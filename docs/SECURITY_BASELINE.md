@@ -54,6 +54,7 @@
 
 - Redact password, token, cookie, authorization header.
 - Audit login, failed login, user/role changes, publish, delete, settings, media delete.
+- P13 chỉ ghi audit key cấu hình đã đổi; toàn bộ value được redaction. Secret cấu hình lưu dạng mã hóa hoặc `env:VARIABLE`, không trả về Angular/public payload và không đưa vào cache public.
 - Không cho sửa audit log từ admin thông thường.
 - Retention policy.
 

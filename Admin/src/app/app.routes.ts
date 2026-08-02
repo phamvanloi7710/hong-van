@@ -69,6 +69,13 @@ export const routes: Routes = [
           import('./features/identity/identity-page').then((page) => page.IdentityPage),
         data: { breadcrumb: 'menu.identity' },
       },
+      {
+        path: 'settings',
+        canActivate: [permissionGuard('settings.view')],
+        loadComponent: () =>
+          import('./features/settings/settings-page').then((page) => page.SettingsPage),
+        data: { breadcrumb: 'menu.settings' },
+      },
     ],
   },
   {

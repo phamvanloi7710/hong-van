@@ -31,6 +31,9 @@ class TablePrefixTest extends TestCase
         $expectedTables = [
             'hongvan_cache',
             'hongvan_cache_locks',
+            'hongvan_branches',
+            'hongvan_business_hours',
+            'hongvan_contact_channels',
             'hongvan_failed_jobs',
             'hongvan_job_batches',
             'hongvan_jobs',
@@ -46,6 +49,7 @@ class TablePrefixTest extends TestCase
             'hongvan_sessions',
             'hongvan_setting_groups',
             'hongvan_settings',
+            'hongvan_social_links',
             'hongvan_users',
             'hongvan_user_permission_overrides',
             'hongvan_user_preferences',

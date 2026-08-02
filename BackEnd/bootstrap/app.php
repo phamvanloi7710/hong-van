@@ -27,6 +27,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->redirectGuestsTo(
+            static fn (Request $request): ?string => $request->is('api/*') ? null : '/admin/login',
+        );
         $middleware->prepend([
             AssignRequestId::class,
             SetApiLocale::class,

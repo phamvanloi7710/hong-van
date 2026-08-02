@@ -1,0 +1,63 @@
+<section class="settings-page">
+  <header class="page-actions">
+    <div><p class="eyebrow">{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><p>{{ text('description') }}</p></div>
+    <button mat-stroked-button type="button" (click)="reload()"><mat-icon>refresh</mat-icon> {{ 'common.refresh' | hvT }}</button>
+  </header>
+
+  @if (loading()) {
+    <div class="state"><mat-spinner diameter="42" /><span>{{ 'common.loading' | hvT }}</span></div>
+  } @else if (error()) {
+    <mat-card class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></mat-card>
+  } @else if (payload(); as settings) {
+    <mat-tab-group animationDuration="180ms">
+      <mat-tab [label]="text('settings')">
+        <div class="group-grid">
+          @for (group of settings.groups; track group.public_id) {
+            <mat-card class="settings-card" [formGroup]="formFor(group)">
+              <mat-card-header><mat-icon mat-card-avatar>tune</mat-icon><mat-card-title>{{ text(group.key) }}</mat-card-title></mat-card-header>
+              <mat-card-content class="fields-grid">
+                @for (setting of group.settings; track setting.public_id) {
+                  @if (setting.value_type === 'boolean') {
+                    <mat-slide-toggle [formControlName]="setting.key" [disabled]="setting.is_locked">{{ text(setting.key) }}</mat-slide-toggle>
+                  } @else {
+                    <mat-form-field appearance="outline" [class.full]="setting.value_type === 'text'">
+                      <mat-label>{{ text(setting.key) }}</mat-label>
+                      @if (setting.value_type === 'text') { <textarea matInput rows="3" [formControlName]="setting.key"></textarea> }
+                      @else { <input matInput [type]="setting.value_type === 'secret' ? 'password' : 'text'" [formControlName]="setting.key" /> }
+                      @if (setting.value_type === 'secret') { <mat-hint>{{ text('secretHint') }}</mat-hint> }
+                    </mat-form-field>
+                  }
+                }
+              </mat-card-content>
+              <mat-card-actions align="end"><button mat-flat-button [disabled]="!authStore.hasPermission('settings.update') || formFor(group).invalid" (click)="saveGroup(group)"><mat-icon>save</mat-icon>{{ text('save') }}</button></mat-card-actions>
+            </mat-card>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="text('branches')">
+        <div class="tab-toolbar"><span>{{ settings.branches.length }} {{ text('branches') }}</span><button mat-flat-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="openBranch()"><mat-icon>add_business</mat-icon>{{ text('add') }}</button></div>
+        <div class="record-grid">
+          @for (branch of settings.branches; track branch.public_id) {
+            <mat-card class="record-card"><mat-card-header><mat-icon mat-card-avatar>location_on</mat-icon><mat-card-title>{{ branch.name }}</mat-card-title><mat-card-subtitle>{{ branch.code || branch.address || '—' }}</mat-card-subtitle></mat-card-header><mat-card-content><p>{{ branch.phone || '—' }} · {{ branch.email || '—' }}</p><div class="badges">@if (branch.is_head_office) { <span>{{ text('headOffice') }}</span> }<span [class.muted]="!branch.is_active">{{ text(branch.is_active ? 'active' : 'inactive') }}</span></div></mat-card-content><mat-card-actions align="end"><button mat-icon-button [disabled]="!authStore.hasPermission('settings.manage_settings')" [title]="text('edit')" (click)="openBranch(branch)"><mat-icon>edit</mat-icon></button><button mat-icon-button [disabled]="!authStore.hasPermission('settings.manage_settings')" [title]="text('delete')" (click)="deleteBranch(branch)"><mat-icon>delete</mat-icon></button></mat-card-actions></mat-card>
+          } @empty { <mat-card class="empty">{{ text('empty') }}</mat-card> }
+        </div>
+      </mat-tab>
+
+      <mat-tab [label]="text('hours')">
+        <div class="tab-toolbar"><mat-form-field appearance="outline" subscriptSizing="dynamic"><mat-label>{{ text('scope') }}</mat-label><mat-select [value]="hourScope()" (selectionChange)="selectHourScope($event.value)"><mat-option value="global">{{ text('global') }}</mat-option>@for (branch of settings.branches; track branch.public_id) { <mat-option [value]="branch.public_id">{{ branch.name }}</mat-option> }</mat-select></mat-form-field><button mat-flat-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="saveHours()"><mat-icon>schedule</mat-icon>{{ text('save') }}</button></div>
+        <mat-card class="hours-card"><div class="hours-header"><span>{{ text('day') }}</span><span>{{ text('opens') }}</span><span>{{ text('closes') }}</span><span>{{ text('closed') }}</span><span>{{ text('statusEnabled') }}</span></div>@for (hour of hours(); track hour.day_of_week) { <div class="hours-row"><strong>{{ text(dayKeys[hour.day_of_week]) }}</strong><input type="time" [value]="hour.opens_at ?? ''" [disabled]="hour.is_closed" (input)="updateHour(hour.day_of_week, 'opens_at', $any($event.target).value)" /><input type="time" [value]="hour.closes_at ?? ''" [disabled]="hour.is_closed" (input)="updateHour(hour.day_of_week, 'closes_at', $any($event.target).value)" /><mat-checkbox [checked]="hour.is_closed" (change)="updateHour(hour.day_of_week, 'is_closed', $event.checked)" /><mat-checkbox [checked]="hour.is_active" (change)="updateHour(hour.day_of_week, 'is_active', $event.checked)" /></div> }</mat-card>
+      </mat-tab>
+
+      <mat-tab [label]="text('socialLinks')">
+        <div class="tab-toolbar"><span>{{ settings.social_links.length }} {{ text('socialLinks') }}</span><button mat-flat-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="openSocial()"><mat-icon>add_link</mat-icon>{{ text('add') }}</button></div>
+        <div class="record-grid">@for (link of settings.social_links; track link.public_id) { <mat-card class="record-card"><mat-card-header><mat-icon mat-card-avatar>share</mat-icon><mat-card-title>{{ link.label }}</mat-card-title><mat-card-subtitle>{{ link.platform }}</mat-card-subtitle></mat-card-header><mat-card-content><a [href]="link.url" target="_blank" rel="noopener noreferrer">{{ link.url }}</a><div class="badges"><span [class.muted]="!link.is_active">{{ text(link.is_active ? 'active' : 'inactive') }}</span></div></mat-card-content><mat-card-actions align="end"><button mat-icon-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="openSocial(link)"><mat-icon>edit</mat-icon></button><button mat-icon-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="deleteSocial(link)"><mat-icon>delete</mat-icon></button></mat-card-actions></mat-card> } @empty { <mat-card class="empty">{{ text('empty') }}</mat-card> }</div>
+      </mat-tab>
+
+      <mat-tab [label]="text('contactChannels')">
+        <div class="tab-toolbar"><span>{{ settings.contact_channels.length }} {{ text('contactChannels') }}</span><button mat-flat-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="openContact()"><mat-icon>add_call</mat-icon>{{ text('add') }}</button></div>
+        <div class="record-grid">@for (channel of settings.contact_channels; track channel.public_id) { <mat-card class="record-card"><mat-card-header><mat-icon mat-card-avatar>contact_phone</mat-icon><mat-card-title>{{ channel.label }}</mat-card-title><mat-card-subtitle>{{ channel.type }}</mat-card-subtitle></mat-card-header><mat-card-content><p>{{ channel.value }}</p><div class="badges">@if (channel.is_primary) { <span>{{ text('primary') }}</span> }<span [class.muted]="!channel.is_active">{{ text(channel.is_active ? 'active' : 'inactive') }}</span></div></mat-card-content><mat-card-actions align="end"><button mat-icon-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="openContact(channel)"><mat-icon>edit</mat-icon></button><button mat-icon-button [disabled]="!authStore.hasPermission('settings.manage_settings')" (click)="deleteContact(channel)"><mat-icon>delete</mat-icon></button></mat-card-actions></mat-card> } @empty { <mat-card class="empty">{{ text('empty') }}</mat-card> }</div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</section>

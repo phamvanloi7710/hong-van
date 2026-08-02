@@ -144,6 +144,14 @@ export class AdminShell {
   }
 
   private updatePageHeader(url: string): void {
+    if (url.startsWith('/settings')) {
+      this.pageHeader.set({
+        icon: 'tune',
+        titleKey: 'menu.settings',
+      });
+      return;
+    }
+
     if (url.startsWith('/identity')) {
       this.pageHeader.set({
         icon: 'supervisor_account',

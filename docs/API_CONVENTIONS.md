@@ -27,9 +27,18 @@ GET|PUT|DELETE /api/admin/v1/identity/roles/{public_id}
 GET|POST /api/admin/v1/identity/permissions
 GET|PUT|DELETE /api/admin/v1/identity/permissions/{public_id}
 GET|PUT|DELETE /api/admin/v1/preferences
+GET /api/admin/v1/settings
+PUT /api/admin/v1/settings/groups/{group_key}
+POST|PUT|DELETE /api/admin/v1/settings/branches[/{public_id}]
+PUT /api/admin/v1/settings/business-hours/global
+PUT /api/admin/v1/settings/branches/{public_id}/business-hours
+POST|PUT|DELETE /api/admin/v1/settings/social-links[/{public_id}]
+POST|PUT|DELETE /api/admin/v1/settings/contact-channels[/{public_id}]
 ```
 
 Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Admin ping dùng `auth` và Gate `system_health`, được P11 ánh xạ vào permission `system.health`. Identity API dùng Sanctum, permission middleware, Policy và Form Request; filter/sort chỉ nhận key trong allowlist phía server.
+
+Settings API dùng `settings.view`, `settings.update` và `settings.manage_settings`. Secret luôn trả `value: null` kèm `has_value`, không trả ciphertext, giá trị giải mã hoặc tên biến môi trường. Public Blade dùng `CompanySettingsViewModel` và cache nội bộ, không gọi HTTP loopback.
 
 ## Response thành công
 

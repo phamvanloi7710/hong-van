@@ -15,7 +15,7 @@
 - [x] Local WAMP database runtime repaired and verified after P11
 - [x] Local database reset with mandatory table/column comments and default Super Admin verified after P11
 - [x] P12 User theme preferences, Admin i18n foundation and Annular favorite shortcuts
-- [ ] P13 Company settings
+- [x] P13 Company settings
 - [ ] P14 Localization
 - [ ] P15 Audit/security foundation
 - [ ] P16 Media domain
@@ -59,3 +59,5 @@
 - [ ] P54 Content migration/UAT
 - [ ] P55 Production cutover
 - [ ] P56 Final handover
+
+> Quyết định của chủ dự án: web frontend public thực hiện cuối cùng sau khi có template; phải nhắc lại trước khi bắt đầu phần này.
