@@ -27,7 +27,7 @@ Nguyên tắc không được thay đổi trong lúc triển khai:
 
 - Website public render bằng Laravel Blade để bảo đảm SEO cốt lõi.
 - Angular chỉ dùng cho admin.
-- Admin chạy dưới `/admin`; API quản trị dưới `/api/v1/admin`.
+- Admin chạy dưới `/admin`; API quản trị dưới `/api/admin/v1`.
 - Page Builder lưu JSON có schema, không lưu/chạy PHP, Blade hoặc JavaScript tùy ý từ database.
 - Preview Page Builder phải dùng chính Blade renderer và CSS của frontend public.
 - Mọi bảng do hệ thống tạo phải bắt đầu bằng `hongvan_`.
