@@ -39,6 +39,9 @@ hongvan_role_user
 hongvan_permission_role
 hongvan_user_permission_overrides
 hongvan_languages
+hongvan_translation_keys
+hongvan_translation_values
+hongvan_localized_slugs
 hongvan_setting_groups
 hongvan_settings
 hongvan_user_preferences
@@ -53,6 +56,8 @@ Quy ước định danh được chốt tại `ADR-009`: entity nghiệp vụ d�
 P13 đã hoàn thiện foundation settings bằng allowlist có kiểu dữ liệu cho 11 nhóm/28 khóa; secret dùng ciphertext hoặc tham chiếu `env:VARIABLE` và không xuất hiện trong payload Admin/public. P13 cũng triển khai `hongvan_branches`, `hongvan_business_hours`, `hongvan_social_links` và `hongvan_contact_channels`, có trạng thái, thứ tự, khóa ngoại, index và comment đầy đủ. P10 đã ánh xạ Sanctum vào `hongvan_personal_access_tokens`. P11 đã triển khai role, permission, hai pivot và user permission override; tất cả quan hệ dùng khóa nội bộ, còn API chỉ nhận/trả `public_id`.
 
 P12 đã triển khai `hongvan_user_preferences` để lưu cấu hình riêng từng user theo cặp `namespace` + `key`. Giá trị JSON chỉ nhận contract có allowlist; hiện gồm theme Annular, locale `vi|en|zh` và danh sách favorite menu có thứ tự. Unique key `(user_id, namespace, key)` ngăn dữ liệu trùng và foreign key xóa cascade theo user.
+
+P14 bổ sung fallback tự tham chiếu cho `hongvan_languages`, hai bảng queryable `hongvan_translation_keys`/`hongvan_translation_values` và registry `hongvan_localized_slugs`. Bản dịch dùng row theo ngôn ngữ thay vì JSON; slug unique theo ngôn ngữ và namespace. `vi` là mặc định, `en` và `zh` được seed active và fallback về `vi`.
 
 ## Core và Identity dự kiến
 
@@ -85,6 +90,7 @@ hongvan_settings
 hongvan_languages
 hongvan_translation_keys
 hongvan_translation_values
+hongvan_localized_slugs
 hongvan_branches
 hongvan_business_hours
 hongvan_social_links

@@ -30,6 +30,7 @@ final class PermissionRegistry
             ...self::module('roles', 'vai trò', ['view', 'create', 'update', 'delete']),
             ...self::module('permissions', 'quyền', ['view', 'create', 'update', 'delete']),
             ...self::module('settings', 'cài đặt', ['view', 'update', 'manage_settings']),
+            ...self::module('localization', 'đa ngôn ngữ', ['view', 'update']),
             ...self::module('audit', 'nhật ký', ['view', 'export']),
             ...self::module('products', 'sản phẩm', ['view', 'create', 'update', 'delete', 'restore', 'publish', 'export']),
             ...self::module('pages', 'trang', ['view', 'create', 'update', 'delete', 'restore', 'publish']),

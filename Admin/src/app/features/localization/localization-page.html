@@ -1,0 +1,61 @@
+<section class="localization-page">
+  <header class="page-actions">
+    <div><p class="eyebrow">{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><p>{{ text('description') }}</p></div>
+    <button mat-stroked-button type="button" (click)="reload()"><mat-icon>refresh</mat-icon>{{ 'common.refresh' | hvT }}</button>
+  </header>
+
+  @if (loading()) {
+    <div class="state"><mat-spinner diameter="42" /><span>{{ 'common.loading' | hvT }}</span></div>
+  } @else if (error()) {
+    <mat-card class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></mat-card>
+  } @else if (payload(); as localization) {
+    <div class="summary-grid">
+      <mat-card><mat-icon>database</mat-icon><small>{{ text('storageTimezone') }}</small><strong>{{ localization.storage_timezone }}</strong></mat-card>
+      <mat-card><mat-icon>schedule</mat-icon><small>{{ text('displayTimezone') }}</small><strong>{{ localization.display_timezone }}</strong></mat-card>
+      <mat-card><mat-icon>update</mat-icon><small>{{ text('generatedAt') }}</small><strong>{{ formattedTime(localization.generated_at, localization.display_timezone) }}</strong></mat-card>
+      <mat-card><mat-icon>translate</mat-icon><small>{{ text('translationKeys') }}</small><strong>{{ localization.missing_translations.total_keys }}</strong></mat-card>
+    </div>
+
+    <mat-card class="rule-card"><mat-icon>verified</mat-icon><div><strong>{{ text('systemRule') }}</strong><span>{{ text('disabledRoute') }}</span></div></mat-card>
+
+    <h3>{{ text('languages') }}</h3>
+    <div class="language-grid">
+      @for (language of localization.languages; track language.public_id) {
+        <mat-card class="language-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>language</mat-icon>
+            <mat-card-title>{{ language.native_name }}</mat-card-title>
+            <mat-card-subtitle>{{ language.name }} · {{ language.locale.toUpperCase() }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="badges"><span [class.inactive]="!language.is_active">{{ text(language.is_active ? 'active' : 'inactive') }}</span>@if (language.is_default) { <span>{{ text('default') }}</span> }</div>
+            <mat-slide-toggle [checked]="language.is_active" [disabled]="language.is_default || !authStore.hasPermission('localization.update') || savingId() === language.public_id" (change)="setActive(language, $event.checked)">{{ text('active') }}</mat-slide-toggle>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>{{ text('fallback') }}</mat-label>
+              <mat-select [value]="language.fallback_locale" [disabled]="!authStore.hasPermission('localization.update') || savingId() === language.public_id" (selectionChange)="setFallback(language, $event.value)">
+                <mat-option [value]="null">{{ text('noFallback') }}</mat-option>
+                @for (fallback of fallbackOptions(language); track fallback.public_id) { <mat-option [value]="fallback.locale">{{ fallback.native_name }}</mat-option> }
+              </mat-select>
+              <mat-hint>{{ text('fallbackHelp') }}</mat-hint>
+            </mat-form-field>
+            <small>{{ text('updatedAt') }}: {{ formattedTime(language.updated_at, localization.display_timezone) }}</small>
+          </mat-card-content>
+          <mat-card-actions align="end"><button mat-flat-button type="button" [disabled]="language.is_default || !authStore.hasPermission('localization.update') || savingId() === language.public_id" (click)="setDefault(language)"><mat-icon>check_circle</mat-icon>{{ language.is_default ? text('default') : text('makeDefault') }}</button></mat-card-actions>
+        </mat-card>
+      }
+    </div>
+
+    <h3>{{ text('missingReport') }}</h3>
+    <div class="report-grid">
+      @for (language of localization.languages; track language.public_id) {
+        @let report = reportFor(language.locale);
+        <mat-card class="report-card">
+          <div><strong>{{ language.native_name }}</strong><span [class.complete]="report?.missing_count === 0">{{ report?.missing_count ?? 0 }} {{ text('missing') }}</span></div>
+          @if (localization.missing_translations.total_keys === 0) { <p>{{ text('noKeys') }}</p> }
+          @else if (report?.missing_count === 0) { <p>{{ text('complete') }}</p> }
+          @else { <ul>@for (key of previewMissing(report); track key) { <li>{{ key }}</li> }</ul> }
+        </mat-card>
+      }
+    </div>
+  }
+</section>

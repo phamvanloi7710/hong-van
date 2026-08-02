@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Identity\PermissionController;
 use App\Http\Controllers\Api\V1\Identity\RoleController;
 use App\Http\Controllers\Api\V1\Identity\UserController;
 use App\Http\Controllers\Api\V1\Identity\UserPreferenceController;
+use App\Http\Controllers\Api\V1\Localization\LocalizationController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
 use App\Http\Controllers\Api\V1\SystemPingController;
@@ -81,6 +82,11 @@ Route::prefix('admin/v1')
                 Route::post('contact-channels', [CompanyDirectoryController::class, 'storeContactChannel'])->middleware('permission:settings.manage_settings')->name('contact-channels.store');
                 Route::put('contact-channels/{contactChannel:public_id}', [CompanyDirectoryController::class, 'updateContactChannel'])->middleware('permission:settings.manage_settings')->name('contact-channels.update');
                 Route::delete('contact-channels/{contactChannel:public_id}', [CompanyDirectoryController::class, 'deleteContactChannel'])->middleware('permission:settings.manage_settings')->name('contact-channels.destroy');
+            });
+
+            Route::prefix('localization')->name('localization.')->group(function (): void {
+                Route::get('/', [LocalizationController::class, 'index'])->middleware('permission:localization.view')->name('index');
+                Route::put('languages/{language:public_id}', [LocalizationController::class, 'update'])->middleware('permission:localization.update')->name('languages.update');
             });
         });
     });

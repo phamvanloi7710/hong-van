@@ -27,6 +27,8 @@ GET|PUT|DELETE /api/admin/v1/identity/roles/{public_id}
 GET|POST /api/admin/v1/identity/permissions
 GET|PUT|DELETE /api/admin/v1/identity/permissions/{public_id}
 GET|PUT|DELETE /api/admin/v1/preferences
+GET /api/admin/v1/localization
+PUT /api/admin/v1/localization/languages/{public_id}
 GET /api/admin/v1/settings
 PUT /api/admin/v1/settings/groups/{group_key}
 POST|PUT|DELETE /api/admin/v1/settings/branches[/{public_id}]
@@ -102,6 +104,15 @@ Settings API dùng `settings.view`, `settings.update` và `settings.manage_setti
 - Locale ngoài allowlist không được đặt vào application context.
 - Response trả `Content-Language` với locale thực tế.
 - Admin SPA lưu locale theo user qua Preferences API và gửi locale đang dùng bằng `X-Locale` cho các request tiếp theo.
+- `hongvan_languages` là nguồn chân lý sau khi database đã seed; allowlist cấu hình chỉ là fallback an toàn trong giai đoạn bootstrap.
+- Locale public mặc định `vi` không có prefix; `en` và `zh` dùng prefix đầu route. Locale được hỗ trợ nhưng đang tắt chuyển về route mặc định thay vì tạo broken route.
+- Chuỗi fallback nằm trong `hongvan_languages`; resolver chỉ đọc và không tự ghi translation key/value trong public request.
+
+## Date-time
+
+- Database và application lưu thời gian UTC; MySQL session dùng `+00:00`.
+- API trả date-time ISO 8601 ở UTC với hậu tố `Z`.
+- Admin hiển thị theo `Asia/Ho_Chi_Minh`; chỉ dùng timezone theo user khi có preference được phê duyệt ở prompt sau.
 
 ## Pagination
 

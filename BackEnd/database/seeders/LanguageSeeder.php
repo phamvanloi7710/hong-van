@@ -21,5 +21,9 @@ final class LanguageSeeder extends Seeder
                 [...$language, 'is_active' => true],
             );
         }
+
+        $vietnameseId = Language::query()->where('locale', 'vi')->value('id');
+        Language::query()->whereIn('locale', ['en', 'zh'])->update(['fallback_language_id' => $vietnameseId]);
+        Language::query()->where('locale', 'vi')->update(['fallback_language_id' => null]);
     }
 }

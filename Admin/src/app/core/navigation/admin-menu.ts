@@ -62,6 +62,13 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         route: '/settings',
         permission: 'settings.view',
       },
+      {
+        id: 'localization',
+        labelKey: 'menu.localization',
+        icon: 'translate',
+        route: '/localization',
+        permission: 'localization.view',
+      },
       { id: 'audit', labelKey: 'menu.audit', icon: 'history', disabled: true },
     ],
   },

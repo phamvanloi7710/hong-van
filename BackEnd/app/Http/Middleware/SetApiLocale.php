@@ -2,13 +2,16 @@
 
 namespace App\Http\Middleware;
 
+use App\Domain\Localization\LocaleRegistry;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
-final class SetApiLocale
+final readonly class SetApiLocale
 {
+    public function __construct(private LocaleRegistry $locales) {}
+
     /**
      * @param  Closure(Request): Response  $next
      */
@@ -31,11 +34,8 @@ final class SetApiLocale
 
     private function resolveLocale(Request $request): string
     {
-        $allowedLocales = array_values(array_filter(
-            config('api.locales', ['vi', 'en', 'zh']),
-            static fn (mixed $locale): bool => is_string($locale) && $locale !== '',
-        ));
-        $defaultLocale = (string) config('api.default_locale', config('app.locale', 'vi'));
+        $allowedLocales = $this->locales->supportedLocales();
+        $defaultLocale = $this->locales->defaultLocale();
         $user = $request->user();
         $userLocale = $user?->getAttribute('locale');
 

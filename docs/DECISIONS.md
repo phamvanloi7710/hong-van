@@ -14,3 +14,4 @@ Individual ADR files are the source of truth. P02 reviewed `ARCHITECTURE.md`, `D
 | [ADR-008](adr/ADR-008-sanctum-same-origin.md) | Sanctum same-origin cookie/session for Admin | Accepted | 2026-08-02 |
 | [ADR-009](adr/ADR-009-database-comments.md) | Bắt buộc comment cho mọi bảng và cột | Accepted | 2026-08-02 |
 | [ADR-010](adr/ADR-010-admin-preferences-and-localization.md) | Preferences theo user và i18n Admin `vi/en/zh` | Accepted | 2026-08-02 |
+| [ADR-011](adr/ADR-011-localization-routing-and-timezone.md) | Locale public, fallback, translation tables và UTC | Accepted | 2026-08-03 |

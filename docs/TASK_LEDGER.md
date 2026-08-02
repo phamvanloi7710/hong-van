@@ -16,7 +16,7 @@
 - [x] Local database reset with mandatory table/column comments and default Super Admin verified after P11
 - [x] P12 User theme preferences, Admin i18n foundation and Annular favorite shortcuts
 - [x] P13 Company settings
-- [ ] P14 Localization
+- [x] P14 Localization
 - [ ] P15 Audit/security foundation
 - [ ] P16 Media domain
 - [ ] P17 StayHub media clone

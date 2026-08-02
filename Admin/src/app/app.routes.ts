@@ -76,6 +76,13 @@ export const routes: Routes = [
           import('./features/settings/settings-page').then((page) => page.SettingsPage),
         data: { breadcrumb: 'menu.settings' },
       },
+      {
+        path: 'localization',
+        canActivate: [permissionGuard('localization.view')],
+        loadComponent: () =>
+          import('./features/localization/localization-page').then((page) => page.LocalizationPage),
+        data: { breadcrumb: 'menu.localization' },
+      },
     ],
   },
   {
