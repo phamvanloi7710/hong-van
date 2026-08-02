@@ -13,6 +13,8 @@
 - Permission phải được kiểm tra cả route, UI và backend.
 - Theme user lưu server, local cache chỉ để giảm flash.
 - Build production phải sync sang `BackEnd/public/admin/browser`.
+- Bất kỳ bước nào thay đổi Admin Angular đều phải chạy `npm run build:laravel`; không chỉ chạy dev build hoặc dev server.
+- Trước khi báo hoàn tất, kiểm tra giao diện đã sync tại `http://hongvan.local` vì chủ dự án nghiệm thu bằng Google Chrome trên domain này.
 - Sau feature: lint, test và build.
 - Mọi text hiển thị phải đi qua translation key và có đủ bản dịch `vi`, `en`, `zh` trong cùng thay đổi.
 - Không hardcode text người dùng trong component/template; tên riêng và technical identifier được giữ nguyên khi phù hợp.
