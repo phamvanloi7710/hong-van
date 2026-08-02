@@ -1,0 +1,21 @@
+<section class="placeholder-page">
+  <mat-card class="placeholder-card" [style.--module-icon-color]="iconColor">
+    <div class="module-icon" aria-hidden="true">
+      <mat-icon>{{ icon }}</mat-icon>
+    </div>
+
+    <p class="eyebrow">{{ 'placeholder.eyebrow' | hvT }}</p>
+    <h2>{{ titleKey | hvT }}</h2>
+    <p>{{ 'placeholder.description' | hvT }}</p>
+
+    <div class="notice">
+      <mat-icon aria-hidden="true">info</mat-icon>
+      <span>{{ 'placeholder.notice' | hvT }}</span>
+    </div>
+
+    <a mat-flat-button routerLink="/dashboard">
+      <mat-icon>dashboard</mat-icon>
+      {{ 'placeholder.backDashboard' | hvT }}
+    </a>
+  </mat-card>
+</section>

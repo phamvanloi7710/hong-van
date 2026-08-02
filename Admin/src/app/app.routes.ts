@@ -1,6 +1,24 @@
 import { Routes } from '@angular/router';
 
 import { authGuard, guestGuard, permissionGuard } from './core/auth/auth.guard';
+import { findAdminMenuItemById } from './core/navigation/admin-menu';
+
+const loadModulePlaceholder = () =>
+  import('./features/module-placeholder/module-placeholder').then((page) => page.ModulePlaceholder);
+
+function placeholderData(id: string) {
+  const menuItem = findAdminMenuItemById(id);
+
+  if (menuItem === undefined) {
+    throw new Error(`Admin menu item not found: ${id}`);
+  }
+
+  return {
+    breadcrumb: menuItem.labelKey,
+    icon: menuItem.icon,
+    iconColor: menuItem.iconColor,
+  };
+}
 
 export const routes: Routes = [
   {
@@ -63,6 +81,51 @@ export const routes: Routes = [
         data: { breadcrumb: 'menu.dashboard' },
       },
       {
+        path: 'products',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('products'),
+      },
+      {
+        path: 'crop-solutions',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('crop-solutions'),
+      },
+      {
+        path: 'services',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('services'),
+      },
+      {
+        path: 'transportation',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('transportation'),
+      },
+      {
+        path: 'warehouses',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('warehouses'),
+      },
+      {
+        path: 'leads',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('leads'),
+      },
+      {
+        path: 'content-pages',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('content-pages'),
+      },
+      {
+        path: 'page-builder',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('page-builder'),
+      },
+      {
+        path: 'seo',
+        loadComponent: loadModulePlaceholder,
+        data: placeholderData('seo'),
+      },
+      {
         path: 'identity',
         canActivate: [permissionGuard('users.view')],
         loadComponent: () =>
@@ -86,15 +149,13 @@ export const routes: Routes = [
       {
         path: 'audit',
         canActivate: [permissionGuard('audit.view')],
-        loadComponent: () =>
-          import('./features/audit/audit-page').then((page) => page.AuditPage),
+        loadComponent: () => import('./features/audit/audit-page').then((page) => page.AuditPage),
         data: { breadcrumb: 'menu.audit' },
       },
       {
         path: 'media',
         canActivate: [permissionGuard('media.view')],
-        loadComponent: () =>
-          import('./features/media/media-page').then((page) => page.MediaPage),
+        loadComponent: () => import('./features/media/media-page').then((page) => page.MediaPage),
         data: { breadcrumb: 'menu.media' },
       },
     ],

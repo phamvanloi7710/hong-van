@@ -21,6 +21,7 @@
 - [x] P16 Media domain
 - [x] P17 StayHub media clone
 - [x] P17 follow-up: repair favorite menu width/right-aligned colored icons, main-menu icon palette, localized language labels and route-aware admin headers
+- [x] P17 follow-up: make all 15 admin leaf menus clickable with localized placeholder routes for pending modules
 - [ ] P18 Blade frontend foundation
 - [ ] P19 Frontend template clone
 - [ ] P20 Public theme studio
