@@ -2,6 +2,8 @@
 
 Individual ADR files are the source of truth. P02 reviewed `ARCHITECTURE.md`, `DATABASE_BLUEPRINT.md`, `PAGE_BUILDER_CONTRACT.md`, `API_CONVENTIONS.md` and `SECURITY_BASELINE.md`; no conflicting accepted architecture was found.
 
+Delivery order decision: all public frontend/template work is postponed until the final project stage, after the owner supplies a complete frontend template. Admin and backend prompts may continue without modifying `FrontEndTemplate/` or public Blade.
+
 | ADR | Decision | Status | Date |
 |---|---|---|---|
 | [ADR-001](adr/ADR-001-laravel-blade-public.md) | Laravel Blade for the public website | Accepted | 2026-08-02 |

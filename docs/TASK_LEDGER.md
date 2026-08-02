@@ -36,7 +36,7 @@
 - [ ] P29 Templates/import/export/locks
 - [ ] P30 Menus/global regions
 - [ ] P31 Public routing/core pages
-- [ ] P32 Product domain
+- [x] P32 Product domain (completed out of sequence for the Admin track; public frontend remains postponed)
 - [ ] P33 Product admin/public
 - [ ] P34 Crop solutions
 - [ ] P35 Services

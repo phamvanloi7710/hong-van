@@ -3,13 +3,19 @@
 namespace App\Providers;
 
 use App\Domain\Identity\PermissionService;
+use App\Models\Brand;
 use App\Models\Media;
 use App\Models\Permission;
 use App\Models\PersonalAccessToken;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Role;
 use App\Models\User;
+use App\Policies\BrandPolicy;
 use App\Policies\MediaPolicy;
 use App\Policies\PermissionPolicy;
+use App\Policies\ProductCategoryPolicy;
+use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -101,6 +107,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Role::class, RolePolicy::class);
         Gate::policy(Permission::class, PermissionPolicy::class);
         Gate::policy(Media::class, MediaPolicy::class);
+        Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(ProductCategory::class, ProductCategoryPolicy::class);
+        Gate::policy(Brand::class, BrandPolicy::class);
 
         Gate::define(
             'system_health',
