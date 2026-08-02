@@ -12,6 +12,7 @@
 - [x] P09 API foundation
 - [x] P10 Authentication
 - [x] P11 RBAC
+- [x] Local WAMP database runtime repaired and verified after P11
 - [ ] P12 User theme preferences
 - [ ] P13 Company settings
 - [ ] P14 Localization
