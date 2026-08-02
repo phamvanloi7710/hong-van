@@ -6,7 +6,7 @@
 - [x] P03 Repository hygiene
 - [x] P04 Laravel bootstrap
 - [x] P05 Angular bootstrap
-- [ ] P06 Admin template integration
+- [x] P06 Admin template integration
 - [ ] P07 Admin build integration
 - [ ] P08 Database foundation
 - [ ] P09 API foundation

@@ -1,0 +1,18 @@
+footer {
+  align-items: center;
+  background: var(--hv-theme-primary);
+  color: #fff;
+  display: flex;
+  font-size: 0.78rem;
+  height: 56px;
+  justify-content: space-between;
+  padding-inline: 20px;
+}
+
+@media (max-width: 600px) {
+  footer {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

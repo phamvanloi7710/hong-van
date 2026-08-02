@@ -1,0 +1,146 @@
+:host {
+  display: block;
+}
+
+.admin-shell {
+  --hv-sidenav-width: 260px;
+  background: var(--hv-theme-background);
+  color: var(--hv-theme-text);
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.admin-shell.menu-compact {
+  --hv-sidenav-width: 170px;
+}
+
+.admin-shell.menu-mini {
+  --hv-sidenav-width: 66px;
+}
+
+.page-wrapper {
+  background: var(--hv-theme-background);
+  height: calc(100dvh - 56px);
+}
+
+.horizontal-menu .page-wrapper {
+  height: calc(100dvh - 120px);
+}
+
+.sidenav {
+  background: var(--hv-theme-sidebar);
+  border: 0;
+  color: var(--hv-theme-sidebar-text);
+  width: var(--hv-sidenav-width);
+}
+
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.main-content-inner {
+  flex: 1 0 auto;
+  min-height: calc(100% - 56px);
+}
+
+.content-header {
+  align-items: end;
+  background: var(--hv-theme-surface);
+  border-bottom: 1px solid var(--hv-theme-border);
+  display: flex;
+  justify-content: space-between;
+  min-height: 76px;
+  padding: 14px 22px;
+}
+
+.content-header h1,
+.content-header p {
+  margin: 0;
+}
+
+.content-header h1 {
+  font-size: 1.28rem;
+  font-weight: 500;
+}
+
+.eyebrow {
+  color: var(--hv-theme-muted);
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  margin-bottom: 4px !important;
+}
+
+.content-area {
+  padding: 20px;
+}
+
+.fixed-header hv-admin-header {
+  left: 0;
+  position: sticky;
+  right: 0;
+  top: 0;
+}
+
+.fixed-footer hv-admin-footer {
+  bottom: 0;
+  left: 0;
+  position: sticky;
+  right: 0;
+}
+
+.theme-trigger,
+.back-to-top {
+  background: rgb(0 0 0 / 72%);
+  color: #fff;
+  position: fixed;
+  right: 0;
+  z-index: 30;
+}
+
+.theme-trigger {
+  border-radius: 4px 0 0 4px;
+  top: 120px;
+}
+
+.theme-trigger mat-icon {
+  animation: spin 8s linear infinite;
+}
+
+.back-to-top {
+  bottom: 20px;
+  right: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 960px) {
+  .admin-shell,
+  .admin-shell.menu-compact,
+  .admin-shell.menu-mini {
+    --hv-sidenav-width: min(280px, 86vw);
+  }
+
+  .page-wrapper,
+  .horizontal-menu .page-wrapper {
+    height: calc(100dvh - 56px);
+  }
+}
+
+@media (max-width: 600px) {
+  .content-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+
+  .content-area {
+    padding: 14px;
+  }
+}

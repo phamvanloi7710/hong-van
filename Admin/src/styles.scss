@@ -1,1 +1,138 @@
-/* You can add global styles to this file, and also import other style files */
+:root,
+.skin-indigo-light {
+  --hv-theme-primary: #3f51b5;
+  --hv-theme-primary-strong: #283593;
+  --hv-theme-accent: #ff4081;
+  --hv-theme-background: #f4f5f8;
+  --hv-theme-surface: #fff;
+  --hv-theme-text: #263238;
+  --hv-theme-muted: #6d7583;
+  --hv-theme-border: #e2e5eb;
+  --hv-theme-sidebar: #252a3b;
+  --hv-theme-sidebar-text: #f5f7ff;
+}
+
+.skin-teal-light {
+  --hv-theme-primary: #009688;
+  --hv-theme-primary-strong: #00695c;
+  --hv-theme-accent: #ff7043;
+  --hv-theme-sidebar: #203a38;
+}
+
+.skin-red-light {
+  --hv-theme-primary: #f44336;
+  --hv-theme-primary-strong: #c62828;
+  --hv-theme-accent: #43a047;
+  --hv-theme-sidebar: #3d2727;
+}
+
+.skin-gray-light {
+  --hv-theme-primary: #757575;
+  --hv-theme-primary-strong: #424242;
+  --hv-theme-accent: #ff4081;
+  --hv-theme-sidebar: #30343a;
+}
+
+.skin-blue-dark,
+.skin-green-dark,
+.skin-pink-dark,
+.skin-gray-dark {
+  --hv-theme-background: #191b1f;
+  --hv-theme-surface: #26282d;
+  --hv-theme-text: #f4f5f8;
+  --hv-theme-muted: #b7bbc5;
+  --hv-theme-border: #3b3e45;
+  --hv-theme-sidebar: #111318;
+  --hv-theme-sidebar-text: #f8f9ff;
+}
+
+.skin-blue-dark {
+  --hv-theme-primary: #0277bd;
+  --hv-theme-primary-strong: #01579b;
+  --hv-theme-accent: #ffd740;
+}
+
+.skin-green-dark {
+  --hv-theme-primary: #388e3c;
+  --hv-theme-primary-strong: #1b5e20;
+  --hv-theme-accent: #ffd740;
+}
+
+.skin-pink-dark {
+  --hv-theme-primary: #d81b60;
+  --hv-theme-primary-strong: #880e4f;
+  --hv-theme-accent: #90a4ae;
+}
+
+.skin-gray-dark {
+  --hv-theme-primary: #607d8b;
+  --hv-theme-primary-strong: #37474f;
+  --hv-theme-accent: #ff4081;
+}
+
+html,
+body,
+hv-root {
+  height: 100%;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: #f4f5f8;
+  color: #263238;
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.mat-icon,
+.material-icons {
+  direction: ltr;
+  display: inline-block;
+  font-family: 'Material Icons';
+  font-feature-settings: 'liga';
+  font-size: 24px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--hv-theme-accent) 65%, #fff);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b3b6bd;
+}
+
+::-webkit-scrollbar-track {
+  background: #e1e3e7;
+}

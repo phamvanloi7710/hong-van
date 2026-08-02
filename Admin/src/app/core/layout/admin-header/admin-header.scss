@@ -1,0 +1,106 @@
+:host {
+  display: block;
+  position: relative;
+  z-index: 10;
+}
+
+.top-toolbar {
+  background: var(--hv-theme-primary);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 24%);
+  color: #fff;
+  gap: 0.25rem;
+  height: 56px;
+  padding-inline: 8px;
+}
+
+.toolbar-primary-actions {
+  align-items: center;
+  display: flex;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.search {
+  align-items: center;
+  display: flex;
+}
+
+.search input {
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 18%);
+  height: 30px;
+  opacity: 0;
+  outline: 0;
+  padding: 0;
+  pointer-events: none;
+  transition: 180ms ease;
+  width: 0;
+}
+
+.search.opened input {
+  opacity: 1;
+  padding-inline: 12px;
+  pointer-events: auto;
+  width: min(250px, 28vw);
+}
+
+.user-button {
+  color: inherit;
+}
+
+.user-avatar {
+  align-items: center;
+  background: rgb(255 255 255 / 20%);
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: 0.65rem;
+  font-weight: 800;
+  height: 30px;
+  justify-content: center;
+  margin-right: 0.45rem;
+  width: 30px;
+}
+
+.visually-hidden {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  clip: rect(0 0 0 0);
+}
+
+@media (max-width: 960px) {
+  .pin-button,
+  .user-name {
+    display: none;
+  }
+
+  .top-toolbar {
+    padding-inline: 6px;
+  }
+}
+
+@media (max-width: 600px) {
+  hv-admin-brand {
+    max-width: 42px;
+    overflow: hidden;
+  }
+
+  .search.opened {
+    background: var(--hv-theme-primary);
+    inset: 0;
+    padding-inline: 12px;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .search.opened input {
+    flex: 1;
+    width: auto;
+  }
+}

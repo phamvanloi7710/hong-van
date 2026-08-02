@@ -1,0 +1,51 @@
+:host {
+  display: block;
+}
+
+.brand {
+  align-items: center;
+  color: inherit;
+  display: inline-flex;
+  gap: 0.65rem;
+  min-width: 228px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  align-items: center;
+  background: rgb(255 255 255 / 18%);
+  border: 1px solid rgb(255 255 255 / 38%);
+  border-radius: 50%;
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 800;
+  height: 34px;
+  justify-content: center;
+  letter-spacing: 0.04em;
+  width: 34px;
+}
+
+.brand-copy {
+  display: grid;
+  line-height: 1.05;
+}
+
+.brand-copy strong {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+}
+
+.brand-copy small {
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  margin-top: 0.2rem;
+  opacity: 0.74;
+}
+
+.brand.compact {
+  min-width: 34px;
+}
+
+.brand.compact .brand-copy {
+  display: none;
+}

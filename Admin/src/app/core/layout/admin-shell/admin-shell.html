@@ -1,0 +1,72 @@
+<div [class]="shellClasses()" [attr.dir]="themeStore.preferences().rtl ? 'rtl' : 'ltr'">
+  <hv-admin-header
+    [verticalMenu]="effectiveMenuOrientation() === 'vertical'"
+    [pinned]="themeStore.preferences().sidenavPinned"
+    [compactBrand]="compactBrand()"
+    (toggleMenu)="toggleSidenav()"
+    (togglePinned)="togglePinned()"
+    (openThemePanel)="themePanelOpened.set(true)"
+  />
+
+  @if (effectiveMenuOrientation() === 'horizontal') {
+    <hv-admin-horizontal-menu [density]="themeStore.preferences().menuDensity" />
+  }
+
+  <mat-sidenav-container class="page-wrapper">
+    <mat-sidenav
+      class="sidenav"
+      [opened]="effectiveMenuOrientation() === 'vertical' && sidenavOpened()"
+      [mode]="sidenavMode()"
+      [fixedInViewport]="themeStore.preferences().fixedSidenav"
+      [fixedTopGap]="themeStore.preferences().fixedHeader ? 56 : 0"
+      [autoFocus]="false"
+    >
+      <hv-admin-sidebar
+        [density]="themeStore.preferences().menuDensity"
+        (navigated)="closeMobileSidenav()"
+      />
+    </mat-sidenav>
+
+    <mat-sidenav-content (scroll)="onContentScroll($event)">
+      <div class="main-content-inner">
+        <header class="content-header">
+          <div>
+            <p class="eyebrow">HỆ THỐNG QUẢN TRỊ</p>
+            <h1>Tổng quan</h1>
+          </div>
+          <hv-admin-breadcrumb title="Tổng quan" />
+        </header>
+
+        <main class="content-area">
+          <router-outlet />
+        </main>
+      </div>
+
+      <hv-admin-footer />
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+  <button
+    mat-mini-fab
+    type="button"
+    class="theme-trigger"
+    aria-label="Tùy chỉnh giao diện"
+    (click)="themePanelOpened.set(true)"
+  >
+    <mat-icon>settings</mat-icon>
+  </button>
+
+  @if (showBackToTop()) {
+    <button
+      mat-mini-fab
+      type="button"
+      class="back-to-top"
+      aria-label="Về đầu trang"
+      (click)="scrollToTop()"
+    >
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+  }
+
+  <hv-theme-settings-panel [opened]="themePanelOpened()" (closed)="themePanelOpened.set(false)" />
+</div>

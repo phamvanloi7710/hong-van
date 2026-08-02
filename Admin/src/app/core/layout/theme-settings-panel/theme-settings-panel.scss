@@ -1,0 +1,126 @@
+.panel-backdrop {
+  background: rgb(0 0 0 / 36%);
+  border: 0;
+  inset: 0;
+  position: fixed;
+  z-index: 40;
+}
+
+.theme-panel {
+  background: var(--hv-theme-surface);
+  box-shadow: -4px 0 16px rgb(0 0 0 / 22%);
+  color: var(--hv-theme-text);
+  height: 100dvh;
+  overflow: hidden;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transform: translateX(105%);
+  transition: transform 220ms ease;
+  width: min(300px, 92vw);
+  z-index: 50;
+}
+
+:host-context([dir='rtl']) .theme-panel {
+  left: 0;
+  right: auto;
+  transform: translateX(-105%);
+}
+
+.theme-panel.opened,
+:host-context([dir='rtl']) .theme-panel.opened {
+  transform: translateX(0);
+}
+
+header {
+  align-items: center;
+  background: var(--hv-theme-primary);
+  color: #fff;
+  display: flex;
+  height: 56px;
+  justify-content: space-between;
+  padding-inline: 14px 6px;
+}
+
+h2,
+h3 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 1.05rem;
+}
+
+h3 {
+  border-bottom: 1px solid var(--hv-theme-border);
+  font-size: 0.83rem;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.panel-content {
+  height: calc(100dvh - 56px);
+  overflow: auto;
+  padding: 0 14px 20px;
+}
+
+section {
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+}
+
+mat-slide-toggle {
+  width: 100%;
+}
+
+.option-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.three-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.option-grid button {
+  font-size: 0.73rem;
+  padding-inline: 6px;
+  text-transform: capitalize;
+}
+
+.option-grid button.selected {
+  background: var(--hv-theme-primary);
+  color: #fff;
+}
+
+.skin-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.skin-option {
+  border: 2px solid transparent;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 46px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.skin-option.selected {
+  border-color: var(--hv-theme-accent);
+  box-shadow: 0 0 0 2px rgb(0 0 0 / 12%);
+}
+
+.reset-button {
+  margin-top: 20px;
+  width: 100%;
+}

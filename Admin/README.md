@@ -16,6 +16,11 @@ npm start
 
 Ứng dụng dùng base path `/admin/` và API base `/api/admin/v1`; không hardcode domain.
 
+Các route nền tảng hiện có:
+
+- `/admin/dashboard`: Admin shell responsive, menu dọc/ngang và theme settings local.
+- `/admin/login`: Auth shell và form UI; chưa kết nối authentication API.
+
 ## Kiểm tra
 
 ```powershell
@@ -24,4 +29,4 @@ npm test -- --watch=false
 npm run build
 ```
 
-`npm run build:laravel` là placeholder fail-fast dành cho P07. Chưa có bundle nào được đồng bộ vào Laravel ở P05.
+`npm run build:laravel` vẫn là placeholder fail-fast dành cho P07. Chưa có bundle nào được đồng bộ vào Laravel ở P06.

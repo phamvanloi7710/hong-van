@@ -3,10 +3,11 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P05
-last_completed_prompt: 05
+current_prompt: P06
+last_completed_prompt: 06
 status: DONE
 admin_template_gate: READY
+admin_template_integration: SELECTIVE_PORT_COMPLETE
 frontend_template_gate: MISSING
 stayhub_media_gate: MISSING
 backend_bootstrapped: true
@@ -27,16 +28,16 @@ latest_angular_core_patch: 22.1.0
 latest_angular_cli_patch: 22.1.2
 latest_typescript_patch: 6.0.3
 latest_admin_lint: passed_angular_eslint_22_1_0
-latest_admin_test: passed_vitest_2_files_4_tests
-latest_admin_build: passed_angular_production_initial_190_41_kb
-latest_e2e: not_run_p05_unit_scope_only
+latest_admin_test: passed_vitest_4_files_9_tests
+latest_admin_build: passed_angular_production_initial_312_41_kb
+latest_e2e: passed_browser_qa_dashboard_login_theme_responsive
+latest_visual_qa: passed_1280x720_and_390x844
 open_blockers:
-  - P06 must port the Angular 20.1.3 template into the Angular 22.1.x target without modifying Template/.
   - Admin template is missing package-lock.json, public/ assets and a root license file.
   - Angular CLI 22.1.2 has three moderate dev-tool audit findings through MCP SDK/Hono with no compatible in-range npm fix.
   - Public frontend template source is missing at FrontEndTemplate/.
   - StayHub media reference source is missing at SourceIntegrations/StayHubMedia/.
-next_prompt: 06_PORT_ADMIN_TEMPLATE
+next_prompt: 07_INTEGRATE_ADMIN_BUILD_WITH_LARAVEL
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

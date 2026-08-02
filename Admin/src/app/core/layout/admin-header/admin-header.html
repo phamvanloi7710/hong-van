@@ -1,0 +1,66 @@
+<mat-toolbar class="top-toolbar">
+  <hv-admin-brand [compact]="compactBrand()" />
+
+  <div class="toolbar-primary-actions">
+    @if (verticalMenu()) {
+      <button
+        mat-icon-button
+        type="button"
+        aria-label="Mở hoặc đóng menu"
+        (click)="toggleMenu.emit()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="pin-button"
+        type="button"
+        [attr.aria-label]="pinned() ? 'Bỏ ghim menu' : 'Ghim menu'"
+        (click)="togglePinned.emit()"
+      >
+        <mat-icon>{{ pinned() ? 'push_pin' : 'keep_off' }}</mat-icon>
+      </button>
+    }
+  </div>
+
+  <div class="toolbar-spacer"></div>
+
+  <div class="search" [class.opened]="searchOpened()">
+    <label class="visually-hidden" for="admin-search">Tìm kiếm trong trang quản trị</label>
+    <input id="admin-search" type="search" placeholder="Tìm kiếm..." />
+    <button mat-icon-button type="button" aria-label="Tìm kiếm" (click)="toggleSearch()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+
+  <button mat-icon-button type="button" aria-label="Toàn màn hình" (click)="toggleFullscreen()">
+    <mat-icon>fullscreen</mat-icon>
+  </button>
+  <button mat-icon-button type="button" aria-label="Thông báo">
+    <mat-icon>notifications_none</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    type="button"
+    aria-label="Tùy chỉnh giao diện"
+    (click)="openThemePanel.emit()"
+  >
+    <mat-icon>settings</mat-icon>
+  </button>
+  <button mat-button type="button" class="user-button" [matMenuTriggerFor]="userMenu">
+    <span class="user-avatar" aria-hidden="true">HV</span>
+    <span class="user-name">Quản trị viên</span>
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu" xPosition="before">
+    <button mat-menu-item type="button" disabled>
+      <mat-icon>person</mat-icon>
+      <span>Hồ sơ sẽ được bổ sung sau</span>
+    </button>
+    <button mat-menu-item type="button" disabled>
+      <mat-icon>logout</mat-icon>
+      <span>Đăng xuất</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

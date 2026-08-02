@@ -1,0 +1,80 @@
+.dashboard-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+mat-card {
+  background: var(--hv-theme-surface);
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+  color: var(--hv-theme-text);
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, var(--hv-theme-primary), var(--hv-theme-primary-strong));
+  color: #fff;
+  grid-column: 1 / -1;
+}
+
+.welcome-card mat-card-content {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+.welcome-card h2,
+.welcome-card p {
+  margin: 0;
+}
+
+.welcome-card h2 {
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  font-weight: 400;
+  margin-block: 6px 10px;
+}
+
+.welcome-card p:not(.eyebrow) {
+  max-width: 720px;
+  opacity: 0.82;
+}
+
+.welcome-card > mat-card-content > mat-icon {
+  font-size: 74px;
+  height: 74px;
+  opacity: 0.28;
+  width: 74px;
+}
+
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+mat-card:not(.welcome-card) mat-card-content {
+  color: var(--hv-theme-muted);
+  min-height: 76px;
+  padding-top: 14px;
+}
+
+mat-card-actions {
+  padding: 0 16px 16px;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-card > mat-card-content > mat-icon {
+    display: none;
+  }
+}

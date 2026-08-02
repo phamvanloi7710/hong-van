@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.horizontal-navigation {
+  align-items: stretch;
+  background: var(--hv-theme-primary);
+  box-shadow: 0 2px 5px rgb(0 0 0 / 18%);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  min-height: 64px;
+  padding-inline: 16px;
+}
+
+.horizontal-navigation > a,
+.menu-group > button {
+  border-radius: 0;
+  color: inherit;
+  min-height: 64px;
+}
+
+.horizontal-navigation .active {
+  background: rgb(255 255 255 / 14%);
+}
+
+.menu-group {
+  position: relative;
+}
+
+.dropdown {
+  background: var(--hv-theme-surface);
+  box-shadow: 0 5px 12px rgb(0 0 0 / 24%);
+  color: var(--hv-theme-text);
+  display: none;
+  left: 0;
+  min-width: 230px;
+  padding-block: 6px;
+  position: absolute;
+  top: 100%;
+  z-index: 20;
+}
+
+.menu-group:focus-within .dropdown,
+.menu-group:hover .dropdown {
+  display: grid;
+}
+
+.dropdown button {
+  border-radius: 0;
+  justify-content: flex-start;
+}
+
+.compact > a,
+.compact .menu-group > button {
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.mini span,
+.mini .expand-icon {
+  display: none;
+}

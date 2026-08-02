@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  max-width: 460px;
+  width: 100%;
+}
+
+.login-card {
+  border-radius: 4px;
+  box-shadow: 0 12px 36px rgb(35 46 80 / 18%);
+  padding: 12px;
+}
+
+mat-card-header {
+  margin-bottom: 16px;
+}
+
+mat-card-title {
+  font-size: 1.45rem;
+}
+
+form {
+  display: grid;
+  gap: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-options {
+  align-items: center;
+  color: #697386;
+  display: flex;
+  font-size: 0.75rem;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.submit-button {
+  background: #3f51b5;
+  color: #fff;
+  min-height: 44px;
+  width: 100%;
+}
+
+.integration-notice {
+  background: #eef4ff;
+  border-left: 3px solid #3f51b5;
+  color: #34446e;
+  font-size: 0.78rem;
+  margin: 8px 0 0;
+  padding: 10px 12px;
+}
+
+@media (max-width: 520px) {
+  .form-options {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

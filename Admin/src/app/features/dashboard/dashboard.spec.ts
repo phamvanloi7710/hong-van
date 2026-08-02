@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FoundationPage } from './foundation-page';
+import { Dashboard } from './dashboard';
 
-describe('FoundationPage', () => {
-  let fixture: ComponentFixture<FoundationPage>;
+describe('Dashboard', () => {
+  let fixture: ComponentFixture<Dashboard>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FoundationPage],
+      imports: [Dashboard],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FoundationPage);
+    fixture = TestBed.createComponent(Dashboard);
     fixture.detectChanges();
   });
 
@@ -18,8 +18,8 @@ describe('FoundationPage', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should identify the admin foundation', () => {
+  it('should render the admin foundation status', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('HongVan Admin');
+    expect(compiled.querySelector('h2')?.textContent).toContain('Nền tảng quản trị đã sẵn sàng');
   });
 });

@@ -1,0 +1,119 @@
+@if (opened()) {
+  <button
+    class="panel-backdrop"
+    type="button"
+    aria-label="Đóng tùy chỉnh giao diện"
+    (click)="closed.emit()"
+  ></button>
+}
+
+<aside
+  class="theme-panel"
+  [class.opened]="opened()"
+  aria-label="Tùy chỉnh giao diện"
+  [attr.aria-hidden]="!opened()"
+>
+  <header>
+    <h2>Tùy chỉnh</h2>
+    <button mat-icon-button type="button" aria-label="Đóng" (click)="closed.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="panel-content">
+    <section>
+      <h3>Bố cục</h3>
+      <mat-slide-toggle
+        [checked]="themeStore.preferences().fixedHeader"
+        (change)="setBoolean('fixedHeader', $event.checked)"
+        >Header cố định</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        [checked]="themeStore.preferences().fixedSidenav"
+        [disabled]="themeStore.preferences().menuOrientation === 'horizontal'"
+        (change)="setBoolean('fixedSidenav', $event.checked)"
+        >Sidebar cố định</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        [checked]="themeStore.preferences().fixedFooter"
+        (change)="setBoolean('fixedFooter', $event.checked)"
+        >Footer cố định</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        [checked]="themeStore.preferences().rtl"
+        (change)="setBoolean('rtl', $event.checked)"
+      >
+        Giao diện RTL
+      </mat-slide-toggle>
+    </section>
+
+    <section>
+      <h3>Kiểu menu</h3>
+      <div class="option-grid two-columns">
+        @for (orientation of menuOrientations; track orientation) {
+          <button
+            mat-stroked-button
+            type="button"
+            [class.selected]="themeStore.preferences().menuOrientation === orientation"
+            (click)="setMenuOrientation(orientation)"
+          >
+            {{ orientation === 'vertical' ? 'Dọc' : 'Ngang' }}
+          </button>
+        }
+      </div>
+    </section>
+
+    <section>
+      <h3>Mật độ menu</h3>
+      <div class="option-grid three-columns">
+        @for (density of menuDensities; track density) {
+          <button
+            mat-stroked-button
+            type="button"
+            [class.selected]="themeStore.preferences().menuDensity === density"
+            (click)="setMenuDensity(density)"
+          >
+            {{ density }}
+          </button>
+        }
+      </div>
+    </section>
+
+    <section>
+      <h3>Màu giao diện</h3>
+      <div class="skin-grid">
+        @for (skin of skins; track skin.id) {
+          <button
+            class="skin-option"
+            type="button"
+            [class.selected]="themeStore.preferences().skin === skin.id"
+            [attr.aria-label]="skin.label"
+            [attr.aria-pressed]="themeStore.preferences().skin === skin.id"
+            (click)="setSkin(skin.id)"
+          >
+            <span [style.background]="skin.primary"></span>
+            <span [style.background]="skin.surface"></span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section>
+      <h3>Sidebar</h3>
+      <mat-slide-toggle
+        [checked]="themeStore.preferences().sidenavOpened"
+        (change)="setBoolean('sidenavOpened', $event.checked)"
+        >Mở sidebar</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        [checked]="themeStore.preferences().sidenavPinned"
+        (change)="setBoolean('sidenavPinned', $event.checked)"
+        >Ghim sidebar</mat-slide-toggle
+      >
+    </section>
+
+    <button mat-stroked-button type="button" class="reset-button" (click)="themeStore.reset()">
+      Khôi phục mặc định
+    </button>
+  </div>
+</aside>
