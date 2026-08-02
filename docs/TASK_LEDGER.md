@@ -1,7 +1,7 @@
 # TASK LEDGER
 
 - [x] P00 Repository audit
-- [ ] P01 External source inventory
+- [x] P01 External source inventory
 - [ ] P02 Architecture records
 - [ ] P03 Repository hygiene
 - [ ] P04 Laravel bootstrap
