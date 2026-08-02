@@ -30,7 +30,7 @@
       <div class="main-content-inner">
         <header class="content-header">
           <mat-icon class="content-header-icon">{{ pageHeader().icon }}</mat-icon>
-          <h1>{{ pageHeader().title }}</h1>
+          <h1>{{ pageHeader().titleKey | hvT }}</h1>
         </header>
 
         <main class="content-area">
@@ -46,7 +46,7 @@
     mat-mini-fab
     type="button"
     class="theme-trigger"
-    aria-label="Tùy chỉnh giao diện"
+    [attr.aria-label]="'shell.themeSettings' | hvT"
     (click)="themePanelOpened.set(true)"
   >
     <mat-icon>settings</mat-icon>
@@ -57,7 +57,7 @@
       mat-mini-fab
       type="button"
       class="back-to-top"
-      aria-label="Về đầu trang"
+      [attr.aria-label]="'shell.backToTop' | hvT"
       (click)="scrollToTop()"
     >
       <mat-icon>arrow_upward</mat-icon>

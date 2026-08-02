@@ -45,6 +45,18 @@
   position: relative;
 }
 
+.menu-group > button .expand-icon-slot {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  margin-inline-end: 0;
+  margin-inline-start: auto;
+}
+
+.menu-group > button .expand-icon {
+  margin: 0 !important;
+}
+
 .dropdown {
   background: var(--hv-theme-surface);
   box-shadow: 0 5px 12px rgb(0 0 0 / 24%);
@@ -75,6 +87,6 @@
 }
 
 .mini span,
-.mini .expand-icon {
+.mini .expand-icon-slot {
   display: none;
 }

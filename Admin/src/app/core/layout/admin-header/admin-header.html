@@ -6,7 +6,7 @@
       <button
         mat-icon-button
         type="button"
-        aria-label="Mở hoặc đóng menu"
+        [attr.aria-label]="'header.toggleMenu' | hvT"
         (click)="toggleMenu.emit()"
       >
         <mat-icon>menu</mat-icon>
@@ -15,7 +15,7 @@
         mat-icon-button
         class="pin-button"
         type="button"
-        [attr.aria-label]="pinned() ? 'Bỏ ghim menu' : 'Ghim menu'"
+        [attr.aria-label]="pinned() ? ('header.unpinMenu' | hvT) : ('header.pinMenu' | hvT)"
         (click)="togglePinned.emit()"
       >
         <svg class="pin" viewBox="0 0 24 24" aria-hidden="true">
@@ -28,52 +28,106 @@
           }
         </svg>
       </button>
-      <button mat-icon-button type="button" class="desktop-action" aria-label="Mở thông tin nhanh">
+      <button mat-icon-button type="button" class="desktop-action" [attr.aria-label]="'header.quickInfo' | hvT">
         <mat-icon>expand_more</mat-icon>
       </button>
-      <button mat-icon-button type="button" class="favorite-action" aria-label="Mục yêu thích">
-        <mat-icon>favorite</mat-icon>
-      </button>
+      <div class="favorite-navigation" [attr.aria-label]="'header.favoriteMenu' | hvT">
+        <div
+          class="favorite-picker-shell"
+          [matTooltip]="'header.favoriteManage' | hvT"
+          matTooltipPosition="below"
+        >
+          <mat-icon class="favorite-heart" aria-hidden="true">favorite</mat-icon>
+          <mat-form-field class="favorite-picker" subscriptSizing="dynamic">
+            <mat-select
+              multiple
+              [value]="preferences.favoriteMenuIds()"
+              [attr.aria-label]="'header.favoriteSelect' | hvT"
+              (selectionChange)="updateFavorites($event.value)"
+            >
+              @for (item of availableFavoriteMenuItems(); track item.id) {
+                <mat-option [value]="item.id">
+                  <span class="favorite-option">
+                    <span>{{ item.labelKey | hvT }}</span>
+                    <mat-icon>{{ item.icon }}</mat-icon>
+                  </span>
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        @for (item of favoriteMenuItems(); track item.id) {
+          <a
+            mat-icon-button
+            class="favorite-menu-link"
+            [routerLink]="item.route"
+            [attr.aria-label]="item.labelKey | hvT"
+            [matTooltip]="item.labelKey | hvT"
+            matTooltipPosition="below"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+          </a>
+        }
+      </div>
     }
   </div>
 
   <div class="toolbar-spacer"></div>
 
   <div class="search" [class.opened]="searchOpened()">
-    <label class="visually-hidden" for="admin-search">Tìm kiếm trong trang quản trị</label>
-    <input id="admin-search" type="search" placeholder="Tìm kiếm..." />
-    <button mat-icon-button type="button" aria-label="Tìm kiếm" (click)="toggleSearch()">
+    <label class="visually-hidden" for="admin-search">{{ 'header.searchAdmin' | hvT }}</label>
+    <input id="admin-search" type="search" [placeholder]="'header.searchPlaceholder' | hvT" />
+    <button mat-icon-button type="button" [attr.aria-label]="'common.search' | hvT" (click)="toggleSearch()">
       <mat-icon>search</mat-icon>
     </button>
   </div>
 
-  <button mat-icon-button type="button" aria-label="Toàn màn hình" (click)="toggleFullscreen()">
+  <button
+    mat-button
+    type="button"
+    class="language-action"
+    [attr.aria-label]="'header.language' | hvT"
+    [matMenuTriggerFor]="languageMenu"
+  >
+    <mat-icon>language</mat-icon>
+    <span>{{ i18n.locale().toUpperCase() }}</span>
+  </button>
+  <button mat-icon-button type="button" [attr.aria-label]="'header.fullscreen' | hvT" (click)="toggleFullscreen()">
     <mat-icon>fullscreen</mat-icon>
   </button>
-  <button mat-icon-button type="button" class="desktop-action" aria-label="Ứng dụng">
+  <button mat-icon-button type="button" class="desktop-action" [attr.aria-label]="'header.apps' | hvT">
     <mat-icon>apps</mat-icon>
   </button>
-  <button mat-icon-button type="button" aria-label="Thông báo">
+  <button mat-icon-button type="button" [attr.aria-label]="'header.notifications' | hvT">
     <mat-icon>notifications</mat-icon>
   </button>
   <button
     mat-icon-button
     type="button"
     class="user-button"
-    aria-label="Tài khoản"
+    [attr.aria-label]="'header.account' | hvT"
     [matMenuTriggerFor]="userMenu"
   >
     <mat-icon>account_circle</mat-icon>
   </button>
 
+  <mat-menu #languageMenu="matMenu">
+    @for (locale of locales; track locale.id) {
+      <button mat-menu-item type="button" (click)="selectLocale(locale.id)">
+        <mat-icon>{{ i18n.locale() === locale.id ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+        <span>{{ locale.labelKey | hvT }}</span>
+      </button>
+    }
+  </mat-menu>
+
   <mat-menu #userMenu="matMenu" xPosition="before">
     <button mat-menu-item type="button" disabled>
       <mat-icon>person</mat-icon>
-      <span>{{ authStore.user()?.name ?? 'Quản trị viên' }}</span>
+      <span>{{ authStore.user()?.name ?? ('header.administrator' | hvT) }}</span>
     </button>
     <button mat-menu-item type="button" (click)="logout()" [disabled]="logoutPending()">
       <mat-icon>logout</mat-icon>
-      <span>{{ logoutPending() ? 'Đang đăng xuất…' : 'Đăng xuất' }}</span>
+      <span>{{ logoutPending() ? ('header.loggingOut' | hvT) : ('header.logout' | hvT) }}</span>
     </button>
   </mat-menu>
   @if (logoutError()) {

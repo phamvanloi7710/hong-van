@@ -15,6 +15,8 @@ import { filter, finalize, forkJoin, Observable, of, switchMap } from 'rxjs';
 import { authErrorMessage } from '../../core/auth/auth-error';
 import { HasPermissionDirective } from '../../core/auth/has-permission.directive';
 import { AuthStore } from '../../core/auth/auth.store';
+import { I18nService } from '../../core/i18n/i18n.service';
+import { TranslationPipe } from '../../core/i18n/translation.pipe';
 import { IdentityDataService } from './identity-data.service';
 import {
   IdentityPermission,
@@ -42,6 +44,7 @@ import { UserDialogData, UserFormDialog } from './user-form-dialog';
     MatProgressSpinnerModule,
     MatTableModule,
     MatTabsModule,
+    TranslationPipe,
   ],
   templateUrl: './identity-page.html',
   styleUrl: './identity-page.scss',
@@ -51,6 +54,7 @@ export class IdentityPage {
   private readonly data = inject(IdentityDataService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly i18n = inject(I18nService);
   readonly authStore = inject(AuthStore);
 
   readonly users = signal<readonly IdentityUser[]>([]);
@@ -85,7 +89,7 @@ export class IdentityPage {
           this.permissions.set(permissions);
         },
         error: (error: unknown) =>
-          this.error.set(authErrorMessage(error, 'Không thể tải dữ liệu phân quyền.')),
+          this.error.set(authErrorMessage(error, this.i18n.t('identity.loadError'))),
       });
   }
 
@@ -114,7 +118,7 @@ export class IdentityPage {
         ),
       )
       .subscribe({
-        next: () => this.complete('Đã lưu người dùng.'),
+        next: () => this.complete(this.i18n.t('identity.savedUser')),
         error: (error: unknown) => this.fail(error),
       });
   }
@@ -131,7 +135,7 @@ export class IdentityPage {
         ),
       )
       .subscribe({
-        next: () => this.complete('Đã lưu vai trò.'),
+        next: () => this.complete(this.i18n.t('identity.savedRole')),
         error: (error: unknown) => this.fail(error),
       });
   }
@@ -152,38 +156,38 @@ export class IdentityPage {
         ),
       )
       .subscribe({
-        next: () => this.complete('Đã lưu quyền.'),
+        next: () => this.complete(this.i18n.t('identity.savedPermission')),
         error: (error: unknown) => this.fail(error),
       });
   }
 
   lock(user: IdentityUser): void {
-    this.run(this.data.lockUser(user.public_id), 'Đã khóa người dùng.');
+    this.run(this.data.lockUser(user.public_id), this.i18n.t('identity.lockedUser'));
   }
 
   activate(user: IdentityUser): void {
-    this.run(this.data.activateUser(user.public_id), 'Đã kích hoạt người dùng.');
+    this.run(this.data.activateUser(user.public_id), this.i18n.t('identity.activatedUser'));
   }
 
   resetSessions(user: IdentityUser): void {
-    this.run(this.data.resetUserSessions(user.public_id), 'Đã thu hồi các phiên đăng nhập.');
+    this.run(this.data.resetUserSessions(user.public_id), this.i18n.t('identity.sessionsRevoked'));
   }
 
   deleteUser(user: IdentityUser): void {
-    if (confirm(`Xóa người dùng ${user.name}?`)) {
-      this.run(this.data.deleteUser(user.public_id), 'Đã xóa người dùng.');
+    if (confirm(this.i18n.t('identity.confirmDeleteUser', { name: user.name }))) {
+      this.run(this.data.deleteUser(user.public_id), this.i18n.t('identity.deletedUser'));
     }
   }
 
   deleteRole(role: IdentityRole): void {
-    if (confirm(`Xóa vai trò ${role.name}?`)) {
-      this.run(this.data.deleteRole(role.public_id), 'Đã xóa vai trò.');
+    if (confirm(this.i18n.t('identity.confirmDeleteRole', { name: role.name }))) {
+      this.run(this.data.deleteRole(role.public_id), this.i18n.t('identity.deletedRole'));
     }
   }
 
   deletePermission(permission: IdentityPermission): void {
-    if (confirm(`Xóa quyền ${permission.key}?`)) {
-      this.run(this.data.deletePermission(permission.public_id), 'Đã xóa quyền.');
+    if (confirm(this.i18n.t('identity.confirmDeletePermission', { name: permission.key }))) {
+      this.run(this.data.deletePermission(permission.public_id), this.i18n.t('identity.deletedPermission'));
     }
   }
 
@@ -203,12 +207,12 @@ export class IdentityPage {
   }
 
   private complete(message: string): void {
-    this.snackBar.open(message, 'Đóng', { duration: 3000 });
+    this.snackBar.open(message, this.i18n.t('common.close'), { duration: 3000 });
     this.reload();
   }
 
   private fail(error: unknown): void {
-    this.snackBar.open(authErrorMessage(error, 'Thao tác không thành công.'), 'Đóng', {
+    this.snackBar.open(authErrorMessage(error, this.i18n.t('identity.operationFailed')), this.i18n.t('common.close'), {
       duration: 5000,
     });
   }

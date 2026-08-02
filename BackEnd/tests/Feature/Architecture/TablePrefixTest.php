@@ -48,6 +48,7 @@ class TablePrefixTest extends TestCase
             'hongvan_settings',
             'hongvan_users',
             'hongvan_user_permission_overrides',
+            'hongvan_user_preferences',
         ];
 
         $this->assertEqualsCanonicalizing($expectedTables, $tables);

@@ -1,25 +1,25 @@
 <mat-card class="login-card">
   <header class="login-hero">
     <mat-icon>exit_to_app</mat-icon>
-    <h1>Đăng nhập</h1>
+    <h1>{{ 'auth.login' | hvT }}</h1>
   </header>
 
   <mat-card-content>
-    <p class="access-note">Khu vực dành cho tài khoản được cấp quyền</p>
+    <p class="access-note">{{ 'auth.accessNote' | hvT }}</p>
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
+        <mat-label>{{ 'auth.email' | hvT }}</mat-label>
         <mat-icon matPrefix>mail</mat-icon>
         <input matInput type="email" formControlName="email" autocomplete="username" />
         @if (form.controls.email.touched && form.controls.email.hasError('required')) {
-          <mat-error>Email là bắt buộc.</mat-error>
+          <mat-error>{{ 'auth.emailRequired' | hvT }}</mat-error>
         } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
-          <mat-error>Email chưa đúng định dạng.</mat-error>
+          <mat-error>{{ 'auth.emailInvalid' | hvT }}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="fill">
-        <mat-label>Mật khẩu</mat-label>
+        <mat-label>{{ 'auth.password' | hvT }}</mat-label>
         <mat-icon matPrefix>lock</mat-icon>
         <input
           matInput
@@ -31,27 +31,27 @@
           mat-icon-button
           matSuffix
           type="button"
-          [attr.aria-label]="passwordVisible() ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'"
+          [attr.aria-label]="passwordVisible() ? ('auth.hidePassword' | hvT) : ('auth.showPassword' | hvT)"
           (click)="passwordVisible.update((visible) => !visible)"
         >
           <mat-icon>{{ passwordVisible() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         @if (form.controls.password.touched && form.controls.password.hasError('required')) {
-          <mat-error>Mật khẩu là bắt buộc.</mat-error>
+          <mat-error>{{ 'auth.passwordRequired' | hvT }}</mat-error>
         } @else if (
           form.controls.password.touched && form.controls.password.hasError('minlength')
         ) {
-          <mat-error>Mật khẩu phải có ít nhất 8 ký tự.</mat-error>
+          <mat-error>{{ 'auth.passwordMin8' | hvT }}</mat-error>
         }
       </mat-form-field>
 
       <div class="form-options">
-        <mat-checkbox formControlName="remember">Ghi nhớ đăng nhập</mat-checkbox>
-        <a routerLink="/forgot-password" class="forgot-link">Quên mật khẩu?</a>
+        <mat-checkbox formControlName="remember">{{ 'auth.remember' | hvT }}</mat-checkbox>
+        <a routerLink="/forgot-password" class="forgot-link">{{ 'auth.forgotPassword' | hvT }}</a>
       </div>
 
       <button mat-raised-button type="submit" class="submit-button" [disabled]="submitting()">
-        {{ submitting() ? 'ĐANG ĐĂNG NHẬP…' : 'ĐĂNG NHẬP' }}
+        {{ submitting() ? ('auth.loggingIn' | hvT) : ('auth.login' | hvT) }}
       </button>
 
       @if (errorMessage()) {

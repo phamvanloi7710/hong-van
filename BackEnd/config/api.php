@@ -5,7 +5,7 @@ return [
 
     'default_locale' => env('API_DEFAULT_LOCALE', 'vi'),
 
-    'locales' => ['vi', 'en'],
+    'locales' => ['vi', 'en', 'zh'],
 
     'rate_limit_per_minute' => (int) env('API_RATE_LIMIT_PER_MINUTE', 60),
 

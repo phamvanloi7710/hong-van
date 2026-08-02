@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\V1\Identity\PermissionController;
 use App\Http\Controllers\Api\V1\Identity\RoleController;
 use App\Http\Controllers\Api\V1\Identity\UserController;
+use App\Http\Controllers\Api\V1\Identity\UserPreferenceController;
 use App\Http\Controllers\Api\V1\SystemPingController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,10 @@ Route::prefix('admin/v1')
         });
 
         Route::middleware('auth:sanctum')->group(function (): void {
+            Route::get('preferences', [UserPreferenceController::class, 'show'])->name('preferences.show');
+            Route::put('preferences', [UserPreferenceController::class, 'update'])->name('preferences.update');
+            Route::delete('preferences', [UserPreferenceController::class, 'destroy'])->name('preferences.destroy');
+
             Route::get('system/ping', SystemPingController::class)
                 ->middleware('can:system_health')
                 ->name('system.ping');

@@ -32,7 +32,7 @@ final class SetApiLocale
     private function resolveLocale(Request $request): string
     {
         $allowedLocales = array_values(array_filter(
-            config('api.locales', ['vi', 'en']),
+            config('api.locales', ['vi', 'en', 'zh']),
             static fn (mixed $locale): bool => is_string($locale) && $locale !== '',
         ));
         $defaultLocale = (string) config('api.default_locale', config('app.locale', 'vi'));

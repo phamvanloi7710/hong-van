@@ -1,41 +1,41 @@
-<section class="dashboard" aria-label="Tổng quan nền tảng quản trị">
+<section class="dashboard" [attr.aria-label]="'dashboard.aria' | hvT">
   <div class="tiles-grid">
     <mat-card class="tile gradient-green">
       <mat-icon>inventory_2</mat-icon>
       <h2>—</h2>
-      <p>Sản phẩm</p>
+      <p>{{ 'dashboard.products' | hvT }}</p>
     </mat-card>
     <mat-card class="tile gradient-red">
       <mat-icon>handyman</mat-icon>
       <h2>—</h2>
-      <p>Dịch vụ</p>
+      <p>{{ 'dashboard.services' | hvT }}</p>
     </mat-card>
     <mat-card class="tile gradient-orange">
       <mat-icon>warehouse</mat-icon>
       <h2>—</h2>
-      <p>Kho bãi</p>
+      <p>{{ 'dashboard.warehouses' | hvT }}</p>
     </mat-card>
     <mat-card class="tile gradient-pink">
       <mat-icon>request_quote</mat-icon>
       <h2>—</h2>
-      <p>Báo giá</p>
+      <p>{{ 'dashboard.quotes' | hvT }}</p>
     </mat-card>
     <mat-card class="tile gradient-gray">
       <mat-icon>article</mat-icon>
       <h2>—</h2>
-      <p>Bài viết</p>
+      <p>{{ 'dashboard.posts' | hvT }}</p>
     </mat-card>
     <mat-card class="tile gradient-brown">
       <mat-icon>group</mat-icon>
       <h2>—</h2>
-      <p>Người dùng</p>
+      <p>{{ 'dashboard.users' | hvT }}</p>
     </mat-card>
   </div>
 
   <div class="info-grid">
     <mat-card class="info-card gradient-purple">
       <header>
-        <span>Sản phẩm đã xuất bản</span><span><mat-icon>trending_up</mat-icon> 0%</span>
+        <span>{{ 'dashboard.publishedProducts' | hvT }}</span><span><mat-icon>trending_up</mat-icon> 0%</span>
       </header>
       <div class="bar-chart" aria-hidden="true">
         <i style="height: 45%"></i><i style="height: 72%"></i><i style="height: 32%"></i>
@@ -46,7 +46,7 @@
     </mat-card>
     <mat-card class="info-card gradient-teal">
       <header>
-        <span>Yêu cầu báo giá</span><span><mat-icon>trending_up</mat-icon> 0%</span>
+        <span>{{ 'dashboard.quoteRequests' | hvT }}</span><span><mat-icon>trending_up</mat-icon> 0%</span>
       </header>
       <svg class="line-chart" viewBox="0 0 220 100" preserveAspectRatio="none" aria-hidden="true">
         <polyline
@@ -56,7 +56,7 @@
     </mat-card>
     <mat-card class="info-card gradient-indigo">
       <header>
-        <span>Nội dung chờ duyệt</span><span><mat-icon>trending_down</mat-icon> 0%</span>
+        <span>{{ 'dashboard.pendingContent' | hvT }}</span><span><mat-icon>trending_down</mat-icon> 0%</span>
       </header>
       <div class="bar-chart" aria-hidden="true">
         <i style="height: 34%"></i><i style="height: 65%"></i><i style="height: 48%"></i>
@@ -67,7 +67,7 @@
     </mat-card>
     <mat-card class="info-card gradient-amber">
       <header>
-        <span>Lượt liên hệ</span><span><mat-icon>trending_up</mat-icon> 0%</span>
+        <span>{{ 'dashboard.contacts' | hvT }}</span><span><mat-icon>trending_up</mat-icon> 0%</span>
       </header>
       <svg class="line-chart" viewBox="0 0 220 100" preserveAspectRatio="none" aria-hidden="true">
         <polyline
@@ -79,30 +79,30 @@
 
   <div class="dashboard-panels">
     <mat-card class="panel disk-panel">
-      <h2>Dung lượng lưu trữ</h2>
+      <h2>{{ 'dashboard.storage' | hvT }}</h2>
       <div class="panel-controls">
-        <label><input type="checkbox" checked disabled /> File hệ thống</label>
-        <label><input type="checkbox" checked disabled /> Media</label>
+        <label><input type="checkbox" checked disabled /> {{ 'dashboard.systemFiles' | hvT }}</label>
+        <label><input type="checkbox" checked disabled /> {{ 'dashboard.media' | hvT }}</label>
       </div>
       <div class="disk-chart" aria-hidden="true"><span></span></div>
     </mat-card>
 
     <mat-card class="panel todo-panel">
-      <h2>Công việc cần làm</h2>
+      <h2>{{ 'dashboard.todo' | hvT }}</h2>
       <div class="task-input">
-        <input type="text" placeholder="Nhập công việc..." /><mat-icon>add</mat-icon>
+        <input type="text" [placeholder]="'dashboard.todoPlaceholder' | hvT" /><mat-icon>add</mat-icon>
       </div>
       <ul>
-        <li>Thiết lập nội dung công ty</li>
-        <li>Hoàn thiện danh mục sản phẩm</li>
-        <li>Cấu hình dịch vụ vận chuyển và kho bãi</li>
-        <li>Chuẩn bị nội dung website public</li>
+        <li>{{ 'dashboard.todoCompany' | hvT }}</li>
+        <li>{{ 'dashboard.todoProducts' | hvT }}</li>
+        <li>{{ 'dashboard.todoServices' | hvT }}</li>
+        <li>{{ 'dashboard.todoPublic' | hvT }}</li>
       </ul>
     </mat-card>
   </div>
 
   <div class="performance-grid">
-    <mat-card class="analytics-card gradient-purple" aria-label="Biểu đồ hoạt động">
+    <mat-card class="analytics-card gradient-purple" [attr.aria-label]="'dashboard.activityChart' | hvT">
       <svg viewBox="0 0 700 240" preserveAspectRatio="none" aria-hidden="true">
         <polyline
           points="0,195 50,138 100,168 150,62 200,120 250,46 300,104 350,75 400,145 450,88 500,170 550,96 600,132 650,52 700,84"
@@ -111,19 +111,19 @@
     </mat-card>
     <div class="progress-column">
       <mat-card
-        ><div><strong>0</strong><span>Sản phẩm</span></div>
+        ><div><strong>0</strong><span>{{ 'dashboard.products' | hvT }}</span></div>
         <mat-progress-bar mode="determinate" value="0" />
-        <p>Chưa có dữ liệu thống kê</p></mat-card
+        <p>{{ 'dashboard.noStats' | hvT }}</p></mat-card
       >
       <mat-card
-        ><div><strong>0</strong><span>Yêu cầu báo giá</span></div>
+        ><div><strong>0</strong><span>{{ 'dashboard.quoteRequests' | hvT }}</span></div>
         <mat-progress-bar mode="determinate" value="0" />
-        <p>Chưa có dữ liệu thống kê</p></mat-card
+        <p>{{ 'dashboard.noStats' | hvT }}</p></mat-card
       >
       <mat-card
-        ><div><strong>0</strong><span>Lượt liên hệ</span></div>
+        ><div><strong>0</strong><span>{{ 'dashboard.contacts' | hvT }}</span></div>
         <mat-progress-bar mode="determinate" value="0" />
-        <p>Chưa có dữ liệu thống kê</p></mat-card
+        <p>{{ 'dashboard.noStats' | hvT }}</p></mat-card
       >
     </div>
   </div>

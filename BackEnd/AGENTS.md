@@ -15,3 +15,4 @@
 - Tác vụ ảnh/email/export/import/sitemap nặng dùng queue.
 - Mỗi endpoint có authorization và test.
 - Sau thay đổi: chạy test phạm vi, Pint và static analysis liên quan.
+- Message API hướng người dùng phải dùng Laravel language catalog và có đủ `vi`, `en`, `zh` trong cùng thay đổi.

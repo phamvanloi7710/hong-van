@@ -12,10 +12,11 @@ import {
   AdminSkin,
 } from '../../theme/admin-theme.model';
 import { AdminThemeStore } from '../../theme/admin-theme.store';
+import { TranslationPipe } from '../../i18n/translation.pipe';
 
 @Component({
   selector: 'hv-theme-settings-panel',
-  imports: [MatButtonModule, MatIconModule, MatSlideToggleModule],
+  imports: [MatButtonModule, MatIconModule, MatSlideToggleModule, TranslationPipe],
   templateUrl: './theme-settings-panel.html',
   styleUrl: './theme-settings-panel.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

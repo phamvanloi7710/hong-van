@@ -41,11 +41,14 @@ hongvan_user_permission_overrides
 hongvan_languages
 hongvan_setting_groups
 hongvan_settings
+hongvan_user_preferences
 ```
 
 Quy ước định danh được chốt tại `ADR-009`: entity nghiệp vụ dùng unsigned `BIGINT` làm khóa nội bộ và `CHAR(26)` ULID unique làm `public_id` khi cần xuất hiện bên ngoài. Foreign key nội bộ tham chiếu `id`.
 
 Foundation settings chỉ lưu cấu hình có kiểu dữ liệu khai báo qua `value_type`; validation và allowlist của từng setting thuộc P13. P10 đã ánh xạ Sanctum vào `hongvan_personal_access_tokens`. P11 đã triển khai role, permission, hai pivot và user permission override; tất cả quan hệ dùng khóa nội bộ, còn API chỉ nhận/trả `public_id`.
+
+P12 đã triển khai `hongvan_user_preferences` để lưu cấu hình riêng từng user theo cặp `namespace` + `key`. Giá trị JSON chỉ nhận contract có allowlist; hiện gồm theme Annular, locale `vi|en|zh` và danh sách favorite menu có thứ tự. Unique key `(user_id, namespace, key)` ngăn dữ liệu trùng và foreign key xóa cascade theo user.
 
 ## Core và Identity dự kiến
 

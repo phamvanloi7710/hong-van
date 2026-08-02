@@ -60,14 +60,14 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('./features/dashboard/dashboard').then((page) => page.Dashboard),
-        data: { breadcrumb: 'Tổng quan' },
+        data: { breadcrumb: 'menu.dashboard' },
       },
       {
         path: 'identity',
         canActivate: [permissionGuard('users.view')],
         loadComponent: () =>
           import('./features/identity/identity-page').then((page) => page.IdentityPage),
-        data: { breadcrumb: 'Người dùng & phân quyền' },
+        data: { breadcrumb: 'menu.identity' },
       },
     ],
   },

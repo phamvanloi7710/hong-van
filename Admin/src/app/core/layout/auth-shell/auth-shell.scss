@@ -5,6 +5,12 @@
   justify-content: center;
   min-height: 100dvh;
   padding: 24px;
+  position: relative;
+}
+
+.guest-language {
+  inset: 18px 18px auto auto;
+  position: absolute;
 }
 
 @media (max-width: 520px) {

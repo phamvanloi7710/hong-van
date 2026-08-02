@@ -1,3 +1,21 @@
 <main class="auth-shell">
+  <button
+    mat-stroked-button
+    type="button"
+    class="guest-language"
+    [attr.aria-label]="'header.language' | hvT"
+    [matMenuTriggerFor]="guestLanguageMenu"
+  >
+    <mat-icon>language</mat-icon>
+    {{ i18n.locale().toUpperCase() }}
+  </button>
+  <mat-menu #guestLanguageMenu="matMenu">
+    @for (locale of locales; track locale.id) {
+      <button mat-menu-item type="button" (click)="selectLocale(locale.id)">
+        <mat-icon>{{ i18n.locale() === locale.id ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+        <span>{{ locale.labelKey | hvT }}</span>
+      </button>
+    }
+  </mat-menu>
   <router-outlet />
 </main>

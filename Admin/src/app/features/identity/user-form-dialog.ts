@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { IdentityPermission, IdentityRole, IdentityUser, UserPayload } from './identity.models';
+import { TranslationPipe } from '../../core/i18n/translation.pipe';
 
 export interface UserDialogData {
   readonly user: IdentityUser | null;
@@ -27,30 +28,31 @@ export interface UserDialogData {
     MatInputModule,
     MatSelectModule,
     ReactiveFormsModule,
+    TranslationPipe,
   ],
   template: `
-    <h2 mat-dialog-title>{{ data.user ? 'Cập nhật người dùng' : 'Tạo người dùng' }}</h2>
+    <h2 mat-dialog-title>{{ data.user ? ('identity.updateUser' | hvT) : ('identity.createUser' | hvT) }}</h2>
     <mat-dialog-content>
       <form class="identity-form" [formGroup]="form">
         <mat-form-field appearance="outline">
-          <mat-label>Họ tên</mat-label>
+          <mat-label>{{ 'identity.fullName' | hvT }}</mat-label>
           <input matInput formControlName="name" />
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
+          <mat-label>{{ 'auth.email' | hvT }}</mat-label>
           <input matInput type="email" formControlName="email" />
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>{{ data.user ? 'Mật khẩu mới (không bắt buộc)' : 'Mật khẩu' }}</mat-label>
+          <mat-label>{{ data.user ? ('identity.newPasswordOptional' | hvT) : ('auth.password' | hvT) }}</mat-label>
           <input matInput type="password" formControlName="password" />
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Xác nhận mật khẩu</mat-label>
+          <mat-label>{{ 'auth.passwordConfirmation' | hvT }}</mat-label>
           <input matInput type="password" formControlName="password_confirmation" />
         </mat-form-field>
         @if (data.canManageRoles) {
           <mat-form-field appearance="outline">
-            <mat-label>Vai trò</mat-label>
+            <mat-label>{{ 'identity.roles' | hvT }}</mat-label>
             <mat-select formControlName="role_ids" multiple>
               @for (role of data.roles; track role.public_id) {
                 <mat-option [value]="role.public_id">{{ role.name }}</mat-option>
@@ -60,7 +62,7 @@ export interface UserDialogData {
         }
         @if (data.canManageOverrides) {
           <mat-form-field appearance="outline">
-            <mat-label>Cho phép riêng</mat-label>
+            <mat-label>{{ 'identity.allowPermissions' | hvT }}</mat-label>
             <mat-select formControlName="allow_permissions" multiple>
               @for (permission of data.permissions; track permission.public_id) {
                 <mat-option [value]="permission.public_id">{{ permission.key }}</mat-option>
@@ -68,7 +70,7 @@ export interface UserDialogData {
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline">
-            <mat-label>Từ chối riêng</mat-label>
+            <mat-label>{{ 'identity.denyPermissions' | hvT }}</mat-label>
             <mat-select formControlName="deny_permissions" multiple>
               @for (permission of data.permissions; track permission.public_id) {
                 <mat-option [value]="permission.public_id">{{ permission.key }}</mat-option>
@@ -77,13 +79,13 @@ export interface UserDialogData {
           </mat-form-field>
         }
         @if (!data.user) {
-          <mat-checkbox formControlName="is_active">Cho phép đăng nhập ngay</mat-checkbox>
+          <mat-checkbox formControlName="is_active">{{ 'identity.allowLogin' | hvT }}</mat-checkbox>
         }
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button type="button" mat-dialog-close>Hủy</button>
-      <button mat-flat-button type="button" [disabled]="form.invalid" (click)="save()">Lưu</button>
+      <button mat-button type="button" mat-dialog-close>{{ 'common.cancel' | hvT }}</button>
+      <button mat-flat-button type="button" [disabled]="form.invalid" (click)="save()">{{ 'common.save' | hvT }}</button>
     </mat-dialog-actions>
   `,
   styles: `

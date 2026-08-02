@@ -12,14 +12,16 @@
         [routerLinkActiveOptions]="{ exact: true }"
       >
         <mat-icon>{{ item.icon }}</mat-icon>
-        <span>{{ item.label }}</span>
+        <span>{{ item.labelKey | hvT }}</span>
       </a>
     } @else if (!item.route && canSeeGroup(item)) {
       <div class="menu-group">
         <button mat-button type="button">
           <mat-icon>{{ item.icon }}</mat-icon>
-          <span>{{ item.label }}</span>
-          <mat-icon class="expand-icon">expand_more</mat-icon>
+          <span>{{ item.labelKey | hvT }}</span>
+          <span class="expand-icon-slot" aria-hidden="true">
+            <mat-icon class="expand-icon">expand_more</mat-icon>
+          </span>
         </button>
         <div class="dropdown">
           @for (child of item.children ?? []; track child.id) {
@@ -27,12 +29,12 @@
               @if (child.route) {
                 <a mat-button [routerLink]="child.route" routerLinkActive="active">
                   <mat-icon>{{ child.icon }}</mat-icon>
-                  <span>{{ child.label }}</span>
+                  <span>{{ child.labelKey | hvT }}</span>
                 </a>
               } @else {
                 <button mat-button type="button" disabled>
                   <mat-icon>{{ child.icon }}</mat-icon>
-                  <span>{{ child.label }}</span>
+                  <span>{{ child.labelKey | hvT }}</span>
                 </button>
               }
             }

@@ -11,6 +11,8 @@ import { finalize } from 'rxjs';
 
 import { authErrorMessage } from '../../../core/auth/auth-error';
 import { AuthService } from '../../../core/auth/auth.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslationPipe } from '../../../core/i18n/translation.pipe';
 
 @Component({
   selector: 'hv-forgot-password',
@@ -22,6 +24,7 @@ import { AuthService } from '../../../core/auth/auth.service';
     MatInputModule,
     ReactiveFormsModule,
     RouterLink,
+    TranslationPipe,
   ],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
@@ -31,6 +34,7 @@ export class ForgotPassword {
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly i18n = inject(I18nService);
 
   readonly submitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -59,7 +63,7 @@ export class ForgotPassword {
         next: (message) => this.successMessage.set(message),
         error: (error: unknown) =>
           this.errorMessage.set(
-            authErrorMessage(error, 'Không thể gửi yêu cầu. Vui lòng thử lại.'),
+            authErrorMessage(error, this.i18n.t('auth.forgotSendError')),
           ),
       });
   }

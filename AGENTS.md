@@ -93,6 +93,9 @@ Khi clone giao diện:
 - Giữ nguyên hệ thống layout/theme của template admin.
 - Không tự thay template bằng một bộ UI khác.
 - Mỗi feature hoàn tất phải chạy lint/test/build liên quan.
+- Mọi text hiển thị cho người dùng phải dùng translation key; không hardcode trực tiếp trong component/template.
+- Mỗi translation key mới phải có đủ `vi`, `en`, `zh` trong cùng thay đổi. Tên riêng doanh nghiệp và technical identifier được giữ nguyên khi phù hợp.
+- Favorite menu phải giữ cơ chế chọn nhiều shortcut của Annular template; icon tim luôn đứng bên trái các shortcut đã chọn.
 
 ## 8. Page Builder
 

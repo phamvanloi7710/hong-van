@@ -7,10 +7,11 @@ import { AuthStore } from '../../auth/auth.store';
 import { ADMIN_MENU_ITEMS } from '../../navigation/admin-menu';
 import { AdminMenuItem } from '../../navigation/admin-menu.model';
 import { AdminMenuDensity } from '../../theme/admin-theme.model';
+import { TranslationPipe } from '../../i18n/translation.pipe';
 
 @Component({
   selector: 'hv-admin-sidebar',
-  imports: [MatButtonModule, MatIconModule, RouterLink, RouterLinkActive],
+  imports: [MatButtonModule, MatIconModule, RouterLink, RouterLinkActive, TranslationPipe],
   templateUrl: './admin-sidebar.html',
   styleUrl: './admin-sidebar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

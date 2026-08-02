@@ -12,6 +12,8 @@ import { finalize } from 'rxjs';
 
 import { authErrorMessage } from '../../../core/auth/auth-error';
 import { AuthService } from '../../../core/auth/auth.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslationPipe } from '../../../core/i18n/translation.pipe';
 
 @Component({
   selector: 'hv-login',
@@ -24,6 +26,7 @@ import { AuthService } from '../../../core/auth/auth.service';
     MatInputModule,
     ReactiveFormsModule,
     RouterLink,
+    TranslationPipe,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -35,6 +38,7 @@ export class Login {
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly i18n = inject(I18nService);
 
   readonly passwordVisible = signal(false);
   readonly submitting = signal(false);
@@ -64,7 +68,7 @@ export class Login {
         next: () => void this.router.navigateByUrl(this.safeReturnUrl()),
         error: (error: unknown) =>
           this.errorMessage.set(
-            authErrorMessage(error, 'Đăng nhập không thành công. Vui lòng thử lại.'),
+            authErrorMessage(error, this.i18n.t('auth.loginError')),
           ),
       });
   }

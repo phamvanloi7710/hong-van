@@ -24,7 +24,15 @@ export interface AdminThemePreferences {
 
 export interface AdminSkinOption {
   readonly id: AdminSkin;
-  readonly label: string;
+  readonly labelKey:
+    | 'theme.skin.indigoLight'
+    | 'theme.skin.tealLight'
+    | 'theme.skin.redLight'
+    | 'theme.skin.grayLight'
+    | 'theme.skin.blueDark'
+    | 'theme.skin.greenDark'
+    | 'theme.skin.pinkDark'
+    | 'theme.skin.grayDark';
   readonly primary: string;
   readonly surface: string;
   readonly dark: boolean;
@@ -43,14 +51,14 @@ export const DEFAULT_ADMIN_THEME_PREFERENCES: AdminThemePreferences = {
 };
 
 export const ADMIN_SKINS: readonly AdminSkinOption[] = [
-  { id: 'indigo-light', label: 'Indigo sáng', primary: '#3f51b5', surface: '#ececec', dark: false },
-  { id: 'teal-light', label: 'Teal sáng', primary: '#009688', surface: '#ececec', dark: false },
-  { id: 'red-light', label: 'Đỏ sáng', primary: '#f44336', surface: '#ececec', dark: false },
-  { id: 'gray-light', label: 'Xám sáng', primary: '#757575', surface: '#ececec', dark: false },
-  { id: 'blue-dark', label: 'Xanh tối', primary: '#0277bd', surface: '#262626', dark: true },
-  { id: 'green-dark', label: 'Lục tối', primary: '#388e3c', surface: '#262626', dark: true },
-  { id: 'pink-dark', label: 'Hồng tối', primary: '#d81b60', surface: '#262626', dark: true },
-  { id: 'gray-dark', label: 'Xám tối', primary: '#607d8b', surface: '#262626', dark: true },
+  { id: 'indigo-light', labelKey: 'theme.skin.indigoLight', primary: '#3f51b5', surface: '#ececec', dark: false },
+  { id: 'teal-light', labelKey: 'theme.skin.tealLight', primary: '#009688', surface: '#ececec', dark: false },
+  { id: 'red-light', labelKey: 'theme.skin.redLight', primary: '#f44336', surface: '#ececec', dark: false },
+  { id: 'gray-light', labelKey: 'theme.skin.grayLight', primary: '#757575', surface: '#ececec', dark: false },
+  { id: 'blue-dark', labelKey: 'theme.skin.blueDark', primary: '#0277bd', surface: '#262626', dark: true },
+  { id: 'green-dark', labelKey: 'theme.skin.greenDark', primary: '#388e3c', surface: '#262626', dark: true },
+  { id: 'pink-dark', labelKey: 'theme.skin.pinkDark', primary: '#d81b60', surface: '#262626', dark: true },
+  { id: 'gray-dark', labelKey: 'theme.skin.grayDark', primary: '#607d8b', surface: '#262626', dark: true },
 ];
 
 export const ADMIN_MENU_ORIENTATIONS: readonly AdminMenuOrientation[] = ['vertical', 'horizontal'];

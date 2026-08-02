@@ -7,7 +7,7 @@
     <mat-icon>account_circle</mat-icon>
   </span>
   <div class="user-copy">
-    <strong>{{ authStore.user()?.name ?? 'Quản trị viên' }}</strong>
+    <strong>{{ authStore.user()?.name ?? ('header.administrator' | hvT) }}</strong>
     <small>{{ authStore.user()?.email ?? 'admin@hongvan.local' }}</small>
   </div>
 </section>
@@ -28,15 +28,17 @@
         (click)="navigated.emit()"
       >
         <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
-        <span class="menu-title">{{ item.label }}</span>
+        <span class="menu-title">{{ item.labelKey | hvT }}</span>
       </a>
     } @else if (!item.route && canSeeGroup(item)) {
       <button mat-button type="button" class="menu-entry" (click)="toggleGroup(item)">
         <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
-        <span class="menu-title">{{ item.label }}</span>
-        <mat-icon class="expand-icon" [class.expanded]="isExpanded(item)">{{
-          isExpanded(item) ? 'expand_less' : 'expand_more'
-        }}</mat-icon>
+        <span class="menu-title">{{ item.labelKey | hvT }}</span>
+        <span class="expand-icon-slot" aria-hidden="true">
+          <mat-icon class="expand-icon" [class.expanded]="isExpanded(item)">{{
+            isExpanded(item) ? 'expand_less' : 'expand_more'
+          }}</mat-icon>
+        </span>
       </button>
       @if (isExpanded(item)) {
         <div class="sub-menu">
@@ -51,12 +53,12 @@
                   (click)="navigated.emit()"
                 >
                   <mat-icon class="menu-icon">{{ child.icon }}</mat-icon>
-                  <span class="menu-title">{{ child.label }}</span>
+                  <span class="menu-title">{{ child.labelKey | hvT }}</span>
                 </a>
               } @else {
                 <button mat-button class="menu-entry" type="button" disabled>
                   <mat-icon class="menu-icon">{{ child.icon }}</mat-icon>
-                  <span class="menu-title">{{ child.label }}</span>
+                  <span class="menu-title">{{ child.labelKey | hvT }}</span>
                 </button>
               }
             }

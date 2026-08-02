@@ -4,14 +4,16 @@ import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
 import { AuthStore } from './auth.store';
+import { I18nService } from '../i18n/i18n.service';
 
 function isSameOriginRelativeUrl(url: string): boolean {
   return url.startsWith('/') && !url.startsWith('//');
 }
 
 export const sessionCredentialsInterceptor: HttpInterceptorFn = (request, next) => {
+  const locale = inject(I18nService).locale();
   const statefulRequest = isSameOriginRelativeUrl(request.url)
-    ? request.clone({ withCredentials: true })
+    ? request.clone({ withCredentials: true, setHeaders: { 'X-Locale': locale } })
     : request;
 
   return next(statefulRequest);

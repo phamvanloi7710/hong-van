@@ -10,6 +10,7 @@ import { provideRouter, Router } from '@angular/router';
 import { AdminUser, ApiEnvelope } from './auth.models';
 import { sessionCredentialsInterceptor, unauthorizedInterceptor } from './auth.interceptor';
 import { AuthService } from './auth.service';
+import { AdminPreferencesDto } from '../preferences/admin-preferences.model';
 
 const adminUser: AdminUser = {
   public_id: '01JADMINUSER00000000000000',
@@ -20,6 +21,22 @@ const adminUser: AdminUser = {
   locked_at: null,
   roles: ['super_admin'],
   permissions: ['users.view'],
+};
+
+const adminPreferences: AdminPreferencesDto = {
+  theme: {
+    fixed_header: true,
+    fixed_sidenav: true,
+    fixed_footer: false,
+    sidenav_opened: true,
+    sidenav_pinned: true,
+    menu_orientation: 'vertical',
+    menu_density: 'default',
+    skin: 'indigo-light',
+    rtl: false,
+  },
+  locale: 'vi',
+  favorite_menu_ids: [],
 };
 
 function envelope<T>(data: T, message: string | null = null): ApiEnvelope<T> {
@@ -66,6 +83,7 @@ describe('AuthService', () => {
     const request = httpTesting.expectOne('/api/admin/v1/auth/me');
     expect(request.request.withCredentials).toBe(true);
     request.flush(envelope(adminUser));
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(adminPreferences));
 
     expect(resolvedUser).toEqual(adminUser);
     expect(service.store.authenticated()).toBe(true);
@@ -92,10 +110,13 @@ describe('AuthService', () => {
     expect(loginRequest.request.withCredentials).toBe(true);
     expect(loginRequest.request.headers.get('X-XSRF-TOKEN')).toBe('csrf-test');
     loginRequest.flush(envelope(adminUser, 'Đăng nhập thành công.'));
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(adminPreferences));
 
     expect(resolvedUser).toEqual(adminUser);
     expect(service.store.authenticated()).toBe(true);
-    expect(localStorageSpy).not.toHaveBeenCalled();
+    expect(
+      localStorageSpy.mock.calls.some(([key]) => String(key).toLowerCase().includes('token')),
+    ).toBe(false);
   });
 
   it('clears auth state and redirects when session bootstrap returns 401', () => {

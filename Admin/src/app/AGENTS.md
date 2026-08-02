@@ -8,3 +8,4 @@
 - Error/loading/empty/permission-denied state là bắt buộc.
 - Subscription phải cleanup an toàn.
 - Không hardcode API URL hoặc company contact.
+- UI text mới bắt buộc dùng translation key có đủ `vi`, `en`, `zh`; không tạo feature chỉ có một ngôn ngữ.

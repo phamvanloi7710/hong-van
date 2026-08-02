@@ -26,6 +26,7 @@ GET|POST /api/admin/v1/identity/roles
 GET|PUT|DELETE /api/admin/v1/identity/roles/{public_id}
 GET|POST /api/admin/v1/identity/permissions
 GET|PUT|DELETE /api/admin/v1/identity/permissions/{public_id}
+GET|PUT|DELETE /api/admin/v1/preferences
 ```
 
 Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Admin ping dùng `auth` và Gate `system_health`, được P11 ánh xạ vào permission `system.health`. Identity API dùng Sanctum, permission middleware, Policy và Form Request; filter/sort chỉ nhận key trong allowlist phía server.
@@ -87,10 +88,11 @@ Public ping chỉ trả trạng thái ứng dụng, không trả thông tin depe
 
 ## Locale
 
-- Locale API hiện hỗ trợ `vi` và `en`.
+- Locale API hiện hỗ trợ `vi`, `en` và `zh`.
 - Thứ tự chọn: locale của user nếu có, `X-Locale`, `Accept-Language`, sau đó `API_DEFAULT_LOCALE`.
 - Locale ngoài allowlist không được đặt vào application context.
 - Response trả `Content-Language` với locale thực tế.
+- Admin SPA lưu locale theo user qua Preferences API và gửi locale đang dùng bằng `X-Locale` cho các request tiếp theo.
 
 ## Pagination
 

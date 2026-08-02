@@ -1,36 +1,33 @@
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import {
-  AdminThemePreferencesAdapter,
-  ADMIN_THEME_PREFERENCES_ADAPTER,
-} from './admin-theme-preferences.adapter';
+import { AdminPreferencesStore } from '../preferences/admin-preferences.store';
 import { DEFAULT_ADMIN_THEME_PREFERENCES } from './admin-theme.model';
 import { AdminThemeStore } from './admin-theme.store';
 
-class MemoryThemePreferencesAdapter implements AdminThemePreferencesAdapter {
+class MemoryAdminPreferencesStore {
+  private readonly themeState = signal(DEFAULT_ADMIN_THEME_PREFERENCES);
+  readonly theme = this.themeState.asReadonly();
   saved = DEFAULT_ADMIN_THEME_PREFERENCES;
 
-  load() {
-    return null;
-  }
-
-  save(preferences: typeof DEFAULT_ADMIN_THEME_PREFERENCES): void {
+  updateTheme(preferences: typeof DEFAULT_ADMIN_THEME_PREFERENCES): void {
     this.saved = preferences;
+    this.themeState.set(preferences);
   }
 }
 
 describe('AdminThemeStore', () => {
-  let adapter: MemoryThemePreferencesAdapter;
+  let preferences: MemoryAdminPreferencesStore;
   let store: AdminThemeStore;
 
   beforeEach(() => {
-    adapter = new MemoryThemePreferencesAdapter();
+    preferences = new MemoryAdminPreferencesStore();
     TestBed.configureTestingModule({
       providers: [
         AdminThemeStore,
         {
-          provide: ADMIN_THEME_PREFERENCES_ADAPTER,
-          useValue: adapter,
+          provide: AdminPreferencesStore,
+          useValue: preferences,
         },
       ],
     });
@@ -44,7 +41,7 @@ describe('AdminThemeStore', () => {
   it('should persist theme changes through the adapter contract', () => {
     store.update({ skin: 'teal-light', menuDensity: 'compact' });
 
-    expect(adapter.saved.skin).toBe('teal-light');
-    expect(adapter.saved.menuDensity).toBe('compact');
+    expect(preferences.saved.skin).toBe('teal-light');
+    expect(preferences.saved.menuDensity).toBe('compact');
   });
 });

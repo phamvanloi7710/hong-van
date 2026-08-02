@@ -11,6 +11,8 @@ import { finalize } from 'rxjs';
 
 import { authErrorMessage } from '../../../core/auth/auth-error';
 import { AuthService } from '../../../core/auth/auth.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslationPipe } from '../../../core/i18n/translation.pipe';
 
 @Component({
   selector: 'hv-reset-password',
@@ -22,6 +24,7 @@ import { AuthService } from '../../../core/auth/auth.service';
     MatInputModule,
     ReactiveFormsModule,
     RouterLink,
+    TranslationPipe,
   ],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.scss',
@@ -32,6 +35,7 @@ export class ResetPassword {
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly route = inject(ActivatedRoute);
+  private readonly i18n = inject(I18nService);
 
   readonly token = this.route.snapshot.queryParamMap.get('token') ?? '';
   readonly submitting = signal(false);
@@ -50,7 +54,7 @@ export class ResetPassword {
     if (this.form.invalid || this.token === '') {
       this.form.markAllAsTouched();
       this.errorMessage.set(
-        this.token === '' ? 'Liên kết đặt lại mật khẩu không hợp lệ.' : null,
+        this.token === '' ? this.i18n.t('auth.resetLinkInvalid') : null,
       );
       return;
     }
@@ -58,7 +62,7 @@ export class ResetPassword {
     const value = this.form.getRawValue();
 
     if (value.password !== value.password_confirmation) {
-      this.errorMessage.set('Mật khẩu xác nhận không khớp.');
+      this.errorMessage.set(this.i18n.t('auth.confirmationMismatch'));
       return;
     }
 
@@ -73,7 +77,7 @@ export class ResetPassword {
         next: (message) => this.successMessage.set(message),
         error: (error: unknown) =>
           this.errorMessage.set(
-            authErrorMessage(error, 'Không thể đặt lại mật khẩu. Vui lòng thử lại.'),
+            authErrorMessage(error, this.i18n.t('auth.resetError')),
           ),
       });
   }

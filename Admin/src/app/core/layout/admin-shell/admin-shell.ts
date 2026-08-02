@@ -20,6 +20,8 @@ import { AdminHeader } from '../admin-header/admin-header';
 import { AdminHorizontalMenu } from '../admin-horizontal-menu/admin-horizontal-menu';
 import { AdminSidebar } from '../admin-sidebar/admin-sidebar';
 import { ThemeSettingsPanel } from '../theme-settings-panel/theme-settings-panel';
+import { TranslationPipe } from '../../i18n/translation.pipe';
+import { TranslationKey } from '../../i18n/translation-catalog';
 
 const MOBILE_BREAKPOINT = 960;
 
@@ -35,6 +37,7 @@ const MOBILE_BREAKPOINT = 960;
     MatSidenavModule,
     RouterOutlet,
     ThemeSettingsPanel,
+    TranslationPipe,
   ],
   templateUrl: './admin-shell.html',
   styleUrl: './admin-shell.scss',
@@ -50,7 +53,10 @@ export class AdminShell {
   readonly mobileSidenavOpened = signal(false);
   readonly themePanelOpened = signal(false);
   readonly showBackToTop = signal(false);
-  readonly pageHeader = signal({ icon: 'dashboard', title: 'Chào mừng đến trang quản trị!' });
+  readonly pageHeader = signal<{ icon: string; titleKey: TranslationKey }>({
+    icon: 'dashboard',
+    titleKey: 'shell.welcome',
+  });
 
   readonly effectiveMenuOrientation = computed(() =>
     this.isMobile() ? 'vertical' : this.themeStore.preferences().menuOrientation,
@@ -141,11 +147,11 @@ export class AdminShell {
     if (url.startsWith('/identity')) {
       this.pageHeader.set({
         icon: 'supervisor_account',
-        title: 'Người dùng & phân quyền',
+        titleKey: 'menu.identity',
       });
       return;
     }
 
-    this.pageHeader.set({ icon: 'dashboard', title: 'Chào mừng đến trang quản trị!' });
+    this.pageHeader.set({ icon: 'dashboard', titleKey: 'shell.welcome' });
   }
 }
