@@ -62,6 +62,8 @@ P14 bổ sung fallback tự tham chiếu cho `hongvan_languages`, hai bảng que
 
 P15 bổ sung `hongvan_audit_logs` theo cơ chế append-only. Bảng lưu định danh actor/subject dạng snapshot, dữ liệu before/after/metadata đã redaction, hash IP/user-agent, request ID và thời điểm UTC; không đặt foreign key để lịch sử không mất hoặc bị thay đổi khi entity nguồn bị xóa. Model chặn update/delete và Admin chỉ có API đọc.
 
+P16 triển khai đủ bảy bảng Media nêu dưới đây. Bản ghi gốc và variant chỉ lưu `disk` + `path` do server sinh, metadata đã kiểm tra, SHA-256, kích thước, MIME và trạng thái; không lưu URL public cố định. `hongvan_media_usages` là registry tham chiếu theo owner contract để chặn xóa file đang dùng, còn `hongvan_media_operations` lưu vòng đời queue/retry/cleanup. Toàn bộ 85 cột Media có comment và các bảng dùng index, unique, foreign key, rollback cùng prefix `hongvan_`.
+
 ## Core và Identity dự kiến
 
 ```text

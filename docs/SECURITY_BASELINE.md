@@ -41,6 +41,15 @@
 - Error interceptor không rò secret.
 - Logout xóa state.
 
+## Media
+
+- Chỉ nhận extension/MIME trong allowlist; MIME phải được phát hiện từ nội dung và khớp extension phía client.
+- Chặn SVG, executable/script prefix, file rỗng, file vượt giới hạn và ảnh không decode được.
+- Storage path do server sinh; database không lưu URL public cố định và client không được gửi filesystem path.
+- File chỉ được stream qua endpoint đã xác thực/authorize; response dùng `nosniff` và filename đã chuẩn hóa.
+- Variant thumbnail/WebP/AVIF chạy queue. Thất bại được ghi vào operation để retry có kiểm soát, không ghi raw file content vào log.
+- Usage registry chặn trash/xóa file đang được domain khác tham chiếu. Xóa vĩnh viễn dọn cả original/variant qua Filesystem abstraction và ghi audit.
+
 ## Public forms
 
 - Rate limiter có tên cho login, public form, upload và preview session; endpoint tương lai phải gắn đúng limiter.

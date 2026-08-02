@@ -38,7 +38,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
     icon: 'article',
     children: [
       { id: 'content-pages', labelKey: 'menu.contentPages', icon: 'description', disabled: true },
-      { id: 'media', labelKey: 'menu.media', icon: 'perm_media', disabled: true },
+      { id: 'media', labelKey: 'menu.media', icon: 'perm_media', route: '/media', permission: 'media.view' },
       { id: 'page-builder', labelKey: 'menu.pageBuilder', icon: 'dashboard_customize', disabled: true },
       { id: 'seo', labelKey: 'menu.seo', icon: 'travel_explore', disabled: true },
     ],

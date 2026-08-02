@@ -9,6 +9,9 @@ use App\Http\Controllers\Api\V1\Identity\RoleController;
 use App\Http\Controllers\Api\V1\Identity\UserController;
 use App\Http\Controllers\Api\V1\Identity\UserPreferenceController;
 use App\Http\Controllers\Api\V1\Localization\LocalizationController;
+use App\Http\Controllers\Api\V1\Media\MediaContentController;
+use App\Http\Controllers\Api\V1\Media\MediaController;
+use App\Http\Controllers\Api\V1\Media\MediaFolderController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
 use App\Http\Controllers\Api\V1\SystemPingController;
@@ -93,5 +96,20 @@ Route::prefix('admin/v1')
             Route::get('audit-logs', [AuditLogController::class, 'index'])
                 ->middleware('permission:audit.view')
                 ->name('audit-logs.index');
+
+            Route::prefix('media')->name('media.')->group(function (): void {
+                Route::get('folders', [MediaFolderController::class, 'index'])->middleware('permission:media.view')->name('folders.index');
+                Route::post('folders', [MediaFolderController::class, 'store'])->middleware('permission:media.create')->name('folders.store');
+                Route::get('/', [MediaController::class, 'index'])->middleware('permission:media.view')->name('index');
+                Route::post('/', [MediaController::class, 'store'])->middleware(['permission:media.create', 'throttle:uploads'])->name('store');
+                Route::get('{media:public_id}', [MediaController::class, 'show'])->middleware('permission:media.view')->name('show');
+                Route::get('{media:public_id}/content', MediaContentController::class)->middleware('permission:media.view')->name('content');
+                Route::patch('{media:public_id}', [MediaController::class, 'update'])->middleware('permission:media.update')->name('update');
+                Route::patch('{media:public_id}/move', [MediaController::class, 'move'])->middleware('permission:media.update')->name('move');
+                Route::post('{media:public_id}/trash', [MediaController::class, 'trash'])->middleware('permission:media.delete')->name('trash');
+                Route::post('{media:public_id}/restore', [MediaController::class, 'restore'])->withTrashed()->middleware('permission:media.restore')->name('restore');
+                Route::post('{media:public_id}/retry', [MediaController::class, 'retry'])->middleware('permission:media.update')->name('retry');
+                Route::delete('{media:public_id}', [MediaController::class, 'destroy'])->withTrashed()->middleware('permission:media.delete')->name('destroy');
+            });
         });
     });

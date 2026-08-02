@@ -16,3 +16,4 @@ Individual ADR files are the source of truth. P02 reviewed `ARCHITECTURE.md`, `D
 | [ADR-010](adr/ADR-010-admin-preferences-and-localization.md) | Preferences theo user và i18n Admin `vi/en/zh` | Accepted | 2026-08-02 |
 | [ADR-011](adr/ADR-011-localization-routing-and-timezone.md) | Locale public, fallback, translation tables và UTC | Accepted | 2026-08-03 |
 | [ADR-012](adr/ADR-012-audit-and-security-foundation.md) | Audit append-only, redaction tập trung và security headers | Accepted | 2026-08-03 |
+| [ADR-013](adr/ADR-013-media-storage-and-lifecycle.md) | Media lưu disk/path, xử lý variant qua queue và chặn xóa theo usage | Accepted | 2026-08-03 |

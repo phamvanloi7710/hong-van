@@ -90,6 +90,13 @@ export const routes: Routes = [
           import('./features/audit/audit-page').then((page) => page.AuditPage),
         data: { breadcrumb: 'menu.audit' },
       },
+      {
+        path: 'media',
+        canActivate: [permissionGuard('media.view')],
+        loadComponent: () =>
+          import('./features/media/media-page').then((page) => page.MediaPage),
+        data: { breadcrumb: 'menu.media' },
+      },
     ],
   },
   {

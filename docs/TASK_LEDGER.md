@@ -18,7 +18,7 @@
 - [x] P13 Company settings
 - [x] P14 Localization
 - [x] P15 Audit/security foundation
-- [ ] P16 Media domain
+- [x] P16 Media domain
 - [ ] P17 StayHub media clone
 - [ ] P18 Blade frontend foundation
 - [ ] P19 Frontend template clone

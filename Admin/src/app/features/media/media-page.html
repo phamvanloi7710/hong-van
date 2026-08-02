@@ -1,0 +1,57 @@
+<section class="media-page">
+  <header class="page-actions">
+    <div><p class="eyebrow">{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><p>{{ text('description') }}</p></div>
+    <div class="header-actions">
+      <button mat-stroked-button type="button" (click)="openPicker()"><mat-icon>collections</mat-icon>{{ text('openPicker') }}</button>
+      @if (authStore.hasPermission('media.create')) {
+        <button mat-flat-button type="button" (click)="fileInput.click()"><mat-icon>cloud_upload</mat-icon>{{ text('upload') }}</button>
+        <input #fileInput class="file-input" type="file" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.avif,.pdf" [attr.aria-label]="text('fileInput')" (change)="uploadFiles($event)" />
+      }
+    </div>
+  </header>
+
+  <mat-card class="foundation-notice">
+    <mat-icon>verified_user</mat-icon><div><strong>{{ text('safeUpload') }}</strong><span>{{ text('queueNote') }}</span><span>{{ text('neutralNotice') }}</span></div>
+  </mat-card>
+
+  <form class="filters" [formGroup]="filters" (ngSubmit)="load()">
+    <mat-form-field appearance="outline"><mat-label>{{ text('search') }}</mat-label><input matInput formControlName="search" [placeholder]="text('searchHint')" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('status') }}</mat-label><mat-select formControlName="status"><mat-option value="">{{ text('allStatuses') }}</mat-option><mat-option value="ready">{{ text('ready') }}</mat-option><mat-option value="processing">{{ text('processing') }}</mat-option><mat-option value="failed">{{ text('failed') }}</mat-option></mat-select></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('folder') }}</mat-label><mat-select formControlName="folder_id"><mat-option value="">{{ text('rootFolder') }}</mat-option>@for (folder of folders(); track folder.public_id) { <mat-option [value]="folder.public_id">{{ folder.name }}</mat-option> }</mat-select></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('trashFilter') }}</mat-label><mat-select formControlName="trashed"><mat-option value="without">{{ text('activeOnly') }}</mat-option><mat-option value="only">{{ text('onlyTrashed') }}</mat-option></mat-select></mat-form-field>
+    <div class="filter-actions"><button mat-flat-button type="submit"><mat-icon>filter_alt</mat-icon>{{ text('apply') }}</button><button mat-stroked-button type="button" (click)="reset()">{{ text('reset') }}</button></div>
+  </form>
+
+  @if (uploads().length > 0) {
+    <section class="upload-state"><h3>{{ text('uploads') }}</h3><div class="upload-list">@for (upload of uploads(); track upload.id) { <span [class.error]="upload.status === 'error'"><mat-icon>{{ upload.status === 'success' ? 'check_circle' : upload.status === 'error' ? 'error' : 'hourglass_top' }}</mat-icon><b>{{ upload.name }}</b> · {{ text(upload.status === 'success' ? 'uploadSuccess' : upload.status === 'error' ? 'uploadFailed' : 'uploading') }} @if (upload.message) { · {{ upload.message }} }</span> }</div></section>
+  }
+
+  @if (picked().length > 0) { <mat-card class="picked"><strong>{{ text('selected') }}</strong><span>{{ pickedNames() }}</span></mat-card> }
+
+  @if (loading()) {
+    <div class="state"><mat-spinner diameter="44" /></div>
+  } @else if (error()) {
+    <mat-card class="state error"><mat-icon>error_outline</mat-icon>{{ error() }}</mat-card>
+  } @else if (items().length === 0) {
+    <mat-card class="state"><mat-icon>perm_media</mat-icon>{{ text('empty') }}</mat-card>
+  } @else {
+    <div class="summary"><strong>{{ text('total') }}: {{ pagination()?.total ?? items().length }}</strong><span>{{ text('page') }} {{ pagination()?.page ?? 1 }} {{ text('of') }} {{ pagination()?.last_page ?? 1 }}</span></div>
+    <div class="media-grid">
+      @for (item of items(); track item.public_id) {
+        <mat-card class="media-card">
+          <a class="preview" [href]="item.content_url" target="_blank" rel="noopener">
+            @if (item.mime_type.startsWith('image/')) { <img [src]="thumbnail(item)" [alt]="item.alt_text ?? item.original_filename" /> } @else { <mat-icon>description</mat-icon><span>{{ item.extension.toUpperCase() }}</span> }
+          </a>
+          <div class="media-info"><strong [title]="item.original_filename">{{ item.title || item.original_filename }}</strong><span>{{ item.mime_type }} · {{ fileSize(item.size_bytes) }}</span><span>{{ item.width && item.height ? item.width + ' × ' + item.height : '—' }} · {{ item.variants.length }} {{ text('variants') }}</span><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span><span>{{ text('usage') }}: {{ item.usage_count }} · {{ item.can_delete ? text('safe') : text('protected') }}</span></div>
+          <div class="card-actions">
+            @if (item.status === 'failed' && authStore.hasPermission('media.update')) { <button mat-icon-button type="button" [attr.aria-label]="text('retry')" (click)="retry(item)"><mat-icon>replay</mat-icon></button> }
+            @if (item.deleted_at && authStore.hasPermission('media.restore')) { <button mat-icon-button type="button" [attr.aria-label]="text('restore')" (click)="restore(item)"><mat-icon>restore_from_trash</mat-icon></button> }
+            @if (!item.deleted_at && authStore.hasPermission('media.delete')) { <button mat-icon-button type="button" [attr.aria-label]="text('trash')" (click)="trash(item)"><mat-icon>delete_outline</mat-icon></button> }
+            @if (item.deleted_at && authStore.hasPermission('media.delete')) { <button mat-icon-button type="button" [attr.aria-label]="text('deleteForever')" (click)="deletePermanently(item)"><mat-icon>delete_forever</mat-icon></button> }
+          </div>
+        </mat-card>
+      }
+    </div>
+    <nav class="pagination"><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) <= 1" (click)="previous()">{{ text('previous') }}</button><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) >= (pagination()?.last_page ?? 1)" (click)="next()">{{ text('next') }}</button></nav>
+  }
+</section>
