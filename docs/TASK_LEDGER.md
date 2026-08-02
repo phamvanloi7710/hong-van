@@ -20,6 +20,7 @@
 - [x] P15 Audit/security foundation
 - [x] P16 Media domain
 - [x] P17 StayHub media clone
+- [x] P17 follow-up: repair favorite menu width, localized language labels and route-aware admin headers
 - [ ] P18 Blade frontend foundation
 - [ ] P19 Frontend template clone
 - [ ] P20 Public theme studio

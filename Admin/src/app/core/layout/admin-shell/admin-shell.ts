@@ -22,6 +22,7 @@ import { AdminSidebar } from '../admin-sidebar/admin-sidebar';
 import { ThemeSettingsPanel } from '../theme-settings-panel/theme-settings-panel';
 import { TranslationPipe } from '../../i18n/translation.pipe';
 import { TranslationKey } from '../../i18n/translation-catalog';
+import { findAdminMenuItemByRoute } from '../../navigation/admin-menu';
 
 const MOBILE_BREAKPOINT = 960;
 
@@ -144,18 +145,12 @@ export class AdminShell {
   }
 
   private updatePageHeader(url: string): void {
-    if (url.startsWith('/settings')) {
-      this.pageHeader.set({
-        icon: 'tune',
-        titleKey: 'menu.settings',
-      });
-      return;
-    }
+    const menuItem = findAdminMenuItemByRoute(url);
 
-    if (url.startsWith('/identity')) {
+    if (menuItem !== undefined && menuItem.id !== 'dashboard') {
       this.pageHeader.set({
-        icon: 'supervisor_account',
-        titleKey: 'menu.identity',
+        icon: menuItem.icon,
+        titleKey: menuItem.labelKey,
       });
       return;
     }

@@ -8,12 +8,15 @@ describe('I18nService', () => {
 
     service.setLocale('vi');
     expect(service.t('menu.dashboard')).toBe('Tổng quan');
+    expect(service.t('language.en')).toBe('Tiếng Anh');
 
     service.setLocale('en');
     expect(service.t('menu.dashboard')).toBe('Dashboard');
+    expect(service.t('language.vi')).toBe('Vietnamese');
 
     service.setLocale('zh');
     expect(service.t('menu.dashboard')).toBe('总览');
+    expect(service.t('language.en')).toBe('英语');
     expect(document.documentElement.lang).toBe('zh');
   });
 
