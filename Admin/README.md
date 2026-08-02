@@ -27,6 +27,17 @@ Các route nền tảng hiện có:
 npm run lint
 npm test -- --watch=false
 npm run build
+npm run build:laravel
 ```
 
-`npm run build:laravel` vẫn là placeholder fail-fast dành cho P07. Chưa có bundle nào được đồng bộ vào Laravel ở P06.
+`npm run build:laravel` tạo production build, kiểm tra `<base href="/admin/">`, asset tham chiếu và policy không source map, sau đó đồng bộ có guard vào `BackEnd/public/admin/browser/`.
+
+Có thể chạy toàn bộ lint, test, build và sync từ repository root:
+
+```powershell
+.\scripts\build-admin.ps1 -SkipInstall
+```
+
+```bash
+bash ./scripts/build-admin.sh --skip-install
+```

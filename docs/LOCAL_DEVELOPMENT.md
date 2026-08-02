@@ -73,9 +73,47 @@ npm ci
 npm run lint
 npm test -- --watch=false
 npm run build
+npm run build:laravel
 ```
 
-`npm run build:laravel` hiện cố ý dừng với mã lỗi và thông báo `P07_REQUIRED`. Việc đồng bộ bundle vào `BackEnd/public/admin/browser` thuộc P07.
+Angular 22.1 tạo browser bundle thực tế tại `Admin/dist/hongvan-admin/browser/`. `npm run build:laravel` build production, kiểm tra base href `/admin/`, asset tham chiếu và source-map policy, sau đó xóa có guard output cũ rồi đồng bộ vào `BackEnd/public/admin/browser/`. Không sửa thủ công bundle đã sinh; thư mục đích được Git ignore.
+
+Từ repository root, pipeline đa nền tảng mặc định chạy lint, test, build và sync. `npm ci` chỉ chạy khi `node_modules` chưa có hoặc lock snapshot cũ hơn `package-lock.json`:
+
+```powershell
+.\scripts\build-admin.ps1
+.\scripts\build-admin.ps1 -Mode BuildOnly -SkipInstall
+```
+
+```bash
+bash ./scripts/build-admin.sh
+bash ./scripts/build-admin.sh --build-only --skip-install
+```
+
+## Phục vụ Angular Admin qua Laravel
+
+- Entry point và mọi client-side deep link dưới `/admin/` dùng route tên `admin.spa` đặt sau public routes.
+- `/api/*`, `/preview/*` và public routes không đi qua admin catch-all.
+- `index.html` trả `private, no-store, no-cache`; asset có hash trả `public, max-age=31536000, immutable`.
+- Asset bị thiếu trả 404 thay vì trả nhầm HTML SPA.
+- WAMP dùng `BackEnd/public/admin/.htaccess` để chuyển `/admin/*` vào Laravel; output Angular vẫn nằm trong `browser/`.
+
+Với Nginx, document root vẫn là `BackEnd/public`. Cấu hình `/admin/` đi qua Laravel front controller để Laravel áp dụng cùng fallback và cache policy:
+
+```nginx
+location /admin/ {
+    try_files __hongvan_admin_spa__ /index.php?$query_string;
+}
+```
+
+Production build đặt `sourceMap: false`. Có thể smoke test local tại:
+
+```text
+http://hongvan.local/admin/
+http://hongvan.local/admin/dashboard
+```
+
+Nếu terminal Windows vẫn trả `PHP 8.4.1` từ `PATH`, dùng đúng binary `C:\wamp64\bin\php\php8.5.9\php.exe` cho Composer/Artisan của project hoặc cập nhật `PATH` của terminal trước khi chạy lệnh backend.
 
 ## Nguyên tắc an toàn
 

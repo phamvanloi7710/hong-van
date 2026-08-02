@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "build:laravel": "node ./tools/build-laravel-placeholder.mjs"
+    "sync:laravel": "node ./tools/sync-to-laravel.mjs",
+    "build:laravel": "npm run build && npm run sync:laravel"
   },
   "private": true,
   "packageManager": "npm@11.12.1",

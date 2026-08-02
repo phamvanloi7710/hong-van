@@ -1,0 +1,24 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Laravel maps /admin/ URLs to the guarded Angular browser output and SPA fallback.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ /index.php [L]
+</IfModule>
+
+<IfModule mod_setenvif.c>
+    SetEnvIf Request_URI "^/admin/(?:browser/)?index\.html$" admin_spa_index=1
+    SetEnvIf Request_URI "^/admin/.*\.(?:css|eot|gif|ico|jpe?g|js|json|png|svg|ttf|webmanifest|webp|woff2?|xml)$" admin_spa_asset=1
+    SetEnvIf Request_URI "^/admin/.*-[A-Za-z0-9]{8,}\.(?:css|eot|gif|ico|jpe?g|js|json|png|svg|ttf|webmanifest|webp|woff2?|xml)$" admin_spa_hashed_asset=1
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate" env=admin_spa_index
+    Header set Pragma "no-cache" env=admin_spa_index
+    Header set Expires "0" env=admin_spa_index
+    Header set Cache-Control "public, max-age=3600" env=admin_spa_asset
+    Header set X-Content-Type-Options "nosniff" env=admin_spa_asset
+    Header set Cache-Control "public, max-age=31536000, immutable" env=admin_spa_hashed_asset
+</IfModule>

@@ -7,7 +7,7 @@
 - [x] P04 Laravel bootstrap
 - [x] P05 Angular bootstrap
 - [x] P06 Admin template integration
-- [ ] P07 Admin build integration
+- [x] P07 Admin build integration
 - [ ] P08 Database foundation
 - [ ] P09 API foundation
 - [ ] P10 Authentication
