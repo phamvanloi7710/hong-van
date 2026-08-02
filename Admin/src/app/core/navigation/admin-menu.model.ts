@@ -4,5 +4,6 @@ export interface AdminMenuItem {
   readonly icon: string;
   readonly route?: string;
   readonly disabled?: boolean;
+  readonly permission?: string;
   readonly children?: readonly AdminMenuItem[];
 }

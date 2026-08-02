@@ -13,6 +13,8 @@ const adminUser: AdminUser = {
   email_verified_at: null,
   is_active: true,
   locked_at: null,
+  roles: ['super_admin'],
+  permissions: ['users.view'],
 };
 
 describe('Login', () => {

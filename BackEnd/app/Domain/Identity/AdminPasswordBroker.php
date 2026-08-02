@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -14,6 +13,8 @@ use LogicException;
 
 final class AdminPasswordBroker
 {
+    public function __construct(private readonly SessionRevoker $sessionRevoker) {}
+
     public function sendResetLink(string $email): void
     {
         Password::broker()->sendResetLink([
@@ -47,10 +48,7 @@ final class AdminPasswordBroker
                 'remember_token' => Str::random(60),
             ])->save();
 
-            $resettable->tokens()->delete();
-            DB::table((string) config('session.table', 'hongvan_sessions'))
-                ->where('user_id', $resettable->getKey())
-                ->delete();
+            $this->sessionRevoker->revoke($resettable);
 
             event(new PasswordReset($resettable));
         });

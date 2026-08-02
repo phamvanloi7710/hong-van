@@ -33,3 +33,28 @@ export const guestGuard: CanActivateFn = () => {
     map((user) => (user === null ? true : router.createUrlTree(['/dashboard']))),
   );
 };
+
+export function permissionGuard(permission: string): CanActivateFn {
+  return (_route, state) => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    if (authService.store.authenticated()) {
+      return authService.store.hasPermission(permission)
+        ? true
+        : router.createUrlTree(['/dashboard'], { queryParams: { denied: state.url } });
+    }
+
+    return authService.bootstrap().pipe(
+      map((user) => {
+        if (user === null) {
+          return router.createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
+        }
+
+        return authService.store.hasPermission(permission)
+          ? true
+          : router.createUrlTree(['/dashboard'], { queryParams: { denied: state.url } });
+      }),
+    );
+  };
+}

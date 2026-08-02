@@ -30,6 +30,10 @@ export class AuthStore {
       .join('');
   });
 
+  hasPermission(permission: string | undefined): boolean {
+    return permission === undefined || (this.userState()?.permissions.includes(permission) ?? false);
+  }
+
   markLoading(): void {
     this.statusState.set('loading');
     this.errorState.set(null);

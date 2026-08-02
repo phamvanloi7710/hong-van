@@ -11,6 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seeders are introduced by their owning domain prompts.
+        $this->call(PermissionSeeder::class);
     }
 }

@@ -38,11 +38,16 @@ class TablePrefixTest extends TestCase
             'hongvan_migrations',
             'hongvan_notifications',
             'hongvan_password_reset_tokens',
+            'hongvan_permission_role',
+            'hongvan_permissions',
             'hongvan_personal_access_tokens',
+            'hongvan_role_user',
+            'hongvan_roles',
             'hongvan_sessions',
             'hongvan_setting_groups',
             'hongvan_settings',
             'hongvan_users',
+            'hongvan_user_permission_overrides',
         ];
 
         $this->assertEqualsCanonicalizing($expectedTables, $tables);

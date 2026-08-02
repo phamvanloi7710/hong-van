@@ -3,8 +3,8 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P10
-last_completed_prompt: 10
+current_prompt: P11
+last_completed_prompt: 11
 status: DONE
 admin_template_gate: READY
 admin_template_integration: SELECTIVE_PORT_COMPLETE
@@ -22,16 +22,20 @@ latest_readonly_source_check: passed_powershell_and_git_bash
 latest_laravel_13_patch: 13.23.0
 latest_php_85_patch: 8.5.9
 latest_database_runtime: passed_mysql_8_2_0_isolated_hongvan_testing_utf8mb4_0900_ai_ci
-latest_database_migration: passed_fresh_rollback_batch_remigrate_and_fresh_seed_14_prefixed_tables
-latest_database_prefix_check: passed_7_php_files_and_rejected_unprefixed_and_double_prefixed_fixtures
+latest_database_migration: passed_fresh_seed_p11_rollback_remigrate_19_prefixed_tables
+latest_database_prefix_check: passed_19_mysql_tables_and_repository_prefix_checker
 latest_api_test: passed_api_filter_8_tests_65_assertions
 latest_api_runtime: passed_hongvan_local_public_ping_200_admin_ping_401_request_id_locale
 latest_auth_package: laravel_sanctum_4_3_3
 latest_auth_migration: passed_rollback_remigrate_active_locked_fields_and_prefixed_token_table
 latest_auth_test: passed_auth_filter_9_tests_59_assertions
 latest_auth_runtime: passed_hongvan_local_csrf_cookie_login_refresh_logout_and_guard
+latest_rbac_seed: passed_idempotent_38_permissions_1_system_super_admin_role
+latest_rbac_test: passed_permission_filter_8_tests_35_assertions
+latest_rbac_runtime: passed_hongvan_local_identity_crud_ui_refresh_permission_guard_and_hidden_menu
+latest_super_admin_bootstrap: passed_environment_command_idempotency_and_missing_password_rejection
 latest_admin_asset_mime: passed_explicit_javascript_css_font_and_image_content_types
-latest_backend_test: passed_phpunit_27_tests_215_assertions_mysql
+latest_backend_test: passed_phpunit_37_tests_262_assertions_mysql
 latest_backend_format: passed_pint
 latest_backend_static_analysis: passed_larastan_level_6
 latest_backend_build: passed_vite_7_3_6
@@ -39,10 +43,10 @@ latest_angular_core_patch: 22.1.0
 latest_angular_cli_patch: 22.1.2
 latest_typescript_patch: 6.0.3
 latest_admin_lint: passed_angular_eslint_22_1_0
-latest_admin_test: passed_vitest_5_files_12_tests
-latest_admin_build: passed_angular_production_initial_318_02_kb
-latest_admin_sync: passed_90_files_to_laravel_public_admin_browser
-latest_e2e: passed_browser_qa_dashboard_login_theme_responsive
+latest_admin_test: passed_vitest_7_files_14_tests
+latest_admin_build: passed_angular_production_initial_111_97_kb_identity_lazy_202_47_kb
+latest_admin_sync: passed_95_files_to_laravel_public_admin_browser
+latest_e2e: passed_browser_qa_identity_super_admin_limited_user_refresh_guard
 latest_visual_qa: passed_1280x720_and_390x844
 latest_admin_smoke: passed_hongvan_local_root_deep_link_asset_cache
 open_blockers:
@@ -51,7 +55,7 @@ open_blockers:
   - Angular CLI 22.1.2 has three moderate dev-tool audit findings through MCP SDK/Hono with no compatible in-range npm fix.
   - Public frontend template source is missing at FrontEndTemplate/.
   - StayHub media reference source is missing at SourceIntegrations/StayHubMedia/.
-next_prompt: 11_RBAC_USERS_ROLES_PERMISSIONS
+next_prompt: 12_PER_USER_ADMIN_THEME_PREFERENCES
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

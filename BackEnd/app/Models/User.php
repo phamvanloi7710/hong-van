@@ -8,6 +8,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -35,6 +36,28 @@ class User extends Authenticatable
     public function notifications(): MorphMany
     {
         return $this->morphMany(DatabaseNotification::class, 'notifiable')->latest();
+    }
+
+    /**
+     * @return BelongsToMany<Role, $this, RoleUser>
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'hongvan_role_user')
+            ->using(RoleUser::class)
+            ->withPivot('assigned_by')
+            ->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany<Permission, $this, UserPermissionOverride>
+     */
+    public function permissionOverrides(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'hongvan_user_permission_overrides')
+            ->using(UserPermissionOverride::class)
+            ->withPivot(['is_allowed', 'assigned_by'])
+            ->withTimestamps();
     }
 
     /**

@@ -19,9 +19,16 @@ Các route foundation đã có:
 ```text
 GET /api/public/v1/system/ping
 GET /api/admin/v1/system/ping
+GET|POST /api/admin/v1/identity/users
+GET|PUT|DELETE /api/admin/v1/identity/users/{public_id}
+POST /api/admin/v1/identity/users/{public_id}/activate|lock|reset-sessions
+GET|POST /api/admin/v1/identity/roles
+GET|PUT|DELETE /api/admin/v1/identity/roles/{public_id}
+GET|POST /api/admin/v1/identity/permissions
+GET|PUT|DELETE /api/admin/v1/identity/permissions/{public_id}
 ```
 
-Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Admin ping dùng `auth` và Gate `system_health`; Gate đang deny-by-default cho tới khi P10/P11 hoàn thiện Sanctum và RBAC.
+Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Admin ping dùng `auth` và Gate `system_health`, được P11 ánh xạ vào permission `system.health`. Identity API dùng Sanctum, permission middleware, Policy và Form Request; filter/sort chỉ nhận key trong allowlist phía server.
 
 ## Response thành công
 

@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
+import { AuthStore } from '../../auth/auth.store';
 import { ADMIN_MENU_ITEMS } from '../../navigation/admin-menu';
+import { AdminMenuItem } from '../../navigation/admin-menu.model';
 import { AdminMenuDensity } from '../../theme/admin-theme.model';
 
 @Component({
@@ -14,6 +16,15 @@ import { AdminMenuDensity } from '../../theme/admin-theme.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminHorizontalMenu {
+  private readonly authStore = inject(AuthStore);
   readonly density = input.required<AdminMenuDensity>();
   readonly menuItems = ADMIN_MENU_ITEMS;
+
+  canSee(item: AdminMenuItem): boolean {
+    return this.authStore.hasPermission(item.permission);
+  }
+
+  canSeeGroup(item: AdminMenuItem): boolean {
+    return item.children?.some((child) => this.canSee(child)) ?? true;
+  }
 }

@@ -1,7 +1,7 @@
 <section class="user-block">
-  <span class="avatar" aria-hidden="true">HV</span>
+  <span class="avatar" aria-hidden="true">{{ authStore.initials() }}</span>
   <div class="user-copy">
-    <strong>Quản trị viên</strong>
+    <strong>{{ authStore.user()?.name ?? 'Quản trị viên' }}</strong>
     <small><span class="status-dot"></span> Hệ thống quản trị</small>
   </div>
 </section>
@@ -12,7 +12,7 @@
   [class.mini]="density() === 'mini'"
 >
   @for (item of menuItems; track item.id) {
-    @if (item.route) {
+    @if (item.route && canSee(item)) {
       <a
         mat-list-item
         [routerLink]="item.route"
@@ -23,7 +23,7 @@
         <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
         <span matListItemTitle>{{ item.label }}</span>
       </a>
-    } @else {
+    } @else if (!item.route && canSeeGroup(item)) {
       <button mat-list-item type="button" class="group-button" (click)="toggleGroup(item)">
         <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
         <span matListItemTitle>{{ item.label }}</span>
@@ -34,10 +34,19 @@
       @if (isExpanded(item)) {
         <div class="sub-menu">
           @for (child of item.children ?? []; track child.id) {
-            <button mat-list-item type="button" disabled>
-              <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
-              <span matListItemTitle>{{ child.label }}</span>
-            </button>
+            @if (canSee(child)) {
+              @if (child.route) {
+                <a mat-list-item [routerLink]="child.route" routerLinkActive="active" (click)="navigated.emit()">
+                  <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
+                  <span matListItemTitle>{{ child.label }}</span>
+                </a>
+              } @else {
+                <button mat-list-item type="button" disabled>
+                  <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
+                  <span matListItemTitle>{{ child.label }}</span>
+                </button>
+              }
+            }
           }
         </div>
       }

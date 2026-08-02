@@ -4,7 +4,7 @@
   [class.mini]="density() === 'mini'"
 >
   @for (item of menuItems; track item.id) {
-    @if (item.route) {
+    @if (item.route && canSee(item)) {
       <a
         mat-button
         [routerLink]="item.route"
@@ -14,7 +14,7 @@
         <mat-icon>{{ item.icon }}</mat-icon>
         <span>{{ item.label }}</span>
       </a>
-    } @else {
+    } @else if (!item.route && canSeeGroup(item)) {
       <div class="menu-group">
         <button mat-button type="button">
           <mat-icon>{{ item.icon }}</mat-icon>
@@ -23,10 +23,19 @@
         </button>
         <div class="dropdown">
           @for (child of item.children ?? []; track child.id) {
-            <button mat-button type="button" disabled>
-              <mat-icon>{{ child.icon }}</mat-icon>
-              <span>{{ child.label }}</span>
-            </button>
+            @if (canSee(child)) {
+              @if (child.route) {
+                <a mat-button [routerLink]="child.route" routerLinkActive="active">
+                  <mat-icon>{{ child.icon }}</mat-icon>
+                  <span>{{ child.label }}</span>
+                </a>
+              } @else {
+                <button mat-button type="button" disabled>
+                  <mat-icon>{{ child.icon }}</mat-icon>
+                  <span>{{ child.label }}</span>
+                </button>
+              }
+            }
           }
         </div>
       </div>

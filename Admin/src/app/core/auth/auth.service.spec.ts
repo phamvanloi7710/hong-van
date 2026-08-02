@@ -18,6 +18,8 @@ const adminUser: AdminUser = {
   email_verified_at: '2026-08-02T00:00:00+00:00',
   is_active: true,
   locked_at: null,
+  roles: ['super_admin'],
+  permissions: ['users.view'],
 };
 
 function envelope<T>(data: T, message: string | null = null): ApiEnvelope<T> {

@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
+use App\Domain\Identity\PermissionService;
+use App\Models\Permission;
 use App\Models\PersonalAccessToken;
+use App\Models\Role;
 use App\Models\User;
+use App\Policies\PermissionPolicy;
+use App\Policies\RolePolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -56,9 +62,13 @@ class AppServiceProvider extends ServiceProvider
                 .'&email='.rawurlencode($user->getEmailForPasswordReset());
         });
 
+        Gate::policy(User::class, UserPolicy::class);
+        Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(Permission::class, PermissionPolicy::class);
+
         Gate::define(
             'system_health',
-            static fn (User $user): bool => $user->is_active && $user->locked_at === null,
+            static fn (User $user): bool => app(PermissionService::class)->allows($user, 'system.health'),
         );
     }
 

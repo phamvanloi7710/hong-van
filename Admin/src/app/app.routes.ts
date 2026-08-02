@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { authGuard, guestGuard } from './core/auth/auth.guard';
+import { authGuard, guestGuard, permissionGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -61,6 +61,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/dashboard').then((page) => page.Dashboard),
         data: { breadcrumb: 'Tổng quan' },
+      },
+      {
+        path: 'identity',
+        canActivate: [permissionGuard('users.view')],
+        loadComponent: () =>
+          import('./features/identity/identity-page').then((page) => page.IdentityPage),
+        data: { breadcrumb: 'Người dùng & phân quyền' },
       },
     ],
   },

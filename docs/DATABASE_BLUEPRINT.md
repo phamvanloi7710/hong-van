@@ -15,7 +15,7 @@
 - Entity public có thêm `public_id` dạng ULID để không lộ sequence.
 - JSON chỉ dùng cho cấu trúc linh hoạt có schema, không thay thế dữ liệu cần query/report.
 
-## Nền tảng đã triển khai tại P08
+## Nền tảng đã triển khai qua P11
 
 Database MySQL dùng `utf8mb4` với collation mặc định `utf8mb4_0900_ai_ci`; connection-level prefix luôn để rỗng. Tên bảng vật lý được ghi đầy đủ trong migration, model và cấu hình framework.
 
@@ -33,6 +33,11 @@ hongvan_job_batches
 hongvan_failed_jobs
 hongvan_notifications
 hongvan_personal_access_tokens
+hongvan_roles
+hongvan_permissions
+hongvan_role_user
+hongvan_permission_role
+hongvan_user_permission_overrides
 hongvan_languages
 hongvan_setting_groups
 hongvan_settings
@@ -40,7 +45,7 @@ hongvan_settings
 
 Quy ước định danh được chốt tại `ADR-009`: entity nghiệp vụ dùng unsigned `BIGINT` làm khóa nội bộ và `CHAR(26)` ULID unique làm `public_id` khi cần xuất hiện bên ngoài. Foreign key nội bộ tham chiếu `id`.
 
-Foundation settings chỉ lưu cấu hình có kiểu dữ liệu khai báo qua `value_type`; validation và allowlist của từng setting thuộc P13. Bảng `hongvan_personal_access_tokens` được chuẩn bị trước, còn package/model Sanctum sẽ được ánh xạ rõ tại prompt authentication.
+Foundation settings chỉ lưu cấu hình có kiểu dữ liệu khai báo qua `value_type`; validation và allowlist của từng setting thuộc P13. P10 đã ánh xạ Sanctum vào `hongvan_personal_access_tokens`. P11 đã triển khai role, permission, hai pivot và user permission override; tất cả quan hệ dùng khóa nội bộ, còn API chỉ nhận/trả `public_id`.
 
 ## Core và Identity dự kiến
 

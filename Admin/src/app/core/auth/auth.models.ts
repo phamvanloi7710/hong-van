@@ -16,6 +16,8 @@ export interface AdminUser {
   readonly email_verified_at: string | null;
   readonly is_active: boolean;
   readonly locked_at: string | null;
+  readonly roles: readonly string[];
+  readonly permissions: readonly string[];
 }
 
 export interface LoginCredentials {
