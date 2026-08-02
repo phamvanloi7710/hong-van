@@ -149,7 +149,7 @@ Trước khi kết thúc prompt:
 - Không reset/xóa thay đổi chưa commit của người dùng.
 - Không commit secret, template có giấy phép hoặc output build nếu policy ignore.
 - Mỗi prompt hoàn tất bắt buộc tạo commit ngay trên nhánh `main` sau khi toàn bộ test liên quan pass; không để code của prompt đã hoàn tất ở trạng thái chưa commit.
-- Không tự push remote trừ khi prompt hoặc chủ dự án yêu cầu rõ.
+- Sau khi commit prompt hoàn tất, bắt buộc push ngay `main` lên `origin/main` và xác nhận remote HEAD khớp local HEAD.
 - Commit message gợi ý: `feat(Pxx): ...`, `fix(Pxx): ...`, `docs(Pxx): ...`.
 
 ## 13. Báo cáo cuối mỗi prompt
