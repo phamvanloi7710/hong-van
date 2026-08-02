@@ -52,6 +52,30 @@ Ba vùng sau không phải source đích và không được sửa trong quá tr
 
 File `.readonly-sources.sha256` ghi dấu vân tay đã được duyệt. Chạy script verify trước và sau một prompt có đọc nguồn tham chiếu. Khi chủ dự án chủ động thay thế nguồn, cần audit lại nguồn mới trước; sau đó mới tạo nội dung baseline mới bằng `-PrintBaseline` hoặc `--print-baseline` và cập nhật file baseline có chủ đích.
 
+## Database MySQL cho test
+
+Test backend dùng MySQL thật, không dùng SQLite in-memory. Tạo riêng database test với đúng charset/collation và không trỏ test vào database local chứa dữ liệu:
+
+```sql
+CREATE DATABASE hongvan_testing
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_0900_ai_ci;
+```
+
+`BackEnd/phpunit.xml` mặc định kết nối `127.0.0.1:3306`, database `hongvan_testing`, user `root` không password cho WAMP local. Nếu môi trường khác, đặt `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` trong process chạy test; không commit credential.
+
+Các lệnh kiểm chứng P08:
+
+```powershell
+php artisan migrate:fresh --env=testing --force
+php artisan migrate:rollback --env=testing --force
+php artisan migrate --env=testing --force
+php artisan test --filter=TablePrefix
+php ..\scripts\check-table-prefix.php
+```
+
+Checker phải fail khi migration, foreign key literal, model `$table` hoặc cấu hình framework tham chiếu bảng không bắt đầu bằng `hongvan_`.
+
 ## Lệnh backend
 
 ```powershell

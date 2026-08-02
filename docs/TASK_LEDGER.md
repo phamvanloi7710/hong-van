@@ -8,7 +8,7 @@
 - [x] P05 Angular bootstrap
 - [x] P06 Admin template integration
 - [x] P07 Admin build integration
-- [ ] P08 Database foundation
+- [x] P08 Database foundation
 - [ ] P09 API foundation
 - [ ] P10 Authentication
 - [ ] P11 RBAC
