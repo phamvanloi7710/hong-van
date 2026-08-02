@@ -14,6 +14,7 @@ backend_bootstrapped: true
 admin_bootstrapped: true
 admin_build_integration: CONFIGURED_LARAVEL_ADMIN
 admin_delivery_policy: ALWAYS_BUILD_SYNC_AND_VERIFY_HONGVAN_LOCAL_AFTER_ADMIN_CHANGE
+git_delivery_policy: COMMIT_EVERY_COMPLETED_PROMPT_DIRECTLY_TO_MAIN
 database_migrated: true
 local_database: hongvan_platform
 local_database_status: PASSED_WAMP_MYSQL_9_1_0_FRESH_SEEDED_COMMENTED

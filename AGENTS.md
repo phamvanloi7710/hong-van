@@ -148,7 +148,7 @@ Trước khi kết thúc prompt:
 - Không force push.
 - Không reset/xóa thay đổi chưa commit của người dùng.
 - Không commit secret, template có giấy phép hoặc output build nếu policy ignore.
-- Mỗi prompt nên tạo một commit nhỏ khi toàn bộ test liên quan pass.
+- Mỗi prompt hoàn tất bắt buộc tạo commit ngay trên nhánh `main` sau khi toàn bộ test liên quan pass; không để code của prompt đã hoàn tất ở trạng thái chưa commit.
 - Không tự push remote trừ khi prompt hoặc chủ dự án yêu cầu rõ.
 - Commit message gợi ý: `feat(Pxx): ...`, `fix(Pxx): ...`, `docs(Pxx): ...`.
 
