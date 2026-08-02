@@ -1,0 +1,43 @@
+# Framework/vendor
+BackEnd/vendor/
+Admin/node_modules/
+Admin/dist/
+BackEnd/public/admin/browser/
+BackEnd/public/build/
+BackEnd/storage/*.key
+BackEnd/storage/framework/cache/*
+BackEnd/storage/framework/sessions/*
+BackEnd/storage/framework/views/*
+BackEnd/storage/logs/*
+BackEnd/bootstrap/cache/*.php
+
+# Environment
+.env
+.env.*
+!.env.example
+BackEnd/.env
+Admin/src/environments/environment.local.ts
+
+# IDE/OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Licensed/reference sources: ignored by default
+Template/*
+!Template/AGENTS.md
+!Template/README_PLACE_ADMIN_TEMPLATE_HERE.md
+FrontEndTemplate/*
+!FrontEndTemplate/AGENTS.md
+!FrontEndTemplate/README_PLACE_FRONTEND_TEMPLATE_HERE.md
+SourceIntegrations/StayHubMedia/*
+!SourceIntegrations/StayHubMedia/AGENTS.md
+!SourceIntegrations/StayHubMedia/README_PLACE_MEDIA_SOURCE_HERE.md
+
+# Temporary bootstrap
+.bootstrap/
+.tmp/
+coverage/
+playwright-report/
+test-results/

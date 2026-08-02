@@ -1,0 +1,11 @@
+# AGENTS.md — DATABASE
+
+- Mọi bảng và pivot bắt đầu `hongvan_`.
+- Migration mới phải rollback được.
+- Foreign key/index/unique đầy đủ.
+- Không sửa migration đã chạy production; tạo migration mới.
+- Không dùng float cho tiền.
+- Không seed thông tin pháp lý giả.
+- Seeder demo phải idempotent hoặc có chiến lược rõ.
+- Test `migrate:fresh --seed` trên DB test.
+- Cập nhật `docs/DATABASE_BLUEPRINT.md` nếu đổi schema lớn.

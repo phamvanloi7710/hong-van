@@ -1,0 +1,59 @@
+# TASK LEDGER
+
+- [ ] P00 Repository audit
+- [ ] P01 External source inventory
+- [ ] P02 Architecture records
+- [ ] P03 Repository hygiene
+- [ ] P04 Laravel bootstrap
+- [ ] P05 Angular bootstrap
+- [ ] P06 Admin template integration
+- [ ] P07 Admin build integration
+- [ ] P08 Database foundation
+- [ ] P09 API foundation
+- [ ] P10 Authentication
+- [ ] P11 RBAC
+- [ ] P12 User theme preferences
+- [ ] P13 Company settings
+- [ ] P14 Localization
+- [ ] P15 Audit/security foundation
+- [ ] P16 Media domain
+- [ ] P17 StayHub media clone
+- [ ] P18 Blade frontend foundation
+- [ ] P19 Frontend template clone
+- [ ] P20 Public theme studio
+- [ ] P21 Page Builder schema/registry
+- [ ] P22 Layout blocks
+- [ ] P23 Content/media blocks
+- [ ] P24 Dynamic business blocks
+- [ ] P25 Form blocks
+- [ ] P26 Angular Page Builder editor
+- [ ] P27 Blade iframe preview
+- [ ] P28 Versioning/publishing
+- [ ] P29 Templates/import/export/locks
+- [ ] P30 Menus/global regions
+- [ ] P31 Public routing/core pages
+- [ ] P32 Product domain
+- [ ] P33 Product admin/public
+- [ ] P34 Crop solutions
+- [ ] P35 Services
+- [ ] P36 Transportation
+- [ ] P37 Warehouses
+- [ ] P38 Lead workflows
+- [ ] P39 News/content
+- [ ] P40 Showcase
+- [ ] P41 Public search/filter
+- [ ] P42 SEO metadata
+- [ ] P43 Sitemap/schema/redirect
+- [ ] P44 Analytics/consent
+- [ ] P45 Dashboard/reports/notifications
+- [ ] P46 Accessibility/performance
+- [ ] P47 Seed/demo content
+- [ ] P48 Backend QA
+- [ ] P49 Angular/E2E/visual QA
+- [ ] P50 Build/CI
+- [ ] P51 Docker/deployment
+- [ ] P52 Backup/monitoring
+- [ ] P53 Security audit
+- [ ] P54 Content migration/UAT
+- [ ] P55 Production cutover
+- [ ] P56 Final handover
