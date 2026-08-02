@@ -1,57 +1,146 @@
-<section class="media-page">
-  <header class="page-actions">
-    <div><p class="eyebrow">{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><p>{{ text('description') }}</p></div>
+<section class="media-page" (dragover)="dragOver($event)" (dragleave)="dragLeave($event)" (drop)="dropFiles($event)">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">{{ text('eyebrow') }}</p>
+      <h2>{{ text('title') }}</h2>
+      <p>{{ text('description') }}</p>
+    </div>
     <div class="header-actions">
       <button mat-stroked-button type="button" (click)="openPicker()"><mat-icon>collections</mat-icon>{{ text('openPicker') }}</button>
       @if (authStore.hasPermission('media.create')) {
-        <button mat-flat-button type="button" (click)="fileInput.click()"><mat-icon>cloud_upload</mat-icon>{{ text('upload') }}</button>
-        <input #fileInput class="file-input" type="file" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.avif,.pdf" [attr.aria-label]="text('fileInput')" (change)="uploadFiles($event)" />
+        <button mat-stroked-button type="button" (click)="createFolder()"><mat-icon>create_new_folder</mat-icon>{{ text('createFolder') }}</button>
+        <button mat-flat-button type="button" (click)="uploadPanelOpen.set(true)"><mat-icon>cloud_upload</mat-icon>{{ text('upload') }}</button>
       }
+      <button mat-icon-button type="button" [matMenuTriggerFor]="helpMenu" [attr.aria-label]="text('shortcuts')"><mat-icon>keyboard</mat-icon></button>
+      <mat-menu #helpMenu="matMenu"><div class="shortcut-help"><strong>{{ text('shortcuts') }}</strong><span>Ctrl/⌘ + A — {{ text('selectAll') }}</span><span>U — {{ text('upload') }}</span><span>G / L — {{ text('grid') }} / {{ text('list') }}</span><span>Delete — {{ text('trash') }}</span><span>Esc — {{ text('clearSelection') }}</span></div></mat-menu>
+      <input #fileInput class="file-input" type="file" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.avif,.pdf" [attr.aria-label]="text('fileInput')" (change)="fileInputChanged($event)" />
     </div>
   </header>
 
-  <mat-card class="foundation-notice">
-    <mat-icon>verified_user</mat-icon><div><strong>{{ text('safeUpload') }}</strong><span>{{ text('queueNote') }}</span><span>{{ text('neutralNotice') }}</span></div>
-  </mat-card>
+  @if (picked().length > 0) { <mat-card class="picked"><mat-icon>check_circle</mat-icon><strong>{{ text('selected') }}</strong><span>{{ pickedNames() }}</span></mat-card> }
 
-  <form class="filters" [formGroup]="filters" (ngSubmit)="load()">
-    <mat-form-field appearance="outline"><mat-label>{{ text('search') }}</mat-label><input matInput formControlName="search" [placeholder]="text('searchHint')" /></mat-form-field>
-    <mat-form-field appearance="outline"><mat-label>{{ text('status') }}</mat-label><mat-select formControlName="status"><mat-option value="">{{ text('allStatuses') }}</mat-option><mat-option value="ready">{{ text('ready') }}</mat-option><mat-option value="processing">{{ text('processing') }}</mat-option><mat-option value="failed">{{ text('failed') }}</mat-option></mat-select></mat-form-field>
-    <mat-form-field appearance="outline"><mat-label>{{ text('folder') }}</mat-label><mat-select formControlName="folder_id"><mat-option value="">{{ text('rootFolder') }}</mat-option>@for (folder of folders(); track folder.public_id) { <mat-option [value]="folder.public_id">{{ folder.name }}</mat-option> }</mat-select></mat-form-field>
-    <mat-form-field appearance="outline"><mat-label>{{ text('trashFilter') }}</mat-label><mat-select formControlName="trashed"><mat-option value="without">{{ text('activeOnly') }}</mat-option><mat-option value="only">{{ text('onlyTrashed') }}</mat-option></mat-select></mat-form-field>
-    <div class="filter-actions"><button mat-flat-button type="submit"><mat-icon>filter_alt</mat-icon>{{ text('apply') }}</button><button mat-stroked-button type="button" (click)="reset()">{{ text('reset') }}</button></div>
-  </form>
-
-  @if (uploads().length > 0) {
-    <section class="upload-state"><h3>{{ text('uploads') }}</h3><div class="upload-list">@for (upload of uploads(); track upload.id) { <span [class.error]="upload.status === 'error'"><mat-icon>{{ upload.status === 'success' ? 'check_circle' : upload.status === 'error' ? 'error' : 'hourglass_top' }}</mat-icon><b>{{ upload.name }}</b> · {{ text(upload.status === 'success' ? 'uploadSuccess' : upload.status === 'error' ? 'uploadFailed' : 'uploading') }} @if (upload.message) { · {{ upload.message }} }</span> }</div></section>
-  }
-
-  @if (picked().length > 0) { <mat-card class="picked"><strong>{{ text('selected') }}</strong><span>{{ pickedNames() }}</span></mat-card> }
-
-  @if (loading()) {
-    <div class="state"><mat-spinner diameter="44" /></div>
-  } @else if (error()) {
-    <mat-card class="state error"><mat-icon>error_outline</mat-icon>{{ error() }}</mat-card>
-  } @else if (items().length === 0) {
-    <mat-card class="state"><mat-icon>perm_media</mat-icon>{{ text('empty') }}</mat-card>
-  } @else {
-    <div class="summary"><strong>{{ text('total') }}: {{ pagination()?.total ?? items().length }}</strong><span>{{ text('page') }} {{ pagination()?.page ?? 1 }} {{ text('of') }} {{ pagination()?.last_page ?? 1 }}</span></div>
-    <div class="media-grid">
-      @for (item of items(); track item.public_id) {
-        <mat-card class="media-card">
-          <a class="preview" [href]="item.content_url" target="_blank" rel="noopener">
-            @if (item.mime_type.startsWith('image/')) { <img [src]="thumbnail(item)" [alt]="item.alt_text ?? item.original_filename" /> } @else { <mat-icon>description</mat-icon><span>{{ item.extension.toUpperCase() }}</span> }
-          </a>
-          <div class="media-info"><strong [title]="item.original_filename">{{ item.title || item.original_filename }}</strong><span>{{ item.mime_type }} · {{ fileSize(item.size_bytes) }}</span><span>{{ item.width && item.height ? item.width + ' × ' + item.height : '—' }} · {{ item.variants.length }} {{ text('variants') }}</span><span class="status" [attr.data-status]="item.status">{{ statusLabel(item.status) }}</span><span>{{ text('usage') }}: {{ item.usage_count }} · {{ item.can_delete ? text('safe') : text('protected') }}</span></div>
-          <div class="card-actions">
-            @if (item.status === 'failed' && authStore.hasPermission('media.update')) { <button mat-icon-button type="button" [attr.aria-label]="text('retry')" (click)="retry(item)"><mat-icon>replay</mat-icon></button> }
-            @if (item.deleted_at && authStore.hasPermission('media.restore')) { <button mat-icon-button type="button" [attr.aria-label]="text('restore')" (click)="restore(item)"><mat-icon>restore_from_trash</mat-icon></button> }
-            @if (!item.deleted_at && authStore.hasPermission('media.delete')) { <button mat-icon-button type="button" [attr.aria-label]="text('trash')" (click)="trash(item)"><mat-icon>delete_outline</mat-icon></button> }
-            @if (item.deleted_at && authStore.hasPermission('media.delete')) { <button mat-icon-button type="button" [attr.aria-label]="text('deleteForever')" (click)="deletePermanently(item)"><mat-icon>delete_forever</mat-icon></button> }
-          </div>
-        </mat-card>
+  @if (uploadPanelOpen()) {
+    <section class="upload-panel" role="dialog" [attr.aria-label]="text('uploads')">
+      <header><div><h3>{{ text('uploads') }}</h3><p>{{ text('formats') }}</p></div><button mat-icon-button type="button" [attr.aria-label]="text('close')" (click)="uploadPanelOpen.set(false)"><mat-icon>close</mat-icon></button></header>
+      <button class="dropzone" type="button" [class.active]="dragActive()" (click)="fileInput.click()"><mat-icon>cloud_upload</mat-icon><strong>{{ text('dropFiles') }}</strong><span>{{ text('browseFiles') }}</span></button>
+      @if (uploads().length > 0) {
+        <div class="upload-queue">
+          @for (upload of uploads(); track upload.id) {
+            <div class="upload-row" [class.error]="upload.status === 'error'">
+              <mat-icon>{{ upload.status === 'success' ? 'check_circle' : upload.status === 'error' ? 'error' : upload.status === 'uploading' ? 'cloud_upload' : 'schedule' }}</mat-icon>
+              <div><strong>{{ upload.name }}</strong><mat-progress-bar mode="determinate" [value]="upload.progress" /><small>{{ text(upload.status) }} · {{ upload.progress }}% @if (upload.message) { · {{ upload.message }} }</small></div>
+              <button mat-icon-button type="button" [disabled]="upload.status === 'uploading'" [attr.aria-label]="text('remove')" (click)="removeUpload(upload.id)"><mat-icon>close</mat-icon></button>
+            </div>
+          }
+        </div>
       }
-    </div>
-    <nav class="pagination"><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) <= 1" (click)="previous()">{{ text('previous') }}</button><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) >= (pagination()?.last_page ?? 1)" (click)="next()">{{ text('next') }}</button></nav>
+      <footer><button mat-button type="button" (click)="uploadPanelOpen.set(false)">{{ text('close') }}</button><button mat-flat-button type="button" [disabled]="uploads().length === 0" (click)="startUploads()"><mat-icon>cloud_upload</mat-icon>{{ text('startUpload') }}</button></footer>
+    </section>
   }
+
+  @if (dragActive()) { <div class="drop-overlay"><mat-icon>cloud_upload</mat-icon><strong>{{ text('dropNow') }}</strong></div> }
+
+  <div class="media-shell">
+    <aside class="folder-panel" aria-label="Media folders">
+      <div class="panel-title"><strong>{{ text('folders') }}</strong><span>{{ folders().length }}</span></div>
+      <button class="folder-row root" type="button" [class.active]="currentFolderId() === null" (click)="navigateTo(null)"><mat-icon>home</mat-icon><span>{{ text('rootFolder') }}</span></button>
+      @for (row of folderRows(); track row.folder.public_id) {
+        <button class="folder-row" type="button" [class.active]="currentFolderId() === row.folder.public_id" [style.padding-left.px]="12 + row.depth * 18" (click)="navigateTo(row.folder.public_id)">
+          <mat-icon>{{ row.folder.is_locked ? 'folder_lock' : 'folder' }}</mat-icon><span>{{ row.folder.name }}</span><small>{{ row.folder.media_count }}</small>
+        </button>
+      }
+      @if (folders().length === 0) { <p class="folder-empty">{{ text('noFolders') }}</p> }
+    </aside>
+
+    <main class="library-panel">
+      <nav class="breadcrumbs" [attr.aria-label]="text('breadcrumb')">
+        <button mat-button type="button" (click)="navigateTo(null)"><mat-icon>home</mat-icon>{{ text('rootFolder') }}</button>
+        @for (folder of breadcrumbs(); track folder.public_id) { <mat-icon>chevron_right</mat-icon><button mat-button type="button" (click)="navigateTo(folder.public_id)">{{ folder.name }}</button> }
+        <span class="breadcrumb-spacer"></span>
+        @if (currentFolder()) {
+          <button mat-icon-button type="button" [matTooltip]="text('parentFolder')" (click)="navigateParent()"><mat-icon>arrow_upward</mat-icon></button>
+          @if (authStore.hasPermission('media.update')) {
+            <button mat-icon-button type="button" [disabled]="currentFolder()!.is_locked" [matTooltip]="text('renameFolder')" (click)="renameCurrentFolder()"><mat-icon>drive_file_rename_outline</mat-icon></button>
+            <button mat-icon-button type="button" [matTooltip]="currentFolder()!.is_locked ? text('unlockFolder') : text('lockFolder')" (click)="toggleCurrentFolderLock()"><mat-icon>{{ currentFolder()!.is_locked ? 'lock_open' : 'lock' }}</mat-icon></button>
+          }
+        }
+      </nav>
+
+      <form class="filters" [formGroup]="filters" (ngSubmit)="load()">
+        <mat-form-field appearance="outline" class="search-field"><mat-label>{{ text('search') }}</mat-label><mat-icon matPrefix>search</mat-icon><input matInput formControlName="search" [placeholder]="text('searchHint')" /></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('type') }}</mat-label><mat-select formControlName="type"><mat-option value="">{{ text('allTypes') }}</mat-option><mat-option value="image/">{{ text('images') }}</mat-option><mat-option value="application/pdf">PDF</mat-option></mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('visibility') }}</mat-label><mat-select formControlName="visibility"><mat-option value="">{{ text('allVisibility') }}</mat-option><mat-option value="public">{{ text('public') }}</mat-option><mat-option value="private">{{ text('private') }}</mat-option></mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('trashFilter') }}</mat-label><mat-select formControlName="trashed"><mat-option value="without">{{ text('activeOnly') }}</mat-option><mat-option value="only">{{ text('onlyTrashed') }}</mat-option></mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('sort') }}</mat-label><mat-select formControlName="sort"><mat-option value="-created_at">{{ text('newest') }}</mat-option><mat-option value="created_at">{{ text('oldest') }}</mat-option><mat-option value="original_filename">{{ text('nameAsc') }}</mat-option><mat-option value="-original_filename">{{ text('nameDesc') }}</mat-option><mat-option value="-size_bytes">{{ text('largest') }}</mat-option></mat-select></mat-form-field>
+        <button mat-flat-button type="submit"><mat-icon>filter_alt</mat-icon>{{ text('apply') }}</button>
+        <button mat-icon-button type="button" [matTooltip]="text('reset')" (click)="reset()"><mat-icon>filter_alt_off</mat-icon></button>
+      </form>
+
+      <div class="library-toolbar">
+        <mat-checkbox [checked]="allSelected()" [indeterminate]="selectedIds().size > 0 && !allSelected()" (change)="toggleSelectAll()">{{ text('selectAll') }}</mat-checkbox>
+        <span>{{ interpolate('selectedCount', { count: selectedIds().size.toString() }) }}</span>
+        <span class="toolbar-spacer"></span>
+        <strong>{{ pagination()?.total ?? items().length }} {{ text('items') }}</strong>
+        <button mat-icon-button type="button" [class.active]="viewMode() === 'grid'" [attr.aria-label]="text('grid')" (click)="viewMode.set('grid')"><mat-icon>grid_view</mat-icon></button>
+        <button mat-icon-button type="button" [class.active]="viewMode() === 'list'" [attr.aria-label]="text('list')" (click)="viewMode.set('list')"><mat-icon>view_list</mat-icon></button>
+        <button mat-icon-button type="button" [attr.aria-label]="text('refresh')" (click)="load()"><mat-icon>refresh</mat-icon></button>
+      </div>
+
+      @if (selectedIds().size > 0) {
+        <div class="bulk-bar" role="toolbar" [attr.aria-label]="text('bulkActions')">
+          <strong>{{ interpolate('selectedCount', { count: selectedIds().size.toString() }) }}</strong>
+          @if (authStore.hasPermission('media.update')) {
+            <mat-form-field appearance="outline"><mat-label>{{ text('moveTo') }}</mat-label><mat-select [formControl]="moveDestination"><mat-option value="root">{{ text('rootFolder') }}</mat-option>@for (row of folderRows(); track row.folder.public_id) { <mat-option [value]="row.folder.public_id">{{ row.folder.name }}</mat-option> }</mat-select></mat-form-field>
+            <button mat-stroked-button type="button" (click)="moveSelected()"><mat-icon>drive_file_move</mat-icon>{{ text('move') }}</button>
+            <button mat-stroked-button type="button" [matMenuTriggerFor]="lockMenu"><mat-icon>lock</mat-icon>{{ text('lock') }}</button>
+            <mat-menu #lockMenu="matMenu"><button mat-menu-item type="button" (click)="setSelectedLock(true)"><mat-icon>lock</mat-icon>{{ text('lock') }}</button><button mat-menu-item type="button" (click)="setSelectedLock(false)"><mat-icon>lock_open</mat-icon>{{ text('unlock') }}</button></mat-menu>
+            <button mat-stroked-button type="button" [matMenuTriggerFor]="visibilityMenu"><mat-icon>visibility</mat-icon>{{ text('visibility') }}</button>
+            <mat-menu #visibilityMenu="matMenu"><button mat-menu-item type="button" (click)="setSelectedVisibility('public')"><mat-icon>public</mat-icon>{{ text('public') }}</button><button mat-menu-item type="button" (click)="setSelectedVisibility('private')"><mat-icon>visibility_off</mat-icon>{{ text('private') }}</button></mat-menu>
+          }
+          <button mat-stroked-button type="button" (click)="downloadSelected()"><mat-icon>download</mat-icon>{{ text('download') }}</button>
+          @if (filters.controls.trashed.value === 'only' && authStore.hasPermission('media.restore')) { <button mat-stroked-button type="button" (click)="restoreSelected()"><mat-icon>restore_from_trash</mat-icon>{{ text('restore') }}</button> }
+          @if (filters.controls.trashed.value !== 'only' && authStore.hasPermission('media.delete')) { <button mat-stroked-button type="button" class="danger" (click)="trashSelected()"><mat-icon>delete_outline</mat-icon>{{ text('trash') }}</button> }
+          <button mat-icon-button type="button" [attr.aria-label]="text('clearSelection')" (click)="clearSelection()"><mat-icon>close</mat-icon></button>
+        </div>
+      }
+
+      @if (loading()) {
+        <div class="state"><mat-spinner diameter="44" /><span>{{ text('loading') }}</span></div>
+      } @else if (error()) {
+        <mat-card class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span><button mat-stroked-button type="button" (click)="load()">{{ text('retry') }}</button></mat-card>
+      } @else if (items().length === 0) {
+        <mat-card class="state empty"><mat-icon>perm_media</mat-icon><strong>{{ text('empty') }}</strong><span>{{ text('emptyHint') }}</span>@if (authStore.hasPermission('media.create')) { <button mat-flat-button type="button" (click)="uploadPanelOpen.set(true)">{{ text('upload') }}</button> }</mat-card>
+      } @else {
+        <div class="media-results" [class.list-mode]="viewMode() === 'list'" role="listbox" [attr.aria-label]="text('title')" [attr.aria-multiselectable]="true">
+          @for (item of items(); track item.public_id) {
+            <article class="media-item" role="option" tabindex="0" [class.selected]="selectedIds().has(item.public_id)" [class.locked]="item.is_locked" [attr.aria-selected]="selectedIds().has(item.public_id)" (click)="selectItem(item, $event)" (keydown.enter)="selectItemFromKeyboard(item, $event)" (keydown.space)="selectItemFromKeyboard(item, $event)" (dblclick)="openPreview(item)">
+              <mat-checkbox class="item-check" [checked]="selectedIds().has(item.public_id)" [attr.aria-label]="item.original_filename" (click)="$event.stopPropagation(); selectItem(item, $event)" />
+              <div class="preview">
+                @if (item.mime_type.startsWith('image/')) { <img [src]="thumbnail(item)" [alt]="item.alt_text ?? item.original_filename" /> } @else { <mat-icon>description</mat-icon><b>{{ item.extension.toUpperCase() }}</b> }
+                <span class="media-badges">@if (item.is_locked) { <mat-icon>lock</mat-icon> }<mat-icon>{{ item.visibility === 'public' ? 'public' : 'visibility_off' }}</mat-icon></span>
+              </div>
+              <div class="item-info"><strong [title]="item.original_filename">{{ item.title || item.original_filename }}</strong><span>{{ item.mime_type }} · {{ fileSize(item.size_bytes) }}</span><span>{{ item.width && item.height ? item.width + ' × ' + item.height : '—' }} · {{ statusLabel(item.status) }}</span><span>{{ text('usage') }}: {{ item.usage_count }}</span></div>
+              @if (item.deleted_at && authStore.hasPermission('media.delete')) { <button class="delete-forever" mat-icon-button type="button" [attr.aria-label]="text('deleteForever')" (click)="$event.stopPropagation(); deletePermanently(item)"><mat-icon>delete_forever</mat-icon></button> }
+            </article>
+          }
+        </div>
+        <nav class="pagination"><span>{{ text('page') }} {{ pagination()?.page ?? 1 }} {{ text('of') }} {{ pagination()?.last_page ?? 1 }}</span><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) <= 1" (click)="previous()">{{ text('previous') }}</button><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) >= (pagination()?.last_page ?? 1)" (click)="next()">{{ text('next') }}</button></nav>
+      }
+    </main>
+
+    <aside class="detail-panel" [class.empty]="!detail()" [attr.aria-label]="text('details')">
+      @if (detail(); as item) {
+        <header><strong>{{ text('details') }}</strong><button mat-icon-button type="button" [attr.aria-label]="text('close')" (click)="clearSelection()"><mat-icon>close</mat-icon></button></header>
+        <button class="detail-preview" type="button" (click)="openPreview(item)">@if (item.mime_type.startsWith('image/')) { <img [src]="thumbnail(item)" [alt]="item.alt_text ?? item.original_filename" /> } @else { <mat-icon>description</mat-icon> }</button>
+        <h3>{{ item.title || item.original_filename }}</h3><p class="detail-file">{{ item.original_filename }}</p>
+        <dl><div><dt>{{ text('mimeType') }}</dt><dd>{{ item.mime_type }}</dd></div><div><dt>{{ text('size') }}</dt><dd>{{ fileSize(item.size_bytes) }}</dd></div><div><dt>{{ text('dimensions') }}</dt><dd>{{ item.width && item.height ? item.width + ' × ' + item.height : '—' }}</dd></div><div><dt>{{ text('visibility') }}</dt><dd>{{ text(item.visibility) }}</dd></div><div><dt>{{ text('status') }}</dt><dd>{{ statusLabel(item.status) }}</dd></div></dl>
+        @if (authStore.hasPermission('media.update') && !item.deleted_at) {
+          <div class="detail-actions"><button mat-stroked-button type="button" (click)="setSelectedLock(!item.is_locked)"><mat-icon>{{ item.is_locked ? 'lock_open' : 'lock' }}</mat-icon>{{ item.is_locked ? text('unlock') : text('lock') }}</button>@if (item.mime_type.startsWith('image/')) { <button mat-stroked-button type="button" [disabled]="item.is_locked" (click)="openEditor()"><mat-icon>tune</mat-icon>{{ text('editImage') }}</button> }</div>
+          <form class="metadata-form" [formGroup]="detailForm" (ngSubmit)="saveMetadata()"><mat-form-field appearance="outline"><mat-label>{{ text('mediaTitle') }}</mat-label><input matInput formControlName="title" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('altText') }}</mat-label><input matInput formControlName="alt_text" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('caption') }}</mat-label><textarea matInput rows="3" formControlName="caption"></textarea></mat-form-field><button mat-flat-button type="submit" [disabled]="item.is_locked || saving()">{{ saving() ? text('saving') : text('saveMetadata') }}</button></form>
+        }
+        <section class="used-by"><h4>{{ text('usedBy') }} <span>{{ item.usage_count }}</span></h4>@if (item.usages?.length) { @for (usage of item.usages; track usage.public_id) { <div><mat-icon>link</mat-icon><span><strong>{{ usage.owner_type }}</strong><small>{{ usage.field }} · {{ usage.owner_public_id }}</small></span></div> } } @else { <p>{{ text('notUsed') }}</p> }</section>
+        @if (item.status === 'failed' && authStore.hasPermission('media.update')) { <button mat-stroked-button type="button" (click)="retry(item)"><mat-icon>replay</mat-icon>{{ text('retry') }}</button> }
+      } @else { <mat-icon>info</mat-icon><strong>{{ text('noSelection') }}</strong><span>{{ text('selectionHint') }}</span> }
+    </aside>
+  </div>
 </section>

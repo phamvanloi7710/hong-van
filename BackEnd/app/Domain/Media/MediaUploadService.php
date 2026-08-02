@@ -3,6 +3,7 @@
 namespace App\Domain\Media;
 
 use App\Domain\Audit\AuditTrail;
+use App\Exceptions\ConflictException;
 use App\Jobs\Media\GenerateMediaVariants;
 use App\Models\Media;
 use App\Models\MediaFolder;
@@ -31,6 +32,7 @@ final readonly class MediaUploadService
         $publicId = (string) Str::ulid();
         $path = sprintf('media/originals/%s/%s/%s.%s', now('UTC')->format('Y'), now('UTC')->format('m'), $publicId, $inspected->extension);
         $folder = $this->folder($attributes['folder_id'] ?? null);
+        $this->guardFolderUnlocked($folder);
 
         $this->storage->putUploadedFile($disk, $path, $file, $visibility);
 
@@ -104,5 +106,16 @@ final readonly class MediaUploadService
         return is_string($publicId) && $publicId !== ''
             ? MediaFolder::query()->where('public_id', $publicId)->firstOrFail()
             : null;
+    }
+
+    private function guardFolderUnlocked(?MediaFolder $folder): void
+    {
+        while ($folder !== null) {
+            if ($folder->is_locked) {
+                throw new ConflictException(__('media.folder_locked'));
+            }
+
+            $folder = $folder->parent;
+        }
     }
 }

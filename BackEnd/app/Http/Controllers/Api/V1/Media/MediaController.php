@@ -8,6 +8,8 @@ use App\Domain\Media\MediaUploadService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Media\IndexMediaRequest;
 use App\Http\Requests\Api\V1\Media\MoveMediaRequest;
+use App\Http\Requests\Api\V1\Media\SetMediaLockRequest;
+use App\Http\Requests\Api\V1\Media\SetMediaVisibilityRequest;
 use App\Http\Requests\Api\V1\Media\StoreMediaRequest;
 use App\Http\Requests\Api\V1\Media\UpdateMediaRequest;
 use App\Http\Resources\Api\V1\Media\MediaResource;
@@ -90,6 +92,20 @@ final class MediaController extends Controller
         Gate::authorize('update', $media);
 
         return $response->success((new MediaResource($library->retry($media, $this->actor($request), $request)))->resolve($request), __('media.retry_queued'));
+    }
+
+    public function lock(SetMediaLockRequest $request, Media $media, MediaLibraryService $library, ApiResponse $response): JsonResponse
+    {
+        Gate::authorize('update', $media);
+
+        return $response->success((new MediaResource($library->setLock($media, $request->boolean('locked'), $this->actor($request), $request)))->resolve($request), __('media.lock_updated'));
+    }
+
+    public function visibility(SetMediaVisibilityRequest $request, Media $media, MediaLibraryService $library, ApiResponse $response): JsonResponse
+    {
+        Gate::authorize('update', $media);
+
+        return $response->success((new MediaResource($library->setVisibility($media, $request->validated('visibility'), $this->actor($request), $request)))->resolve($request), __('media.visibility_updated'));
     }
 
     private function actor(Request $request): User

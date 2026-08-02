@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['parent_id', 'name', 'slug', 'sort_order', 'created_by', 'updated_by'])]
+#[Fillable(['parent_id', 'name', 'slug', 'sort_order', 'is_locked', 'created_by', 'updated_by'])]
 final class MediaFolder extends Model
 {
     use HasPublicId;
@@ -38,6 +38,6 @@ final class MediaFolder extends Model
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return ['sort_order' => 'integer'];
+        return ['sort_order' => 'integer', 'is_locked' => 'boolean'];
     }
 }

@@ -16,6 +16,9 @@ final class MediaFolderResource extends JsonResource
             'name' => $this->resource->name,
             'slug' => $this->resource->slug,
             'sort_order' => $this->resource->sort_order,
+            'is_locked' => (bool) $this->resource->is_locked,
+            'media_count' => (int) ($this->resource->media_count ?? 0),
+            'children_count' => (int) ($this->resource->children_count ?? 0),
         ];
     }
 }

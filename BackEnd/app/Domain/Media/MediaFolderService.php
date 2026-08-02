@@ -3,6 +3,7 @@
 namespace App\Domain\Media;
 
 use App\Domain\Audit\AuditTrail;
+use App\Exceptions\ConflictException;
 use App\Models\MediaFolder;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ final readonly class MediaFolderService
         $parent = is_string($parentId)
             ? MediaFolder::query()->where('public_id', $parentId)->firstOrFail()
             : null;
+        $this->guardUnlocked($parent);
         $baseSlug = Str::slug($data['name']);
         $baseSlug = $baseSlug !== '' ? $baseSlug : 'folder';
         $slug = $baseSlug;
@@ -47,5 +49,56 @@ final readonly class MediaFolderService
         );
 
         return $folder;
+    }
+
+    /** @param array{name: string} $data */
+    public function rename(MediaFolder $folder, array $data, User $actor, Request $request): MediaFolder
+    {
+        $this->guardUnlocked($folder);
+
+        $name = trim($data['name']);
+        $baseSlug = Str::slug($name);
+        $baseSlug = $baseSlug !== '' ? $baseSlug : 'folder';
+        $slug = $baseSlug;
+        $suffix = 2;
+
+        while (MediaFolder::query()
+            ->where('parent_id', $folder->parent_id)
+            ->whereKeyNot($folder->getKey())
+            ->where('slug', $slug)
+            ->exists()) {
+            $slug = $baseSlug.'-'.$suffix++;
+        }
+
+        $before = $folder->only(['name', 'slug']);
+        $folder->forceFill([
+            'name' => $name,
+            'slug' => $slug,
+            'updated_by' => $actor->getKey(),
+        ])->save();
+
+        $this->auditTrail->record('media.folder.renamed', $actor, 'media_folder', $folder->public_id, before: $before, after: $folder->only(['name', 'slug']), request: $request);
+
+        return $folder;
+    }
+
+    public function setLock(MediaFolder $folder, bool $locked, User $actor, Request $request): MediaFolder
+    {
+        $before = (bool) $folder->is_locked;
+        $folder->forceFill(['is_locked' => $locked, 'updated_by' => $actor->getKey()])->save();
+        $this->auditTrail->record('media.folder.lock.changed', $actor, 'media_folder', $folder->public_id, before: ['locked' => $before], after: ['locked' => $locked], request: $request);
+
+        return $folder;
+    }
+
+    private function guardUnlocked(?MediaFolder $folder): void
+    {
+        while ($folder !== null) {
+            if ($folder->is_locked) {
+                throw new ConflictException(__('media.folder_locked'));
+            }
+
+            $folder = $folder->parent;
+        }
     }
 }

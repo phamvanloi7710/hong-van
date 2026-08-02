@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ text('editorTitle') }}</h2>
+<mat-dialog-content class="editor">
+  <aside class="editor-tools">
+    <div class="tool-row">
+      <button mat-stroked-button type="button" [attr.aria-label]="text('rotateLeft')" (click)="rotate(false)"><mat-icon>rotate_left</mat-icon></button>
+      <button mat-stroked-button type="button" [attr.aria-label]="text('rotateRight')" (click)="rotate(true)"><mat-icon>rotate_right</mat-icon></button>
+      <button mat-stroked-button type="button" [attr.aria-label]="text('flipHorizontal')" (click)="flip(true)"><mat-icon>flip</mat-icon></button>
+      <button mat-stroked-button type="button" [attr.aria-label]="text('flipVertical')" (click)="flip(false)"><mat-icon>swap_vert</mat-icon></button>
+    </div>
+    <div class="resize-fields">
+      <mat-form-field appearance="outline"><mat-label>{{ text('width') }}</mat-label><input matInput type="number" min="1" max="8000" [formControl]="width" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('height') }}</mat-label><input matInput type="number" min="1" max="8000" [formControl]="height" /></mat-form-field>
+      <button mat-stroked-button type="button" (click)="resize()"><mat-icon>aspect_ratio</mat-icon>{{ text('resize') }}</button>
+    </div>
+    <div class="slider-label">{{ text('brightness') }} <strong>{{ brightness.value }}%</strong></div>
+    <mat-slider min="25" max="175" step="1"><input matSliderThumb [formControl]="brightness" (valueChange)="render()" /></mat-slider>
+    <div class="slider-label">{{ text('contrast') }} <strong>{{ contrast.value }}%</strong></div>
+    <mat-slider min="25" max="175" step="1"><input matSliderThumb [formControl]="contrast" (valueChange)="render()" /></mat-slider>
+    <div class="slider-label">{{ text('grayscale') }} <strong>{{ grayscale.value }}%</strong></div>
+    <mat-slider min="0" max="100" step="1"><input matSliderThumb [formControl]="grayscale" (valueChange)="render()" /></mat-slider>
+    <p>{{ text('cropHint') }}</p>
+    <button mat-flat-button type="button" [disabled]="!crop()" (click)="applyCrop()"><mat-icon>crop</mat-icon>{{ text('applyCrop') }}</button>
+  </aside>
+  <main class="canvas-stage">
+    @if (loading()) { <div class="editor-state">{{ text('loading') }}</div> }
+    @if (error()) { <div class="editor-state error">{{ error() }}</div> }
+    <canvas #canvas [attr.aria-label]="text('cropCanvas')" (pointerdown)="beginCrop($event)" (pointermove)="updateCrop($event)" (pointerup)="finishCrop($event)"></canvas>
+  </main>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>{{ text('cancel') }}</button>
+  <button mat-flat-button type="button" [disabled]="loading() || saving()" (click)="save()"><mat-icon>save</mat-icon>{{ saving() ? text('saving') : text('saveAsNew') }}</button>
+</mat-dialog-actions>

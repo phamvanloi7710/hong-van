@@ -53,7 +53,7 @@ Settings API dùng `settings.view`, `settings.update` và `settings.manage_setti
 
 Audit API chỉ đọc, yêu cầu `audit.view`, phân trang chuẩn và chỉ chấp nhận filter/sort được allowlist cho action, actor, subject, request ID và khoảng thời gian. Không có endpoint create/update/delete/export trong P15; dữ liệu audit chỉ được ghi qua `AuditTrail` phía server sau khi đã redaction.
 
-Media API yêu cầu Sanctum, `MediaPolicy` và các permission `media.view|create|update|delete|restore`. List hỗ trợ search/filter/sort allowlist; upload dùng limiter `uploads` và multipart field `file`. Resource trả URL content cùng origin được tạo từ `public_id`, không làm lộ storage path. Trash/restore/retry là action riêng; xóa vĩnh viễn bị từ chối với `409` khi `hongvan_media_usages` còn tham chiếu.
+Media API yêu cầu Sanctum, `MediaPolicy` và các permission `media.view|create|update|delete|restore`. List hỗ trợ search/filter/sort allowlist, gồm folder gốc, visibility và lock; upload dùng limiter `uploads` và multipart field `file`. Folder có create/rename/lock; media có metadata/move/lock/visibility/trash/restore/retry. Resource trả URL content cùng origin được tạo từ `public_id`, không làm lộ storage path. Thay đổi media/folder bị khóa trả `409`; xóa vĩnh viễn bị từ chối khi `hongvan_media_usages` còn tham chiếu.
 
 ## Response thành công
 

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[Fillable([
     'folder_id', 'disk', 'path', 'original_filename', 'normalized_filename', 'extension',
     'mime_type', 'size_bytes', 'checksum_sha256', 'width', 'height', 'status',
-    'visibility', 'title', 'alt_text', 'caption', 'metadata', 'uploaded_by', 'updated_by',
+    'visibility', 'is_locked', 'title', 'alt_text', 'caption', 'metadata', 'uploaded_by', 'updated_by',
     'deleted_by',
 ])]
 final class Media extends Model
@@ -61,6 +61,7 @@ final class Media extends Model
             'size_bytes' => 'integer',
             'width' => 'integer',
             'height' => 'integer',
+            'is_locked' => 'boolean',
             'metadata' => 'array',
         ];
     }

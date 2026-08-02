@@ -22,6 +22,8 @@ SourceIntegrations/StayHubMedia/
 
 Nếu thiếu, P17 = `DEFERRED`; P16 vẫn triển khai Media domain contract. Khi source có mặt, phải inventory, xác minh quyền sử dụng, lập feature-parity matrix và port vào Hồng Vân mà không bê tenant/domain/token riêng của StayHub.
 
+P17 status: `READY_PORTED`. Source owner supplied the internal reference and explicitly requested the clone; inventory/hash and parity evidence are recorded in `docs/inventories/STAYHUB_MEDIA_INVENTORY.md` and `docs/MEDIA_CLONE_CHECKLIST.md`. Source remains read-only.
+
 ## Gate C — Frontend Template
 
 Path chính xác:

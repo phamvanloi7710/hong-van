@@ -20,6 +20,7 @@ final readonly class MediaLibraryService
     /** @param array<string, mixed> $data */
     public function updateMetadata(Media $media, array $data, User $actor, Request $request): Media
     {
+        $this->guardMutable($media);
         $before = $media->only(['title', 'alt_text', 'caption']);
         $media->forceFill([
             'title' => $data['title'] ?? null,
@@ -40,6 +41,8 @@ final readonly class MediaLibraryService
 
     public function move(Media $media, ?MediaFolder $folder, User $actor, Request $request): Media
     {
+        $this->guardMutable($media);
+        $this->guardFolderUnlocked($folder);
         $beforeFolder = $media->folder?->public_id;
         $media->forceFill(['folder_id' => $folder?->getKey(), 'updated_by' => $actor->getKey()])->save();
         $this->auditTrail->record('media.moved', $actor, 'media', $media->public_id, before: ['folder_public_id' => $beforeFolder], after: ['folder_public_id' => $folder?->public_id], request: $request);
@@ -49,6 +52,7 @@ final readonly class MediaLibraryService
 
     public function trash(Media $media, User $actor, Request $request): Media
     {
+        $this->guardMutable($media);
         $this->guardUnused($media);
         $media->forceFill(['status' => 'trashed', 'deleted_by' => $actor->getKey(), 'updated_by' => $actor->getKey()])->save();
         $media->delete();
@@ -98,6 +102,7 @@ final readonly class MediaLibraryService
 
     public function retry(Media $media, ?User $actor, Request $request): Media
     {
+        $this->guardMutable($media);
         if ($media->trashed() || ! str_starts_with($media->mime_type, 'image/')) {
             throw new ConflictException(__('media.retry_unavailable'));
         }
@@ -118,10 +123,49 @@ final readonly class MediaLibraryService
         return $this->reload($media);
     }
 
+    public function setLock(Media $media, bool $locked, User $actor, Request $request): Media
+    {
+        $before = (bool) $media->is_locked;
+        $media->forceFill(['is_locked' => $locked, 'updated_by' => $actor->getKey()])->save();
+        $this->auditTrail->record('media.lock.changed', $actor, 'media', $media->public_id, before: ['locked' => $before], after: ['locked' => $locked], request: $request);
+
+        return $this->reload($media);
+    }
+
+    public function setVisibility(Media $media, string $visibility, User $actor, Request $request): Media
+    {
+        $this->guardMutable($media);
+        $before = $media->visibility;
+        $media->forceFill(['visibility' => $visibility, 'updated_by' => $actor->getKey()])->save();
+        $this->auditTrail->record('media.visibility.changed', $actor, 'media', $media->public_id, before: ['visibility' => $before], after: ['visibility' => $visibility], request: $request);
+
+        return $this->reload($media);
+    }
+
     private function guardUnused(Media $media): void
     {
         if ($media->usages()->exists()) {
             throw new ConflictException(__('media.in_use'));
+        }
+    }
+
+    private function guardMutable(Media $media): void
+    {
+        if ($media->is_locked) {
+            throw new ConflictException(__('media.locked'));
+        }
+
+        $this->guardFolderUnlocked($media->folder);
+    }
+
+    private function guardFolderUnlocked(?MediaFolder $folder): void
+    {
+        while ($folder !== null) {
+            if ($folder->is_locked) {
+                throw new ConflictException(__('media.folder_locked'));
+            }
+
+            $folder = $folder->parent;
         }
     }
 

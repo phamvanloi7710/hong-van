@@ -100,12 +100,16 @@ Route::prefix('admin/v1')
             Route::prefix('media')->name('media.')->group(function (): void {
                 Route::get('folders', [MediaFolderController::class, 'index'])->middleware('permission:media.view')->name('folders.index');
                 Route::post('folders', [MediaFolderController::class, 'store'])->middleware('permission:media.create')->name('folders.store');
+                Route::patch('folders/{folder:public_id}', [MediaFolderController::class, 'update'])->middleware('permission:media.update')->name('folders.update');
+                Route::patch('folders/{folder:public_id}/lock', [MediaFolderController::class, 'lock'])->middleware('permission:media.update')->name('folders.lock');
                 Route::get('/', [MediaController::class, 'index'])->middleware('permission:media.view')->name('index');
                 Route::post('/', [MediaController::class, 'store'])->middleware(['permission:media.create', 'throttle:uploads'])->name('store');
                 Route::get('{media:public_id}', [MediaController::class, 'show'])->middleware('permission:media.view')->name('show');
                 Route::get('{media:public_id}/content', MediaContentController::class)->middleware('permission:media.view')->name('content');
                 Route::patch('{media:public_id}', [MediaController::class, 'update'])->middleware('permission:media.update')->name('update');
                 Route::patch('{media:public_id}/move', [MediaController::class, 'move'])->middleware('permission:media.update')->name('move');
+                Route::patch('{media:public_id}/lock', [MediaController::class, 'lock'])->middleware('permission:media.update')->name('lock');
+                Route::patch('{media:public_id}/visibility', [MediaController::class, 'visibility'])->middleware('permission:media.update')->name('visibility');
                 Route::post('{media:public_id}/trash', [MediaController::class, 'trash'])->middleware('permission:media.delete')->name('trash');
                 Route::post('{media:public_id}/restore', [MediaController::class, 'restore'])->withTrashed()->middleware('permission:media.restore')->name('restore');
                 Route::post('{media:public_id}/retry', [MediaController::class, 'retry'])->middleware('permission:media.update')->name('retry');

@@ -14,7 +14,7 @@ describe('MediaDataService', () => {
     const http = TestBed.inject(HttpTestingController);
     const pagination: MediaPagination = { page: 2, last_page: 3, per_page: 24, total: 60 };
 
-    service.list({ search: 'logo', status: 'ready', trashed: 'without' }, 2).subscribe((result) => {
+    service.list({ search: 'logo', status: 'ready', visibility: 'private', locked: true, trashed: 'without', sort: 'original_filename' }, 2).subscribe((result) => {
       expect(result.pagination).toEqual(pagination);
       expect(result.items).toEqual([]);
     });
@@ -23,7 +23,32 @@ describe('MediaDataService', () => {
     expect(request.request.params.get('search')).toBe('logo');
     expect(request.request.params.get('filter[status]')).toBe('ready');
     expect(request.request.params.get('filter[trashed]')).toBe('without');
+    expect(request.request.params.get('filter[visibility]')).toBe('private');
+    expect(request.request.params.get('filter[locked]')).toBe('1');
+    expect(request.request.params.get('sort')).toBe('original_filename');
     request.flush({ success: true, data: [] as MediaItem[], meta: { request_id: '01JREQUEST0000000000000000', pagination }, message: null } satisfies ApiEnvelope<MediaItem[]>);
+    http.verify();
+  });
+
+  it('maps clone folder lock and visibility actions to versioned APIs', () => {
+    const service = TestBed.inject(MediaDataService);
+    const http = TestBed.inject(HttpTestingController);
+
+    service.renameFolder('01JFOLDER00000000000000000', 'Campaign 2026').subscribe();
+    const rename = http.expectOne('/api/admin/v1/media/folders/01JFOLDER00000000000000000');
+    expect(rename.request.method).toBe('PATCH');
+    expect(rename.request.body).toEqual({ name: 'Campaign 2026' });
+    rename.flush({ success: true, data: {}, meta: { request_id: '01JREQUEST0000000000000000' }, message: null });
+
+    service.setLock('01JMEDIA000000000000000000', true).subscribe();
+    const lock = http.expectOne('/api/admin/v1/media/01JMEDIA000000000000000000/lock');
+    expect(lock.request.body).toEqual({ locked: true });
+    lock.flush({ success: true, data: {}, meta: { request_id: '01JREQUEST0000000000000000' }, message: null });
+
+    service.setVisibility('01JMEDIA000000000000000000', 'public').subscribe();
+    const visibility = http.expectOne('/api/admin/v1/media/01JMEDIA000000000000000000/visibility');
+    expect(visibility.request.body).toEqual({ visibility: 'public' });
+    visibility.flush({ success: true, data: {}, meta: { request_id: '01JREQUEST0000000000000000' }, message: null });
     http.verify();
   });
 

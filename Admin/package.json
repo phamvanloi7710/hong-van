@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "e2e:media": "playwright test media",
     "lint": "ng lint",
     "sync:laravel": "node ./tools/sync-to-laravel.mjs",
     "build:laravel": "npm run build && npm run sync:laravel"
@@ -36,6 +37,7 @@
     "@angular/cli": "~22.1.2",
     "@angular/compiler-cli": "~22.1.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.55.0",
     "angular-eslint": "22.1.0",
     "eslint": "^10.6.0",
     "jsdom": "^28.0.0",

@@ -18,7 +18,7 @@ Initial P01 mapping based on the replacement Admin template currently on disk. N
 | Landing, mailbox, chat, schedule, maps, charts, UI, form/table, icon and dynamic-menu demos | None by default | Exclude unless a later approved requirement maps them | DROP |
 | Annular branding, ThemeForest purchase link and external demo links | None | Remove in target code; never edit the reference source | DROP |
 | Public frontend template | `BackEnd/resources/views/` and public Page Builder blocks | Inventory and port after source supply | DEFERRED — SOURCE MISSING |
-| StayHub Media source | Hồng Vân Media domain and `Admin/` Media UI | Inventory and clone after source supply | DEFERRED — SOURCE MISSING |
+| StayHub Media source | Hồng Vân Media domain and `Admin/` Media UI | Port workflow onto P16 storage/policy contract; remove tenant/property/domain/token coupling | READY — PORTED P17 |
 
 ## Decisions required before integration
 
@@ -27,7 +27,7 @@ Initial P01 mapping based on the replacement Admin template currently on disk. N
 3. Define same-origin Sanctum cookie/session, CSRF, versioned Admin API and permission contracts.
 4. Decide which fonts/icons/editor styles are self-hosted and which external origins, if any, CSP permits.
 5. Obtain the missing Admin `public/` assets or formally approve replacements before visual clone acceptance.
-6. Supply the licensed public frontend template and StayHub Media source, then rerun their deferred inventories.
+6. Supply the licensed public frontend template and rerun its deferred inventory. StayHub Media was supplied, re-inventoried and ported in P17.
 7. At the appropriate local-runtime setup checkpoint, remove the existing WAMP entry for `hongvan.local` and recreate it for this project, pointing the web root to `BackEnd/public/`. P01 does not edit WAMP configuration.
 
 ## Next checkpoint

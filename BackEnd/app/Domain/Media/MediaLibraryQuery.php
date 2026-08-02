@@ -18,16 +18,19 @@ final class MediaLibraryQuery
     public function paginate(array $query): LengthAwarePaginator
     {
         $filters = is_array($query['filter'] ?? null) ? $query['filter'] : [];
-        $directFilters = array_intersect_key($filters, array_flip(['status', 'mime_type']));
+        $directFilters = array_intersect_key($filters, array_flip(['status', 'mime_type', 'visibility', 'locked']));
         $allowlist = new QueryAllowlist(
             filters: [
                 new AllowedFilter('status', 'status'),
                 new AllowedFilter('mime_type', 'mime_type', operator: FilterOperator::Contains),
+                new AllowedFilter('visibility', 'visibility'),
+                new AllowedFilter('locked', 'is_locked'),
             ],
             sorts: [
                 new AllowedSort('created_at', 'created_at'),
                 new AllowedSort('original_filename', 'original_filename'),
                 new AllowedSort('size_bytes', 'size_bytes'),
+                new AllowedSort('updated_at', 'updated_at'),
             ],
         );
         $builder = Media::query();
@@ -51,7 +54,9 @@ final class MediaLibraryQuery
         }
 
         if (isset($filters['folder_id'])) {
-            $builder->whereHas('folder', static fn ($folderQuery) => $folderQuery->where('public_id', $filters['folder_id']));
+            $filters['folder_id'] === 'root'
+                ? $builder->whereNull('folder_id')
+                : $builder->whereHas('folder', static fn ($folderQuery) => $folderQuery->where('public_id', $filters['folder_id']));
         }
 
         if (isset($filters['tag'])) {

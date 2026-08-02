@@ -27,7 +27,7 @@ The ranges are contiguous and cover every prompt exactly once: P00–P56.
 | PHP 8.5.x | Current CLI is 8.4.1 | Before P04 | Select and verify PHP 8.5.x without changing unrelated projects |
 | Admin template | `READY` for inventory, incomplete package | Before P06 acceptance | Confirm license, obtain/replace missing `public/` assets and verify Angular 20.1.3-to-22.1.x dependency compatibility |
 | Public frontend template | `MISSING` | P19 | Before starting P19, proactively remind the project owner; supply/review licensed source in `FrontEndTemplate/` and rerun its inventory |
-| StayHub Media source | `MISSING` | P17 | Supply relevant source in `SourceIntegrations/StayHubMedia/` and rerun its inventory |
+| StayHub Media source | `READY_PORTED_P17` | P17 | Source supplied, re-inventoried, mapped and ported; preserve read-only hash evidence |
 | Local WAMP domain | `PENDING_WAMP_RECONFIGURATION` | Before local browser acceptance after P04/P07 | Inspect the exact existing `hongvan.local` virtual-host entry, remove only that entry, and recreate it for this project with document root `D:\www\HongVan\BackEnd\public`; verify hosts mapping and HTTP response |
 
 P17 and P19 may be deferred only because their external source is genuinely missing. Both must be resolved before P54 UAT/production unless the project owner records explicit acceptance of a reduced scope.

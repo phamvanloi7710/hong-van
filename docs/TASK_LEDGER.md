@@ -19,7 +19,7 @@
 - [x] P14 Localization
 - [x] P15 Audit/security foundation
 - [x] P16 Media domain
-- [ ] P17 StayHub media clone
+- [x] P17 StayHub media clone
 - [ ] P18 Blade frontend foundation
 - [ ] P19 Frontend template clone
 - [ ] P20 Public theme studio

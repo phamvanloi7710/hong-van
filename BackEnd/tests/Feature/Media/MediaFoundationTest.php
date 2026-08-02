@@ -10,6 +10,7 @@ use App\Domain\Media\MediaUploadService;
 use App\Domain\Media\MediaUsageTracker;
 use App\Jobs\Media\GenerateMediaVariants;
 use App\Models\Media;
+use App\Models\MediaFolder;
 use App\Models\MediaOperation;
 use App\Models\Permission;
 use App\Models\Role;
@@ -164,6 +165,73 @@ class MediaFoundationTest extends TestCase
         Queue::assertPushed(GenerateMediaVariants::class, 2);
         $this->assertSame('processing', $media->fresh()->status);
         $this->assertDatabaseHas('hongvan_media_operations', ['media_id' => $media->getKey(), 'status' => 'queued']);
+    }
+
+    public function test_clone_folder_lock_visibility_and_navigation_contracts_are_enforced(): void
+    {
+        Queue::fake();
+        $actor = $this->superAdmin();
+        $this->actingAs($actor);
+
+        $folderId = $this->postJson('/api/admin/v1/media/folders', ['name' => 'Campaigns'])
+            ->assertCreated()
+            ->assertJsonPath('data.is_locked', false)
+            ->json('data.public_id');
+        $this->patchJson('/api/admin/v1/media/folders/'.$folderId, ['name' => 'Campaign 2026'])
+            ->assertOk()
+            ->assertJsonPath('data.slug', 'campaign-2026');
+        $childFolderId = $this->postJson('/api/admin/v1/media/folders', [
+            'name' => 'Assets',
+            'parent_id' => $folderId,
+        ])->assertCreated()->json('data.public_id');
+        $this->patchJson('/api/admin/v1/media/folders/'.$folderId.'/lock', ['locked' => true])
+            ->assertOk()
+            ->assertJsonPath('data.is_locked', true);
+        $this->postJson('/api/admin/v1/media/folders', [
+            'name' => 'Blocked child',
+            'parent_id' => $childFolderId,
+        ])->assertConflict()->assertJsonPath('message', __('media.folder_locked'));
+        $this->patchJson('/api/admin/v1/media/folders/'.$childFolderId, ['name' => 'Blocked rename'])
+            ->assertConflict()
+            ->assertJsonPath('message', __('media.folder_locked'));
+        $this->post('/api/admin/v1/media', [
+            'folder_id' => $childFolderId,
+            'file' => UploadedFile::fake()->image('blocked.png'),
+        ])->assertConflict()->assertJsonPath('message', __('media.folder_locked'));
+
+        $this->patchJson('/api/admin/v1/media/folders/'.$folderId.'/lock', ['locked' => false])->assertOk();
+        $mediaId = $this->post('/api/admin/v1/media', [
+            'folder_id' => $childFolderId,
+            'file' => UploadedFile::fake()->image('workflow.png'),
+        ])->assertCreated()->json('data.public_id');
+
+        $this->getJson('/api/admin/v1/media?filter[folder_id]='.$childFolderId)
+            ->assertOk()
+            ->assertJsonPath('meta.pagination.total', 1)
+            ->assertJsonPath('data.0.public_id', $mediaId);
+        $this->getJson('/api/admin/v1/media?filter[folder_id]=root')
+            ->assertOk()
+            ->assertJsonPath('meta.pagination.total', 0);
+        $this->patchJson('/api/admin/v1/media/'.$mediaId.'/lock', ['locked' => true])
+            ->assertOk()
+            ->assertJsonPath('data.is_locked', true);
+        $this->patchJson('/api/admin/v1/media/'.$mediaId.'/visibility', ['visibility' => 'private'])
+            ->assertConflict()
+            ->assertJsonPath('message', __('media.locked'));
+        $this->patchJson('/api/admin/v1/media/'.$mediaId.'/lock', ['locked' => false])->assertOk();
+        $this->patchJson('/api/admin/v1/media/'.$mediaId.'/visibility', ['visibility' => 'private'])
+            ->assertOk()
+            ->assertJsonPath('data.visibility', 'private');
+        $this->patchJson('/api/admin/v1/media/'.$mediaId.'/move', ['folder_id' => null])
+            ->assertOk()
+            ->assertJsonPath('data.folder', null);
+
+        $viewer = User::factory()->create();
+        $viewer->permissionOverrides()->attach(Permission::query()->where('key', 'media.view')->firstOrFail(), ['is_allowed' => true]);
+        $this->actingAs($viewer);
+        $this->patchJson('/api/admin/v1/media/'.$mediaId.'/lock', ['locked' => true])->assertForbidden();
+        $this->patchJson('/api/admin/v1/media/folders/'.$folderId, ['name' => 'Denied'])->assertForbidden();
+        $this->assertFalse(MediaFolder::query()->where('public_id', $folderId)->firstOrFail()->is_locked);
     }
 
     private function superAdmin(): User
