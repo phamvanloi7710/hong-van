@@ -1,8 +1,11 @@
 import { Routes } from '@angular/router';
 
+import { authGuard, guestGuard } from './core/auth/auth.guard';
+
 export const routes: Routes = [
   {
     path: 'login',
+    canActivate: [guestGuard],
     loadComponent: () =>
       import('./core/layout/auth-shell/auth-shell').then((shell) => shell.AuthShell),
     children: [
@@ -13,7 +16,38 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'forgot-password',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./core/layout/auth-shell/auth-shell').then((shell) => shell.AuthShell),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/auth/forgot-password/forgot-password').then(
+            (page) => page.ForgotPassword,
+          ),
+      },
+    ],
+  },
+  {
+    path: 'reset-password',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./core/layout/auth-shell/auth-shell').then((shell) => shell.AuthShell),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/auth/reset-password/reset-password').then(
+            (page) => page.ResetPassword,
+          ),
+      },
+    ],
+  },
+  {
     path: '',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./core/layout/admin-shell/admin-shell').then((shell) => shell.AdminShell),
     children: [

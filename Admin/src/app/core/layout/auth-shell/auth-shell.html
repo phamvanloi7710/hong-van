@@ -1,14 +1,16 @@
 <main class="auth-shell">
-  <section class="auth-brand-panel">
+  <section class="auth-brand-panel" aria-label="Giới thiệu hệ thống quản trị Hồng Vân">
     <hv-admin-brand link="/login" />
     <div>
       <p class="eyebrow">CÔNG TY TNHH DV VT HỒNG VÂN</p>
       <h1>Quản trị nội dung và vận hành trên một nền tảng thống nhất.</h1>
-      <p class="description">Giao diện quản trị nội bộ dành cho người dùng được cấp quyền.</p>
+      <p class="description">
+        Giao diện quản trị nội bộ dành cho người dùng được cấp quyền.
+      </p>
     </div>
   </section>
 
-  <section class="auth-form-panel">
+  <section class="auth-form-panel" aria-label="Xác thực quản trị">
     <router-outlet />
   </section>
 </main>

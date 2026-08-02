@@ -46,15 +46,15 @@
 
       <div class="form-options">
         <mat-checkbox formControlName="remember">Ghi nhớ đăng nhập</mat-checkbox>
-        <span>Quên mật khẩu sẽ được bổ sung sau.</span>
+        <a routerLink="/forgot-password" class="forgot-link">Quên mật khẩu?</a>
       </div>
 
-      <button mat-flat-button type="submit" class="submit-button">Đăng nhập</button>
+      <button mat-flat-button type="submit" class="submit-button" [disabled]="submitting()">
+        {{ submitting() ? 'Đang đăng nhập…' : 'Đăng nhập' }}
+      </button>
 
-      @if (integrationNoticeVisible()) {
-        <p class="integration-notice" role="status">
-          Màn hình đã sẵn sàng. Luồng xác thực Sanctum sẽ được kết nối ở prompt authentication.
-        </p>
+      @if (errorMessage()) {
+        <p class="integration-notice" role="alert">{{ errorMessage() }}</p>
       }
     </form>
   </mat-card-content>

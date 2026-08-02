@@ -48,8 +48,8 @@
     <mat-icon>settings</mat-icon>
   </button>
   <button mat-button type="button" class="user-button" [matMenuTriggerFor]="userMenu">
-    <span class="user-avatar" aria-hidden="true">HV</span>
-    <span class="user-name">Quản trị viên</span>
+    <span class="user-avatar" aria-hidden="true">{{ authStore.initials() }}</span>
+    <span class="user-name">{{ authStore.user()?.name ?? 'Quản trị viên' }}</span>
     <mat-icon>arrow_drop_down</mat-icon>
   </button>
 
@@ -58,9 +58,12 @@
       <mat-icon>person</mat-icon>
       <span>Hồ sơ sẽ được bổ sung sau</span>
     </button>
-    <button mat-menu-item type="button" disabled>
+    <button mat-menu-item type="button" (click)="logout()" [disabled]="logoutPending()">
       <mat-icon>logout</mat-icon>
-      <span>Đăng xuất</span>
+      <span>{{ logoutPending() ? 'Đang đăng xuất…' : 'Đăng xuất' }}</span>
     </button>
   </mat-menu>
+  @if (logoutError()) {
+    <span class="logout-error" role="alert">{{ logoutError() }}</span>
+  }
 </mat-toolbar>

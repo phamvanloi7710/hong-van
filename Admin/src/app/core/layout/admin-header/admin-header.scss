@@ -74,6 +74,16 @@
   clip: rect(0 0 0 0);
 }
 
+.logout-error {
+  background: #fff1f0;
+  border-radius: 4px;
+  color: #8f1d1d;
+  font-size: 0.72rem;
+  inset: calc(100% + 4px) 8px auto auto;
+  padding: 6px 10px;
+  position: absolute;
+}
+
 @media (max-width: 960px) {
   .pin-button,
   .user-name {

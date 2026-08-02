@@ -56,6 +56,7 @@ class AdminSpaTest extends TestCase
     {
         $response = $this->get('/admin/main-ABCDEF12.js')
             ->assertOk()
+            ->assertHeader('Content-Type', 'text/javascript; charset=UTF-8')
             ->assertHeader('X-Content-Type-Options', 'nosniff');
 
         $this->assertBinaryFile($response, $this->spaDirectory.'/main-ABCDEF12.js');
@@ -64,7 +65,9 @@ class AdminSpaTest extends TestCase
 
     public function test_non_hashed_admin_assets_use_a_short_cache(): void
     {
-        $response = $this->get('/admin/favicon.ico')->assertOk();
+        $response = $this->get('/admin/favicon.ico')
+            ->assertOk()
+            ->assertHeader('Content-Type', 'image/x-icon');
 
         $this->assertCacheControlContains($response, ['max-age=3600', 'public']);
     }

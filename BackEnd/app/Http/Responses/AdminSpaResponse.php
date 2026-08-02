@@ -127,8 +127,31 @@ final class AdminSpaResponse
 
         return [
             'Cache-Control' => $cacheControl,
+            'Content-Type' => $this->assetContentType($assetPath),
             'X-Content-Type-Options' => 'nosniff',
         ];
+    }
+
+    private function assetContentType(string $assetPath): string
+    {
+        return match (strtolower(pathinfo($assetPath, PATHINFO_EXTENSION))) {
+            'css' => 'text/css; charset=UTF-8',
+            'eot' => 'application/vnd.ms-fontobject',
+            'gif' => 'image/gif',
+            'ico' => 'image/x-icon',
+            'jpeg', 'jpg' => 'image/jpeg',
+            'js' => 'text/javascript; charset=UTF-8',
+            'json', 'webmanifest' => 'application/json; charset=UTF-8',
+            'png' => 'image/png',
+            'svg' => 'image/svg+xml',
+            'ttf' => 'font/ttf',
+            'txt' => 'text/plain; charset=UTF-8',
+            'webp' => 'image/webp',
+            'woff' => 'font/woff',
+            'woff2' => 'font/woff2',
+            'xml' => 'application/xml; charset=UTF-8',
+            default => 'application/octet-stream',
+        };
     }
 
     private function looksLikeAssetRequest(string $path): bool

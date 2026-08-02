@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/health',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->statefulApi();
         $middleware->prepend([
             AssignRequestId::class,
             SetApiLocale::class,
