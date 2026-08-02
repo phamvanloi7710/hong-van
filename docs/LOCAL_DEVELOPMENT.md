@@ -65,6 +65,18 @@ composer analyse
 
 Không chạy migration/seed cho đến khi prompt database tương ứng đã tạo migration có prefix `hongvan_`.
 
+## Lệnh Angular Admin
+
+```powershell
+cd .\Admin
+npm ci
+npm run lint
+npm test -- --watch=false
+npm run build
+```
+
+`npm run build:laravel` hiện cố ý dừng với mã lỗi và thông báo `P07_REQUIRED`. Việc đồng bộ bundle vào `BackEnd/public/admin/browser` thuộc P07.
+
 ## Nguyên tắc an toàn
 
 - Không commit `.env`, log, dependency hoặc build output.

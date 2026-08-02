@@ -5,7 +5,7 @@
 - [x] P02 Architecture records
 - [x] P03 Repository hygiene
 - [x] P04 Laravel bootstrap
-- [ ] P05 Angular bootstrap
+- [x] P05 Angular bootstrap
 - [ ] P06 Admin template integration
 - [ ] P07 Admin build integration
 - [ ] P08 Database foundation
