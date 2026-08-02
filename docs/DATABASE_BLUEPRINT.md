@@ -285,5 +285,7 @@ UNIQUE(locale, slug) trong đúng namespace
 
 - Script CI scan mọi `Schema::create`, `Schema::table`, package migration và model `$table`.
 - Không được merge migration tạo bảng không prefix.
+- Mọi bảng phải có table comment và mọi cột phải có column comment mô tả rõ mục đích, kể cả bảng/cột framework.
+- Test `DatabaseCommentTest` không được phát hiện table comment hoặc column comment rỗng.
 - Test migration fresh trên database rỗng.
 - Test rollback theo batch.

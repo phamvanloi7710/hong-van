@@ -63,6 +63,9 @@ Khi clone giao diện:
 - Pivot table, bảng package, queue, cache, session, notification, Sanctum và migrations cũng phải được cấu hình prefix.
 - Không tạo bảng không prefix để “sửa sau”.
 - Migration phải có index, foreign key, unique constraint và rollback hợp lệ.
+- Mọi bảng phải có table comment mô tả mục đích nghiệp vụ hoặc mục đích framework của bảng.
+- Mọi cột, kể cả khóa chính, khóa ngoại, pivot, cột framework và cột timestamp, phải có column comment giải thích ý nghĩa và cách sử dụng.
+- Migration thêm hoặc đổi cột phải tạo mới hoặc duy trì comment rõ ràng; test database comment bắt buộc phải pass trước khi hoàn tất.
 - Dữ liệu thời gian lưu UTC; hiển thị theo `Asia/Ho_Chi_Minh`.
 - Không lưu tiền bằng float/double. Dùng decimal hoặc integer phù hợp.
 

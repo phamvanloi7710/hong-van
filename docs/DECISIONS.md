@@ -12,3 +12,4 @@ Individual ADR files are the source of truth. P02 reviewed `ARCHITECTURE.md`, `D
 | [ADR-006](adr/ADR-006-external-source-read-only.md) | External source is read-only | Accepted | 2026-08-02 |
 | [ADR-007](adr/ADR-007-monorepo.md) | Monorepo for the platform | Accepted | 2026-08-02 |
 | [ADR-008](adr/ADR-008-sanctum-same-origin.md) | Sanctum same-origin cookie/session for Admin | Accepted | 2026-08-02 |
+| [ADR-009](adr/ADR-009-database-comments.md) | Bắt buộc comment cho mọi bảng và cột | Accepted | 2026-08-02 |

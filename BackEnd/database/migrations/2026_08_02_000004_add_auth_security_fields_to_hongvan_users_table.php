@@ -9,8 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hongvan_users', function (Blueprint $table): void {
-            $table->boolean('is_active')->default(true)->index()->after('email_verified_at');
-            $table->timestamp('locked_at')->nullable()->index()->after('is_active');
+            $table->boolean('is_active')->default(true)->index()->comment('Cho biết tài khoản có được phép đăng nhập và sử dụng hệ thống hay không')->after('email_verified_at');
+            $table->timestamp('locked_at')->nullable()->index()->comment('Thời điểm UTC tài khoản bị khóa; null nghĩa là không bị khóa')->after('is_active');
         });
     }
 
