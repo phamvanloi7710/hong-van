@@ -3,7 +3,7 @@
 - [x] P00 Repository audit
 - [x] P01 External source inventory
 - [x] P02 Architecture records
-- [ ] P03 Repository hygiene
+- [x] P03 Repository hygiene
 - [ ] P04 Laravel bootstrap
 - [ ] P05 Angular bootstrap
 - [ ] P06 Admin template integration

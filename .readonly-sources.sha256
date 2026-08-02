@@ -1,0 +1,4 @@
+# Aggregate fingerprints for approved read-only reference sources.
+cc31a2a5c1a276be1c235ba632c230a1667eb78282838c30dfe97157269c39be  Template
+fa68d5d0157f10ee663170b678d8b8c39a5b3bc32f4d6a809c2b86d295196675  FrontEndTemplate
+674ba23764bd4b428ef066aa3d31f796c05bb615519f274594ad7f15f46fc9dc  SourceIntegrations

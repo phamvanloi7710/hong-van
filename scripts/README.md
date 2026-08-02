@@ -1,11 +1,8 @@
-# Scripts dự kiến
+# Scripts
 
-Các prompt sau sẽ tạo/hoàn thiện:
+Các script hiện có:
 
-- `build-admin.ps1` / `build-admin.sh`
-- `check-table-prefix.php`
-- `verify-project.ps1` / `verify-project.sh`
-- script sync Angular output
-- smoke check deployment
+- `verify-prerequisites.ps1` và `verify-prerequisites.sh`: kiểm tra phiên bản PHP, Composer, Node.js, npm và Git; không cài đặt hoặc thay đổi môi trường.
+- `verify-readonly-sources.ps1` và `verify-readonly-sources.sh`: đối chiếu dấu vân tay của `Template/`, `FrontEndTemplate/` và `SourceIntegrations/` với `.readonly-sources.sha256`.
 
-Không dùng script placeholder như bằng chứng chức năng đã hoàn tất.
+Các script build/deploy sẽ chỉ được bổ sung tại prompt sở hữu tương ứng. Không script nào trong thư mục này được phép tự cài framework, package hoặc thay đổi database.

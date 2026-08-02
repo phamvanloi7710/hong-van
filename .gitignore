@@ -1,28 +1,44 @@
-# Framework/vendor
-BackEnd/vendor/
-Admin/node_modules/
+# Framework/vendor and generated application files
+**/vendor/
+**/node_modules/
 Admin/dist/
+Admin/.angular/
+Admin/coverage/
 BackEnd/public/admin/browser/
 BackEnd/public/build/
+BackEnd/.phpunit.cache/
+BackEnd/bootstrap/cache/*.php
 BackEnd/storage/*.key
 BackEnd/storage/framework/cache/*
 BackEnd/storage/framework/sessions/*
 BackEnd/storage/framework/views/*
 BackEnd/storage/logs/*
-BackEnd/bootstrap/cache/*.php
 
 # Environment
 .env
 .env.*
 !.env.example
-BackEnd/.env
+**/.env
+**/.env.*
+!**/.env.example
 Admin/src/environments/environment.local.ts
+
+# Logs, tests and reports
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+coverage/
+playwright-report/
+test-results/
 
 # IDE/OS
 .idea/
 .vscode/
 .DS_Store
 Thumbs.db
+Desktop.ini
 
 # Licensed/reference sources: ignored by default
 Template/*
@@ -31,6 +47,9 @@ Template/*
 FrontEndTemplate/*
 !FrontEndTemplate/AGENTS.md
 !FrontEndTemplate/README_PLACE_FRONTEND_TEMPLATE_HERE.md
+SourceIntegrations/*
+!SourceIntegrations/AGENTS.md
+!SourceIntegrations/StayHubMedia/
 SourceIntegrations/StayHubMedia/*
 !SourceIntegrations/StayHubMedia/AGENTS.md
 !SourceIntegrations/StayHubMedia/README_PLACE_MEDIA_SOURCE_HERE.md
@@ -38,6 +57,3 @@ SourceIntegrations/StayHubMedia/*
 # Temporary bootstrap
 .bootstrap/
 .tmp/
-coverage/
-playwright-report/
-test-results/
