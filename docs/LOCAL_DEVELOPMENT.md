@@ -2,7 +2,7 @@
 
 ## Mục tiêu môi trường
 
-Repository hiện mới ở giai đoạn chuẩn bị. P03 không cài Laravel, Angular hoặc package. Các phiên bản mục tiêu đã chốt:
+Backend Laravel đã được bootstrap ở P04. Các phiên bản mục tiêu đã chốt:
 
 | Công cụ | Phiên bản mục tiêu |
 | --- | --- |
@@ -12,7 +12,7 @@ Repository hiện mới ở giai đoạn chuẩn bị. P03 không cài Laravel, 
 | npm | đi kèm Node.js mục tiêu |
 | Git | bản còn được hỗ trợ |
 
-Máy Windows được kiểm tra ở P00 đang có PHP `8.4.1`, vì vậy script prerequisite sẽ báo không tương thích cho đến khi PHP `8.5.x` được chọn. Đây là cảnh báo môi trường, không phải chỉ dẫn tự nâng cấp.
+Môi trường Windows/WAMP đã được nâng cấp và chọn PHP `8.5.9` ở P04. PHP `8.4.1` vẫn được giữ lại để có thể chuyển phiên bản khi cần.
 
 ## Chuẩn bị trên Windows
 
@@ -25,9 +25,9 @@ Máy Windows được kiểm tra ở P00 đang có PHP `8.4.1`, vì vậy script
    powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-readonly-sources.ps1
    ```
 
-4. Chỉ tạo `BackEnd/.env` từ file example của Laravel sau khi P04 đã bootstrap backend. Không đặt secret vào `.env.example` ở root.
+4. Tạo `BackEnd/.env` từ `BackEnd/.env.example`, sau đó chạy `php artisan key:generate`. Không commit `.env` hoặc secret.
 
-Tên miền local dự kiến là `hongvan.local`. Việc xóa và tạo lại VirtualHost WAMP được hoãn đến prompt sở hữu cấu hình runtime, sau khi `BackEnd/public` tồn tại; không trỏ domain vào repository root.
+VirtualHost WAMP `hongvan.local` trỏ tới `D:/www/HongVan/BackEnd/public`. Có thể kiểm tra runtime tại `http://hongvan.local/health`.
 
 ## Chuẩn bị trên Linux
 
@@ -52,9 +52,18 @@ Ba vùng sau không phải source đích và không được sửa trong quá tr
 
 File `.readonly-sources.sha256` ghi dấu vân tay đã được duyệt. Chạy script verify trước và sau một prompt có đọc nguồn tham chiếu. Khi chủ dự án chủ động thay thế nguồn, cần audit lại nguồn mới trước; sau đó mới tạo nội dung baseline mới bằng `-PrintBaseline` hoặc `--print-baseline` và cập nhật file baseline có chủ đích.
 
-## Lệnh ứng dụng
+## Lệnh backend
 
-Lệnh cài dependency, migrate, seed, test và build sẽ được bổ sung khi Laravel/Angular thực sự được bootstrap. Không giả định cấu trúc hoặc script chưa tồn tại.
+```powershell
+cd .\BackEnd
+composer install
+php artisan serve
+php artisan test
+php vendor/bin/pint --test
+composer analyse
+```
+
+Không chạy migration/seed cho đến khi prompt database tương ứng đã tạo migration có prefix `hongvan_`.
 
 ## Nguyên tắc an toàn
 

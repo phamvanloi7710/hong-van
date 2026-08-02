@@ -41,6 +41,9 @@ function Get-GitObjectHashes {
         return [string[]]@()
     }
 
+    $previousInputEncoding = [Console]::InputEncoding
+    [Console]::InputEncoding = New-Object System.Text.UTF8Encoding($false)
+
     $gitCommand = Get-Command -Name 'git' -ErrorAction Stop
     $startInfo = New-Object System.Diagnostics.ProcessStartInfo
     $startInfo.FileName = $gitCommand.Source
@@ -73,6 +76,7 @@ function Get-GitObjectHashes {
         return [string[]]@($standardOutput -split "`r?`n" | Where-Object { $_ -ne '' })
     }
     finally {
+        [Console]::InputEncoding = $previousInputEncoding
         $process.Dispose()
     }
 }
