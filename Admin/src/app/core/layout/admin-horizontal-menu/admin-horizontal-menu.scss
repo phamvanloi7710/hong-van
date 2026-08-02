@@ -27,9 +27,9 @@
 .horizontal-navigation > a mat-icon,
 .menu-group > button mat-icon:first-child {
   align-items: center;
-  background: var(--hv-theme-icon-surface);
+  background: color-mix(in srgb, var(--menu-icon-color) 14%, var(--hv-theme-icon-surface));
   border-radius: 50%;
-  color: var(--hv-theme-muted);
+  color: var(--menu-icon-color);
   display: inline-flex;
   height: 38px;
   justify-content: center;
@@ -37,7 +37,7 @@
 }
 
 .horizontal-navigation .active mat-icon:first-child {
-  background: var(--hv-theme-primary);
+  background: var(--menu-icon-color);
   color: #fff;
 }
 
@@ -78,6 +78,10 @@
 .dropdown button {
   border-radius: 0;
   justify-content: flex-start;
+}
+
+.dropdown mat-icon {
+  color: var(--menu-icon-color);
 }
 
 .compact > a,

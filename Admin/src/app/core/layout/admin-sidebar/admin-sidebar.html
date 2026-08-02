@@ -27,12 +27,16 @@
         [routerLinkActiveOptions]="{ exact: true }"
         (click)="navigated.emit()"
       >
-        <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+        <mat-icon class="menu-icon" [style.--menu-icon-color]="item.iconColor">{{
+          item.icon
+        }}</mat-icon>
         <span class="menu-title">{{ item.labelKey | hvT }}</span>
       </a>
     } @else if (!item.route && canSeeGroup(item)) {
       <button mat-button type="button" class="menu-entry" (click)="toggleGroup(item)">
-        <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+        <mat-icon class="menu-icon" [style.--menu-icon-color]="item.iconColor">{{
+          item.icon
+        }}</mat-icon>
         <span class="menu-title">{{ item.labelKey | hvT }}</span>
         <span class="expand-icon-slot" aria-hidden="true">
           <mat-icon class="expand-icon" [class.expanded]="isExpanded(item)">{{
@@ -52,12 +56,16 @@
                   routerLinkActive="active-link"
                   (click)="navigated.emit()"
                 >
-                  <mat-icon class="menu-icon">{{ child.icon }}</mat-icon>
+                  <mat-icon class="menu-icon" [style.--menu-icon-color]="child.iconColor">{{
+                    child.icon
+                  }}</mat-icon>
                   <span class="menu-title">{{ child.labelKey | hvT }}</span>
                 </a>
               } @else {
                 <button mat-button class="menu-entry" type="button" disabled>
-                  <mat-icon class="menu-icon">{{ child.icon }}</mat-icon>
+                  <mat-icon class="menu-icon" [style.--menu-icon-color]="child.iconColor">{{
+                    child.icon
+                  }}</mat-icon>
                   <span class="menu-title">{{ child.labelKey | hvT }}</span>
                 </button>
               }

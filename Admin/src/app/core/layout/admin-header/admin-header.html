@@ -28,7 +28,12 @@
           }
         </svg>
       </button>
-      <button mat-icon-button type="button" class="desktop-action" [attr.aria-label]="'header.quickInfo' | hvT">
+      <button
+        mat-icon-button
+        type="button"
+        class="desktop-action"
+        [attr.aria-label]="'header.quickInfo' | hvT"
+      >
         <mat-icon>expand_more</mat-icon>
       </button>
       <div class="favorite-navigation" [attr.aria-label]="'header.favoriteMenu' | hvT">
@@ -50,7 +55,9 @@
                 <mat-option class="favorite-option-row" [value]="item.id">
                   <span class="favorite-option">
                     <span>{{ item.labelKey | hvT }}</span>
-                    <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+                    <mat-icon aria-hidden="true" [style.color]="item.iconColor">{{
+                      item.icon
+                    }}</mat-icon>
                   </span>
                 </mat-option>
               }
@@ -78,7 +85,12 @@
   <div class="search" [class.opened]="searchOpened()">
     <label class="visually-hidden" for="admin-search">{{ 'header.searchAdmin' | hvT }}</label>
     <input id="admin-search" type="search" [placeholder]="'header.searchPlaceholder' | hvT" />
-    <button mat-icon-button type="button" [attr.aria-label]="'common.search' | hvT" (click)="toggleSearch()">
+    <button
+      mat-icon-button
+      type="button"
+      [attr.aria-label]="'common.search' | hvT"
+      (click)="toggleSearch()"
+    >
       <mat-icon>search</mat-icon>
     </button>
   </div>
@@ -93,10 +105,20 @@
     <mat-icon>language</mat-icon>
     <span>{{ i18n.locale().toUpperCase() }}</span>
   </button>
-  <button mat-icon-button type="button" [attr.aria-label]="'header.fullscreen' | hvT" (click)="toggleFullscreen()">
+  <button
+    mat-icon-button
+    type="button"
+    [attr.aria-label]="'header.fullscreen' | hvT"
+    (click)="toggleFullscreen()"
+  >
     <mat-icon>fullscreen</mat-icon>
   </button>
-  <button mat-icon-button type="button" class="desktop-action" [attr.aria-label]="'header.apps' | hvT">
+  <button
+    mat-icon-button
+    type="button"
+    class="desktop-action"
+    [attr.aria-label]="'header.apps' | hvT"
+  >
     <mat-icon>apps</mat-icon>
   </button>
   <button mat-icon-button type="button" [attr.aria-label]="'header.notifications' | hvT">
@@ -115,7 +137,9 @@
   <mat-menu #languageMenu="matMenu">
     @for (locale of locales; track locale.id) {
       <button mat-menu-item type="button" (click)="selectLocale(locale.id)">
-        <mat-icon>{{ i18n.locale() === locale.id ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+        <mat-icon>{{
+          i18n.locale() === locale.id ? 'radio_button_checked' : 'radio_button_unchecked'
+        }}</mat-icon>
         <span>{{ locale.labelKey | hvT }}</span>
       </button>
     }

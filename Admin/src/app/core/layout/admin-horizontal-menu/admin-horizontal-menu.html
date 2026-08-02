@@ -11,13 +11,13 @@
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <mat-icon>{{ item.icon }}</mat-icon>
+        <mat-icon [style.--menu-icon-color]="item.iconColor">{{ item.icon }}</mat-icon>
         <span>{{ item.labelKey | hvT }}</span>
       </a>
     } @else if (!item.route && canSeeGroup(item)) {
       <div class="menu-group">
         <button mat-button type="button">
-          <mat-icon>{{ item.icon }}</mat-icon>
+          <mat-icon [style.--menu-icon-color]="item.iconColor">{{ item.icon }}</mat-icon>
           <span>{{ item.labelKey | hvT }}</span>
           <span class="expand-icon-slot" aria-hidden="true">
             <mat-icon class="expand-icon">expand_more</mat-icon>
@@ -28,12 +28,12 @@
             @if (canSee(child)) {
               @if (child.route) {
                 <a mat-button [routerLink]="child.route" routerLinkActive="active">
-                  <mat-icon>{{ child.icon }}</mat-icon>
+                  <mat-icon [style.--menu-icon-color]="child.iconColor">{{ child.icon }}</mat-icon>
                   <span>{{ child.labelKey | hvT }}</span>
                 </a>
               } @else {
                 <button mat-button type="button" disabled>
-                  <mat-icon>{{ child.icon }}</mat-icon>
+                  <mat-icon [style.--menu-icon-color]="child.iconColor">{{ child.icon }}</mat-icon>
                   <span>{{ child.labelKey | hvT }}</span>
                 </button>
               }
