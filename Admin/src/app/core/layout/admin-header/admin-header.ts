@@ -35,7 +35,6 @@ export class AdminHeader {
   readonly compactBrand = input(false);
   readonly toggleMenu = output<void>();
   readonly togglePinned = output<void>();
-  readonly openThemePanel = output<void>();
 
   readonly searchOpened = signal(false);
   readonly logoutPending = signal(false);

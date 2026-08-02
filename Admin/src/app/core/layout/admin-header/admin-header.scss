@@ -5,17 +5,27 @@
 }
 
 .top-toolbar {
-  background: var(--hv-theme-primary);
+  background: var(--hv-theme-primary-strong);
   box-shadow: 0 2px 6px rgb(0 0 0 / 24%);
-  color: #fff;
-  gap: 0.25rem;
+  color: var(--hv-theme-toolbar-text);
+  gap: 0;
   height: 56px;
-  padding-inline: 8px;
+  padding-inline: 16px 8px;
 }
 
 .toolbar-primary-actions {
   align-items: center;
   display: flex;
+}
+
+.pin {
+  fill: currentColor;
+  height: 24px;
+  width: 24px;
+}
+
+.favorite-action {
+  color: #ff4081 !important;
 }
 
 .toolbar-spacer {
@@ -47,21 +57,8 @@
   width: min(250px, 28vw);
 }
 
-.user-button {
-  color: inherit;
-}
-
-.user-avatar {
-  align-items: center;
-  background: rgb(255 255 255 / 20%);
-  border-radius: 50%;
-  display: inline-flex;
-  font-size: 0.65rem;
-  font-weight: 800;
-  height: 30px;
-  justify-content: center;
-  margin-right: 0.45rem;
-  width: 30px;
+.top-toolbar button {
+  color: #fff;
 }
 
 .visually-hidden {
@@ -86,7 +83,7 @@
 
 @media (max-width: 960px) {
   .pin-button,
-  .user-name {
+  .desktop-action {
     display: none;
   }
 
@@ -102,7 +99,7 @@
   }
 
   .search.opened {
-    background: var(--hv-theme-primary);
+    background: var(--hv-theme-primary-strong);
     inset: 0;
     padding-inline: 12px;
     position: absolute;

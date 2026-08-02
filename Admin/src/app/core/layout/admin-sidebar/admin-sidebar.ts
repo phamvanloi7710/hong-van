@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AuthStore } from '../../auth/auth.store';
@@ -11,7 +10,7 @@ import { AdminMenuDensity } from '../../theme/admin-theme.model';
 
 @Component({
   selector: 'hv-admin-sidebar',
-  imports: [MatButtonModule, MatIconModule, MatListModule, RouterLink, RouterLinkActive],
+  imports: [MatButtonModule, MatIconModule, RouterLink, RouterLinkActive],
   templateUrl: './admin-sidebar.html',
   styleUrl: './admin-sidebar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,7 +20,7 @@ export class AdminSidebar {
   readonly density = input.required<AdminMenuDensity>();
   readonly navigated = output<void>();
   readonly menuItems = ADMIN_MENU_ITEMS;
-  readonly expandedGroup = signal<string | null>('catalog');
+  readonly expandedGroup = signal<string | null>(null);
 
   toggleGroup(item: AdminMenuItem): void {
     if (item.children === undefined) {

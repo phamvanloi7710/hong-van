@@ -18,7 +18,21 @@
         [attr.aria-label]="pinned() ? 'Bỏ ghim menu' : 'Ghim menu'"
         (click)="togglePinned.emit()"
       >
-        <mat-icon>{{ pinned() ? 'push_pin' : 'keep_off' }}</mat-icon>
+        <svg class="pin" viewBox="0 0 24 24" aria-hidden="true">
+          @if (pinned()) {
+            <path
+              d="M2 5.27 3.28 4 20 20.72 18.73 22 12.8 16.07V22h-1.6v-6H6v-2l2-2v-.73L2 5.27M16 12l2 2v2h-.18L8 6.18V4H7V2h10v2h-1v8Z"
+            />
+          } @else {
+            <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2Z" />
+          }
+        </svg>
+      </button>
+      <button mat-icon-button type="button" class="desktop-action" aria-label="Mở thông tin nhanh">
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <button mat-icon-button type="button" class="favorite-action" aria-label="Mục yêu thích">
+        <mat-icon>favorite</mat-icon>
       </button>
     }
   </div>
@@ -36,27 +50,26 @@
   <button mat-icon-button type="button" aria-label="Toàn màn hình" (click)="toggleFullscreen()">
     <mat-icon>fullscreen</mat-icon>
   </button>
+  <button mat-icon-button type="button" class="desktop-action" aria-label="Ứng dụng">
+    <mat-icon>apps</mat-icon>
+  </button>
   <button mat-icon-button type="button" aria-label="Thông báo">
-    <mat-icon>notifications_none</mat-icon>
+    <mat-icon>notifications</mat-icon>
   </button>
   <button
     mat-icon-button
     type="button"
-    aria-label="Tùy chỉnh giao diện"
-    (click)="openThemePanel.emit()"
+    class="user-button"
+    aria-label="Tài khoản"
+    [matMenuTriggerFor]="userMenu"
   >
-    <mat-icon>settings</mat-icon>
-  </button>
-  <button mat-button type="button" class="user-button" [matMenuTriggerFor]="userMenu">
-    <span class="user-avatar" aria-hidden="true">{{ authStore.initials() }}</span>
-    <span class="user-name">{{ authStore.user()?.name ?? 'Quản trị viên' }}</span>
-    <mat-icon>arrow_drop_down</mat-icon>
+    <mat-icon>account_circle</mat-icon>
   </button>
 
   <mat-menu #userMenu="matMenu" xPosition="before">
     <button mat-menu-item type="button" disabled>
       <mat-icon>person</mat-icon>
-      <span>Hồ sơ sẽ được bổ sung sau</span>
+      <span>{{ authStore.user()?.name ?? 'Quản trị viên' }}</span>
     </button>
     <button mat-menu-item type="button" (click)="logout()" [disabled]="logoutPending()">
       <mat-icon>logout</mat-icon>

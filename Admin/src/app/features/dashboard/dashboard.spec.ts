@@ -18,8 +18,9 @@ describe('Dashboard', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render the admin foundation status', () => {
+  it('should render the Annular dashboard structure', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h2')?.textContent).toContain('Nền tảng quản trị đã sẵn sàng');
+    expect(compiled.querySelectorAll('.tile')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.info-card')).toHaveLength(4);
   });
 });

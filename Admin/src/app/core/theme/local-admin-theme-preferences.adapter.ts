@@ -11,7 +11,7 @@ import {
   AdminThemePreferences,
 } from './admin-theme.model';
 
-const STORAGE_KEY = 'hongvan.admin.theme-settings.v1';
+const STORAGE_KEY = 'hongvan.admin.theme-settings.v2';
 
 @Injectable({ providedIn: 'root' })
 export class LocalAdminThemePreferencesAdapter implements AdminThemePreferencesAdapter {

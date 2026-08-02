@@ -5,7 +5,6 @@
     [compactBrand]="compactBrand()"
     (toggleMenu)="toggleSidenav()"
     (togglePinned)="togglePinned()"
-    (openThemePanel)="themePanelOpened.set(true)"
   />
 
   @if (effectiveMenuOrientation() === 'horizontal') {
@@ -30,11 +29,8 @@
     <mat-sidenav-content (scroll)="onContentScroll($event)">
       <div class="main-content-inner">
         <header class="content-header">
-          <div>
-            <p class="eyebrow">HỆ THỐNG QUẢN TRỊ</p>
-            <h1>Tổng quan</h1>
-          </div>
-          <hv-admin-breadcrumb title="Tổng quan" />
+          <mat-icon class="content-header-icon">{{ pageHeader().icon }}</mat-icon>
+          <h1>{{ pageHeader().title }}</h1>
         </header>
 
         <main class="content-area">

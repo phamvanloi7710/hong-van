@@ -7,7 +7,7 @@ current_prompt: P11
 last_completed_prompt: 11
 status: DONE
 admin_template_gate: READY
-admin_template_integration: SELECTIVE_PORT_COMPLETE
+admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
 frontend_template_gate: MISSING
 stayhub_media_gate: MISSING
 backend_bootstrapped: true
@@ -47,10 +47,11 @@ latest_angular_cli_patch: 22.1.2
 latest_typescript_patch: 6.0.3
 latest_admin_lint: passed_angular_eslint_22_1_0
 latest_admin_test: passed_vitest_7_files_14_tests
-latest_admin_build: passed_angular_production_initial_111_97_kb_identity_lazy_202_47_kb
-latest_admin_sync: passed_95_files_to_laravel_public_admin_browser
+latest_admin_build: passed_angular_production_initial_112_57_kb_dashboard_lazy_23_03_kb
+latest_admin_sync: passed_94_files_to_laravel_public_admin_browser
+latest_admin_template_rework: passed_live_annular_comparison_shell_dashboard_auth
 latest_e2e: passed_browser_qa_identity_super_admin_limited_user_refresh_guard
-latest_visual_qa: passed_1280x720_and_390x844
+latest_visual_qa: passed_annular_metrics_1280x720_and_responsive_390x844
 latest_admin_smoke: passed_hongvan_local_root_deep_link_asset_cache
 open_blockers:
   - Admin template is missing package-lock.json, public/ assets and a root license file.

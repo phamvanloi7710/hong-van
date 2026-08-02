@@ -1,57 +1,130 @@
-<section class="dashboard-grid" aria-label="Tổng quan nền tảng quản trị">
-  <mat-card class="welcome-card">
-    <mat-card-content>
-      <div>
-        <p class="eyebrow">HONGVAN ADMIN</p>
-        <h2>Nền tảng quản trị đã sẵn sàng</h2>
-        <p>
-          Shell, responsive navigation và theme settings đã được port chọn lọc từ cấu trúc Annular
-          sang Angular 22.
-        </p>
+<section class="dashboard" aria-label="Tổng quan nền tảng quản trị">
+  <div class="tiles-grid">
+    <mat-card class="tile gradient-green">
+      <mat-icon>inventory_2</mat-icon>
+      <h2>—</h2>
+      <p>Sản phẩm</p>
+    </mat-card>
+    <mat-card class="tile gradient-red">
+      <mat-icon>handyman</mat-icon>
+      <h2>—</h2>
+      <p>Dịch vụ</p>
+    </mat-card>
+    <mat-card class="tile gradient-orange">
+      <mat-icon>warehouse</mat-icon>
+      <h2>—</h2>
+      <p>Kho bãi</p>
+    </mat-card>
+    <mat-card class="tile gradient-pink">
+      <mat-icon>request_quote</mat-icon>
+      <h2>—</h2>
+      <p>Báo giá</p>
+    </mat-card>
+    <mat-card class="tile gradient-gray">
+      <mat-icon>article</mat-icon>
+      <h2>—</h2>
+      <p>Bài viết</p>
+    </mat-card>
+    <mat-card class="tile gradient-brown">
+      <mat-icon>group</mat-icon>
+      <h2>—</h2>
+      <p>Người dùng</p>
+    </mat-card>
+  </div>
+
+  <div class="info-grid">
+    <mat-card class="info-card gradient-purple">
+      <header>
+        <span>Sản phẩm đã xuất bản</span><span><mat-icon>trending_up</mat-icon> 0%</span>
+      </header>
+      <div class="bar-chart" aria-hidden="true">
+        <i style="height: 45%"></i><i style="height: 72%"></i><i style="height: 32%"></i>
+        <i style="height: 86%"></i><i style="height: 64%"></i><i style="height: 38%"></i>
+        <i style="height: 78%"></i><i style="height: 55%"></i><i style="height: 90%"></i>
+        <i style="height: 47%"></i><i style="height: 68%"></i><i style="height: 82%"></i>
       </div>
-      <mat-icon aria-hidden="true">space_dashboard</mat-icon>
-    </mat-card-content>
-  </mat-card>
+    </mat-card>
+    <mat-card class="info-card gradient-teal">
+      <header>
+        <span>Yêu cầu báo giá</span><span><mat-icon>trending_up</mat-icon> 0%</span>
+      </header>
+      <svg class="line-chart" viewBox="0 0 220 100" preserveAspectRatio="none" aria-hidden="true">
+        <polyline
+          points="0,76 12,18 25,58 38,30 52,82 66,14 78,45 91,28 105,72 118,38 132,54 146,86 160,43 175,65 190,31 203,77 220,20"
+        />
+      </svg>
+    </mat-card>
+    <mat-card class="info-card gradient-indigo">
+      <header>
+        <span>Nội dung chờ duyệt</span><span><mat-icon>trending_down</mat-icon> 0%</span>
+      </header>
+      <div class="bar-chart" aria-hidden="true">
+        <i style="height: 34%"></i><i style="height: 65%"></i><i style="height: 48%"></i>
+        <i style="height: 87%"></i><i style="height: 39%"></i><i style="height: 76%"></i>
+        <i style="height: 54%"></i><i style="height: 92%"></i><i style="height: 46%"></i>
+        <i style="height: 72%"></i><i style="height: 36%"></i><i style="height: 81%"></i>
+      </div>
+    </mat-card>
+    <mat-card class="info-card gradient-amber">
+      <header>
+        <span>Lượt liên hệ</span><span><mat-icon>trending_up</mat-icon> 0%</span>
+      </header>
+      <svg class="line-chart" viewBox="0 0 220 100" preserveAspectRatio="none" aria-hidden="true">
+        <polyline
+          points="0,82 12,60 25,74 38,36 52,62 66,42 78,78 91,22 105,65 118,48 132,72 146,32 160,55 175,18 190,64 203,40 220,76"
+        />
+      </svg>
+    </mat-card>
+  </div>
 
-  <mat-card>
-    <mat-card-header>
-      <mat-icon mat-card-avatar>devices</mat-icon>
-      <mat-card-title>Responsive shell</mat-card-title>
-      <mat-card-subtitle>Desktop, tablet và mobile</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>Sidebar tự chuyển sang overlay ở viewport nhỏ hơn hoặc bằng 960px.</p>
-    </mat-card-content>
-  </mat-card>
+  <div class="dashboard-panels">
+    <mat-card class="panel disk-panel">
+      <h2>Dung lượng lưu trữ</h2>
+      <div class="panel-controls">
+        <label><input type="checkbox" checked disabled /> File hệ thống</label>
+        <label><input type="checkbox" checked disabled /> Media</label>
+      </div>
+      <div class="disk-chart" aria-hidden="true"><span></span></div>
+    </mat-card>
 
-  <mat-card>
-    <mat-card-header>
-      <mat-icon mat-card-avatar>palette</mat-icon>
-      <mat-card-title>Theme settings</mat-card-title>
-      <mat-card-subtitle>8 skin và tùy chọn layout</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>Thiết lập đang dùng local adapter tạm và có contract để thay bằng server ở P12.</p>
-    </mat-card-content>
-  </mat-card>
+    <mat-card class="panel todo-panel">
+      <h2>Công việc cần làm</h2>
+      <div class="task-input">
+        <input type="text" placeholder="Nhập công việc..." /><mat-icon>add</mat-icon>
+      </div>
+      <ul>
+        <li>Thiết lập nội dung công ty</li>
+        <li>Hoàn thiện danh mục sản phẩm</li>
+        <li>Cấu hình dịch vụ vận chuyển và kho bãi</li>
+        <li>Chuẩn bị nội dung website public</li>
+      </ul>
+    </mat-card>
+  </div>
 
-  <mat-card>
-    <mat-card-header>
-      <mat-icon mat-card-avatar>verified</mat-icon>
-      <mat-card-title>Component showcase</mat-card-title>
-      <mat-card-subtitle>Angular Material 22</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-chip-set aria-label="Trạng thái foundation">
-        <mat-chip>Standalone</mat-chip>
-        <mat-chip>Strict</mat-chip>
-        <mat-chip>Lazy routes</mat-chip>
-      </mat-chip-set>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-stroked-button type="button" disabled>
-        Module nghiệp vụ sẽ được bổ sung sau
-      </button>
-    </mat-card-actions>
-  </mat-card>
+  <div class="performance-grid">
+    <mat-card class="analytics-card gradient-purple" aria-label="Biểu đồ hoạt động">
+      <svg viewBox="0 0 700 240" preserveAspectRatio="none" aria-hidden="true">
+        <polyline
+          points="0,195 50,138 100,168 150,62 200,120 250,46 300,104 350,75 400,145 450,88 500,170 550,96 600,132 650,52 700,84"
+        />
+      </svg>
+    </mat-card>
+    <div class="progress-column">
+      <mat-card
+        ><div><strong>0</strong><span>Sản phẩm</span></div>
+        <mat-progress-bar mode="determinate" value="0" />
+        <p>Chưa có dữ liệu thống kê</p></mat-card
+      >
+      <mat-card
+        ><div><strong>0</strong><span>Yêu cầu báo giá</span></div>
+        <mat-progress-bar mode="determinate" value="0" />
+        <p>Chưa có dữ liệu thống kê</p></mat-card
+      >
+      <mat-card
+        ><div><strong>0</strong><span>Lượt liên hệ</span></div>
+        <mat-progress-bar mode="determinate" value="0" />
+        <p>Chưa có dữ liệu thống kê</p></mat-card
+      >
+    </div>
+  </div>
 </section>

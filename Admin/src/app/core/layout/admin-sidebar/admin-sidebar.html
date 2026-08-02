@@ -1,12 +1,18 @@
-<section class="user-block">
-  <span class="avatar" aria-hidden="true">{{ authStore.initials() }}</span>
+<section
+  class="user-block"
+  [class.compact]="density() === 'compact'"
+  [class.mini]="density() === 'mini'"
+>
+  <span class="avatar" aria-hidden="true">
+    <mat-icon>account_circle</mat-icon>
+  </span>
   <div class="user-copy">
     <strong>{{ authStore.user()?.name ?? 'Quản trị viên' }}</strong>
-    <small><span class="status-dot"></span> Hệ thống quản trị</small>
+    <small>{{ authStore.user()?.email ?? 'admin@hongvan.local' }}</small>
   </div>
 </section>
 
-<mat-nav-list
+<nav
   class="navigation"
   [class.compact]="density() === 'compact'"
   [class.mini]="density() === 'mini'"
@@ -14,20 +20,21 @@
   @for (item of menuItems; track item.id) {
     @if (item.route && canSee(item)) {
       <a
-        mat-list-item
+        mat-button
+        class="menu-entry"
         [routerLink]="item.route"
-        routerLinkActive="active"
+        routerLinkActive="active-link"
         [routerLinkActiveOptions]="{ exact: true }"
         (click)="navigated.emit()"
       >
-        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-        <span matListItemTitle>{{ item.label }}</span>
+        <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+        <span class="menu-title">{{ item.label }}</span>
       </a>
     } @else if (!item.route && canSeeGroup(item)) {
-      <button mat-list-item type="button" class="group-button" (click)="toggleGroup(item)">
-        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-        <span matListItemTitle>{{ item.label }}</span>
-        <mat-icon class="expand-icon">{{
+      <button mat-button type="button" class="menu-entry" (click)="toggleGroup(item)">
+        <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+        <span class="menu-title">{{ item.label }}</span>
+        <mat-icon class="expand-icon" [class.expanded]="isExpanded(item)">{{
           isExpanded(item) ? 'expand_less' : 'expand_more'
         }}</mat-icon>
       </button>
@@ -36,14 +43,20 @@
           @for (child of item.children ?? []; track child.id) {
             @if (canSee(child)) {
               @if (child.route) {
-                <a mat-list-item [routerLink]="child.route" routerLinkActive="active" (click)="navigated.emit()">
-                  <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
-                  <span matListItemTitle>{{ child.label }}</span>
+                <a
+                  mat-button
+                  class="menu-entry"
+                  [routerLink]="child.route"
+                  routerLinkActive="active-link"
+                  (click)="navigated.emit()"
+                >
+                  <mat-icon class="menu-icon">{{ child.icon }}</mat-icon>
+                  <span class="menu-title">{{ child.label }}</span>
                 </a>
               } @else {
-                <button mat-list-item type="button" disabled>
-                  <mat-icon matListItemIcon>{{ child.icon }}</mat-icon>
-                  <span matListItemTitle>{{ child.label }}</span>
+                <button mat-button class="menu-entry" type="button" disabled>
+                  <mat-icon class="menu-icon">{{ child.icon }}</mat-icon>
+                  <span class="menu-title">{{ child.label }}</span>
                 </button>
               }
             }
@@ -52,4 +65,4 @@
       }
     }
   }
-</mat-nav-list>
+</nav>

@@ -1,26 +1,58 @@
 :host {
   display: block;
-  max-width: 460px;
+  max-width: 386px;
   width: 100%;
 }
 
 .login-card {
-  border-radius: 4px;
-  box-shadow: 0 12px 36px rgb(35 46 80 / 18%);
-  padding: 12px;
+  box-shadow:
+    0 3px 5px -1px rgb(0 0 0 / 20%),
+    0 6px 10px 0 rgb(0 0 0 / 14%),
+    0 1px 18px 0 rgb(0 0 0 / 12%);
+  padding: 0;
 }
 
-mat-card-header {
-  margin-bottom: 16px;
+.login-hero {
+  align-items: center;
+  background:
+    linear-gradient(155deg, transparent 56%, rgb(255 255 255 / 4%) 56% 72%, transparent 72%),
+    linear-gradient(25deg, transparent 38%, rgb(255 255 255 / 4%) 38% 58%, transparent 58%),
+    linear-gradient(115deg, transparent 30%, rgb(0 0 0 / 3%) 30% 52%, transparent 52%), #3949ab;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 168px;
+  justify-content: center;
 }
 
-mat-card-title {
-  font-size: 1.45rem;
+.login-hero mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+}
+
+.login-hero h1 {
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1.2;
+  margin-top: 8px;
+}
+
+mat-card-content {
+  padding: 24px 16px 16px !important;
+}
+
+.access-note {
+  color: #ff4081;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  text-align: center;
 }
 
 form {
   display: grid;
-  gap: 8px;
+  gap: 5px;
 }
 
 mat-form-field {
@@ -33,13 +65,14 @@ mat-form-field {
   display: flex;
   font-size: 0.75rem;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin: 2px 0 10px;
 }
 
 .submit-button {
-  background: #3f51b5;
-  color: #fff;
-  min-height: 44px;
+  background-color: #3949ab !important;
+  color: #fff !important;
+  font-weight: 600;
+  min-height: 41px;
   width: 100%;
 }
 

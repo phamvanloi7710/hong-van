@@ -4,9 +4,9 @@
 
 .horizontal-navigation {
   align-items: stretch;
-  background: var(--hv-theme-primary);
+  background: var(--hv-theme-surface);
   box-shadow: 0 2px 5px rgb(0 0 0 / 18%);
-  color: #fff;
+  color: var(--hv-theme-text);
   display: flex;
   justify-content: center;
   min-height: 64px;
@@ -21,7 +21,24 @@
 }
 
 .horizontal-navigation .active {
-  background: rgb(255 255 255 / 14%);
+  background: var(--hv-theme-active-surface);
+}
+
+.horizontal-navigation > a mat-icon,
+.menu-group > button mat-icon:first-child {
+  align-items: center;
+  background: var(--hv-theme-icon-surface);
+  border-radius: 50%;
+  color: var(--hv-theme-muted);
+  display: inline-flex;
+  height: 38px;
+  justify-content: center;
+  width: 38px;
+}
+
+.horizontal-navigation .active mat-icon:first-child {
+  background: var(--hv-theme-primary);
+  color: #fff;
 }
 
 .menu-group {

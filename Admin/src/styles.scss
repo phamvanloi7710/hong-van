@@ -2,35 +2,42 @@
 .skin-indigo-light {
   --hv-theme-primary: #3f51b5;
   --hv-theme-primary-strong: #283593;
+  --hv-theme-content-header: #303f9f;
   --hv-theme-accent: #ff4081;
-  --hv-theme-background: #f4f5f8;
+  --hv-theme-background: #fafafa;
   --hv-theme-surface: #fff;
-  --hv-theme-text: #263238;
-  --hv-theme-muted: #6d7583;
-  --hv-theme-border: #e2e5eb;
-  --hv-theme-sidebar: #252a3b;
-  --hv-theme-sidebar-text: #f5f7ff;
+  --hv-theme-text: rgb(0 0 0 / 87%);
+  --hv-theme-muted: rgb(0 0 0 / 54%);
+  --hv-theme-border: rgb(0 0 0 / 12%);
+  --hv-theme-sidebar: #fff;
+  --hv-theme-sidebar-text: rgb(0 0 0 / 87%);
+  --hv-theme-toolbar-text: #e8eaf6;
+  --hv-theme-icon-surface: #eee;
+  --hv-theme-active-surface: #e0e0e0;
 }
 
 .skin-teal-light {
   --hv-theme-primary: #009688;
   --hv-theme-primary-strong: #00695c;
+  --hv-theme-content-header: #00796b;
   --hv-theme-accent: #ff7043;
-  --hv-theme-sidebar: #203a38;
+  --hv-theme-sidebar: #fff;
 }
 
 .skin-red-light {
   --hv-theme-primary: #f44336;
   --hv-theme-primary-strong: #c62828;
+  --hv-theme-content-header: #d32f2f;
   --hv-theme-accent: #43a047;
-  --hv-theme-sidebar: #3d2727;
+  --hv-theme-sidebar: #fff;
 }
 
 .skin-gray-light {
   --hv-theme-primary: #757575;
   --hv-theme-primary-strong: #424242;
+  --hv-theme-content-header: #616161;
   --hv-theme-accent: #ff4081;
-  --hv-theme-sidebar: #30343a;
+  --hv-theme-sidebar: #fff;
 }
 
 .skin-blue-dark,
@@ -44,29 +51,36 @@
   --hv-theme-border: #3b3e45;
   --hv-theme-sidebar: #111318;
   --hv-theme-sidebar-text: #f8f9ff;
+  --hv-theme-toolbar-text: #fff;
+  --hv-theme-icon-surface: rgb(255 255 255 / 12%);
+  --hv-theme-active-surface: rgb(255 255 255 / 12%);
 }
 
 .skin-blue-dark {
   --hv-theme-primary: #0277bd;
   --hv-theme-primary-strong: #01579b;
+  --hv-theme-content-header: #0277bd;
   --hv-theme-accent: #ffd740;
 }
 
 .skin-green-dark {
   --hv-theme-primary: #388e3c;
   --hv-theme-primary-strong: #1b5e20;
+  --hv-theme-content-header: #2e7d32;
   --hv-theme-accent: #ffd740;
 }
 
 .skin-pink-dark {
   --hv-theme-primary: #d81b60;
   --hv-theme-primary-strong: #880e4f;
+  --hv-theme-content-header: #ad1457;
   --hv-theme-accent: #90a4ae;
 }
 
 .skin-gray-dark {
   --hv-theme-primary: #607d8b;
   --hv-theme-primary-strong: #37474f;
+  --hv-theme-content-header: #455a64;
   --hv-theme-accent: #ff4081;
 }
 
@@ -81,13 +95,17 @@ html {
 }
 
 body {
-  background: #f4f5f8;
+  background: #fafafa;
   color: #263238;
   font-family: 'Roboto', 'Segoe UI', sans-serif;
   font-size: 14px;
   line-height: 1.5;
-  margin: 0;
   overflow-x: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 .mat-icon,
@@ -117,6 +135,11 @@ body {
 button,
 input {
   font: inherit;
+}
+
+.mat-mdc-card {
+  border-radius: 4px !important;
+  overflow: hidden;
 }
 
 :focus-visible {

@@ -2,7 +2,15 @@
 
 ## Status
 
-`READY` for structural inventory — source exists at `Template/` and was inspected read-only. The supplied package is incomplete for a verified build because `package-lock.json` and the configured `public/` asset directory are absent.
+`READY` — source hiện tại tại `Template/` đã được kiểm tra lại read-only ngày 2026-08-02 và đối chiếu trực tiếp với demo `annular.themeseason.com`. Package vẫn thiếu `package-lock.json`, thư mục asset `public/` và license file ở root, nhưng source layout/theme đủ để port giao diện vào `Admin/`.
+
+## Re-audit after template refresh
+
+- Source hiện tại vẫn là Annular `2.7.0`, Angular `20.1.3`; manifest và cấu trúc shell khớp demo đang chạy.
+- Chuẩn desktop đo trực tiếp trên demo: toolbar `56px`, sidebar `260px`, user block khoảng `181px`, content header `123px`, tile `150x69px` và info card `233x141px` tại viewport `1280x720`.
+- Chuẩn login: card `386px`, header `168px`, căn giữa viewport.
+- `Template/public/` vẫn không tồn tại nên logo/avatar/header background gốc không có trong package; target dùng branding Hồng Vân và CSS pattern tương đương, không lấy asset từ website demo.
+- `git diff -- Template` phải tiếp tục bằng 0 sau khi port.
 
 ## Identity and toolchain
 

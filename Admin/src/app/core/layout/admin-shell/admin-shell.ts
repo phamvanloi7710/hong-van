@@ -15,7 +15,6 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 
 import { AdminThemeStore } from '../../theme/admin-theme.store';
-import { AdminBreadcrumb } from '../admin-breadcrumb/admin-breadcrumb';
 import { AdminFooter } from '../admin-footer/admin-footer';
 import { AdminHeader } from '../admin-header/admin-header';
 import { AdminHorizontalMenu } from '../admin-horizontal-menu/admin-horizontal-menu';
@@ -27,7 +26,6 @@ const MOBILE_BREAKPOINT = 960;
 @Component({
   selector: 'hv-admin-shell',
   imports: [
-    AdminBreadcrumb,
     AdminFooter,
     AdminHeader,
     AdminHorizontalMenu,
@@ -52,6 +50,7 @@ export class AdminShell {
   readonly mobileSidenavOpened = signal(false);
   readonly themePanelOpened = signal(false);
   readonly showBackToTop = signal(false);
+  readonly pageHeader = signal({ icon: 'dashboard', title: 'Chào mừng đến trang quản trị!' });
 
   readonly effectiveMenuOrientation = computed(() =>
     this.isMobile() ? 'vertical' : this.themeStore.preferences().menuOrientation,
@@ -82,12 +81,15 @@ export class AdminShell {
   });
 
   constructor() {
+    this.updatePageHeader(this.router.url);
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntilDestroyed(),
       )
-      .subscribe(() => {
+      .subscribe((event) => {
+        this.updatePageHeader(event.urlAfterRedirects);
+
         if (this.isMobile()) {
           this.mobileSidenavOpened.set(false);
         }
@@ -133,5 +135,17 @@ export class AdminShell {
   scrollToTop(behavior: ScrollBehavior = 'smooth'): void {
     this.sidenavContent?.getElementRef().nativeElement.scrollTo({ top: 0, behavior });
     window.scrollTo({ top: 0, behavior });
+  }
+
+  private updatePageHeader(url: string): void {
+    if (url.startsWith('/identity')) {
+      this.pageHeader.set({
+        icon: 'supervisor_account',
+        title: 'Người dùng & phân quyền',
+      });
+      return;
+    }
+
+    this.pageHeader.set({ icon: 'dashboard', title: 'Chào mừng đến trang quản trị!' });
   }
 }
