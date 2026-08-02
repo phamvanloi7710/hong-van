@@ -2,6 +2,7 @@
 
 namespace App\Domain\Identity;
 
+use App\Domain\Audit\AuditTrail;
 use App\Models\User;
 use App\Support\Http\RequestId;
 use Illuminate\Http\Request;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 
 final class IdentityAuditLogger
 {
+    public function __construct(private readonly AuditTrail $auditTrail) {}
+
     /**
      * @param  array<string, bool|int|string|null>  $details
      */
@@ -22,6 +25,15 @@ final class IdentityAuditLogger
     ): void {
         $request ??= request();
 
+        $this->auditTrail->record(
+            $event,
+            $actor,
+            $subjectType,
+            $subjectPublicId,
+            after: $details,
+            request: $request,
+        );
+
         Log::notice('Admin identity event.', [
             'event' => $event,
             'request_id' => RequestId::getOrCreate($request),
@@ -29,7 +41,7 @@ final class IdentityAuditLogger
             'subject_type' => $subjectType,
             'subject_public_id' => $subjectPublicId,
             'details' => $details,
-            'ip_address' => $request->ip(),
+            'ip_hash' => $this->ipHash($request),
         ]);
     }
 
@@ -46,5 +58,14 @@ final class IdentityAuditLogger
         $this->record('identity.super_admin_bypass', $user, 'permission', null, [
             'permission' => $permission,
         ], $request);
+    }
+
+    private function ipHash(Request $request): ?string
+    {
+        $ip = $request->ip();
+
+        return is_string($ip) && $ip !== ''
+            ? hash_hmac('sha256', $ip, (string) config('app.key'))
+            : null;
     }
 }

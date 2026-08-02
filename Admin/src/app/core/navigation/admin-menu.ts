@@ -69,7 +69,13 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         route: '/localization',
         permission: 'localization.view',
       },
-      { id: 'audit', labelKey: 'menu.audit', icon: 'history', disabled: true },
+      {
+        id: 'audit',
+        labelKey: 'menu.audit',
+        icon: 'history',
+        route: '/audit',
+        permission: 'audit.view',
+      },
     ],
   },
 ];

@@ -33,8 +33,9 @@
 
 ## Admin
 
-- CSP.
-- Frame policy cho preview được thiết kế rõ.
+- CSP mặc định `default-src 'self'`, không cho inline script; build Angular production không sinh inline event handler.
+- Frame policy mặc định `DENY`; route preview dùng `SAMEORIGIN` và CSP riêng để chuẩn bị iframe cùng origin.
+- Response có `X-Content-Type-Options: nosniff` và `Referrer-Policy`; HSTS chỉ bật ở production qua HTTPS.
 - postMessage kiểm tra origin và message schema.
 - Không lưu token trong localStorage nếu dùng cookie auth.
 - Error interceptor không rò secret.
@@ -42,7 +43,7 @@
 
 ## Public forms
 
-- Rate limit.
+- Rate limiter có tên cho login, public form, upload và preview session; endpoint tương lai phải gắn đúng limiter.
 - Honeypot.
 - Optional Turnstile/reCAPTCHA qua setting.
 - Server validation.
@@ -55,8 +56,9 @@
 - Redact password, token, cookie, authorization header.
 - Audit login, failed login, user/role changes, publish, delete, settings, media delete.
 - P13 chỉ ghi audit key cấu hình đã đổi; toàn bộ value được redaction. Secret cấu hình lưu dạng mã hóa hoặc `env:VARIABLE`, không trả về Angular/public payload và không đưa vào cache public.
-- Không cho sửa audit log từ admin thông thường.
-- Retention policy.
+- P15 dùng `AuditTrail` tập trung cho auth, identity và settings; dữ liệu nhạy cảm, nội dung file, IP và user-agent không lưu plain text.
+- `hongvan_audit_logs` là append-only: model chặn update/delete và Admin chỉ có API/UI đọc theo quyền `audit.view`.
+- Security log dùng daily channel riêng; retention audit/security log cấu hình qua environment.
 
 ## Deployment
 
@@ -66,6 +68,7 @@
 - Public root trỏ `BackEnd/public`.
 - Không expose `.env`, storage private, source map admin production nếu không cần.
 - HTTPS.
-- Security headers.
+- Trusted host/proxy lấy từ environment; local/testing giữ compatibility phát triển.
+- Security headers được áp dụng toàn ứng dụng; HSTS chỉ xuất hiện ở production HTTPS.
 - Dependency audit.
 - Backup mã hóa và restore test.

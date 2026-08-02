@@ -83,6 +83,13 @@ export const routes: Routes = [
           import('./features/localization/localization-page').then((page) => page.LocalizationPage),
         data: { breadcrumb: 'menu.localization' },
       },
+      {
+        path: 'audit',
+        canActivate: [permissionGuard('audit.view')],
+        loadComponent: () =>
+          import('./features/audit/audit-page').then((page) => page.AuditPage),
+        data: { breadcrumb: 'menu.audit' },
+      },
     ],
   },
   {

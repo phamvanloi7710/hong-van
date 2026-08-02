@@ -39,6 +39,7 @@ class TablePrefixTest extends TestCase
             'hongvan_jobs',
             'hongvan_languages',
             'hongvan_localized_slugs',
+            'hongvan_audit_logs',
             'hongvan_migrations',
             'hongvan_notifications',
             'hongvan_password_reset_tokens',

@@ -12,6 +12,8 @@ use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Middleware\TrustHosts;
+use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
@@ -36,6 +38,22 @@ class AppServiceProvider extends ServiceProvider
     {
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
+        $trustedHosts = (array) config('security.trusted_hosts', []);
+        if ($trustedHosts !== []) {
+            TrustHosts::at($trustedHosts, subdomains: false);
+        }
+
+        $trustedProxies = (array) config('security.trusted_proxies', []);
+        if ($trustedProxies !== []) {
+            TrustProxies::at($trustedProxies);
+            TrustProxies::withHeaders(
+                Request::HEADER_X_FORWARDED_FOR
+                | Request::HEADER_X_FORWARDED_HOST
+                | Request::HEADER_X_FORWARDED_PORT
+                | Request::HEADER_X_FORWARDED_PROTO,
+            );
+        }
+
         RateLimiter::for('api', static function (Request $request): Limit {
             $user = $request->user();
             $identifier = $user instanceof User && $user->getAuthIdentifier() !== null
@@ -54,6 +72,21 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('auth.password', static function (Request $request): Limit {
             return Limit::perMinute(max(1, (int) config('api.auth_rate_limits.password_per_minute', 3)))
                 ->by(self::authenticationThrottleKey($request));
+        });
+
+        RateLimiter::for('public.forms', static function (Request $request): Limit {
+            return Limit::perMinute(max(1, (int) config('security.rate_limits.public_forms_per_minute', 10)))
+                ->by('public-form|'.$request->ip());
+        });
+
+        RateLimiter::for('uploads', static function (Request $request): Limit {
+            return Limit::perMinute(max(1, (int) config('security.rate_limits.uploads_per_minute', 20)))
+                ->by(self::securityThrottleKey($request, 'upload'));
+        });
+
+        RateLimiter::for('preview.sessions', static function (Request $request): Limit {
+            return Limit::perMinute(max(1, (int) config('security.rate_limits.preview_sessions_per_minute', 10)))
+                ->by(self::securityThrottleKey($request, 'preview'));
         });
 
         ResetPassword::createUrlUsing(static function (User $user, string $token): string {
@@ -77,5 +110,15 @@ class AppServiceProvider extends ServiceProvider
         $email = Str::lower(trim((string) $request->input('email')));
 
         return hash('sha256', $email).'|'.$request->ip();
+    }
+
+    private static function securityThrottleKey(Request $request, string $scope): string
+    {
+        $user = $request->user();
+        $identity = $user instanceof User && $user->getAuthIdentifier() !== null
+            ? 'user:'.$user->getAuthIdentifier()
+            : 'ip:'.$request->ip();
+
+        return $scope.'|'.$identity;
     }
 }

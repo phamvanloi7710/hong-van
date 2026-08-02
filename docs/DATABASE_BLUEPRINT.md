@@ -49,6 +49,7 @@ hongvan_branches
 hongvan_business_hours
 hongvan_social_links
 hongvan_contact_channels
+hongvan_audit_logs
 ```
 
 Quy ước định danh được chốt tại `ADR-009`: entity nghiệp vụ dùng unsigned `BIGINT` làm khóa nội bộ và `CHAR(26)` ULID unique làm `public_id` khi cần xuất hiện bên ngoài. Foreign key nội bộ tham chiếu `id`.
@@ -58,6 +59,8 @@ P13 đã hoàn thiện foundation settings bằng allowlist có kiểu dữ li�
 P12 đã triển khai `hongvan_user_preferences` để lưu cấu hình riêng từng user theo cặp `namespace` + `key`. Giá trị JSON chỉ nhận contract có allowlist; hiện gồm theme Annular, locale `vi|en|zh` và danh sách favorite menu có thứ tự. Unique key `(user_id, namespace, key)` ngăn dữ liệu trùng và foreign key xóa cascade theo user.
 
 P14 bổ sung fallback tự tham chiếu cho `hongvan_languages`, hai bảng queryable `hongvan_translation_keys`/`hongvan_translation_values` và registry `hongvan_localized_slugs`. Bản dịch dùng row theo ngôn ngữ thay vì JSON; slug unique theo ngôn ngữ và namespace. `vi` là mặc định, `en` và `zh` được seed active và fallback về `vi`.
+
+P15 bổ sung `hongvan_audit_logs` theo cơ chế append-only. Bảng lưu định danh actor/subject dạng snapshot, dữ liệu before/after/metadata đã redaction, hash IP/user-agent, request ID và thời điểm UTC; không đặt foreign key để lịch sử không mất hoặc bị thay đổi khi entity nguồn bị xóa. Model chặn update/delete và Admin chỉ có API đọc.
 
 ## Core và Identity dự kiến
 

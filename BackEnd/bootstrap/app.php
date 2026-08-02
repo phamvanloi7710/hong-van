@@ -3,6 +3,7 @@
 use App\Http\Exceptions\ApiExceptionRenderer;
 use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnsurePermission;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetApiLocale;
 use App\Http\Middleware\SetPublicLocale;
 use Illuminate\Foundation\Application;
@@ -35,7 +36,9 @@ return Application::configure(basePath: dirname(__DIR__))
             AssignRequestId::class,
             SetApiLocale::class,
         ]);
+        $middleware->append(SecurityHeaders::class);
         $middleware->throttleApi();
+        $middleware->trustHosts(subdomains: false);
         $middleware->alias([
             'permission' => EnsurePermission::class,
             'public.locale' => SetPublicLocale::class,

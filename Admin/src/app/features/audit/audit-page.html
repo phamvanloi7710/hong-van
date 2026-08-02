@@ -1,0 +1,42 @@
+<section class="audit-page">
+  <header class="page-actions">
+    <div><p class="eyebrow">{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><p>{{ text('description') }}</p></div>
+    <button mat-stroked-button type="button" (click)="load(pagination()?.page ?? 1)"><mat-icon>refresh</mat-icon>{{ text('refresh') }}</button>
+  </header>
+
+  <mat-card class="notice"><mat-icon>verified_user</mat-icon><div><strong>{{ text('immutable') }}</strong><span>{{ text('redacted') }}</span></div></mat-card>
+
+  <form class="filters" [formGroup]="filters" (ngSubmit)="load()">
+    <mat-form-field appearance="outline"><mat-label>{{ text('action') }}</mat-label><input matInput formControlName="action" [placeholder]="text('actionHint')" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('subjectType') }}</mat-label><input matInput formControlName="subject_type" [placeholder]="text('subjectHint')" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('actor') }}</mat-label><input matInput formControlName="actor_public_id" [placeholder]="text('actorId')" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('requestId') }}</mat-label><input matInput formControlName="request_id" [placeholder]="text('requestHint')" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('dateFrom') }}</mat-label><input matInput type="date" formControlName="date_from" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('dateTo') }}</mat-label><input matInput type="date" formControlName="date_to" /></mat-form-field>
+    <div class="filter-actions"><button mat-flat-button type="submit"><mat-icon>filter_alt</mat-icon>{{ text('apply') }}</button><button mat-stroked-button type="button" (click)="reset()">{{ text('reset') }}</button></div>
+  </form>
+
+  @if (loading()) {
+    <div class="state"><mat-spinner diameter="42" /></div>
+  } @else if (error()) {
+    <mat-card class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></mat-card>
+  } @else if (entries().length === 0) {
+    <mat-card class="state"><mat-icon>history</mat-icon><span>{{ text('empty') }}</span></mat-card>
+  } @else {
+    <div class="summary"><strong>{{ text('total') }}: {{ pagination()?.total ?? entries().length }}</strong><span>{{ text('page') }} {{ pagination()?.page ?? 1 }} {{ text('of') }} {{ pagination()?.last_page ?? 1 }}</span></div>
+    <div class="audit-list">
+      @for (entry of entries(); track entry.public_id) {
+        <mat-card class="audit-card">
+          <div class="audit-heading"><div><mat-icon>history</mat-icon><strong>{{ entry.action }}</strong></div><time>{{ formattedTime(entry.occurred_at) }}</time></div>
+          <div class="audit-meta"><span><b>{{ text('actor') }}:</b> {{ actor(entry) }}</span><span><b>{{ text('subject') }}:</b> {{ subject(entry) }}</span><span><b>{{ text('requestId') }}:</b> {{ entry.request_id }}</span></div>
+          <details>
+            <summary>{{ text('details') }}</summary>
+            <div class="diff-grid"><section><h4>{{ text('before') }}</h4><pre>{{ json(entry.before) }}</pre></section><section><h4>{{ text('after') }}</h4><pre>{{ json(entry.after) }}</pre></section><section><h4>{{ text('metadata') }}</h4><pre>{{ json(entry.metadata) }}</pre></section></div>
+            <p class="fingerprints">{{ text('fingerprints') }}: {{ entry.ip_hash ?? '—' }} · {{ entry.user_agent_hash ?? '—' }}</p>
+          </details>
+        </mat-card>
+      }
+    </div>
+    <nav class="pagination"><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) <= 1" (click)="previous()">{{ text('previous') }}</button><button mat-stroked-button type="button" [disabled]="(pagination()?.page ?? 1) >= (pagination()?.last_page ?? 1)" (click)="next()">{{ text('next') }}</button></nav>
+  }
+</section>

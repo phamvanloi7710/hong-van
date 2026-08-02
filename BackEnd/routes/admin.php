@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Audit\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthSessionController;
 use App\Http\Controllers\Api\V1\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\V1\Auth\ResetPasswordController;
@@ -88,5 +89,9 @@ Route::prefix('admin/v1')
                 Route::get('/', [LocalizationController::class, 'index'])->middleware('permission:localization.view')->name('index');
                 Route::put('languages/{language:public_id}', [LocalizationController::class, 'update'])->middleware('permission:localization.update')->name('languages.update');
             });
+
+            Route::get('audit-logs', [AuditLogController::class, 'index'])
+                ->middleware('permission:audit.view')
+                ->name('audit-logs.index');
         });
     });

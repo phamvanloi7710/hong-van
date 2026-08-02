@@ -90,8 +90,9 @@ async function validateBuild(directory) {
   }
 
   const indexHtml = await readFile(path.join(directory, 'index.html'), 'utf8');
+  const baseHref = indexHtml.match(/<base\s+[^>]*href=["']([^"']+)["'][^>]*\/?>/i)?.[1];
 
-  if (!indexHtml.includes(`<base href="${ADMIN_BASE_HREF}">`)) {
+  if (baseHref !== ADMIN_BASE_HREF) {
     throw new Error(`index.html must use base href ${ADMIN_BASE_HREF}`);
   }
 

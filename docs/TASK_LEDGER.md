@@ -17,7 +17,7 @@
 - [x] P12 User theme preferences, Admin i18n foundation and Annular favorite shortcuts
 - [x] P13 Company settings
 - [x] P14 Localization
-- [ ] P15 Audit/security foundation
+- [x] P15 Audit/security foundation
 - [ ] P16 Media domain
 - [ ] P17 StayHub media clone
 - [ ] P18 Blade frontend foundation
