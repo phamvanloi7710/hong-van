@@ -47,7 +47,7 @@
               (selectionChange)="updateFavorites($event.value)"
             >
               @for (item of availableFavoriteMenuItems(); track item.id) {
-                <mat-option [value]="item.id">
+                <mat-option class="favorite-option-row" [value]="item.id">
                   <span class="favorite-option">
                     <span>{{ item.labelKey | hvT }}</span>
                     <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>

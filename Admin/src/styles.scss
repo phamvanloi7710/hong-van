@@ -142,6 +142,15 @@ input {
   overflow: hidden;
 }
 
+.favorite-option-row .mdc-list-item__primary-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.favorite-option-row .favorite-option .mat-icon {
+  margin-inline-end: 0;
+}
+
 :focus-visible {
   outline: 3px solid color-mix(in srgb, var(--hv-theme-accent) 65%, #fff);
   outline-offset: 2px;
