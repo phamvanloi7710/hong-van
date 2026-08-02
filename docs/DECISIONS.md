@@ -1,37 +1,14 @@
 # ARCHITECTURE DECISIONS
 
-## ADR-001 — Public site dùng Laravel Blade
+Individual ADR files are the source of truth. P02 reviewed `ARCHITECTURE.md`, `DATABASE_BLUEPRINT.md`, `PAGE_BUILDER_CONTRACT.md`, `API_CONVENTIONS.md` and `SECURITY_BASELINE.md`; no conflicting accepted architecture was found.
 
-**Status:** Accepted
-
-Lý do: SEO, HTML server-rendered, tốc độ và tích hợp trực tiếp với Laravel.
-
-## ADR-002 — Admin dùng Angular tách source
-
-**Status:** Accepted
-
-Source tại `Admin/`, production build được đồng bộ vào `BackEnd/public/admin/browser/`.
-
-## ADR-003 — Table prefix ghi rõ trong migration
-
-**Status:** Accepted
-
-Không dùng connection-level prefix. Tất cả bảng là `hongvan_*`.
-
-## ADR-004 — Page Builder preview dùng Blade iframe
-
-**Status:** Accepted
-
-Admin canvas sử dụng renderer thật của public để tránh lệch style.
-
-## ADR-005 — Không có e-commerce
-
-**Status:** Accepted
-
-Catalog + CTA báo giá; không cart, checkout, payment.
-
-## ADR-006 — External source là read-only
-
-**Status:** Accepted
-
-`Template/`, `FrontEndTemplate/`, `SourceIntegrations/` không được sửa.
+| ADR | Decision | Status | Date |
+|---|---|---|---|
+| [ADR-001](adr/ADR-001-laravel-blade-public.md) | Laravel Blade for the public website | Accepted | 2026-08-02 |
+| [ADR-002](adr/ADR-002-angular-admin.md) | Angular SPA for Admin | Accepted | 2026-08-02 |
+| [ADR-003](adr/ADR-003-explicit-table-prefix.md) | Explicit `hongvan_` table prefix | Accepted | 2026-08-02 |
+| [ADR-004](adr/ADR-004-blade-iframe-preview.md) | Blade iframe for Page Builder preview | Accepted | 2026-08-02 |
+| [ADR-005](adr/ADR-005-no-ecommerce.md) | No e-commerce | Accepted | 2026-08-02 |
+| [ADR-006](adr/ADR-006-external-source-read-only.md) | External source is read-only | Accepted | 2026-08-02 |
+| [ADR-007](adr/ADR-007-monorepo.md) | Monorepo for the platform | Accepted | 2026-08-02 |
+| [ADR-008](adr/ADR-008-sanctum-same-origin.md) | Sanctum same-origin cookie/session for Admin | Accepted | 2026-08-02 |

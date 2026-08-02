@@ -2,7 +2,7 @@
 
 - [x] P00 Repository audit
 - [x] P01 External source inventory
-- [ ] P02 Architecture records
+- [x] P02 Architecture records
 - [ ] P03 Repository hygiene
 - [ ] P04 Laravel bootstrap
 - [ ] P05 Angular bootstrap
