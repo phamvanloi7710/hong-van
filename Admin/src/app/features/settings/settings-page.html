@@ -14,22 +14,26 @@
         <div class="group-grid">
           @for (group of settings.groups; track group.public_id) {
             <mat-card class="settings-card" [formGroup]="formFor(group)">
-              <mat-card-header><mat-icon mat-card-avatar>tune</mat-icon><mat-card-title>{{ text(group.key) }}</mat-card-title></mat-card-header>
+              <mat-card-header><mat-icon mat-card-avatar>{{ group.key === 'analytics' ? 'monitoring' : 'tune' }}</mat-icon><mat-card-title>{{ text(group.key) }}</mat-card-title>@if (group.key === 'analytics') { <mat-card-subtitle>{{ text('analyticsDescription') }}</mat-card-subtitle> }</mat-card-header>
               <mat-card-content class="fields-grid">
                 @for (setting of group.settings; track setting.public_id) {
                   @if (setting.value_type === 'boolean') {
-                    <mat-slide-toggle [formControlName]="setting.key" [disabled]="setting.is_locked">{{ text(setting.key) }}</mat-slide-toggle>
+                    <mat-slide-toggle [formControlName]="setting.key" [disabled]="setting.is_locked">{{ settingText(group, setting.key) }}</mat-slide-toggle>
                   } @else {
                     <mat-form-field appearance="outline" [class.full]="setting.value_type === 'text'">
-                      <mat-label>{{ text(setting.key) }}</mat-label>
-                      @if (setting.value_type === 'text') { <textarea matInput rows="3" [formControlName]="setting.key"></textarea> }
-                      @else { <input matInput [type]="setting.value_type === 'secret' ? 'password' : 'text'" [formControlName]="setting.key" /> }
+                      <mat-label>{{ settingText(group, setting.key) }}</mat-label>
+                      @if (group.key === 'analytics' && setting.key === 'provider') {
+                        <mat-select [formControlName]="setting.key"><mat-option value="none">{{ text('provider_none') }}</mat-option><mat-option value="google_analytics_4">Google Analytics 4</mat-option><mat-option value="google_tag_manager">Google Tag Manager</mat-option><mat-option value="plausible">Plausible</mat-option></mat-select>
+                      } @else if (group.key === 'analytics' && setting.key === 'consent_mode') {
+                        <mat-select [formControlName]="setting.key"><mat-option value="opt_in">{{ text('consent_opt_in') }}</mat-option></mat-select>
+                      } @else if (setting.value_type === 'text') { <textarea matInput rows="3" [formControlName]="setting.key"></textarea> }
+                      @else { <input matInput [type]="setting.value_type === 'secret' ? 'password' : setting.value_type === 'integer' || setting.value_type === 'decimal' ? 'number' : 'text'" [formControlName]="setting.key" /> }
                       @if (setting.value_type === 'secret') { <mat-hint>{{ text('secretHint') }}</mat-hint> }
                     </mat-form-field>
                   }
                 }
               </mat-card-content>
-              <mat-card-actions align="end"><button mat-flat-button [disabled]="!authStore.hasPermission('settings.update') || formFor(group).invalid" (click)="saveGroup(group)"><mat-icon>save</mat-icon>{{ text('save') }}</button></mat-card-actions>
+              <mat-card-actions align="end"><button mat-flat-button [disabled]="!canSaveGroup(group)" (click)="saveGroup(group)"><mat-icon>save</mat-icon>{{ text('save') }}</button></mat-card-actions>
             </mat-card>
           }
         </div>

@@ -6,7 +6,7 @@ export interface CompanySetting {
   readonly label: string;
   readonly description: string | null;
   readonly value: SettingValue;
-  readonly value_type: 'boolean' | 'decimal' | 'secret' | 'string' | 'text' | 'url';
+  readonly value_type: 'boolean' | 'decimal' | 'integer' | 'secret' | 'string' | 'text' | 'url';
   readonly is_public: boolean;
   readonly is_locked: boolean;
   readonly has_value: boolean;

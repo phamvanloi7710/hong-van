@@ -2,6 +2,8 @@
 
 namespace App\Domain\Settings;
 
+use App\Domain\Analytics\AnalyticsConfiguration;
+use App\Domain\Analytics\AnalyticsSettingsValidator;
 use App\Models\Branch;
 use App\Models\BusinessHour;
 use App\Models\ContactChannel;
@@ -17,7 +19,11 @@ use Illuminate\Validation\ValidationException;
 
 final readonly class CompanySettingsService
 {
-    public function __construct(private CompanySettingsAuditLogger $auditLogger) {}
+    public function __construct(
+        private CompanySettingsAuditLogger $auditLogger,
+        private AnalyticsSettingsValidator $analyticsValidator,
+        private AnalyticsConfiguration $analyticsConfiguration,
+    ) {}
 
     /** @return array<string, mixed> */
     public function adminPayload(): array
@@ -100,6 +106,7 @@ final readonly class CompanySettingsService
     {
         $definition = config('company_settings.groups.'.$group->key.'.settings');
         abort_unless(is_array($definition), 404);
+        $this->analyticsValidator->validate($group->key, $values);
         $changedKeys = array_values(array_intersect(array_keys($values), array_keys($definition)));
 
         DB::transaction(function () use ($actor, $changedKeys, $group, $values): void {
@@ -136,6 +143,7 @@ final readonly class CompanySettingsService
     {
         Cache::forget($this->adminCacheKey());
         Cache::forget($this->publicCacheKey());
+        $this->analyticsConfiguration->invalidate();
     }
 
     /** @return array<string, mixed> */

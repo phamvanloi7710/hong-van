@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormControl, FormRecord, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormRecord, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -65,6 +65,10 @@ export class SettingsPage {
     return Object.entries(parameters).reduce((value, [name, replacement]) => value.replaceAll(`{${name}}`, replacement), source);
   }
 
+  settingText(group: CompanySettingGroup, key: string): string {
+    return this.text(group.key === 'analytics' && key === 'enabled' ? 'analytics_enabled' : key);
+  }
+
   reload(): void {
     this.loading.set(true);
     this.error.set(null);
@@ -78,7 +82,7 @@ export class SettingsPage {
     const existing = this.settingForms.get(group.key);
     if (existing) return existing;
     const controls: Record<string, FormControl<SettingValue>> = {};
-    for (const setting of group.settings) controls[setting.key] = new FormControl<SettingValue>(setting.value);
+    for (const setting of group.settings) controls[setting.key] = new FormControl<SettingValue>(setting.value, this.validatorsFor(group.key, setting.key));
     const form = new FormRecord<FormControl<SettingValue>>(controls);
     this.settingForms.set(group.key, form);
     return form;
@@ -86,6 +90,20 @@ export class SettingsPage {
 
   saveGroup(group: CompanySettingGroup): void {
     this.run(this.data.updateGroup(group.key, this.formFor(group).getRawValue()), this.text('saved'), false);
+  }
+
+  canSaveGroup(group: CompanySettingGroup): boolean {
+    if (!this.authStore.hasPermission('settings.update') || this.formFor(group).invalid) return false;
+    if (group.key !== 'analytics') return true;
+
+    const values = this.formFor(group).getRawValue();
+    if (values['enabled'] !== true) return true;
+    const provider = String(values['provider'] ?? 'none');
+    const identifier = String(values['tracking_identifier'] ?? '').trim();
+    const originalProvider = String(group.settings.find((setting) => setting.key === 'provider')?.value ?? 'none');
+    const hasIdentifier = group.settings.find((setting) => setting.key === 'tracking_identifier')?.has_value === true;
+
+    return provider !== 'none' && (identifier !== '' || (hasIdentifier && provider === originalProvider));
   }
 
   selectHourScope(scope: string): void {
@@ -166,5 +184,16 @@ export class SettingsPage {
 
   private defaultHours(): readonly BusinessHour[] {
     return this.dayKeys.map((_, day) => ({ branch_id: null, day_of_week: day, opens_at: '08:00', closes_at: '17:00', is_closed: day === 0, note: null, is_active: true }));
+  }
+
+  private validatorsFor(groupKey: string, settingKey: string): ValidatorFn[] {
+    if (groupKey !== 'analytics') return [];
+
+    return {
+      policy_path: [Validators.required, Validators.maxLength(255), Validators.pattern(/^\/(?!\/)[A-Za-z0-9_\-/]*$/)],
+      policy_version: [Validators.required, Validators.maxLength(64), Validators.pattern(/^[A-Za-z0-9._-]+$/)],
+      retention_days: [Validators.required, Validators.min(30), Validators.max(365)],
+      tracking_identifier: [Validators.maxLength(253)],
+    }[settingKey] ?? [];
   }
 }

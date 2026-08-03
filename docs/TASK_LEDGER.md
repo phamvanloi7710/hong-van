@@ -86,6 +86,11 @@
   - [x] P43 Admin: Annular technical SEO tab with redirect manager, sitemap health, robots editor and schema preview in vi/en/zh; built, synced and verified on hongvan.local
   - [ ] P43 Public template binding: insert JSON-LD and visible breadcrumbs into final Blade layouts/pages (deferred until P18-P31 and the frontend template)
 - [ ] P44 Analytics/consent
+  - [x] P44 Backend/config: disabled-by-default GA4/GTM/Plausible allowlist, encrypted masked identifier, internal policy path, version and retention validation
+  - [x] P44 Consent API/security: vi/en/zh banner/category/preferences contract, first-party HttpOnly persistence/revoke, no server record/PII, provider scripts only after opt-in and conditional nonce CSP
+  - [x] P44 Event/Page Builder boundary: allowlisted lead_submit/product_view parameters without PII and no arbitrary script URL/setting/provider
+  - [x] P44 Admin: Annular settings card, provider/policy controls, client/backend validation, masking and vi/en/zh; built, synced and verified on hongvan.local
+  - [ ] P44 Public template binding: render banner/preferences, load the consent client and wire lead/product events in final Blade template (deferred to the last frontend stage)
 - [ ] P45 Dashboard/reports/notifications
 - [ ] P46 Accessibility/performance
 - [ ] P47 Seed/demo content

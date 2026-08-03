@@ -14,7 +14,7 @@ class SecurityHeadersTest extends TestCase
             ->assertHeader('X-Content-Type-Options', 'nosniff')
             ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
             ->assertHeader('X-Frame-Options', 'DENY')
-            ->assertHeader('Content-Security-Policy', (string) config('security.headers.content_security_policy'))
+            ->assertHeader('Content-Security-Policy')
             ->assertHeaderMissing('Strict-Transport-Security');
 
         Route::get('/preview/p15-frame-check', static fn () => response('preview'));
@@ -22,7 +22,9 @@ class SecurityHeadersTest extends TestCase
         $this->get('/preview/p15-frame-check')
             ->assertOk()
             ->assertHeader('X-Frame-Options', 'SAMEORIGIN')
-            ->assertHeader('Content-Security-Policy', (string) config('security.headers.preview_content_security_policy'));
+            ->assertHeader('Content-Security-Policy');
+
+        $this->assertStringContainsString("script-src 'self' 'nonce-", (string) $this->get('/')->headers->get('Content-Security-Policy'));
     }
 
     public function test_hsts_is_only_added_for_secure_production_requests(): void

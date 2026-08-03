@@ -14,14 +14,15 @@ final class CompanySettingsSeeder extends Seeder
 
         foreach (array_values(array_keys($groups)) as $groupOrder => $groupKey) {
             $definition = $groups[$groupKey];
-            $group = SettingGroup::query()->updateOrCreate(
+            $group = SettingGroup::query()->firstOrCreate(
                 ['key' => $groupKey],
                 ['label' => $definition['label'], 'description' => $definition['description'], 'is_active' => true, 'sort_order' => $groupOrder],
             );
+            $group->forceFill(['label' => $definition['label'], 'description' => $definition['description'], 'is_active' => true, 'sort_order' => $groupOrder])->save();
 
             foreach (array_values(array_keys($definition['settings'])) as $settingOrder => $settingKey) {
                 $setting = $definition['settings'][$settingKey];
-                Setting::query()->updateOrCreate(
+                $storedSetting = Setting::query()->firstOrCreate(
                     ['setting_group_id' => $group->getKey(), 'key' => $settingKey],
                     [
                         'label' => $setting['label'],
@@ -33,6 +34,14 @@ final class CompanySettingsSeeder extends Seeder
                         'sort_order' => $settingOrder,
                     ],
                 );
+                $storedSetting->forceFill([
+                    'label' => $setting['label'],
+                    'description' => null,
+                    'value_type' => $setting['type'],
+                    'is_public' => $setting['public'],
+                    'is_locked' => false,
+                    'sort_order' => $settingOrder,
+                ])->save();
             }
         }
     }

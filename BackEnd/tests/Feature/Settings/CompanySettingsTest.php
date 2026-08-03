@@ -34,7 +34,7 @@ class CompanySettingsTest extends TestCase
         $this->assertDatabaseHas('hongvan_settings', ['key' => 'tax_code', 'value' => null]);
         $this->assertDatabaseHas('hongvan_settings', ['key' => 'primary_phone', 'value' => null]);
         $this->assertDatabaseHas('hongvan_settings', ['key' => 'primary_address', 'value' => null]);
-        $this->assertSame(11, SettingGroup::query()->count());
+        $this->assertSame(12, SettingGroup::query()->count());
     }
 
     public function test_settings_api_requires_the_matching_permission(): void
@@ -46,7 +46,17 @@ class CompanySettingsTest extends TestCase
 
         $permission = Permission::query()->where('key', 'settings.view')->firstOrFail();
         $user->permissionOverrides()->attach($permission, ['is_allowed' => true]);
-        $this->getJson('/api/admin/v1/settings')->assertOk()->assertJsonCount(11, 'data.groups');
+        $this->getJson('/api/admin/v1/settings')->assertOk()->assertJsonCount(12, 'data.groups');
+    }
+
+    public function test_reseeding_definitions_preserves_existing_setting_values(): void
+    {
+        Setting::query()->where('key', 'short_name')->update(['value' => 'Tên đã cấu hình']);
+
+        $this->seed(CompanySettingsSeeder::class);
+
+        $this->assertDatabaseHas('hongvan_settings', ['key' => 'short_name', 'value' => 'Tên đã cấu hình']);
+        $this->assertDatabaseHas('hongvan_setting_groups', ['key' => 'analytics', 'is_active' => true]);
     }
 
     public function test_settings_api_returns_json_unauthorized_without_an_accept_header(): void

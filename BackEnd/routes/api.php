@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Analytics\PublicConsentController;
 use App\Http\Controllers\Api\V1\Leads\PublicContactController;
 use App\Http\Controllers\Api\V1\Leads\PublicQuoteController;
 use App\Http\Controllers\Api\V1\Media\PublicMediaContentController;
@@ -14,6 +15,9 @@ Route::prefix('public/v1')
     ->name('public.api.v1.')
     ->group(function (): void {
         Route::get('system/ping', SystemPingController::class)->name('system.ping');
+        Route::get('consent', [PublicConsentController::class, 'show'])->name('consent.show');
+        Route::put('consent', [PublicConsentController::class, 'update'])->middleware('throttle:public.forms')->name('consent.update');
+        Route::delete('consent', [PublicConsentController::class, 'destroy'])->middleware('throttle:public.forms')->name('consent.destroy');
         Route::get('search', PublicSearchController::class)->middleware('throttle:public.search')->name('search.index');
         Route::get('related/{type}/{publicId}', PublicRelatedContentController::class)
             ->whereIn('type', config('search.types', []))

@@ -93,5 +93,18 @@ return [
                 'public_contact_forms_enabled' => ['label' => 'Enable public contact forms', 'type' => 'boolean', 'public' => true, 'default' => true, 'rules' => ['required', 'boolean']],
             ],
         ],
+        'analytics' => [
+            'label' => 'Analytics and consent', 'description' => 'Consent-gated analytics using approved providers only.',
+            'settings' => [
+                'enabled' => ['label' => 'Enable analytics', 'type' => 'boolean', 'public' => false, 'default' => false, 'rules' => ['required', 'boolean']],
+                'provider' => ['label' => 'Approved provider', 'type' => 'string', 'public' => false, 'default' => 'none', 'rules' => ['required', 'in:none,google_analytics_4,google_tag_manager,plausible']],
+                'tracking_identifier' => ['label' => 'Tracking identifier', 'type' => 'secret', 'public' => false, 'default' => null, 'rules' => ['nullable', 'string', 'max:253']],
+                'consent_mode' => ['label' => 'Consent policy', 'type' => 'string', 'public' => false, 'default' => 'opt_in', 'rules' => ['required', 'in:opt_in']],
+                'marketing_enabled' => ['label' => 'Enable marketing category', 'type' => 'boolean', 'public' => false, 'default' => false, 'rules' => ['required', 'boolean']],
+                'policy_path' => ['label' => 'Cookie policy path', 'type' => 'string', 'public' => false, 'default' => '/privacy', 'rules' => ['required', 'string', 'max:255', 'regex:/^\/(?!\/)[A-Za-z0-9_\-\/]*$/']],
+                'policy_version' => ['label' => 'Cookie policy version', 'type' => 'string', 'public' => false, 'default' => '2026-08-03', 'rules' => ['required', 'string', 'max:64', 'regex:/^[A-Za-z0-9._-]+$/']],
+                'retention_days' => ['label' => 'Consent retention days', 'type' => 'integer', 'public' => false, 'default' => 180, 'rules' => ['required', 'integer', 'min:30', 'max:365']],
+            ],
+        ],
     ],
 ];
