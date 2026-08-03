@@ -6,6 +6,7 @@ Delivery order decision: all public frontend/template work is postponed until th
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-017](adr/ADR-017-mysql-fulltext-public-search.md) | Native MySQL FULLTEXT with application-maintained accent-folded text | Accepted | 2026-08-03 |
 | [ADR-016](adr/ADR-016-showcase-media-and-document-policy.md) | Showcase media ownership and certification document visibility | Accepted | 2026-08-03 |
 | [ADR-015](adr/ADR-015-post-content-sanitization-and-publishing.md) | Post HTML sanitization, scheduling and slug history | Accepted | 2026-08-03 |
 | [ADR-014](adr/ADR-014-unified-lead-intake-workflow.md) | Unified lead intake, immutable submission and workflow history | Accepted | 2026-08-03 |

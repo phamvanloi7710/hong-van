@@ -123,6 +123,11 @@ class AppServiceProvider extends ServiceProvider
                 ->by('public-form|'.$request->ip());
         });
 
+        RateLimiter::for('public.search', static function (Request $request): Limit {
+            return Limit::perMinute(max(1, (int) config('security.rate_limits.public_search_per_minute', 30)))
+                ->by('public-search|'.hash('sha256', (string) $request->ip()));
+        });
+
         RateLimiter::for('uploads', static function (Request $request): Limit {
             return Limit::perMinute(max(1, (int) config('security.rate_limits.uploads_per_minute', 20)))
                 ->by(self::securityThrottleKey($request, 'upload'));

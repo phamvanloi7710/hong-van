@@ -71,6 +71,10 @@
   - [x] P40 Data source: published-only records, locale fallback, eager media and no fabricated showcase seed data
   - [ ] P40 Public/Page Builder: SSR sections/detail pages and block registration (deferred until P21-P31 and frontend template)
 - [ ] P41 Public search/filter
+  - [x] P41 Backend/API: published-only active-locale search for products, crop solutions, services, posts and projects with pagination and allowlisted type filters
+  - [x] P41 Search quality/security: Unicode normalization, Vietnamese accent folding, bound Boolean FULLTEXT query, escaped highlight, query length and dedicated rate limit
+  - [x] P41 Discovery/operations: explicit-taxonomy related content, opt-in privacy-reduced analytics, automatic index health command and FULLTEXT EXPLAIN baseline
+  - [ ] P41 Public/Page Builder: Blade SSR search results/filter UI and search block registration (deferred until P21-P31 and frontend template)
 - [ ] P42 SEO metadata
 - [ ] P43 Sitemap/schema/redirect
 - [ ] P44 Analytics/consent

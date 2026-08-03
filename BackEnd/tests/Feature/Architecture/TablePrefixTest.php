@@ -104,6 +104,7 @@ class TablePrefixTest extends TestCase
             'hongvan_project_media_translations',
             'hongvan_role_user',
             'hongvan_roles',
+            'hongvan_search_logs',
             'hongvan_service_categories',
             'hongvan_service_category_translations',
             'hongvan_service_media',

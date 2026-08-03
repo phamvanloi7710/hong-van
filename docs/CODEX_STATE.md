@@ -3,7 +3,7 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P40
+current_prompt: P41
 last_completed_prompt: 32
 status: PARTIAL
 admin_template_gate: READY
@@ -27,9 +27,9 @@ latest_readonly_source_check: passed_powershell_and_git_bash
 latest_laravel_13_patch: 13.23.0
 latest_php_85_patch: 8.5.9
 latest_database_runtime: passed_mysql_9_1_0_wamp_local_hongvan_platform_utf8mb4_0900_ai_ci_innodb
-latest_database_migration: passed_p40_local_migrate_111_prefixed_tables_and_testing_rollback_remigrate
-latest_database_prefix_check: passed_p40_table_prefix_test_111_tables
-latest_database_comment_check: passed_database_comment_test_all_p40_tables_and_columns_commented
+latest_database_migration: passed_p41_local_mysql_migrate_112_prefixed_tables_rollback_remigrate
+latest_database_prefix_check: passed_p41_table_prefix_test_112_tables
+latest_database_comment_check: passed_database_comment_test_all_p41_tables_and_columns_commented
 latest_database_engine_guard: passed_explicit_innodb_against_wamp_myisam_default
 latest_api_test: passed_api_filter_8_tests_65_assertions
 latest_api_runtime: passed_hongvan_local_public_ping_200_admin_ping_401_request_id_locale
@@ -42,7 +42,7 @@ latest_rbac_test: passed_permission_filter_8_tests_35_assertions
 latest_rbac_runtime: passed_hongvan_local_identity_crud_ui_refresh_permission_guard_and_hidden_menu
 latest_super_admin_bootstrap: passed_local_environment_account_login_with_87_permissions
 latest_admin_asset_mime: passed_explicit_javascript_css_font_and_image_content_types
-latest_backend_test: passed_phpunit_118_tests_1002_assertions_mysql
+latest_backend_test: passed_phpunit_126_tests_1045_assertions_mysql
 latest_backend_format: passed_pint
 latest_backend_static_analysis: passed_larastan_level_6
 latest_backend_build: passed_vite_7_3_6
@@ -125,6 +125,12 @@ latest_showcase_api: passed_p40_8_permission_guarded_generic_admin_routes_allowl
 latest_showcase_admin: passed_p40_annular_4_tabs_crud_media_picker_featured_status_order_and_vi_en_zh
 latest_showcase_test: passed_showcase_4_tests_34_assertions_architecture_and_full_118_test_suite
 latest_p40_runtime: passed_hongvan_local_admin_showcase_authenticated_4_tabs_partner_dialog_media_picker_and_vi_en_zh
+latest_search_driver: mysql_fulltext_innodb_with_application_unicode_accent_fold_no_scout_dependency
+latest_search_scope: published_only_active_locale_products_crop_solutions_services_posts_projects
+latest_search_security: passed_bound_boolean_query_allowlisted_types_length_limit_rate_limit_escaped_highlight_and_opt_in_redacted_analytics
+latest_search_discovery: passed_explicit_category_tag_crop_stage_related_content_without_ai_inference
+latest_search_health: passed_5_fulltext_indexes_and_explain_access_fulltext_on_wamp_mysql
+latest_search_test: passed_search_8_tests_47_assertions_larastan_and_pint
 latest_admin_smoke: passed_hongvan_local_root_deep_link_asset_cache
 open_blockers:
   - Admin template is missing package-lock.json, public/ assets and a root license file.
@@ -144,7 +150,9 @@ open_blockers:
   - P39 Page Builder post-list block registration remains deferred until P21-P31; the published-only data source contract is ready.
   - P40 public gallery/partner/certification/project SSR pages remain deferred until P31 and the frontend template are available.
   - P40 Page Builder showcase block registration remains deferred until P21-P31; the published-only data source contract is ready.
-next_prompt: 41_PUBLIC_SEARCH_FILTER_AND_DISCOVERY
+  - P41 public Blade SSR search/filter UI remains deferred until P31 and the frontend template are available; the public API and direct domain query are ready.
+  - P41 Page Builder search block registration remains deferred until P21-P31.
+next_prompt: 42_SEO_METADATA_AND_SOCIAL_SHARING
 next_prompt_gate: ADMIN_HALF_ALLOWED_PUBLIC_FRONTEND_REMAINS_LAST
 ```
 

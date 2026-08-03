@@ -22,6 +22,7 @@ return [
 
     'rate_limits' => [
         'public_forms_per_minute' => (int) env('PUBLIC_FORM_RATE_LIMIT_PER_MINUTE', 10),
+        'public_search_per_minute' => (int) env('PUBLIC_SEARCH_RATE_LIMIT_PER_MINUTE', 30),
         'uploads_per_minute' => (int) env('UPLOAD_RATE_LIMIT_PER_MINUTE', 20),
         'preview_sessions_per_minute' => (int) env('PREVIEW_SESSION_RATE_LIMIT_PER_MINUTE', 10),
     ],
