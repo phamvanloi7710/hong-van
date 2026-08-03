@@ -19,11 +19,15 @@
             if (! $publicViteReady && file_exists($viteManifestPath)) {
                 $viteManifest = json_decode((string) file_get_contents($viteManifestPath), true);
                 $publicViteReady = is_array($viteManifest)
-                    && isset($viteManifest['resources/css/public/app.css'], $viteManifest['resources/js/public/app.js']);
+                    && isset(
+                        $viteManifest['resources/css/public/app.css'],
+                        $viteManifest['resources/css/public/page-builder.css'],
+                        $viteManifest['resources/js/public/app.js'],
+                    );
             }
         @endphp
         @if ($publicViteReady)
-            @vite(['resources/css/public/app.css', 'resources/js/public/app.js'])
+            @vite(['resources/css/public/app.css', 'resources/css/public/page-builder.css', 'resources/js/public/app.js'])
         @endif
         <style data-public-theme-version="{{ $publicThemeVersion ?? 'config-default' }}">{!! $publicThemeCss ?? '' !!}</style>
         @stack('head')

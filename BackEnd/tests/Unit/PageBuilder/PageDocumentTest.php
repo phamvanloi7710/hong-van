@@ -106,6 +106,7 @@ final class PageDocumentTest extends TestCase
             styleSchema: $empty, visibilitySchema: $empty,
             bindingsSchema: ['type' => 'object', 'properties' => ['link' => ['type' => 'object', 'properties' => ['sourceBlockId' => ['type' => 'string']], 'required' => ['sourceBlockId'], 'additionalProperties' => false]], 'additionalProperties' => false],
             defaults: [], allowRoot: true, allowedParents: ['test.node'], allowedChildren: ['test.node'], dataDependencies: [], permissions: [], cacheTags: [],
+            maxDepth: PageDocumentSchema::MAX_DEPTH, minChildren: 0, maxChildren: PageDocumentSchema::MAX_BLOCKS,
             renderer: FoundationPlaceholderRenderer::class, sanitizer: FoundationPlaceholderSanitizer::class, migrations: $migrations, testFixture: [],
         );
     }

@@ -119,6 +119,9 @@ final readonly class PageDocumentValidator
         if ($parent !== null && (! in_array($parent->type, $definition->allowedParents, true) || ! in_array($definition->type, $parent->allowedChildren, true))) {
             $errors["{$path}.type"][] = $this->message('invalid_child');
         }
+        if ($depth > $definition->maxDepth) {
+            $errors[$path][] = $this->message('block_depth');
+        }
 
         foreach (['props', 'style', 'visibility', 'bindings'] as $field) {
             $this->validateSchema($value[$field] ?? null, $definition->{$field.'Schema'}, "{$path}.{$field}", $errors);
@@ -134,6 +137,12 @@ final readonly class PageDocumentValidator
         if ($children !== [] && $definition->allowedChildren === []) {
             $errors["{$path}.children"][] = $this->message('children_not_allowed');
         }
+        if (count($children) < $definition->minChildren) {
+            $errors["{$path}.children"][] = $this->message('children_min');
+        }
+        if (count($children) > $definition->maxChildren) {
+            $errors["{$path}.children"][] = $this->message('children_max');
+        }
         $sanitizedChildren = [];
         foreach ($children as $index => $child) {
             $sanitizedChildren[] = $this->validateBlock($child, "{$path}.children.{$index}", $definition, $depth + 1, $count, $ids, $dependencies, $dependencyPaths, $errors);
@@ -145,7 +154,7 @@ final readonly class PageDocumentValidator
             throw new \LogicException("Invalid sanitizer for Page Builder block [{$definition->type}].");
         }
 
-        return $sanitizer->sanitize($value);
+        return $sanitizer->sanitize($value, $path);
     }
 
     /** @param array<string, list<string>> $errors */
@@ -216,6 +225,9 @@ final readonly class PageDocumentValidator
         }
         if (is_string($value) && isset($schema['maxLength']) && mb_strlen($value) > (int) $schema['maxLength']) {
             $errors[$path][] = $this->message('max_length');
+        }
+        if (is_string($value) && is_string($schema['pattern'] ?? null) && preg_match('~'.$schema['pattern'].'~D', $value) !== 1) {
+            $errors[$path][] = $this->message('pattern');
         }
     }
 

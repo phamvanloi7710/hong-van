@@ -47,7 +47,12 @@
   - [x] Validator path-specific chặn unknown type/view/script, duplicate ID, invalid child, quá depth/block/payload và binding cycle
   - [x] Permission-gated registry metadata cùng Page metadata/draft API shell; không lộ renderer/sanitizer class/path
   - [x] P21 test, PageDocument test, DatabaseCommentTest, PHPStan, Pint, migration rollback/remigrate và WAMP migration đạt
-- [ ] P22 Layout blocks
+- [x] P22 Layout blocks
+  - [x] 7 block `Section`, `Container`, `Stack`, `Grid`, `Columns`, `Spacer`, `Divider` có schema/default/fixture/Blade renderer
+  - [x] Parent/children, max depth, child count và Columns/Grid mobile preset được validate theo path
+  - [x] Responsive design token allowlist; chặn raw CSS/grid tùy ý và background media/gradient ngoài contract
+  - [x] Semantic Blade renderer, escaping, catalog docs và preview fixture dùng chung CSS public
+  - [x] P22 5 test/66 assertions, PageDocument 3 test/6 assertions, full backend 189 test/1500 assertions, PHPStan, Pint, Vite build/budget và `hongvan.local` runtime đạt
 - [ ] P23 Content/media blocks
 - [ ] P24 Dynamic business blocks
 - [ ] P25 Form blocks

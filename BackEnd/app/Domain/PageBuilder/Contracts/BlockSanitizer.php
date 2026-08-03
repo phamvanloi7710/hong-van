@@ -8,5 +8,5 @@ interface BlockSanitizer
      * @param  array<string, mixed>  $block
      * @return array<string, mixed>
      */
-    public function sanitize(array $block): array;
+    public function sanitize(array $block, string $path): array;
 }

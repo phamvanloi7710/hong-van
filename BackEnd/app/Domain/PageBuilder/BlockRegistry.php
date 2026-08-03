@@ -14,7 +14,7 @@ final class BlockRegistry
     /** @param list<BlockDefinition>|null $definitions */
     public function __construct(?array $definitions = null)
     {
-        foreach ($definitions ?? [$this->foundationPlaceholder()] as $definition) {
+        foreach ($definitions ?? [$this->foundationPlaceholder(), ...LayoutBlockDefinitions::definitions()] as $definition) {
             $this->register($definition);
         }
     }
@@ -97,8 +97,11 @@ final class BlockRegistry
                 'children' => [],
             ],
             allowRoot: true,
-            allowedParents: [],
+            allowedParents: ['layout.section', 'layout.container', 'layout.stack', 'layout.grid', 'layout.columns'],
             allowedChildren: [],
+            maxDepth: PageDocumentSchema::MAX_DEPTH,
+            minChildren: 0,
+            maxChildren: 0,
             dataDependencies: [],
             permissions: [],
             cacheTags: ['page-builder'],
