@@ -19,6 +19,8 @@ use App\Http\Controllers\Api\V1\Products\ProductAttributeController;
 use App\Http\Controllers\Api\V1\Products\ProductCategoryController;
 use App\Http\Controllers\Api\V1\Products\ProductController;
 use App\Http\Controllers\Api\V1\Products\ProductTagController;
+use App\Http\Controllers\Api\V1\Services\ServiceCategoryController;
+use App\Http\Controllers\Api\V1\Services\ServiceController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
 use App\Http\Controllers\Api\V1\SystemPingController;
@@ -155,6 +157,21 @@ Route::prefix('admin/v1')
                 Route::post('{solution:public_id}/publish', [CropSolutionController::class, 'publish'])->middleware('permission:crop_solutions.publish')->name('publish');
                 Route::post('{solution:public_id}/archive', [CropSolutionController::class, 'archive'])->middleware('permission:crop_solutions.update')->name('archive');
                 Route::delete('{solution:public_id}', [CropSolutionController::class, 'trash'])->middleware('permission:crop_solutions.delete')->name('trash');
+            });
+
+            Route::prefix('services')->name('services.')->group(function (): void {
+                Route::get('/', [ServiceController::class, 'index'])->middleware('permission:services.view')->name('index');
+                Route::post('/', [ServiceController::class, 'store'])->middleware('permission:services.create')->name('store');
+                Route::get('categories', [ServiceCategoryController::class, 'index'])->middleware('permission:services.view')->name('categories.index');
+                Route::post('categories', [ServiceCategoryController::class, 'store'])->middleware('permission:services.create')->name('categories.store');
+                Route::put('categories/{category:public_id}', [ServiceCategoryController::class, 'update'])->middleware('permission:services.update')->name('categories.update');
+                Route::delete('categories/{category:public_id}', [ServiceCategoryController::class, 'destroy'])->middleware('permission:services.delete')->name('categories.destroy');
+                Route::get('{service:public_id}', [ServiceController::class, 'show'])->middleware('permission:services.view')->name('show');
+                Route::put('{service:public_id}', [ServiceController::class, 'update'])->middleware('permission:services.update')->name('update');
+                Route::post('{service:public_id}/publish', [ServiceController::class, 'publish'])->middleware('permission:services.publish')->name('publish');
+                Route::post('{service:public_id}/archive', [ServiceController::class, 'archive'])->middleware('permission:services.update')->name('archive');
+                Route::delete('{service:public_id}', [ServiceController::class, 'destroy'])->middleware('permission:services.delete')->name('destroy');
+                Route::post('{service}/restore', [ServiceController::class, 'restore'])->middleware('permission:services.restore')->name('restore');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

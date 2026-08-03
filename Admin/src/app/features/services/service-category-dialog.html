@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>{{ text(data.category ? 'editCategory' : 'createCategory') }}</h2>
+<mat-dialog-content><form [formGroup]="form" class="service-form">
+  <section class="form-grid">
+    <mat-form-field appearance="outline"><mat-label>{{ text('code') }}</mat-label><input matInput formControlName="code" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('parentCategory') }}</mat-label><mat-select formControlName="parent_id"><mat-option [value]="null">{{ text('noSelection') }}</mat-option>@for (category of data.categories; track category.public_id) { @if (category.public_id !== data.category?.public_id) { <mat-option [value]="category.public_id">{{ categoryName(category.public_id) }}</mat-option> } }</mat-select></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('order') }}</mat-label><input matInput type="number" formControlName="sort_order" /></mat-form-field>
+    <mat-slide-toggle formControlName="is_active">{{ text('active') }}</mat-slide-toggle>
+  </section>
+  <mat-tab-group>@for (locale of locales; track locale) { <mat-tab [label]="languageLabel(locale)"><section class="form-grid locale-grid">
+    <mat-form-field appearance="outline"><mat-label>{{ text('name') }}</mat-label><input matInput [formControl]="control(locale, 'name')" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput [formControl]="control(locale, 'slug')" /></mat-form-field>
+    <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('summary') }}</mat-label><textarea matInput rows="3" [formControl]="control(locale, 'summary')"></textarea></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('metaTitle') }}</mat-label><input matInput [formControl]="control(locale, 'meta_title')" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>{{ text('metaDescription') }}</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'meta_description')"></textarea></mat-form-field>
+  </section></mat-tab> }</mat-tab-group>
+</form></mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ text('cancel') }}</button><button mat-flat-button (click)="submit()">{{ text('save') }}</button></mat-dialog-actions>

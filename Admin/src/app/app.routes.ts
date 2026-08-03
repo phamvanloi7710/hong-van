@@ -96,8 +96,10 @@ export const routes: Routes = [
       },
       {
         path: 'services',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('services'),
+        canActivate: [permissionGuard('services.view')],
+        loadComponent: () =>
+          import('./features/services/service-page').then((page) => page.ServicePage),
+        data: { breadcrumb: 'menu.services' },
       },
       {
         path: 'transportation',

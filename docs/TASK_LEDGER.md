@@ -44,6 +44,9 @@
   - [x] P34 Admin/API: crop hierarchy, stage timeline, solution CRUD, media, products, permissions, audit and vi/en/zh
   - [ ] P34 Public/Page Builder: SSR pages, SEO, internal links and block registration (deferred until P21-P31 and frontend template)
 - [ ] P35 Services
+  - [x] P35 Admin/API: categories, services, translations, media, publish lifecycle, CTA source, permissions, audit and vi/en/zh
+  - [x] P35 Boundary: transportation/warehouse remain explicit specialized links without duplicate detail content, media or general CTA
+  - [ ] P35 Public/Page Builder: Blade listing/detail, SEO, contact/quote routes and block registration (deferred until P21-P31 and frontend template)
 - [ ] P36 Transportation
 - [ ] P37 Warehouses
 - [ ] P38 Lead workflows

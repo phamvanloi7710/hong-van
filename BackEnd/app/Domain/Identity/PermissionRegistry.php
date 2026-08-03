@@ -35,6 +35,7 @@ final class PermissionRegistry
             ...self::module('products', 'sản phẩm', ['view', 'create', 'update', 'delete', 'restore', 'publish', 'export']),
             ...self::module('crops', 'cây trồng', ['view', 'create', 'update', 'delete']),
             ...self::module('crop_solutions', 'giải pháp cây trồng', ['view', 'create', 'update', 'delete', 'publish']),
+            ...self::module('services', 'dịch vụ', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
             ...self::module('pages', 'trang', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
             ...self::module('media', 'media', ['view', 'create', 'update', 'delete', 'restore']),
         ];

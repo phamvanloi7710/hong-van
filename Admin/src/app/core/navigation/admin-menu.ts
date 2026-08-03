@@ -35,6 +35,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'handyman',
         iconColor: '#fb8c00',
         route: '/services',
+        permission: 'services.view',
       },
     ],
   },

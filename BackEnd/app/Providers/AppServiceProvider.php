@@ -16,6 +16,8 @@ use App\Models\ProductAttributeDefinition;
 use App\Models\ProductCategory;
 use App\Models\ProductTag;
 use App\Models\Role;
+use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use App\Policies\BrandPolicy;
 use App\Policies\CropCategoryPolicy;
@@ -29,6 +31,8 @@ use App\Policies\ProductCategoryPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\ProductTagPolicy;
 use App\Policies\RolePolicy;
+use App\Policies\ServiceCategoryPolicy;
+use App\Policies\ServicePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -128,6 +132,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Crop::class, CropPolicy::class);
         Gate::policy(CropStage::class, CropStagePolicy::class);
         Gate::policy(CropSolution::class, CropSolutionPolicy::class);
+        Gate::policy(Service::class, ServicePolicy::class);
+        Gate::policy(ServiceCategory::class, ServiceCategoryPolicy::class);
 
         Gate::define(
             'system_health',
