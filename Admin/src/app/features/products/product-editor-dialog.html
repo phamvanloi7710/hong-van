@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>{{ text(data.product ? 'productEditTitle' : 'productCreateTitle') }}</h2>
+<mat-dialog-content class="editor-content">
+  <form [formGroup]="form">
+    <mat-tab-group animationDuration="180ms">
+      <mat-tab><ng-template mat-tab-label><mat-icon>inventory_2</mat-icon>{{ text('general') }}</ng-template><div class="tab-grid">
+        <mat-form-field appearance="outline"><mat-label>{{ text('sku') }}</mat-label><input matInput formControlName="sku" />@if (form.controls.sku.invalid) { <mat-error>{{ text('requiredField') }}</mat-error> }</mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('code') }}</mat-label><input matInput formControlName="code" /></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('productStatus') }}</mat-label><mat-select formControlName="status">@for (status of ['draft','published','archived','scheduled']; track status) { <mat-option [value]="status">{{ text(status) }}</mat-option> }</mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('category') }}</mat-label><mat-select formControlName="category_id"><mat-option [value]="null">{{ text('noParent') }}</mat-option>@for (category of data.categories; track category.public_id) { <mat-option [value]="category.public_id">{{ category.translations[0]?.name || category.code }}</mat-option> }</mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('brand') }}</mat-label><mat-select formControlName="brand_id"><mat-option [value]="null">—</mat-option>@for (brand of data.brands; track brand.public_id) { <mat-option [value]="brand.public_id">{{ brand.translations[0]?.name || brand.code }}</mat-option> }</mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('origin') }}</mat-label><input matInput formControlName="origin" /></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('packaging') }}</mat-label><input matInput formControlName="packaging" /></mat-form-field>
+        <mat-slide-toggle formControlName="is_featured">{{ text('featured') }}</mat-slide-toggle>
+        <p class="notice full"><mat-icon>info</mat-icon>{{ text('noCommerce') }}</p>
+      </div></mat-tab>
+
+      <mat-tab><ng-template mat-tab-label><mat-icon>translate</mat-icon>{{ text('content') }}</ng-template><div class="translation-tabs">
+        @for (locale of locales; track locale) {
+          <section><h3>{{ languageLabel(locale) }}</h3><div class="tab-grid">
+            <mat-form-field appearance="outline"><mat-label>{{ text('name') }}</mat-label><input matInput [formControl]="translationControl(locale, 'name')" />@if (translationControl(locale, 'name').invalid) { <mat-error>{{ text('requiredField') }}</mat-error> }</mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput [formControl]="translationControl(locale, 'slug')" />@if (translationControl(locale, 'slug').invalid) { <mat-error>{{ text('invalidSlug') }}</mat-error> }</mat-form-field>
+            <mat-form-field appearance="outline" class="full"><mat-label>{{ text('shortDescription') }}</mat-label><textarea matInput rows="2" [formControl]="translationControl(locale, 'short')"></textarea></mat-form-field>
+            <mat-form-field appearance="outline" class="full"><mat-label>{{ text('fullDescription') }}</mat-label><textarea matInput rows="5" [formControl]="translationControl(locale, 'description')"></textarea></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>{{ text('benefits') }}</mat-label><textarea matInput rows="4" [formControl]="translationControl(locale, 'benefits')"></textarea></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>{{ text('usageInstructions') }}</mat-label><textarea matInput rows="4" [formControl]="translationControl(locale, 'usage')"></textarea></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>{{ text('metaTitle') }}</mat-label><input matInput [formControl]="translationControl(locale, 'meta_title')" /></mat-form-field>
+            <mat-form-field appearance="outline"><mat-label>{{ text('metaDescription') }}</mat-label><textarea matInput rows="2" [formControl]="translationControl(locale, 'meta_description')"></textarea></mat-form-field>
+          </div></section>
+        }
+      </div></mat-tab>
+
+      <mat-tab><ng-template mat-tab-label><mat-icon>payments</mat-icon>{{ text('pricing') }}</ng-template><div class="tab-grid">
+        <mat-form-field appearance="outline"><mat-label>{{ text('priceMode') }}</mat-label><mat-select formControlName="price_mode">@for (mode of priceModes; track mode) { <mat-option [value]="mode">{{ text(mode) }}</mat-option> }</mat-select></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('currency') }}</mat-label><input matInput maxlength="3" formControlName="currency" /></mat-form-field>
+        @if (form.controls.price_mode.value === 'fixed') { <mat-form-field appearance="outline"><mat-label>{{ text('amount') }}</mat-label><input matInput inputmode="decimal" formControlName="price_amount" /></mat-form-field> }
+        @if (form.controls.price_mode.value === 'from' || form.controls.price_mode.value === 'range') { <mat-form-field appearance="outline"><mat-label>{{ text('minimum') }}</mat-label><input matInput inputmode="decimal" formControlName="price_minimum" /></mat-form-field> }
+        @if (form.controls.price_mode.value === 'range') { <mat-form-field appearance="outline"><mat-label>{{ text('maximum') }}</mat-label><input matInput inputmode="decimal" formControlName="price_maximum" /></mat-form-field> }
+        <mat-form-field appearance="outline"><mat-label>{{ text('unit') }}</mat-label><input matInput formControlName="price_unit" /></mat-form-field>
+        <mat-form-field appearance="outline" class="full"><mat-label>{{ text('priceNote') }}</mat-label><textarea matInput rows="3" formControlName="price_note"></textarea></mat-form-field>
+        <mat-slide-toggle formControlName="price_visible">{{ text('priceVisible') }}</mat-slide-toggle>
+        <p class="notice full"><mat-icon>verified</mat-icon>{{ text('priceContactRule') }}</p>
+      </div></mat-tab>
+
+      <mat-tab><ng-template mat-tab-label><mat-icon>perm_media</mat-icon>{{ text('media') }}</ng-template><div class="media-tab">
+        <button mat-stroked-button type="button" (click)="chooseMedia()"><mat-icon>add_photo_alternate</mat-icon>{{ text('chooseMedia') }}</button>
+        @if (media().length === 0) { <p class="empty-note">{{ text('mediaEmpty') }}</p> }
+        <div class="media-list">@for (item of media(); track item.media_id; let index = $index) {
+          <article><img [src]="item.content_url" [alt]="item.alt_text || item.title" /><div><strong>{{ item.title }}</strong><mat-form-field appearance="outline" subscriptSizing="dynamic"><mat-label>{{ text('role') }}</mat-label><mat-select [value]="item.role" (selectionChange)="setMediaRole(item.media_id, $event.value)"><mat-option value="primary">{{ text('primary') }}</mat-option><mat-option value="gallery">{{ text('gallery') }}</mat-option><mat-option value="document">{{ text('document') }}</mat-option><mat-option value="certificate">{{ text('certificate') }}</mat-option></mat-select></mat-form-field><mat-checkbox [checked]="item.is_primary" (change)="setMediaPrimary(item.media_id)">{{ text('primary') }}</mat-checkbox></div><nav><button mat-icon-button type="button" [attr.aria-label]="text('moveUp')" [disabled]="index === 0" (click)="moveMedia(index, -1)"><mat-icon>arrow_upward</mat-icon></button><button mat-icon-button type="button" [attr.aria-label]="text('moveDown')" [disabled]="index === media().length - 1" (click)="moveMedia(index, 1)"><mat-icon>arrow_downward</mat-icon></button><button mat-icon-button type="button" [attr.aria-label]="text('remove')" (click)="removeMedia(item.media_id)"><mat-icon>delete</mat-icon></button></nav></article>
+        }</div>
+      </div></mat-tab>
+
+      <mat-tab><ng-template mat-tab-label><mat-icon>fact_check</mat-icon>{{ text('specifications') }}</ng-template><div class="spec-tab">
+        <h3>{{ text('attributeValues') }}</h3>
+        @if (data.attributes.length === 0) { <p class="empty-note">{{ text('noAttributes') }}</p> }
+        <div class="attribute-grid">@for (attribute of data.attributes; track attribute.public_id) { <mat-form-field appearance="outline"><mat-label>{{ attribute.name }}{{ attribute.unit ? ' (' + attribute.unit + ')' : '' }}</mat-label>@if (attribute.data_type === 'boolean') { <mat-select [value]="attributeValue(attribute)" (selectionChange)="setAttributeValue(attribute.public_id, $event.value)"><mat-option value="true">true</mat-option><mat-option value="false">false</mat-option></mat-select> } @else if (attribute.data_type === 'option') { <mat-select [value]="attributeValue(attribute)" (selectionChange)="setAttributeValue(attribute.public_id, $event.value)">@for (option of attribute.options || []; track option) { <mat-option [value]="option">{{ option }}</mat-option> }</mat-select> } @else { <input matInput [value]="attributeValue(attribute)" (input)="setAttributeValue(attribute.public_id, valueFromEvent($event))" /> }</mat-form-field> }</div>
+        <header><h3>{{ text('freeSpecifications') }}</h3><button mat-stroked-button type="button" (click)="addSpecification()"><mat-icon>add</mat-icon>{{ text('addSpecification') }}</button></header>
+        <div class="spec-list">@for (specification of specifications(); track $index; let index = $index) { <div><mat-form-field appearance="outline"><mat-label>{{ text('locale') }}</mat-label><mat-select [value]="specification.locale" (selectionChange)="updateSpecification(index, 'locale', $event.value)">@for (locale of locales; track locale) { <mat-option [value]="locale">{{ languageLabel(locale) }}</mat-option> }</mat-select></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('label') }}</mat-label><input matInput [value]="specification.label" (input)="updateSpecification(index, 'label', valueFromEvent($event))" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('value') }}</mat-label><input matInput [value]="specification.value" (input)="updateSpecification(index, 'value', valueFromEvent($event))" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('unit') }}</mat-label><input matInput [value]="specification.unit || ''" (input)="updateSpecification(index, 'unit', valueFromEvent($event))" /></mat-form-field><button mat-icon-button type="button" [attr.aria-label]="text('remove')" (click)="removeSpecification(index)"><mat-icon>delete</mat-icon></button></div> }</div>
+        <mat-form-field appearance="outline" class="full"><mat-label>{{ text('productTags') }}</mat-label><mat-select formControlName="tag_ids" multiple>@for (tag of data.tags; track tag.public_id) { <mat-option [value]="tag.public_id">{{ tag.name }}</mat-option> }</mat-select></mat-form-field>
+        <mat-form-field appearance="outline" class="full"><mat-label>{{ text('relatedProducts') }}</mat-label><mat-select formControlName="related_product_ids" multiple>@for (product of data.products; track product.public_id) { @if (product.public_id !== data.product?.public_id) { <mat-option [value]="product.public_id">{{ product.translations[0]?.name || product.sku }}</mat-option> } }</mat-select></mat-form-field>
+      </div></mat-tab>
+
+      <mat-tab><ng-template mat-tab-label><mat-icon>event_available</mat-icon>{{ text('publishing') }}</ng-template><div class="tab-grid">
+        <mat-form-field appearance="outline"><mat-label>{{ text('publishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="published_at" /></mat-form-field>
+        <mat-form-field appearance="outline"><mat-label>{{ text('unpublishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="unpublished_at" /></mat-form-field>
+        <p class="notice full"><mat-icon>schedule</mat-icon>{{ text('utcHint') }}</p>
+        <button mat-stroked-button type="button" disabled [title]="text('frontendPending')"><mat-icon>visibility</mat-icon>{{ text('preview') }}</button>
+      </div></mat-tab>
+    </mat-tab-group>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ text('cancel') }}</button><button mat-flat-button type="button" (click)="save()"><mat-icon>save</mat-icon>{{ text('save') }}</button></mat-dialog-actions>

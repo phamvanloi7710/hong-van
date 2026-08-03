@@ -12,6 +12,11 @@ use App\Http\Controllers\Api\V1\Localization\LocalizationController;
 use App\Http\Controllers\Api\V1\Media\MediaContentController;
 use App\Http\Controllers\Api\V1\Media\MediaController;
 use App\Http\Controllers\Api\V1\Media\MediaFolderController;
+use App\Http\Controllers\Api\V1\Products\BrandController;
+use App\Http\Controllers\Api\V1\Products\ProductAttributeController;
+use App\Http\Controllers\Api\V1\Products\ProductCategoryController;
+use App\Http\Controllers\Api\V1\Products\ProductController;
+use App\Http\Controllers\Api\V1\Products\ProductTagController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
 use App\Http\Controllers\Api\V1\SystemPingController;
@@ -96,6 +101,37 @@ Route::prefix('admin/v1')
             Route::get('audit-logs', [AuditLogController::class, 'index'])
                 ->middleware('permission:audit.view')
                 ->name('audit-logs.index');
+
+            Route::prefix('products')->name('products.')->group(function (): void {
+                Route::get('/', [ProductController::class, 'index'])->middleware('permission:products.view')->name('index');
+                Route::post('/', [ProductController::class, 'store'])->middleware('permission:products.create')->name('store');
+                Route::post('bulk', [ProductController::class, 'bulk'])->middleware('permission:products.view')->name('bulk');
+                Route::get('categories', [ProductCategoryController::class, 'index'])->middleware('permission:products.view')->name('categories.index');
+                Route::post('categories', [ProductCategoryController::class, 'store'])->middleware('permission:products.create')->name('categories.store');
+                Route::get('categories/{category:public_id}', [ProductCategoryController::class, 'show'])->middleware('permission:products.view')->name('categories.show');
+                Route::put('categories/{category:public_id}', [ProductCategoryController::class, 'update'])->middleware('permission:products.update')->name('categories.update');
+                Route::delete('categories/{category:public_id}', [ProductCategoryController::class, 'destroy'])->middleware('permission:products.delete')->name('categories.destroy');
+                Route::post('categories/{category:public_id}/restore', [ProductCategoryController::class, 'restore'])->withTrashed()->middleware('permission:products.restore')->name('categories.restore');
+                Route::get('brands', [BrandController::class, 'index'])->middleware('permission:products.view')->name('brands.index');
+                Route::post('brands', [BrandController::class, 'store'])->middleware('permission:products.create')->name('brands.store');
+                Route::put('brands/{brand:public_id}', [BrandController::class, 'update'])->middleware('permission:products.update')->name('brands.update');
+                Route::delete('brands/{brand:public_id}', [BrandController::class, 'destroy'])->middleware('permission:products.delete')->name('brands.destroy');
+                Route::post('brands/{brand:public_id}/restore', [BrandController::class, 'restore'])->withTrashed()->middleware('permission:products.restore')->name('brands.restore');
+                Route::get('tags', [ProductTagController::class, 'index'])->middleware('permission:products.view')->name('tags.index');
+                Route::post('tags', [ProductTagController::class, 'store'])->middleware('permission:products.create')->name('tags.store');
+                Route::put('tags/{tag:public_id}', [ProductTagController::class, 'update'])->middleware('permission:products.update')->name('tags.update');
+                Route::delete('tags/{tag:public_id}', [ProductTagController::class, 'destroy'])->middleware('permission:products.delete')->name('tags.destroy');
+                Route::get('attributes', [ProductAttributeController::class, 'index'])->middleware('permission:products.view')->name('attributes.index');
+                Route::post('attributes', [ProductAttributeController::class, 'store'])->middleware('permission:products.create')->name('attributes.store');
+                Route::put('attributes/{attribute:public_id}', [ProductAttributeController::class, 'update'])->middleware('permission:products.update')->name('attributes.update');
+                Route::delete('attributes/{attribute:public_id}', [ProductAttributeController::class, 'destroy'])->middleware('permission:products.delete')->name('attributes.destroy');
+                Route::get('{product:public_id}', [ProductController::class, 'show'])->middleware('permission:products.view')->name('show');
+                Route::put('{product:public_id}', [ProductController::class, 'update'])->middleware('permission:products.update')->name('update');
+                Route::post('{product:public_id}/publish', [ProductController::class, 'publish'])->middleware('permission:products.publish')->name('publish');
+                Route::post('{product:public_id}/archive', [ProductController::class, 'archive'])->middleware('permission:products.update')->name('archive');
+                Route::delete('{product:public_id}', [ProductController::class, 'trash'])->middleware('permission:products.delete')->name('trash');
+                Route::post('{product:public_id}/restore', [ProductController::class, 'restore'])->withTrashed()->middleware('permission:products.restore')->name('restore');
+            });
 
             Route::prefix('media')->name('media.')->group(function (): void {
                 Route::get('folders', [MediaFolderController::class, 'index'])->middleware('permission:media.view')->name('folders.index');

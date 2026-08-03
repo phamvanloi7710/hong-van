@@ -38,6 +38,8 @@
 - [ ] P31 Public routing/core pages
 - [x] P32 Product domain (completed out of sequence for the Admin track; public frontend remains postponed)
 - [ ] P33 Product admin/public
+  - [x] P33 Admin/API: product and taxonomy CRUD, media, pricing, filters, bulk actions, permissions, audit and vi/en/zh
+  - [ ] P33 Public: Blade catalog/detail, quote CTA, SEO metadata and public E2E (deferred until P31 and frontend template)
 - [ ] P34 Crop solutions
 - [ ] P35 Services
 - [ ] P36 Transportation

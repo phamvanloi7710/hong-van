@@ -82,8 +82,10 @@ export const routes: Routes = [
       },
       {
         path: 'products',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('products'),
+        canActivate: [permissionGuard('products.view')],
+        loadComponent: () =>
+          import('./features/products/product-page').then((page) => page.ProductPage),
+        data: { breadcrumb: 'menu.products' },
       },
       {
         path: 'crop-solutions',

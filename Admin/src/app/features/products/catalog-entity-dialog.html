@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ text(data.item ? 'entityEdit' : 'entityCreate') }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="entity-form">
+    @if (type === 'category' || type === 'brand' || type === 'attribute') {
+      <mat-form-field appearance="outline"><mat-label>{{ text('code') }}</mat-label><input matInput formControlName="code" /></mat-form-field>
+    }
+    @if (type === 'tag' || type === 'attribute') {
+      <mat-form-field appearance="outline"><mat-label>{{ text('name') }}</mat-label><input matInput formControlName="name" /></mat-form-field>
+    }
+    @if (type === 'tag') {
+      <mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput formControlName="slug" /></mat-form-field>
+    }
+    @if (type === 'category') {
+      <mat-form-field appearance="outline"><mat-label>{{ text('parentCategory') }}</mat-label><mat-select formControlName="parent_id"><mat-option [value]="null">{{ text('noParent') }}</mat-option>@for (category of categories; track category.public_id) { <mat-option [value]="category.public_id">{{ category.code }}</mat-option> }</mat-select></mat-form-field>
+    }
+    @if (type === 'brand') {
+      <div class="logo-picker"><mat-form-field appearance="outline"><mat-label>{{ text('logo') }}</mat-label><input matInput formControlName="logo_media_id" readonly /></mat-form-field><button mat-stroked-button type="button" (click)="chooseLogo()"><mat-icon>image</mat-icon>{{ text('chooseLogo') }}</button></div>
+    }
+    @if (type === 'attribute') {
+      <mat-form-field appearance="outline"><mat-label>{{ text('dataType') }}</mat-label><mat-select formControlName="data_type"><mat-option value="text">{{ text('textType') }}</mat-option><mat-option value="decimal">{{ text('decimalType') }}</mat-option><mat-option value="boolean">{{ text('booleanType') }}</mat-option><mat-option value="option">{{ text('optionType') }}</mat-option><mat-option value="json">{{ text('jsonType') }}</mat-option></mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('unit') }}</mat-label><input matInput formControlName="unit" /></mat-form-field>
+      @if (form.controls.data_type.value === 'option') { <mat-form-field appearance="outline" class="full"><mat-label>{{ text('options') }}</mat-label><textarea matInput rows="4" formControlName="options"></textarea><mat-hint>{{ text('optionsHint') }}</mat-hint></mat-form-field> }
+      <mat-slide-toggle formControlName="is_filterable">{{ text('filterable') }}</mat-slide-toggle><mat-slide-toggle formControlName="is_required">{{ text('required') }}</mat-slide-toggle>
+    }
+    @if (type === 'category' || type === 'brand') {
+      <div class="translation-grid">
+        @for (locale of ['vi', 'en', 'zh']; track locale) {
+          <section><h3>{{ text(locale === 'vi' ? 'languageVi' : locale === 'en' ? 'languageEn' : 'languageZh') }}</h3><mat-form-field appearance="outline"><mat-label>{{ text('name') }}</mat-label><input matInput [formControlName]="locale + '_name'" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput [formControlName]="locale + '_slug'" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('entityDescription') }}</mat-label><textarea matInput rows="3" [formControlName]="locale + '_description'"></textarea></mat-form-field></section>
+        }
+      </div>
+    }
+    @if (type === 'category' || type === 'brand') { <mat-slide-toggle formControlName="is_active">{{ text('active') }}</mat-slide-toggle> }
+    @if (type === 'category') { <mat-slide-toggle formControlName="is_featured">{{ text('featured') }}</mat-slide-toggle> }
+    @if (type !== 'tag') { <mat-form-field appearance="outline"><mat-label>{{ text('sortOrder') }}</mat-label><input matInput type="number" formControlName="sort_order" /></mat-form-field> }
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ text('cancel') }}</button><button mat-flat-button type="button" (click)="save()"><mat-icon>save</mat-icon>{{ text('save') }}</button></mat-dialog-actions>

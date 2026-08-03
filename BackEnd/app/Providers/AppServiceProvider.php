@@ -8,14 +8,18 @@ use App\Models\Media;
 use App\Models\Permission;
 use App\Models\PersonalAccessToken;
 use App\Models\Product;
+use App\Models\ProductAttributeDefinition;
 use App\Models\ProductCategory;
+use App\Models\ProductTag;
 use App\Models\Role;
 use App\Models\User;
 use App\Policies\BrandPolicy;
 use App\Policies\MediaPolicy;
 use App\Policies\PermissionPolicy;
+use App\Policies\ProductAttributePolicy;
 use App\Policies\ProductCategoryPolicy;
 use App\Policies\ProductPolicy;
+use App\Policies\ProductTagPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -110,6 +114,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Product::class, ProductPolicy::class);
         Gate::policy(ProductCategory::class, ProductCategoryPolicy::class);
         Gate::policy(Brand::class, BrandPolicy::class);
+        Gate::policy(ProductTag::class, ProductTagPolicy::class);
+        Gate::policy(ProductAttributeDefinition::class, ProductAttributePolicy::class);
 
         Gate::define(
             'system_health',
