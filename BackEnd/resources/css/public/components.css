@@ -10,7 +10,8 @@
 .heading {
     margin-block: 0 0.65em;
     font-family: var(--font-display);
-    font-weight: 750;
+    color: var(--color-text);
+    font-weight: 800;
     line-height: var(--line-height-heading);
     text-wrap: balance;
 }
@@ -49,7 +50,7 @@
     justify-content: center;
     padding: var(--space-3) var(--space-5);
     border: 1px solid transparent;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-weight: 700;
     text-decoration: none;
@@ -62,7 +63,7 @@
 }
 
 .button--primary:hover { background: var(--color-brand-strong); }
-.button--secondary { color: var(--color-brand-strong); background: var(--color-surface); border-color: var(--color-brand); }
+.button--secondary { color: var(--color-brand-deep); background: var(--color-surface); border-color: var(--color-brand); }
 .button--ghost { color: var(--color-brand-strong); background: transparent; }
 
 .alert {

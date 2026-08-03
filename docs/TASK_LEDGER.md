@@ -27,7 +27,13 @@
   - [x] Central design tokens and reusable button/link/Media image/heading/container/breadcrumb/alert/form components
   - [x] Settings-backed home, vi/en/zh routes, legal placeholders, 404/500 views and canonical default-locale redirects
   - [x] WordPress clone inventory and normalized Laravel/Vite port contract; WooCommerce/cart/checkout/payment/account/wishlist excluded
-- [ ] P19 Frontend template clone
+- [x] P19 Frontend template clone
+  - [x] Re-audit WordPress clone, source fingerprint và license/plugin/asset boundary; `FrontEndTemplate/` giữ nguyên
+  - [x] Port header/footer/navigation, home, listing/detail/contact/content contracts sang Blade SSR
+  - [x] Design tokens, responsive desktop/tablet/mobile và mapping section sang Page Builder block
+  - [x] Loại WooCommerce/cart/checkout/payment/account/wishlist/quick-buy và nội dung doanh nghiệp mẫu
+  - [x] Bootstrap 5.3.8, jQuery 4.0.0 và Font Awesome Free 7.3.1 tự host qua Vite theo yêu cầu chủ dự án
+  - [x] vi/en/zh, build, 9 test public/96 assertions, full backend 173 test/1362 assertions và UAT `hongvan.local`
 - [ ] P20 Public theme studio
 - [ ] P21 Page Builder schema/registry
 - [ ] P22 Layout blocks
@@ -43,52 +49,52 @@
 - [x] P32 Product domain (completed out of sequence for the Admin track; public frontend remains postponed)
 - [ ] P33 Product admin/public
   - [x] P33 Admin/API: product and taxonomy CRUD, media, pricing, filters, bulk actions, permissions, audit and vi/en/zh
-  - [ ] P33 Public: Blade catalog/detail, quote CTA, SEO metadata and public E2E (deferred until P31 and frontend template)
+  - [ ] P33 Public: Blade catalog/detail, quote CTA, SEO metadata and public E2E (deferred until P31; P19 presentation contract ready)
 - [ ] P34 Crop solutions
   - [x] P34 Admin/API: crop hierarchy, stage timeline, solution CRUD, media, products, permissions, audit and vi/en/zh
-  - [ ] P34 Public/Page Builder: SSR pages, SEO, internal links and block registration (deferred until P21-P31 and frontend template)
+  - [ ] P34 Public/Page Builder: SSR pages, SEO, internal links and block registration (deferred until P21-P31; P19 presentation contract ready)
 - [ ] P35 Services
   - [x] P35 Admin/API: categories, services, translations, media, publish lifecycle, CTA source, permissions, audit and vi/en/zh
   - [x] P35 Boundary: transportation/warehouse remain explicit specialized links without duplicate detail content, media or general CTA
-  - [ ] P35 Public/Page Builder: Blade listing/detail, SEO, contact/quote routes and block registration (deferred until P21-P31 and frontend template)
+  - [ ] P35 Public/Page Builder: Blade listing/detail, SEO, contact/quote routes and block registration (deferred until P21-P31; P19 presentation contract ready)
 - [ ] P36 Transportation
   - [x] P36 Admin/API: vehicle types, fleet, media, routes, service areas, featured/publish lifecycle, permissions, audit, cache and vi/en/zh
   - [x] P36 Boundary/request contract: pickup, delivery, cargo, weight, vehicle preference, date and contact without GPS, dispatch or automatic fare calculation
-  - [ ] P36 Public/Page Builder: SSR capability pages/sections and block registration (deferred until P21-P31 and frontend template)
+  - [ ] P36 Public/Page Builder: SSR capability pages/sections and block registration (deferred until P21-P31; P19 presentation contract ready)
 - [ ] P37 Warehouses
   - [x] P37 Admin/API: warehouses, translations, media, facilities, services, map privacy, business hours, featured/publish, permissions, audit, cache and vi/en/zh
   - [x] P37 Boundary/request contract: goods, area/volume, duration, start date, storage requirements, location and contact without bins, inventory or inbound/outbound operations
-  - [ ] P37 Public/Page Builder: SSR listing/detail, privacy-aware map rendering and block registration (deferred until P21-P31 and frontend template)
+  - [ ] P37 Public/Page Builder: SSR listing/detail, privacy-aware map rendering and block registration (deferred until P21-P31; P19 presentation contract ready)
 - [ ] P38 Lead workflows
   - [x] P38 Backend: unified lead core, encrypted immutable submission, contact/quote items, transport/warehouse mapping, assignment, status timeline, notes, retention and safe export
   - [x] P38 Public API: contact, quote, transport and warehouse intake with consent, honeypot, shared rate limit, idempotency/dedup and queued email/database notification
   - [x] P38 Admin: permission-gated unified inbox, filters, assignee, transition policy, notes, timeline, metrics, CSV export and vi/en/zh
-  - [ ] P38 Public/Page Builder: wire P25 form blocks to P38 endpoints (deferred until P21-P31 and frontend template)
+  - [ ] P38 Public/Page Builder: wire P25 form blocks to P38 endpoints (deferred until P21-P31; P19 contact layout ready)
 - [ ] P39 News/content
   - [x] P39 Backend: categories, tags, localized posts, author, featured media, publish/schedule lifecycle, slug history, audit, cache and permissions
   - [x] P39 Security/data source: allowlisted HTML sanitizer, published-only queries, locale fallback, old-slug redirect contract, related posts and eager loading
   - [x] P39 Admin: Annular three-tab CMS, rich text editor, Media Picker, preview, scheduling and vi/en/zh
-  - [ ] P39 Public/Page Builder: SSR listing/category/tag/detail, pagination, related content, RSS and post-list block registration (deferred until P21-P31 and frontend template)
+  - [ ] P39 Public/Page Builder: SSR listing/category/tag/detail, pagination, related content, RSS and post-list block registration (deferred until P21-P31; P19 presentation contract ready)
 - [ ] P40 Showcase
   - [x] P40 Backend: galleries/items, partners, certifications, projects/case studies, localized alt/captions, media usage, document visibility, status/order/featured, permissions, audit and cache
   - [x] P40 Admin: Annular four-tab CRUD, Media Picker, certificate PDF policy and vi/en/zh
   - [x] P40 Data source: published-only records, locale fallback, eager media and no fabricated showcase seed data
-  - [ ] P40 Public/Page Builder: SSR sections/detail pages and block registration (deferred until P21-P31 and frontend template)
+  - [ ] P40 Public/Page Builder: SSR sections/detail pages and block registration (deferred until P21-P31; P19 presentation contract ready)
 - [ ] P41 Public search/filter
   - [x] P41 Backend/API: published-only active-locale search for products, crop solutions, services, posts and projects with pagination and allowlisted type filters
   - [x] P41 Search quality/security: Unicode normalization, Vietnamese accent folding, bound Boolean FULLTEXT query, escaped highlight, query length and dedicated rate limit
   - [x] P41 Discovery/operations: explicit-taxonomy related content, opt-in privacy-reduced analytics, automatic index health command and FULLTEXT EXPLAIN baseline
-  - [ ] P41 Public/Page Builder: Blade SSR search results/filter UI and search block registration (deferred until P21-P31 and frontend template)
+  - [ ] P41 Public/Page Builder: Blade SSR search results/filter UI and search block registration (deferred until P21-P31; P19 presentation contract ready)
 - [ ] P42 SEO metadata
   - [x] P42 Backend/API: typed locale SEO records, deterministic fallback resolver, safe canonical override, robots policy, media variants/usage, public media delivery and escaped single-render Blade head component
   - [x] P42 Admin: permission-gated Annular SEO workspace, entity/locale selection, shared metadata panel, character guidance, SERP/social preview, Media Picker and vi/en/zh
-  - [ ] P42 Public integration: bind the resolver/component to final public Blade routes and page-level/Page Builder metadata (deferred until P18-P31 and the frontend template)
+  - [ ] P42 Public integration: bind the resolver/component to final public Blade routes and page-level/Page Builder metadata (deferred until P21-P31; P19 layout ready)
 - [ ] P43 Sitemap/schema/redirect
   - [x] P43 Backend/public technical runtime: cached sitemap index and locale/entity shards, published canonical filtering, hreflang/x-default, database-managed robots.txt and queue regeneration
   - [x] P43 Redirects: prefixed/commented schema, exact internal 301/302/410 rules, locale scope, reserved/collision/loop validation, hit tracking, audit and permission-gated API
   - [x] P43 Structured data: real-settings Organization/LocalBusiness/WebSite plus BreadcrumbList/Product/Article/Service/FAQ builders, XSS-safe JSON and public determined-price Offer policy
   - [x] P43 Admin: Annular technical SEO tab with redirect manager, sitemap health, robots editor and schema preview in vi/en/zh; built, synced and verified on hongvan.local
-  - [ ] P43 Public template binding: insert JSON-LD and visible breadcrumbs into final Blade layouts/pages (deferred until P18-P31 and the frontend template)
+  - [ ] P43 Public template binding: insert JSON-LD and visible breadcrumbs into final Blade layouts/pages (deferred until P21-P31; P19 layout ready)
 - [ ] P44 Analytics/consent
   - [x] P44 Backend/config: disabled-by-default GA4/GTM/Plausible allowlist, encrypted masked identifier, internal policy path, version and retention validation
   - [x] P44 Consent API/security: vi/en/zh banner/category/preferences contract, first-party HttpOnly persistence/revoke, no server record/PII, provider scripts only after opt-in and conditional nonce CSP
@@ -104,12 +110,12 @@
   - [x] P46 Admin: semantic shell, skip-link/focus handoff, keyboard groups, accessible states/tables/actions, reduced motion and vi/en/zh labels
   - [x] P46 Responsive/performance gate: Chrome/Playwright 390x844, 768x1024 and 1440x900 without page overflow; Angular per-script budget and public Vite asset budget
   - [x] P46 Baseline: real production bundle sizes recorded; unavailable Lighthouse explicitly documented without fabricated scores
-  - [ ] P46 Public/Page Builder: final forms, gallery, blocks, axe/Lighthouse and Core Web Vitals remain deferred until P18-P31 and the frontend template
+  - [ ] P46 Public/Page Builder: final forms, gallery, blocks, axe/Lighthouse and Core Web Vitals remain deferred until P21-P31; P19 responsive UAT passed
 - [ ] P47 Seed/demo content
   - [x] P47 Production-safe: idempotent languages, permissions/role, confirmed settings/catalog defaults and optional super admin from environment
   - [x] P47 Explicit demo: locally generated media plus labelled vi/en/zh product, service, crop, vehicle and warehouse fixtures; repeat seed creates no duplicates
   - [x] P47 Product factory: draft, published, archived, contact, fixed and range states
-  - [ ] P47 Page templates/documents: deferred until the P18-P31 Page Builder registry and final frontend template exist; no unvalidated document was fabricated
+  - [ ] P47 Page templates/documents: deferred until the P21-P31 Page Builder registry exists; P19 presentation contract ready and no unvalidated document was fabricated
 - [ ] P48 Backend QA
   - [x] P48 MySQL QA: 164 tests/1266 assertions, Xdebug line coverage baseline 81.5%, critical-domain behavior matrix reviewed
   - [x] P48 Architecture/security: table prefix/comments, controller 150-line threshold, no Blade DB query, published-only public sources and no arbitrary Page Builder renderer capability
@@ -119,7 +125,7 @@
   - [x] P49 Admin gates: lint, 26-file/51-test Vitest, production build, Laravel sync và 14-test Playwright pass
   - [x] P49 Critical admin workflows: login/logout, RBAC, per-user theme, product CRUD + Media Picker, lead status/note, SEO edit, media lifecycle và accessibility smoke
   - [x] P49 Visual/runtime: admin shell và Media Manager snapshots review; live hongvan.local dashboard/products dùng bundle mới, đúng `/admin/` asset path và zero console errors
-  - [ ] P49 Page Builder/public: preview/publish/rollback, canvas và public desktop/tablet/mobile deferred vì P21-P31 cùng final frontend template chưa tồn tại
+  - [ ] P49 Page Builder/public: preview/publish/rollback và canvas deferred vì P21-P31 chưa tồn tại; P19 public desktop/tablet/mobile UAT đã pass
 - [x] P50 Build/CI
   - [x] PowerShell/Bash prerequisites, backend QA, Admin QA, build/sync, smoke và aggregate verify scripts
   - [x] GitLab CI: security, PHP 8.5 + MySQL 8.4 + Redis, Node 24, migration/prefix/Pint/Larastan/test/build/audit và optional E2E

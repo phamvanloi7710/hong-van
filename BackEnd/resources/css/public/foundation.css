@@ -18,6 +18,8 @@ body {
     min-width: 20rem;
     min-height: 100vh;
     margin: 0;
+    color: var(--color-text);
+    background: var(--color-surface);
 }
 
 img,
@@ -37,6 +39,8 @@ select {
 
 a {
     color: inherit;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
 }
 
 :focus-visible {

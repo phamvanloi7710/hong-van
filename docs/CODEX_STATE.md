@@ -3,8 +3,8 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P18
-last_completed_prompt: 18
+current_prompt: P19
+last_completed_prompt: 19
 status: DONE
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
@@ -22,12 +22,13 @@ local_domain: hongvan.local
 local_domain_status: CONFIGURED_WAMP_BACKEND_PUBLIC
 frontend_template_reminder: DELIVERED_BEFORE_P18
 frontend_delivery_order: FRONTEND_FINAL_STAGE_IN_PROGRESS_BY_OWNER_DIRECTIVE
-latest_public_frontend_foundation: passed_p18_blade_ssr_vite_tokens_components_settings_legal_errors_vi_en_zh
-latest_public_frontend_test: passed_public_and_locale_15_tests_117_assertions
-latest_public_frontend_build: passed_vite_7_3_6_css_7_64_kb_js_0_06_kb_budget
-latest_public_frontend_runtime: passed_hongvan_local_vi_en_zh_mobile_390_no_overflow_zero_console_errors
+latest_public_frontend_foundation: passed_p19_wordpress_visual_port_blade_ssr_tokens_layout_home_listing_detail_contact_content_no_ecommerce
+latest_public_frontend_vendor: bootstrap_5_3_8_jquery_4_0_0_fontawesome_free_7_3_1_self_hosted_vite_zero_npm_vulnerabilities
+latest_public_frontend_test: passed_p19_9_tests_96_assertions_full_backend_173_tests_1362_assertions
+latest_public_frontend_build: passed_vite_7_3_6_css_324_09_kb_53_71_gzip_js_161_68_kb_52_77_gzip_budget
+latest_public_frontend_runtime: passed_hongvan_local_vi_en_zh_desktop_1440_tablet_768_mobile_390_no_overflow_all_icons_loaded_menu_accessible
 latest_public_asset_cache: configured_hashed_vite_assets_and_apache_immutable_header_wamp_restart_pending
-latest_frontend_template_inventory: passed_wordpress_clone_558_files_45852960_bytes_read_only_no_ecommerce
+latest_frontend_template_inventory: passed_p19_wordpress_clone_558_files_45852960_bytes_tree_c8afab99d6faf61d181abfe7923eec196604d4c9_read_only
 latest_prerequisite_check: passed_php_8_5_9_node_24_15_0
 latest_readonly_source_check: passed_powershell_and_git_bash
 latest_laravel_13_patch: 13.23.0
@@ -185,33 +186,33 @@ latest_p50_smoke: passed_hongvan_local_health_public_ping_admin_200_and_unauth_a
 open_blockers:
   - Admin template is missing package-lock.json, public/ assets and a root license file.
   - npm audit reports three moderate and two high development-tool findings; no automatic audit fix was applied.
-  - FrontEndTemplate fingerprint differs from the previous read-only baseline across 558 files because the owner is developing it; P50 did not modify or re-baseline this source and frontend preparation must re-audit it first.
-  - P33 public Blade catalog, quote CTA, SEO metadata and public E2E remain deferred until P31 and the frontend template are available.
-  - P34 public SSR/SEO/internal links remain deferred until P31 and the frontend template are available.
+  - P19 re-audited and ported the current 558-file FrontEndTemplate without modifying it; real Media assets remain pending owner-approved content because the clone contains another brand and no sufficient standalone license.
+  - P33 public Blade catalog, quote CTA, SEO metadata and public E2E remain deferred until P31 business-data routing is available; P19 presentation contracts are ready.
+  - P34 public SSR/SEO/internal links remain deferred until P21-P31 binding; P19 presentation contracts are ready.
   - P34 Page Builder block registration remains deferred until the P21-P31 foundation; the domain data source contract is ready.
-  - P35 public Blade listing/detail, SEO and contact/quote form routes remain deferred until P31 and the frontend template are available.
+  - P35 public Blade listing/detail, SEO and contact/quote form routes remain deferred until P31; P19 listing/detail/contact presentation contracts are ready.
   - P35 Page Builder block registration remains deferred until the P21-P31 foundation; the allowlisted service data source contract is ready.
-  - P36 public SSR capability pages/sections remain deferred until P31 and the frontend template are available.
+  - P36 public SSR capability pages/sections remain deferred until P31; P19 service presentation contracts are ready.
   - P36 Page Builder block registration remains deferred until the P21-P31 foundation; the allowlisted transportation data source contract is ready.
-  - P37 public SSR warehouse listing/detail and privacy-aware map rendering remain deferred until P31 and the frontend template are available.
+  - P37 public SSR warehouse listing/detail and privacy-aware map rendering remain deferred until P31; P19 presentation contracts are ready.
   - P37 Page Builder block registration remains deferred until the P21-P31 foundation; the allowlisted warehouse data source contract is ready.
-  - P38 public Page Builder form-block wiring remains deferred because P25/P21-P31 and the frontend template are not available; the public intake endpoints are ready.
-  - P39 public SSR listing/category/tag/detail/pagination/related/RSS remains deferred until P31 and the frontend template are available.
+  - P38 public Page Builder form-block wiring remains deferred until P25/P21-P31; the public intake endpoints and P19 contact layout are ready.
+  - P39 public SSR listing/category/tag/detail/pagination/related/RSS remains deferred until P31; P19 listing/content presentation contracts are ready.
   - P39 Page Builder post-list block registration remains deferred until P21-P31; the published-only data source contract is ready.
-  - P40 public gallery/partner/certification/project SSR pages remain deferred until P31 and the frontend template are available.
+  - P40 public gallery/partner/certification/project SSR pages remain deferred until P31; P19 presentation contracts are ready.
   - P40 Page Builder showcase block registration remains deferred until P21-P31; the published-only data source contract is ready.
-  - P41 public Blade SSR search/filter UI remains deferred until P31 and the frontend template are available; the public API and direct domain query are ready.
+  - P41 public Blade SSR search/filter UI remains deferred until P31; the public API, direct domain query and P19 presentation system are ready.
   - P41 Page Builder search block registration remains deferred until P21-P31.
-  - P42 public route/head integration and page-level/Page Builder metadata remain deferred until P18-P31 and the frontend template; resolver and escaped Blade component contracts are ready.
-  - P43 final public template insertion of JSON-LD and visible breadcrumbs remains deferred until P18-P31 and the frontend template; builders, sitemap, robots and redirect runtime are ready.
-  - P44 public consent banner/preferences, browser event wiring and frontend E2E remain deferred until the final Blade template; API, provider registry, CSP and Admin configuration are ready.
-  - P46 public/Page Builder accessibility, final responsive behavior, Lighthouse/Core Web Vitals and axe remain deferred until P18-P31 and the frontend template; no Lighthouse score was fabricated.
-  - P47 demo page templates/documents remain deferred until the versioned Page Builder registry exists in P18-P31 and the final frontend template is supplied; no invalid JSON document was seeded.
+  - P42 public route/head integration and page-level/Page Builder metadata remain deferred until P21-P31; resolver, escaped component and P19 Blade layout contracts are ready.
+  - P43 final public template insertion of JSON-LD and visible breadcrumbs remains deferred until P21-P31; builders, sitemap, robots, redirects and P19 layout are ready.
+  - P44 public consent banner/preferences, browser event wiring and frontend E2E remain deferred until its assigned public binding; API, provider registry, CSP, Admin configuration and P19 layout are ready.
+  - P46 Page Builder accessibility, Lighthouse/Core Web Vitals and axe remain deferred until P21-P31; P19 responsive desktop/tablet/mobile UAT passed and no Lighthouse score was fabricated.
+  - P47 demo page templates/documents remain deferred until the versioned Page Builder registry exists in P21-P31; no invalid JSON document was seeded.
   - P48 Page Builder publish/version/preview behavioral coverage remains deferred until P21-P31; only the static arbitrary-renderer architecture guard can run against the current placeholder domain.
-  - P49 Page Builder preview/publish/rollback, canvas snapshots and public desktop/tablet/mobile QA remain deferred until P21-P31 and the final frontend template; current Admin workflows pass 14 Playwright tests.
-next_prompt: 19_PORT_PUBLIC_FRONTEND_TEMPLATE
+  - P49 Page Builder preview/publish/rollback and canvas snapshots remain deferred until P21-P31; P19 public desktop/tablet/mobile UAT passed and current Admin workflows pass 14 Playwright tests.
+next_prompt: 20_PUBLIC_THEME_STUDIO
 standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
-next_prompt_gate: READY_REAUDIT_CURRENT_FRONTEND_TEMPLATE_BEFORE_P19
+next_prompt_gate: READY_P19_DONE_STOPPED_BEFORE_P20
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

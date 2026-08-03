@@ -1,71 +1,92 @@
 # Public frontend template porting contract
 
-## Trạng thái
+## Trạng thái P19
 
-- Prompt nền tảng: P18.
 - Nguồn tham chiếu: `FrontEndTemplate/`, chỉ đọc.
-- Đích chạy production: Laravel Blade + Vite trong `BackEnd/`.
-- Bản kiểm kê này chụp nguồn ngày 2026-08-03; P19 phải kiểm kê lại trước khi port nếu fingerprint thay đổi.
+- Đích production: Laravel Blade SSR + Vite trong `BackEnd/`.
+- Fingerprint cây nguồn ngày 2026-08-03: `c8afab99d6faf61d181abfe7923eec196604d4c9`.
+- Inventory: 558 file, 45.852.960 byte; 266 HTML, 140 JPG, 38 JS, 15 CSS và các font/PNG/SVG/GIF/XML liên quan.
+- Theme nguồn: `flatsome`, `web-khoi-nghiep`.
+- Plugin nguồn: `contact-form-7`, `devvn-quick-buy`, `mega_main_menu`, `woocommerce`, `yith-woocommerce-wishlist`.
+- Không tìm thấy license riêng đủ để tái phân phối nguyên bundle hoặc các ảnh thương hiệu/banner của website clone.
 
-## Inventory nguồn WordPress hiện tại
+## Quyết định port
 
-- 558 file, tổng 45.852.960 byte.
-- 266 HTML, 140 JPG, 38 JS, 15 CSS; còn lại là font, PNG, SVG, GIF, XML và một PHP đã tải về.
-- Theme: `flatsome`, `web-khoi-nghiep`.
-- Plugin: `contact-form-7`, `devvn-quick-buy`, `mega_main_menu`, `woocommerce`, `yith-woocommerce-wishlist`.
-- Upload theo năm: `2017`, `2020`.
-- `index.html` còn tham chiếu asset WordPress, domain demo, Facebook và CDN ngoài.
-- Không tìm thấy package manifest hoặc license riêng đủ để cho phép chạy nguyên nguồn clone.
+1. Port ngôn ngữ thiết kế của mẫu: header trắng hai tầng, thanh menu xanh, danh mục dọc, hero ba cột, dải lợi ích, grid card và footer nhiều cột.
+2. Không chạy HTML/PHP/JS WordPress trong production; không copy bundle Flatsome, jQuery/plugin cũ hoặc cấu trúc `wp-*`.
+3. Không copy logo, banner, ảnh có chữ/thương hiệu/khuyến mại của doanh nghiệp khác. P19 dùng đồ họa CSS đã kiểm soát; Media Manager sẽ cấp ảnh thật ở các prompt binding public.
+4. Loại toàn bộ WooCommerce, cart, checkout, payment, account, wishlist, quick-buy, giá/Offer giả và sticky demo bar.
+5. Bootstrap, jQuery và Font Awesome Free được chủ dự án yêu cầu bổ sung và tự host qua npm/Vite. Phiên bản P19: Bootstrap `5.3.8`, jQuery `4.0.0`, Font Awesome Free `7.3.1`.
+6. Nội dung cốt lõi vẫn SSR. JavaScript chỉ tăng cường menu responsive và cung cấp vendor runtime; menu vẫn đọc được khi JavaScript bị tắt.
 
-## Ranh giới nghiệp vụ bắt buộc
+## Design tokens
 
-Hệ thống Hồng Vân là website doanh nghiệp/catalog nhận yêu cầu báo giá. Không triển khai bán hàng online. P19 và các prompt sau phải loại hoàn toàn:
-
-- WooCommerce và mọi PHP/plugin WordPress.
-- Giỏ hàng, checkout, thanh toán, tài khoản mua hàng và wishlist.
-- Quick-buy, giá/Offer giả, đơn hàng và hành vi thương mại điện tử.
-- External demo link, analytics/tracker của bản mẫu và script không xác định rõ mục đích.
-
-## Cấu trúc đích chuẩn
-
-| Nguồn tham chiếu | Đích Laravel/Vite | Quy tắc |
+| Nhóm | Token/contract chính | Nguồn cảm hứng từ mẫu |
 |---|---|---|
-| CSS theme được chọn | `BackEnd/resources/css/public/template/` | Tách token/component, không copy nguyên bundle không kiểm soát |
-| JavaScript cần thiết | `BackEnd/resources/js/public/` | Chỉ port hành vi cần thiết, accessible, không cần jQuery/plugin WordPress |
-| Ảnh trình bày đã duyệt | `BackEnd/resources/images/public/` | Đổi tên có nghĩa, tối ưu, không mang đường dẫn `uploads/YYYY/MM` |
-| Font có quyền sử dụng | `BackEnd/resources/fonts/` | Kiểm tra nguồn/quyền trước khi đưa vào build |
-| Header/footer/section | `BackEnd/resources/views/components/public/` | Component Blade có props contract rõ |
-| Page template | `BackEnd/resources/views/pages/` | SSR, một H1, không query database trong view |
-| Asset runtime | `BackEnd/public/build/` | Chỉ do Vite tạo với filename hash; không commit output build |
+| Màu | `--color-brand`, `--color-brand-strong`, `--color-brand-deep`, `--color-brand-soft` | Xanh lá chủ đạo, menu xanh đậm, nền xanh nhạt |
+| Surface | `--color-surface`, `--color-surface-muted`, `--color-surface-dark` | Header/card trắng, nền section xám nhạt, footer tối |
+| Typography | `--font-sans`, `--font-display`, thang `--font-size-*` | Sans-serif đậm, heading có độ tương phản cao |
+| Khoảng cách | `--space-1` đến `--space-8` | Nhịp 4/8/12/16/24/32/48/72 px |
+| Container | `--container-max: 75rem`, `--container-narrow: 52rem` | Khung desktop xấp xỉ 1200 px |
+| Breakpoint | 64rem, 48rem, 30rem | Desktop, tablet/mobile navigation, phone nhỏ |
+| Component | button, link, heading, alert, form field, catalog/service/content card | Dùng chung cho page và block về sau |
 
-Không tạo hoặc giữ các thư mục `wp-admin`, `wp-content`, `wp-includes`, `uploads`, `themes`, `plugins` trong source đích.
+## Layout và page template đã port
 
-## Contract P18 phải được giữ khi port
+- `layouts/public.blade.php`: utility bar, brand, locale, quote CTA, responsive navigation và footer settings-backed.
+- `pages/home.blade.php`: category panel, hero, promo cards, benefit strip, catalog groups, services, news empty state và contact/quote CTA.
+- `pages/listing.blade.php`: contract listing SSR và empty state.
+- `pages/detail.blade.php`: contract detail SSR, nội dung plain string mặc định escaped; chỉ `Htmlable` đã tin cậy mới render HTML.
+- `pages/contact.blade.php`: layout thông tin liên hệ và điểm gắn form public về sau.
+- `pages/content.blade.php`: layout nội dung tĩnh/CMS với cùng contract HTML an toàn.
+- `pages/legal.blade.php`: giữ privacy/terms settings-backed từ P18.
 
-- Layout gốc: `resources/views/layouts/public.blade.php`.
-- Entry Vite: `resources/css/public/app.css` và `resources/js/public/app.js`.
-- Token semantic nằm trong `resources/css/public/tokens.css`.
-- Primitive Blade: button, link, image qua Media, heading, container, breadcrumbs, alert và form fields.
-- Core content phải SSR và vẫn đọc được khi JavaScript bị tắt.
-- View chỉ nhận view data/controller; không query database hoặc gọi API loopback.
-- Script Vite là file module cùng origin, tương thích CSP `script-src 'self'`; không thêm inline/arbitrary script. Nonce request chỉ dành cho script động được allowlist riêng.
-- Mọi text giao diện mới phải có cùng key trong `vi`, `en`, `zh`.
-- Preview Page Builder về sau phải dùng cùng layout, component và CSS public.
+Các page template mới chưa tự mở route/domain nghiệp vụ của P31-P41. Chúng là contract trình bày để các prompt public binding dùng lại, tránh tạo route giả hoặc dữ liệu demo giả.
 
-## Mapping sơ bộ cho P19
+## Mapping template section → Page Builder block type
 
-| Nhóm trong clone | Hướng port | Page Builder dự kiến |
+| Section từ clone | Blade P19 | Block type dự kiến | Dữ liệu/giới hạn |
+|---|---|---|---|
+| Utility header | `layouts.public` | `layout.utility-bar` | Settings/contact channel đã public |
+| Logo/header | `layouts.public` | `layout.site-header` | Branding Media + company settings |
+| Main/mega menu | `layouts.public` | `layout.navigation` | Menu registry P30, không HTML tùy ý |
+| Category sidebar | `home` | `business.catalog-navigation` | Taxonomy đã publish |
+| Hero slider | `home` | `content.hero` | Heading, text, Media, CTA allowlist; không arbitrary script |
+| Side promo banners | `home` | `content.promo-cards` | Internal link/CTA được kiểm tra |
+| Benefit strip | `home` | `content.feature-strip` | Icon allowlist + localized text |
+| Product carousel/grid | `home`/`listing` | `business.product-grid` | Product đã publish, không add-to-cart/Offer giả |
+| Service tiles | `home` | `business.service-grid` | Service/transport/warehouse đã publish |
+| Latest posts | `home`/`listing` | `content.post-list` | Post đã publish theo locale |
+| Contact/quick-buy form | `contact` | `forms.contact` / `forms.quote-request` | Endpoint lead hiện hữu, consent/rate limit; không quick-buy |
+| Content/legal page | `content`/`legal` | `content.rich-text` | Server sanitizer + `Htmlable` trusted contract |
+| Footer | `layouts.public` | `layout.footer` | Settings, branches, channels, social links |
+
+## Asset và dependency policy
+
+| Nguồn | Đích | Quy tắc |
 |---|---|---|
-| Header, mega menu | Navigation Blade từ dữ liệu được allowlist | `layout.navigation` |
-| Banner/hero | Component media + heading + CTA báo giá | `content.hero` |
-| Product grid | Dữ liệu catalog đã publish, không có add-to-cart | `business.product-grid` |
-| Service/capability section | Dịch vụ, vận chuyển, kho bãi | `business.service-grid` |
-| News section | Post đã publish theo locale | `content.post-list` |
-| Contact form | Endpoint lead hiện hữu, validation và consent | `forms.contact` |
-| Footer | Settings, branch, contact channel, social link | `layout.footer` |
+| CSS được tái hiện | `BackEnd/resources/css/public/` | Token/component/page CSS có kiểm soát, không copy bundle theme |
+| JavaScript cần thiết | `BackEnd/resources/js/public/app.js` | Vite module, same-origin, không plugin WordPress |
+| Ảnh trình bày được duyệt | `BackEnd/resources/images/public/` | Tên có nghĩa, không giữ `uploads/YYYY/MM`; P19 chưa copy ảnh nguồn do license/nội dung |
+| Font icon | npm `@fortawesome/fontawesome-free` | Vite hash, chỉ solid/regular webfont đang dùng |
+| Asset runtime | `BackEnd/public/build/` | Chỉ do Vite tạo; output bị ignore và không commit |
 
-Mapping chỉ là inventory ban đầu. P19 phải đối chiếu từng section desktop/tablet/mobile trước khi chốt block catalog.
+Không tạo `wp-admin`, `wp-content`, `wp-includes`, `uploads`, `themes` hoặc `plugins` trong source đích.
 
-## Asset cache/version
+## Visual compare
 
-Vite là nguồn duy nhất tạo public asset production. Manifest và filename hash đảm bảo version theo nội dung. `public/.htaccess` đặt cache một năm `immutable` riêng cho `/build/assets/`; `manifest.json` và HTML không dùng cache dài hạn.
+| Viewport | Nguồn | Kết quả P19 có chủ đích |
+|---|---|---|
+| Desktop 1440×900 | Category trái, hero giữa, hai promo phải, menu xanh | Giữ cấu trúc và nhịp; thay banner/demo brand bằng CSS art Hồng Vân an toàn |
+| Tablet 768×1024 | Nội dung co về tablet, menu cần gọn | Hero trước, category hai cột, navigation hamburger; không overflow |
+| Mobile 390×844 | Một cột | Hero, category, promo và card xếp dọc; menu accessible; không overflow |
+
+Runtime UAT tại `hongvan.local` xác nhận `vi/en/zh`, đúng một H1, core text SSR, anchor nội bộ hoạt động, Font Awesome load sau `document.fonts.ready` và `scrollWidth = clientWidth` ở tablet/mobile.
+
+## Phần cố ý deferred
+
+- Dữ liệu catalog/post/service thật và route detail/listing: P31, P33-P41.
+- Media/logo/banner thật: sau khi nội dung và Media ID được chủ dự án duyệt.
+- Form contact/quote có submit: binding public P25/P38.
+- Menu quản trị/Page Builder: P21-P30.
+- Theme Studio: P20.

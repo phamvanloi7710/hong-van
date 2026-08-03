@@ -4,8 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const buildDirectory = fileURLToPath(new URL('../public/build/', import.meta.url));
 const limits = new Map([
-  ['.css', 160 * 1024],
-  ['.js', 150 * 1024],
+  // P19 self-hosts the owner-approved Bootstrap, jQuery and Font Awesome vendor runtime.
+  ['.css', 320 * 1024],
+  ['.js', 176 * 1024],
   ['.avif', 500 * 1024],
   ['.webp', 500 * 1024],
   ['.png', 500 * 1024],
