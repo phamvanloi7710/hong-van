@@ -58,6 +58,8 @@ export const VI_TRANSLATIONS = {
   'shell.themeSettings': 'Tùy chỉnh giao diện',
   'shell.backToTop': 'Về đầu trang',
   'shell.breadcrumb': 'Đường dẫn trang',
+  'shell.skipToContent': 'Chuyển đến nội dung chính',
+  'shell.primaryNavigation': 'Điều hướng chính',
   'placeholder.eyebrow': 'MODULE QUẢN TRỊ',
   'placeholder.description': 'Trang quản trị này đã sẵn sàng để truy cập từ menu.',
   'placeholder.notice':
@@ -259,6 +261,8 @@ export const EN_TRANSLATIONS: Record<TranslationKey, string> = {
   'shell.themeSettings': 'Customize appearance',
   'shell.backToTop': 'Back to top',
   'shell.breadcrumb': 'Breadcrumb',
+  'shell.skipToContent': 'Skip to main content',
+  'shell.primaryNavigation': 'Primary navigation',
   'placeholder.eyebrow': 'ADMINISTRATION MODULE',
   'placeholder.description': 'This administration page is now available from the menu.',
   'placeholder.notice':
@@ -457,6 +461,8 @@ export const ZH_TRANSLATIONS: Record<TranslationKey, string> = {
   'shell.themeSettings': '自定义界面',
   'shell.backToTop': '返回顶部',
   'shell.breadcrumb': '面包屑导航',
+  'shell.skipToContent': '跳转到主要内容',
+  'shell.primaryNavigation': '主导航',
   'placeholder.eyebrow': '管理模块',
   'placeholder.description': '现在可以从菜单访问此管理页面。',
   'placeholder.notice': '详细业务功能将在相应步骤中实现，当前导航不会再中断。',

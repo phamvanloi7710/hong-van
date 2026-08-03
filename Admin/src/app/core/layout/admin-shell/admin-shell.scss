@@ -10,6 +10,21 @@
   overflow: hidden;
 }
 
+.skip-link {
+  background: var(--hv-theme-surface);
+  color: var(--hv-theme-text);
+  left: 12px;
+  padding: 10px 14px;
+  position: fixed;
+  top: 8px;
+  transform: translateY(-160%);
+  z-index: 1200;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 .admin-shell.menu-compact {
   --hv-sidenav-width: 170px;
 }
@@ -75,7 +90,12 @@ mat-sidenav-content {
 }
 
 .content-area {
+  min-width: 0;
   padding: 8px;
+}
+
+.content-area:focus {
+  outline: 0;
 }
 
 .fixed-header hv-admin-header {

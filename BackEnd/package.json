@@ -3,7 +3,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
+        "build": "vite build && npm run budget",
+        "budget": "node scripts/check-performance-budget.mjs",
         "dev": "vite"
     },
     "devDependencies": {

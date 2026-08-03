@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "e2e:media": "playwright test media",
+    "e2e:accessibility": "playwright test accessibility",
     "lint": "ng lint",
     "sync:laravel": "node ./tools/sync-to-laravel.mjs",
     "build:laravel": "npm run build && npm run sync:laravel"

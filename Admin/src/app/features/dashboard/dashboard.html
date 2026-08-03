@@ -2,7 +2,7 @@
   <header class="dashboard-head">
     <div>
       <p>{{ text('eyebrow') }}</p>
-      <h1 id="dashboard-title">{{ text('title') }}</h1>
+      <h2 id="dashboard-title">{{ text('title') }}</h2>
       <span>{{ text('subtitle') }}</span>
     </div>
     <form class="range-filter" [formGroup]="filters" (ngSubmit)="load()">
@@ -17,9 +17,9 @@
   </header>
 
   @if (loading() && !snapshot()) {
-    <div class="page-state"><mat-spinner diameter="44"></mat-spinner></div>
+    <div class="page-state" role="status" aria-live="polite"><mat-spinner diameter="44"></mat-spinner></div>
   } @else if (error()) {
-    <div class="page-state error"><mat-icon>error_outline</mat-icon>{{ error() }}</div>
+    <div class="page-state error" role="alert"><mat-icon>error_outline</mat-icon>{{ error() }}</div>
   } @else if (snapshot(); as data) {
     <div class="tiles-grid">
       @if (data.cards.products; as products) {
@@ -41,16 +41,18 @@
       <mat-card class="chart-card">
         <header><div><mat-icon>query_stats</mat-icon><h2>{{ text('leadTrend') }}</h2></div><strong>{{ data.cards.leads?.total ?? 0 }}</strong></header>
         @if (data.charts.leads.length) {
-          <div class="bar-chart" [attr.aria-label]="text('leadTrend')">
+          <div class="bar-chart" role="img" [attr.aria-label]="text('leadTrend')">
             @for (point of data.charts.leads; track point.date) { <div class="bar-column" [title]="point.date + ': ' + point.value"><span [style.height.%]="chartHeight(point, leadChartMax())"></span><small>{{ point.date.slice(5) }}</small></div> }
+            <span class="sr-only">@for (point of data.charts.leads; track point.date) { {{ point.date }}: {{ point.value }}. }</span>
           </div>
         } @else { <div class="empty-chart">{{ text('noChartData') }}</div> }
       </mat-card>
       <mat-card class="chart-card product-chart">
         <header><div><mat-icon>trending_up</mat-icon><h2>{{ text('productTrend') }}</h2></div><strong>{{ data.cards.products?.published ?? 0 }}</strong></header>
         @if (data.charts.published_products.length) {
-          <div class="bar-chart" [attr.aria-label]="text('productTrend')">
+          <div class="bar-chart" role="img" [attr.aria-label]="text('productTrend')">
             @for (point of data.charts.published_products; track point.date) { <div class="bar-column" [title]="point.date + ': ' + point.value"><span [style.height.%]="chartHeight(point, productChartMax())"></span><small>{{ point.date.slice(5) }}</small></div> }
+            <span class="sr-only">@for (point of data.charts.published_products; track point.date) { {{ point.date }}: {{ point.value }}. }</span>
           </div>
         } @else { <div class="empty-chart">{{ text('noChartData') }}</div> }
       </mat-card>

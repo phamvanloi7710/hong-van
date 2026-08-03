@@ -97,6 +97,10 @@
   - [x] P45 Reports: synchronous small lead CSV, queued large export, owner-only private download, expiry and CSV formula-injection protection
   - [x] P45 Data isolation/cache: assigned-lead default, explicit `leads.view_all`, permission-aware cards, aggregate TTL and model-event invalidation
 - [ ] P46 Accessibility/performance
+  - [x] P46 Admin: semantic shell, skip-link/focus handoff, keyboard groups, accessible states/tables/actions, reduced motion and vi/en/zh labels
+  - [x] P46 Responsive/performance gate: Chrome/Playwright 390x844, 768x1024 and 1440x900 without page overflow; Angular per-script budget and public Vite asset budget
+  - [x] P46 Baseline: real production bundle sizes recorded; unavailable Lighthouse explicitly documented without fabricated scores
+  - [ ] P46 Public/Page Builder: final forms, gallery, blocks, axe/Lighthouse and Core Web Vitals remain deferred until P18-P31 and the frontend template
 - [ ] P47 Seed/demo content
 - [ ] P48 Backend QA
 - [ ] P49 Angular/E2E/visual QA

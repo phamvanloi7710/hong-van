@@ -1,4 +1,5 @@
 <div [class]="shellClasses()" [attr.dir]="themeStore.preferences().rtl ? 'rtl' : 'ltr'">
+  <a class="skip-link" href="#admin-main" (click)="skipToContent($event)">{{ 'shell.skipToContent' | hvT }}</a>
   <hv-admin-header
     [verticalMenu]="effectiveMenuOrientation() === 'vertical'"
     [pinned]="themeStore.preferences().sidenavPinned"
@@ -33,7 +34,7 @@
           <h1>{{ pageHeader().titleKey | hvT }}</h1>
         </header>
 
-        <main class="content-area">
+        <main #contentArea id="admin-main" class="content-area" tabindex="-1">
           <router-outlet />
         </main>
       </div>

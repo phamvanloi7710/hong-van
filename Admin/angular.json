@@ -63,6 +63,11 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "11kB",
                   "maximumError": "12kB"
+                },
+                {
+                  "type": "anyScript",
+                  "maximumWarning": "300kB",
+                  "maximumError": "400kB"
                 }
               ],
               "outputHashing": "all"

@@ -47,7 +47,7 @@ test.beforeEach(async ({ page }) => {
   await mockAuthenticatedUser(page);
   await mockMediaApi(page);
   await page.goto('media');
-  await expect(page.getByRole('heading', { name: 'Thư viện media' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Thư viện media', level: 2 })).toBeVisible();
 });
 
 test('media workflow supports folders, search, selection, upload queue and list view', async ({ page }) => {

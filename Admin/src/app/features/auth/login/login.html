@@ -6,7 +6,7 @@
 
   <mat-card-content>
     <p class="access-note">{{ 'auth.accessNote' | hvT }}</p>
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate [attr.aria-busy]="submitting()">
       <mat-form-field appearance="fill">
         <mat-label>{{ 'auth.email' | hvT }}</mat-label>
         <mat-icon matPrefix>mail</mat-icon>
@@ -55,7 +55,7 @@
       </button>
 
       @if (errorMessage()) {
-        <p class="integration-notice" role="alert">{{ errorMessage() }}</p>
+        <p class="integration-notice" role="alert" aria-live="assertive">{{ errorMessage() }}</p>
       }
     </form>
   </mat-card-content>

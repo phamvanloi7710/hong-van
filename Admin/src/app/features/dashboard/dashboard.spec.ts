@@ -33,6 +33,16 @@ describe('Dashboard', () => {
     expect(compiled.textContent).toContain('12');
     expect(compiled.textContent).toContain('3');
   });
+
+  it('exposes one labelled section and non-visual chart data', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const section = compiled.querySelector('section[aria-labelledby="dashboard-title"]');
+    const chart = compiled.querySelector('.bar-chart[role="img"]');
+
+    expect(section).not.toBeNull();
+    expect(compiled.querySelectorAll('#dashboard-title')).toHaveLength(1);
+    expect(chart?.querySelector('.sr-only')?.textContent).toContain('2026-08-03: 2');
+  });
 });
 
 const snapshot: DashboardSnapshot = {

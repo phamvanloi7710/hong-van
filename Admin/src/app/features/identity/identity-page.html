@@ -11,9 +11,9 @@
   </header>
 
   @if (loading()) {
-    <div class="state"><mat-spinner diameter="42" /><span>{{ 'common.loading' | hvT }}</span></div>
+    <div class="state" role="status" aria-live="polite"><mat-spinner diameter="42" /><span>{{ 'common.loading' | hvT }}</span></div>
   } @else if (error()) {
-    <mat-card class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></mat-card>
+    <mat-card class="state error" role="alert"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></mat-card>
   } @else {
     <mat-tab-group animationDuration="180ms">
       <mat-tab [label]="'identity.users' | hvT">
@@ -21,12 +21,12 @@
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>{{ 'identity.searchName' | hvT }}</mat-label>
             <input matInput #userSearch (keyup.enter)="search(userSearch.value)" />
-            <button mat-icon-button matSuffix type="button" (click)="search(userSearch.value)"><mat-icon>search</mat-icon></button>
+            <button mat-icon-button matSuffix type="button" [attr.aria-label]="'common.search' | hvT" (click)="search(userSearch.value)"><mat-icon>search</mat-icon></button>
           </mat-form-field>
           <button *hvHasPermission="'users.create'" mat-flat-button type="button" (click)="openUser()"><mat-icon>person_add</mat-icon> {{ 'identity.addUser' | hvT }}</button>
         </div>
         <div class="table-wrap">
-          <table mat-table [dataSource]="users()">
+          <table mat-table [dataSource]="users()" [attr.aria-label]="'identity.users' | hvT">
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef>{{ 'identity.users' | hvT }}</th>
               <td mat-cell *matCellDef="let user"><strong>{{ user.name }}</strong><small>{{ user.email }}</small></td>
@@ -42,12 +42,12 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>{{ 'identity.actions' | hvT }}</th>
               <td mat-cell *matCellDef="let user" class="actions">
-                <button *hvHasPermission="'users.update'" mat-icon-button [title]="'common.edit' | hvT" (click)="openUser(user)"><mat-icon>edit</mat-icon></button>
+                <button *hvHasPermission="'users.update'" mat-icon-button [attr.aria-label]="'common.edit' | hvT" [title]="'common.edit' | hvT" (click)="openUser(user)"><mat-icon>edit</mat-icon></button>
                 @if (!isSelf(user)) {
-                  @if (user.is_active && !user.locked_at) { <button *hvHasPermission="'users.update'" mat-icon-button [title]="'identity.lock' | hvT" (click)="lock(user)"><mat-icon>lock</mat-icon></button> }
-                  @else { <button *hvHasPermission="'users.update'" mat-icon-button [title]="'identity.activate' | hvT" (click)="activate(user)"><mat-icon>lock_open</mat-icon></button> }
-                  <button *hvHasPermission="'users.update'" mat-icon-button [title]="'identity.revokeSessions' | hvT" (click)="resetSessions(user)"><mat-icon>devices_off</mat-icon></button>
-                  <button *hvHasPermission="'users.delete'" mat-icon-button [title]="'common.delete' | hvT" (click)="deleteUser(user)"><mat-icon>delete</mat-icon></button>
+                  @if (user.is_active && !user.locked_at) { <button *hvHasPermission="'users.update'" mat-icon-button [attr.aria-label]="'identity.lock' | hvT" [title]="'identity.lock' | hvT" (click)="lock(user)"><mat-icon>lock</mat-icon></button> }
+                  @else { <button *hvHasPermission="'users.update'" mat-icon-button [attr.aria-label]="'identity.activate' | hvT" [title]="'identity.activate' | hvT" (click)="activate(user)"><mat-icon>lock_open</mat-icon></button> }
+                  <button *hvHasPermission="'users.update'" mat-icon-button [attr.aria-label]="'identity.revokeSessions' | hvT" [title]="'identity.revokeSessions' | hvT" (click)="resetSessions(user)"><mat-icon>devices_off</mat-icon></button>
+                  <button *hvHasPermission="'users.delete'" mat-icon-button [attr.aria-label]="'common.delete' | hvT" [title]="'common.delete' | hvT" (click)="deleteUser(user)"><mat-icon>delete</mat-icon></button>
                 }
               </td>
             </ng-container>
@@ -61,11 +61,11 @@
       @if (authStore.hasPermission('roles.view')) {
         <mat-tab [label]="'identity.roles' | hvT">
           <div class="tab-toolbar"><span>{{ roles().length }} {{ 'identity.roles' | hvT }}</span><button *hvHasPermission="'roles.create'" mat-flat-button (click)="openRole()"><mat-icon>add</mat-icon> {{ 'identity.addRole' | hvT }}</button></div>
-          <div class="table-wrap"><table mat-table [dataSource]="roles()">
+          <div class="table-wrap"><table mat-table [dataSource]="roles()" [attr.aria-label]="'identity.roles' | hvT">
             <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>{{ 'identity.roles' | hvT }}</th><td mat-cell *matCellDef="let role"><strong>{{ role.name }}</strong><small>{{ role.slug }}</small></td></ng-container>
             <ng-container matColumnDef="permissions"><th mat-header-cell *matHeaderCellDef>{{ 'identity.permissions' | hvT }}</th><td mat-cell *matCellDef="let role">{{ role.permissions.length }}</td></ng-container>
             <ng-container matColumnDef="users"><th mat-header-cell *matHeaderCellDef>{{ 'identity.users' | hvT }}</th><td mat-cell *matCellDef="let role">{{ role.users_count ?? 0 }}</td></ng-container>
-            <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>{{ 'identity.actions' | hvT }}</th><td mat-cell *matCellDef="let role" class="actions">@if (!role.is_system) { <button *hvHasPermission="'roles.update'" mat-icon-button (click)="openRole(role)"><mat-icon>edit</mat-icon></button><button *hvHasPermission="'roles.delete'" mat-icon-button (click)="deleteRole(role)"><mat-icon>delete</mat-icon></button> } @else { <mat-chip>{{ 'identity.system' | hvT }}</mat-chip> }</td></ng-container>
+            <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>{{ 'identity.actions' | hvT }}</th><td mat-cell *matCellDef="let role" class="actions">@if (!role.is_system) { <button *hvHasPermission="'roles.update'" mat-icon-button [attr.aria-label]="'common.edit' | hvT" (click)="openRole(role)"><mat-icon>edit</mat-icon></button><button *hvHasPermission="'roles.delete'" mat-icon-button [attr.aria-label]="'common.delete' | hvT" (click)="deleteRole(role)"><mat-icon>delete</mat-icon></button> } @else { <mat-chip>{{ 'identity.system' | hvT }}</mat-chip> }</td></ng-container>
             <tr mat-header-row *matHeaderRowDef="roleColumns"></tr><tr mat-row *matRowDef="let row; columns: roleColumns"></tr>
           </table></div>
         </mat-tab>
@@ -74,11 +74,11 @@
       @if (authStore.hasPermission('permissions.view')) {
         <mat-tab [label]="'identity.permissions' | hvT">
           <div class="tab-toolbar"><span>{{ permissions().length }} {{ 'identity.permissions' | hvT }}</span><button *hvHasPermission="'permissions.create'" mat-flat-button (click)="openPermission()"><mat-icon>add</mat-icon> {{ 'identity.addPermission' | hvT }}</button></div>
-          <div class="table-wrap"><table mat-table [dataSource]="permissions()">
+          <div class="table-wrap"><table mat-table [dataSource]="permissions()" [attr.aria-label]="'identity.permissions' | hvT">
             <ng-container matColumnDef="key"><th mat-header-cell *matHeaderCellDef>{{ 'identity.permissionKey' | hvT }}</th><td mat-cell *matCellDef="let permission"><code>{{ permission.key }}</code></td></ng-container>
             <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>{{ 'identity.name' | hvT }}</th><td mat-cell *matCellDef="let permission">{{ permission.name }}</td></ng-container>
             <ng-container matColumnDef="roles"><th mat-header-cell *matHeaderCellDef>{{ 'identity.roles' | hvT }}</th><td mat-cell *matCellDef="let permission">{{ permission.roles_count ?? 0 }}</td></ng-container>
-            <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>{{ 'identity.actions' | hvT }}</th><td mat-cell *matCellDef="let permission" class="actions">@if (!permission.is_system) { <button *hvHasPermission="'permissions.update'" mat-icon-button (click)="openPermission(permission)"><mat-icon>edit</mat-icon></button><button *hvHasPermission="'permissions.delete'" mat-icon-button (click)="deletePermission(permission)"><mat-icon>delete</mat-icon></button> } @else { <mat-chip>{{ 'identity.system' | hvT }}</mat-chip> }</td></ng-container>
+            <ng-container matColumnDef="actions"><th mat-header-cell *matHeaderCellDef>{{ 'identity.actions' | hvT }}</th><td mat-cell *matCellDef="let permission" class="actions">@if (!permission.is_system) { <button *hvHasPermission="'permissions.update'" mat-icon-button [attr.aria-label]="'common.edit' | hvT" (click)="openPermission(permission)"><mat-icon>edit</mat-icon></button><button *hvHasPermission="'permissions.delete'" mat-icon-button [attr.aria-label]="'common.delete' | hvT" (click)="deletePermission(permission)"><mat-icon>delete</mat-icon></button> } @else { <mat-chip>{{ 'identity.system' | hvT }}</mat-chip> }</td></ng-container>
             <tr mat-header-row *matHeaderRowDef="permissionColumns"></tr><tr mat-row *matRowDef="let row; columns: permissionColumns"></tr>
           </table></div>
         </mat-tab>

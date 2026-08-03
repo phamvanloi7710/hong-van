@@ -1,5 +1,6 @@
 <nav
   class="horizontal-navigation"
+  [attr.aria-label]="'shell.primaryNavigation' | hvT"
   [class.compact]="density() === 'compact'"
   [class.mini]="density() === 'mini'"
 >
@@ -16,14 +17,19 @@
       </a>
     } @else if (!item.route && canSeeGroup(item)) {
       <div class="menu-group">
-        <button mat-button type="button">
+        <button
+          mat-button
+          type="button"
+          aria-haspopup="true"
+          [attr.aria-controls]="'horizontal-group-' + item.id"
+        >
           <mat-icon [style.--menu-icon-color]="item.iconColor">{{ item.icon }}</mat-icon>
           <span>{{ item.labelKey | hvT }}</span>
           <span class="expand-icon-slot" aria-hidden="true">
             <mat-icon class="expand-icon">expand_more</mat-icon>
           </span>
         </button>
-        <div class="dropdown">
+        <div class="dropdown" [id]="'horizontal-group-' + item.id">
           @for (child of item.children ?? []; track child.id) {
             @if (canSee(child)) {
               @if (child.route) {

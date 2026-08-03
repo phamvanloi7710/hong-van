@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   HostListener,
   inject,
   signal,
@@ -46,6 +47,7 @@ const MOBILE_BREAKPOINT = 960;
 })
 export class AdminShell {
   @ViewChild(MatSidenavContent) private sidenavContent?: MatSidenavContent;
+  @ViewChild('contentArea') private contentArea?: ElementRef<HTMLElement>;
 
   private readonly router = inject(Router);
 
@@ -102,6 +104,7 @@ export class AdminShell {
         }
 
         this.scrollToTop('auto');
+        queueMicrotask(() => this.contentArea?.nativeElement.focus({ preventScroll: true }));
       });
   }
 
@@ -134,14 +137,27 @@ export class AdminShell {
     }
   }
 
+  skipToContent(event: Event): void {
+    event.preventDefault();
+    this.contentArea?.nativeElement.focus({ preventScroll: true });
+    this.contentArea?.nativeElement.scrollIntoView({ block: 'start', behavior: 'auto' });
+  }
+
   onContentScroll(event: Event): void {
     const target = event.target;
     this.showBackToTop.set(target instanceof HTMLElement && target.scrollTop > 300);
   }
 
   scrollToTop(behavior: ScrollBehavior = 'smooth'): void {
-    this.sidenavContent?.getElementRef().nativeElement.scrollTo({ top: 0, behavior });
-    window.scrollTo({ top: 0, behavior });
+    const effectiveBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'auto'
+      : behavior;
+
+    this.sidenavContent?.getElementRef().nativeElement.scrollTo({
+      top: 0,
+      behavior: effectiveBehavior,
+    });
+    window.scrollTo({ top: 0, behavior: effectiveBehavior });
   }
 
   private updatePageHeader(url: string): void {

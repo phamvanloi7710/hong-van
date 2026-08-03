@@ -14,6 +14,7 @@
 
 <nav
   class="navigation"
+  [attr.aria-label]="'shell.primaryNavigation' | hvT"
   [class.compact]="density() === 'compact'"
   [class.mini]="density() === 'mini'"
 >
@@ -33,7 +34,14 @@
         <span class="menu-title">{{ item.labelKey | hvT }}</span>
       </a>
     } @else if (!item.route && canSeeGroup(item)) {
-      <button mat-button type="button" class="menu-entry" (click)="toggleGroup(item)">
+      <button
+        mat-button
+        type="button"
+        class="menu-entry"
+        [attr.aria-expanded]="isExpanded(item)"
+        [attr.aria-controls]="'sidebar-group-' + item.id"
+        (click)="toggleGroup(item)"
+      >
         <mat-icon class="menu-icon" [style.--menu-icon-color]="item.iconColor">{{
           item.icon
         }}</mat-icon>
@@ -45,7 +53,7 @@
         </span>
       </button>
       @if (isExpanded(item)) {
-        <div class="sub-menu">
+        <div class="sub-menu" [id]="'sidebar-group-' + item.id">
           @for (child of item.children ?? []; track child.id) {
             @if (canSee(child)) {
               @if (child.route) {
