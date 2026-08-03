@@ -1,0 +1,1 @@
+.reference-form{display:block;min-width:min(850px,82vw)}.general-grid,.translation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:8px 2px}.general-grid{align-items:center}.wide{grid-column:1/-1}@media(max-width:720px){.reference-form{min-width:0}.general-grid,.translation-grid{grid-template-columns:1fr}.wide{grid-column:auto}}

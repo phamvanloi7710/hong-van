@@ -27,6 +27,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'spa',
         iconColor: '#7cb342',
         route: '/crop-solutions',
+        permission: 'crop_solutions.view',
       },
       {
         id: 'services',

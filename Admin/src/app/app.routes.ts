@@ -89,8 +89,10 @@ export const routes: Routes = [
       },
       {
         path: 'crop-solutions',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('crop-solutions'),
+        canActivate: [permissionGuard('crop_solutions.view')],
+        loadComponent: () =>
+          import('./features/crop-solutions/crop-solution-page').then((page) => page.CropSolutionPage),
+        data: { breadcrumb: 'menu.cropSolutions' },
       },
       {
         path: 'services',

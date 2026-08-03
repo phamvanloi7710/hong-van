@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use App\Domain\Identity\PermissionService;
 use App\Models\Brand;
+use App\Models\Crop;
+use App\Models\CropCategory;
+use App\Models\CropSolution;
+use App\Models\CropStage;
 use App\Models\Media;
 use App\Models\Permission;
 use App\Models\PersonalAccessToken;
@@ -14,6 +18,10 @@ use App\Models\ProductTag;
 use App\Models\Role;
 use App\Models\User;
 use App\Policies\BrandPolicy;
+use App\Policies\CropCategoryPolicy;
+use App\Policies\CropPolicy;
+use App\Policies\CropSolutionPolicy;
+use App\Policies\CropStagePolicy;
 use App\Policies\MediaPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\ProductAttributePolicy;
@@ -116,6 +124,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Brand::class, BrandPolicy::class);
         Gate::policy(ProductTag::class, ProductTagPolicy::class);
         Gate::policy(ProductAttributeDefinition::class, ProductAttributePolicy::class);
+        Gate::policy(CropCategory::class, CropCategoryPolicy::class);
+        Gate::policy(Crop::class, CropPolicy::class);
+        Gate::policy(CropStage::class, CropStagePolicy::class);
+        Gate::policy(CropSolution::class, CropSolutionPolicy::class);
 
         Gate::define(
             'system_health',

@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\V1\Audit\AuditLogController;
 use App\Http\Controllers\Api\V1\Auth\AuthSessionController;
 use App\Http\Controllers\Api\V1\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\V1\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\V1\CropSolutions\CropReferenceController;
+use App\Http\Controllers\Api\V1\CropSolutions\CropSolutionController;
 use App\Http\Controllers\Api\V1\Identity\PermissionController;
 use App\Http\Controllers\Api\V1\Identity\RoleController;
 use App\Http\Controllers\Api\V1\Identity\UserController;
@@ -131,6 +133,28 @@ Route::prefix('admin/v1')
                 Route::post('{product:public_id}/archive', [ProductController::class, 'archive'])->middleware('permission:products.update')->name('archive');
                 Route::delete('{product:public_id}', [ProductController::class, 'trash'])->middleware('permission:products.delete')->name('trash');
                 Route::post('{product:public_id}/restore', [ProductController::class, 'restore'])->withTrashed()->middleware('permission:products.restore')->name('restore');
+            });
+
+            Route::prefix('crop-solutions')->name('crop-solutions.')->group(function (): void {
+                Route::get('/', [CropSolutionController::class, 'index'])->middleware('permission:crop_solutions.view')->name('index');
+                Route::post('/', [CropSolutionController::class, 'store'])->middleware('permission:crop_solutions.create')->name('store');
+                Route::get('categories', [CropReferenceController::class, 'categories'])->middleware('permission:crops.view')->name('categories.index');
+                Route::post('categories', [CropReferenceController::class, 'storeCategory'])->middleware('permission:crops.create')->name('categories.store');
+                Route::put('categories/{category:public_id}', [CropReferenceController::class, 'updateCategory'])->middleware('permission:crops.update')->name('categories.update');
+                Route::delete('categories/{category:public_id}', [CropReferenceController::class, 'deleteCategory'])->middleware('permission:crops.delete')->name('categories.destroy');
+                Route::get('crops', [CropReferenceController::class, 'crops'])->middleware('permission:crops.view')->name('crops.index');
+                Route::post('crops', [CropReferenceController::class, 'storeCrop'])->middleware('permission:crops.create')->name('crops.store');
+                Route::put('crops/{crop:public_id}', [CropReferenceController::class, 'updateCrop'])->middleware('permission:crops.update')->name('crops.update');
+                Route::delete('crops/{crop:public_id}', [CropReferenceController::class, 'deleteCrop'])->middleware('permission:crops.delete')->name('crops.destroy');
+                Route::get('stages', [CropReferenceController::class, 'stages'])->middleware('permission:crops.view')->name('stages.index');
+                Route::post('stages', [CropReferenceController::class, 'storeStage'])->middleware('permission:crops.create')->name('stages.store');
+                Route::put('stages/{stage:public_id}', [CropReferenceController::class, 'updateStage'])->middleware('permission:crops.update')->name('stages.update');
+                Route::delete('stages/{stage:public_id}', [CropReferenceController::class, 'deleteStage'])->middleware('permission:crops.delete')->name('stages.destroy');
+                Route::get('{solution:public_id}', [CropSolutionController::class, 'show'])->middleware('permission:crop_solutions.view')->name('show');
+                Route::put('{solution:public_id}', [CropSolutionController::class, 'update'])->middleware('permission:crop_solutions.update')->name('update');
+                Route::post('{solution:public_id}/publish', [CropSolutionController::class, 'publish'])->middleware('permission:crop_solutions.publish')->name('publish');
+                Route::post('{solution:public_id}/archive', [CropSolutionController::class, 'archive'])->middleware('permission:crop_solutions.update')->name('archive');
+                Route::delete('{solution:public_id}', [CropSolutionController::class, 'trash'])->middleware('permission:crop_solutions.delete')->name('trash');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

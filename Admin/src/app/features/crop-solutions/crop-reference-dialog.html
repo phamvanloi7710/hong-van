@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ text(data.item ? 'editReference' : 'createReference') }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="reference-form">
+    <div class="general-grid">
+      <mat-form-field appearance="outline"><mat-label>{{ text('code') }}</mat-label><input matInput formControlName="code" /></mat-form-field>
+      @if (data.type === 'category') { <mat-form-field appearance="outline"><mat-label>{{ text('parentCategory') }}</mat-label><mat-select formControlName="parent_id"><mat-option [value]="null">{{ text('noSelection') }}</mat-option>@for (category of data.categories; track category.public_id) { @if (category.public_id !== data.item?.public_id) { <mat-option [value]="category.public_id">{{ category.translations[0]?.name }}</mat-option> } }</mat-select></mat-form-field> }
+      @if (data.type === 'crop') { <mat-form-field appearance="outline"><mat-label>{{ text('category') }}</mat-label><mat-select formControlName="category_id"><mat-option [value]="null">{{ text('noSelection') }}</mat-option>@for (category of data.categories; track category.public_id) { <mat-option [value]="category.public_id">{{ category.translations[0]?.name }}</mat-option> }</mat-select></mat-form-field> }
+      @if (data.type === 'stage') { <mat-form-field appearance="outline"><mat-label>{{ text('crop') }}</mat-label><mat-select formControlName="crop_id">@for (crop of data.crops; track crop.public_id) { <mat-option [value]="crop.public_id">{{ crop.translations[0]?.name }}</mat-option> }</mat-select></mat-form-field> }
+      <mat-form-field appearance="outline"><mat-label>{{ text('order') }}</mat-label><input matInput type="number" formControlName="sort_order" /></mat-form-field>
+      <mat-slide-toggle formControlName="is_active">{{ text('active') }}</mat-slide-toggle>
+      <button mat-stroked-button type="button" (click)="chooseImage()"><mat-icon>perm_media</mat-icon>{{ text('chooseImage') }} @if (imageId()) { ✓ }</button>
+    </div>
+    <mat-tab-group>
+      @for (locale of locales; track locale) {
+        <mat-tab [label]="languageLabel(locale)"><section class="translation-grid">
+          <mat-form-field appearance="outline"><mat-label>{{ text('name') }}</mat-label><input matInput [formControl]="control(locale, 'name')" /></mat-form-field>
+          @if (data.type !== 'stage') { <mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput [formControl]="control(locale, 'slug')" /></mat-form-field> }
+          <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('summary') }}</mat-label><textarea matInput rows="3" [formControl]="control(locale, 'summary')"></textarea></mat-form-field>
+          @if (data.type === 'crop') { <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('descriptionField') }}</mat-label><textarea matInput rows="6" [formControl]="control(locale, 'description')"></textarea></mat-form-field> }
+          @if (data.type === 'stage') { <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('content') }}</mat-label><textarea matInput rows="6" [formControl]="control(locale, 'content')"></textarea></mat-form-field> }
+          @if (data.type !== 'stage') { <mat-form-field appearance="outline"><mat-label>{{ text('metaTitle') }}</mat-label><input matInput [formControl]="control(locale, 'meta_title')" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('metaDescription') }}</mat-label><textarea matInput rows="3" [formControl]="control(locale, 'meta_description')"></textarea></mat-form-field> }
+        </section></mat-tab>
+      }
+    </mat-tab-group>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button type="button" mat-dialog-close>{{ text('cancel') }}</button><button mat-flat-button type="button" (click)="submit()">{{ text('save') }}</button></mat-dialog-actions>

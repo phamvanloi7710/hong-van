@@ -89,6 +89,13 @@ final class Product extends TranslatableModel
             ->withPivot(['sort_order', 'created_at']);
     }
 
+    /** @return BelongsToMany<CropSolution, $this> */
+    public function cropSolutions(): BelongsToMany
+    {
+        return $this->belongsToMany(CropSolution::class, 'hongvan_crop_solution_products')
+            ->withPivot(['sort_order', 'recommendation_note', 'created_at']);
+    }
+
     /** @return array<string, string> */
     protected function casts(): array
     {

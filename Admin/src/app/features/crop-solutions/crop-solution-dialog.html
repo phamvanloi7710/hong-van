@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ text(data.solution ? 'editSolution' : 'createSolution') }}</h2>
+<mat-dialog-content><form [formGroup]="form" class="solution-form">
+  <p class="advice"><mat-icon>verified_user</mat-icon>{{ text('noFakeAdvice') }}</p>
+  <mat-tab-group>
+    <mat-tab [label]="text('general')"><section class="form-grid">
+      <mat-form-field appearance="outline"><mat-label>{{ text('crop') }}</mat-label><mat-select formControlName="crop_id"><mat-option [value]="''">{{ text('noSelection') }}</mat-option>@for (crop of data.crops; track crop.public_id) { <mat-option [value]="crop.public_id">{{ cropName(crop.public_id) }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('stage') }}</mat-label><mat-select formControlName="stage_id"><mat-option [value]="null">{{ text('noSelection') }}</mat-option>@for (stage of data.stages; track stage.public_id) { @if (stage.crop_id === form.controls.crop_id.value) { <mat-option [value]="stage.public_id">{{ stageName(stage.public_id) }}</mat-option> } }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('code') }}</mat-label><input matInput formControlName="code" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('status') }}</mat-label><mat-select formControlName="status">@for (status of statuses; track status) { <mat-option [value]="status">{{ text(status) }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('order') }}</mat-label><input matInput type="number" formControlName="sort_order" /></mat-form-field>
+      <mat-checkbox formControlName="is_featured">{{ text('featured') }}</mat-checkbox>
+      <button mat-stroked-button type="button" (click)="chooseHero()"><mat-icon>perm_media</mat-icon>{{ text('heroImage') }} @if (heroMediaId()) { ✓ }</button>
+      <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('recommendedProducts') }}</mat-label><mat-select formControlName="product_ids" multiple>@for (product of data.products; track product.public_id) { <mat-option [value]="product.public_id">{{ productName(product.public_id) }}</mat-option> }</mat-select><mat-hint>{{ text('productHint') }}</mat-hint></mat-form-field>
+    </section></mat-tab>
+    <mat-tab [label]="text('localizedContent')"><div class="localized-list">@for (locale of locales; track locale) { <section><h3>{{ languageLabel(locale) }}</h3><div class="form-grid">
+      <mat-form-field appearance="outline"><mat-label>{{ text('name') }}</mat-label><input matInput [formControl]="control(locale, 'title')" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput [formControl]="control(locale, 'slug')" /></mat-form-field>
+      <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('summary') }}</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'summary')"></textarea></mat-form-field>
+      <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('content') }}</mat-label><textarea matInput rows="5" [formControl]="control(locale, 'content')"></textarea></mat-form-field>
+      <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('sectionLines') }}</mat-label><textarea matInput rows="4" [placeholder]="text('sectionLinesHint')" [formControl]="control(locale, 'sections')"></textarea></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('metaTitle') }}</mat-label><input matInput [formControl]="control(locale, 'meta_title')" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('metaDescription') }}</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'meta_description')"></textarea></mat-form-field>
+    </div></section> }</div></mat-tab>
+    <mat-tab [label]="text('publishing')"><section class="form-grid publishing-grid"><mat-form-field appearance="outline"><mat-label>{{ text('publishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="published_at" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('unpublishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="unpublished_at" /></mat-form-field></section></mat-tab>
+  </mat-tab-group>
+</form></mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button type="button" mat-dialog-close>{{ text('cancel') }}</button><button mat-flat-button type="button" (click)="submit()">{{ text('save') }}</button></mat-dialog-actions>
