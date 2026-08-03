@@ -1,24 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { authGuard, guestGuard, permissionGuard } from './core/auth/auth.guard';
-import { findAdminMenuItemById } from './core/navigation/admin-menu';
-
-const loadModulePlaceholder = () =>
-  import('./features/module-placeholder/module-placeholder').then((page) => page.ModulePlaceholder);
-
-function placeholderData(id: string) {
-  const menuItem = findAdminMenuItemById(id);
-
-  if (menuItem === undefined) {
-    throw new Error(`Admin menu item not found: ${id}`);
-  }
-
-  return {
-    breadcrumb: menuItem.labelKey,
-    icon: menuItem.icon,
-    iconColor: menuItem.iconColor,
-  };
-}
+import { pageBuilderPendingChangesGuard } from './features/page-builder/page-builder-route.guard';
 
 export const routes: Routes = [
   {
@@ -136,8 +119,13 @@ export const routes: Routes = [
       },
       {
         path: 'page-builder',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('page-builder'),
+        canActivate: [permissionGuard('pages.view')],
+        canDeactivate: [pageBuilderPendingChangesGuard],
+        loadComponent: () =>
+          import('./features/page-builder/page-builder-page').then(
+            (page) => page.PageBuilderPage,
+          ),
+        data: { breadcrumb: 'menu.pageBuilder' },
       },
       {
         path: 'theme-studio',

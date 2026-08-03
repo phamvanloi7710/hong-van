@@ -107,6 +107,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'dashboard_customize',
         iconColor: '#8e24aa',
         route: '/page-builder',
+        permission: 'pages.view',
       },
       {
         id: 'theme-studio',

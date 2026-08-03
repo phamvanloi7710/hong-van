@@ -71,7 +71,13 @@
   - [x] Dùng lại P38 `LeadIntakeService`: consent, idempotency/dedup, shared rate limit, persistence thống nhất và notification qua queue
   - [x] Product quote tự gắn product context; token ký có hạn được đối chiếu product/block để chặn sửa hidden context
   - [x] FormBlock 4 test/300 assertions, PublicForm 5 test/51 assertions, full backend 211 test/1916 assertions, Pint, PHPStan và Vite build/budget đạt
-- [ ] P26 Angular Page Builder editor
+- [x] P26 Angular Page Builder editor
+  - [x] Editor Annular ba vùng: thư viện block, cây document lồng nhau, iframe canvas host và inspector responsive theo `vi/en/zh`
+  - [x] Registry/data-access typed từ server; route `pages.view`, thao tác `pages.update`, nút publish tách `pages.publish`
+  - [x] Thao tác document immutable: add/move/reorder/nested/duplicate/delete, giới hạn parent/depth/count, ID duy nhất và không tạo cycle
+  - [x] Undo/redo có giới hạn, dirty guard, autosave debounce, lưu thủ công và giữ bản nháp khi API báo conflict `409`
+  - [x] Angular lint đạt; 30 test file/60 test đạt; production build 120.99 kB initial và đồng bộ 123 file sang Laravel
+  - [x] UAT authenticated `hongvan.local/admin/page-builder`: registry live, layout ba cột, iframe boundary, nhãn accessible và console không warning/error
 - [ ] P27 Blade iframe preview
 - [ ] P28 Versioning/publishing
 - [ ] P29 Templates/import/export/locks

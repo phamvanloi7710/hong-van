@@ -13,10 +13,11 @@ describe('ADMIN_MENU_ITEMS', () => {
     expect(new Set(NAVIGABLE_ADMIN_MENU_ITEMS.map((item) => item.route)).size).toBe(17);
   });
 
-  it('resolves placeholder routes for the page header and favorite menu', () => {
+  it('resolves feature routes for the page header and favorite menu', () => {
     expect(findAdminMenuItemByRoute('/products')?.id).toBe('products');
     expect(findAdminMenuItemByRoute('/showcase')?.id).toBe('showcase');
     expect(findAdminMenuItemByRoute('/page-builder?mode=draft')?.id).toBe('page-builder');
+    expect(findAdminMenuItemByRoute('/page-builder')?.permission).toBe('pages.view');
     expect(findAdminMenuItemByRoute('/seo/details')?.id).toBe('seo');
   });
 });

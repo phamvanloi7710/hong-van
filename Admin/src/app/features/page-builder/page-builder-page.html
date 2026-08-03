@@ -1,0 +1,228 @@
+<section class="page-builder" cdkDropListGroup>
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">{{ text('eyebrow') }}</p>
+      <h2>{{ text('title') }}</h2>
+      <p>{{ text('description') }}</p>
+    </div>
+    <div class="page-actions">
+      <button mat-stroked-button type="button" (click)="load()" [disabled]="loading() || saving()">
+        <mat-icon>refresh</mat-icon>{{ text('refresh') }}
+      </button>
+      <button mat-stroked-button type="button" (click)="undo()" [disabled]="!canEdit() || !history.canUndo()">
+        <mat-icon>undo</mat-icon>{{ text('undo') }}
+      </button>
+      <button mat-stroked-button type="button" (click)="redo()" [disabled]="!canEdit() || !history.canRedo()">
+        <mat-icon>redo</mat-icon>{{ text('redo') }}
+      </button>
+      <button mat-flat-button type="button" (click)="saveNow()" [disabled]="!canEdit() || !currentPage() || !history.dirty() || saving()">
+        <mat-icon>save</mat-icon>{{ text('save') }}
+      </button>
+      @if (canPublish()) {
+        <button mat-flat-button class="publish" type="button" (click)="publish()" [disabled]="!currentPage() || history.dirty()">
+          <mat-icon>publish</mat-icon>{{ text('publish') }}
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="state"><mat-spinner diameter="42"/><span>{{ text('loading') }}</span></div>
+  } @else if (loadError()) {
+    <div class="state error" role="alert"><mat-icon>error_outline</mat-icon><span>{{ loadError() }}</span></div>
+  } @else {
+    <mat-card class="editor-toolbar">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="page-select">
+        <mat-label>{{ text('page') }}</mat-label>
+        <mat-select [value]="currentPage()?.public_id ?? null" (selectionChange)="selectPage($event.value)">
+          @for (page of pages(); track page.public_id) {
+            <mat-option [value]="page.public_id">{{ pageTitle(page) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="document-status" aria-live="polite">
+        <strong>{{ currentPageTitle() }}</strong>
+        <span>{{ text('blockCount', { count: blockCount() }) }}</span>
+        <span>{{ text('registryVersion', { version: registryVersion() }) }}</span>
+        <span class="save-state" [class.dirty]="history.dirty()">
+          <mat-icon>{{ saving() ? 'sync' : history.dirty() ? 'edit' : 'check_circle' }}</mat-icon>
+          {{ saving() ? text('saving') : history.dirty() ? text('unsaved') : text('saved') }}
+        </span>
+      </div>
+
+      <div class="devices" role="group" [attr.aria-label]="text('responsiveStyle')">
+        @for (device of devices; track device) {
+          <button mat-icon-button type="button" [class.active]="activeDevice() === device" [attr.aria-label]="text(device)" [attr.aria-pressed]="activeDevice() === device" [matTooltip]="text(device)" (click)="setDevice(device)">
+            <mat-icon>{{ device === 'desktop' ? 'desktop_windows' : device === 'tablet' ? 'tablet_mac' : 'smartphone' }}</mat-icon>
+          </button>
+        }
+      </div>
+    </mat-card>
+
+    @if (!canEdit()) {
+      <div class="readonly-notice" role="status"><mat-icon>lock</mat-icon>{{ text('readonly') }}</div>
+    }
+    @if (saveError()) {
+      <div class="inline-error" role="alert"><mat-icon>sync_problem</mat-icon>{{ saveError() }}</div>
+    }
+    @if (operationError()) {
+      <div class="inline-error" role="alert"><mat-icon>account_tree</mat-icon>{{ operationError() }}</div>
+    }
+    @if (pages().length === 0) {
+      <div class="empty-page-notice" role="status"><mat-icon>info</mat-icon>{{ text('emptyPages') }}</div>
+    }
+
+    <div class="editor-grid">
+      <aside class="left-panel" [attr.aria-label]="text('workspaceNavigation')">
+        <mat-card class="panel palette-panel">
+          <div class="panel-title"><mat-icon>widgets</mat-icon><h3>{{ text('palette') }}</h3></div>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>{{ text('paletteSearch') }}</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput [ngModel]="paletteSearch()" (ngModelChange)="setPaletteSearch($event)">
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>{{ text('allCategories') }}</mat-label>
+            <mat-select [ngModel]="paletteCategory()" (ngModelChange)="setPaletteCategory($event)">
+              <mat-option value="all">{{ text('allCategories') }}</mat-option>
+              @for (category of categories(); track category) {
+                <mat-option [value]="category">{{ categoryLabel(category) }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <div class="palette-list" cdkDropList [cdkDropListData]="paletteDropListData()" [cdkDropListSortingDisabled]="true">
+            @for (definition of filteredDefinitions(); track definition.type) {
+              <div class="palette-item" cdkDrag [cdkDragData]="paletteDragData(definition)" [cdkDragDisabled]="!canEdit()">
+                <mat-icon>{{ blockIcon(definition) }}</mat-icon>
+                <span><strong>{{ blockLabel(definition) }}</strong><small>{{ categoryLabel(definition.category) }}</small></span>
+                <button mat-icon-button type="button" [disabled]="!canEdit()" [attr.aria-label]="text('addBlock')" (click)="addFromPalette(definition)"><mat-icon>add</mat-icon></button>
+              </div>
+            }
+          </div>
+        </mat-card>
+
+        <mat-card class="panel layers-panel">
+          <div class="panel-title"><mat-icon>account_tree</mat-icon><h3>{{ text('layers') }}</h3></div>
+          <ng-container [ngTemplateOutlet]="tree" [ngTemplateOutletContext]="{ $implicit: history.current().blocks, parentId: null }"/>
+        </mat-card>
+      </aside>
+
+      <main class="canvas-panel" [class.device-tablet]="activeDevice() === 'tablet'" [class.device-mobile]="activeDevice() === 'mobile'">
+        <nav class="block-breadcrumbs" [attr.aria-label]="text('breadcrumbs')">
+          <button type="button" (click)="selectedBlockId.set(null)">{{ text('root') }}</button>
+          @for (block of selectedBreadcrumbs(); track block.id) {
+            <mat-icon>chevron_right</mat-icon><button type="button" (click)="selectBlock(block.id)">{{ blockLabel(block) }}</button>
+          }
+        </nav>
+        <div class="iframe-shell">
+          <div class="iframe-toolbar"><span></span><span></span><span></span><strong>{{ text('canvasHost') }}</strong></div>
+          <iframe src="about:blank" sandbox="" [title]="text('canvasHost')"></iframe>
+          <div class="canvas-placeholder">
+            <mat-icon>web_asset</mat-icon>
+            <h3>{{ text('canvas') }} — {{ text(activeDevice()) }}</h3>
+            <p>{{ text('canvasHint') }}</p>
+            <small>{{ text('previewPlanned') }}</small>
+          </div>
+        </div>
+      </main>
+
+      <aside class="right-panel">
+        <mat-card class="panel inspector-panel">
+          <div class="panel-title"><mat-icon>tune</mat-icon><h3>{{ text('properties') }}</h3></div>
+          @if (selectedBlock(); as block) {
+            <div class="selected-summary">
+              <mat-icon>{{ blockIcon(block) }}</mat-icon>
+              <div><strong>{{ blockLabel(block) }}</strong><code>{{ block.type }}@{{ block.version }}</code></div>
+              <div class="selected-actions">
+                <button mat-icon-button type="button" [matTooltip]="text('duplicate')" (click)="duplicateSelected()" [disabled]="!canEdit()"><mat-icon>content_copy</mat-icon></button>
+                <button mat-icon-button type="button" class="danger" [matTooltip]="text('delete')" (click)="deleteSelected()" [disabled]="!canEdit()"><mat-icon>delete</mat-icon></button>
+              </div>
+            </div>
+
+            <section class="inspector-section">
+              <h4>{{ text('content') }}</h4>
+              @for (entry of propertyEntries(); track entry.key) {
+                @if (entry.schema.enum; as options) {
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>{{ entry.key }}</mat-label>
+                    <mat-select [value]="primitiveValue('props', entry.key)" (selectionChange)="updateInspectorValue('props', entry.key, $event.value)" [disabled]="!canEdit()">
+                      @for (option of options; track $index) { <mat-option [value]="option">{{ option }}</mat-option> }
+                    </mat-select>
+                  </mat-form-field>
+                } @else if (entry.schema.type === 'boolean') {
+                  <mat-slide-toggle [checked]="primitiveValue('props', entry.key) === true" (change)="updateInspectorValue('props', entry.key, $event.checked)" [disabled]="!canEdit()">{{ entry.key }}</mat-slide-toggle>
+                } @else if (isSupportedControl(entry.schema)) {
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>{{ entry.key }}</mat-label>
+                    @if (isTextArea(entry)) {
+                      <textarea matInput rows="4" [value]="primitiveValue('props', entry.key)" (change)="updateTextValue('props', entry, $event)" [required]="schemaRequired('props', entry.key)" [disabled]="!canEdit()"></textarea>
+                    } @else {
+                      <input matInput [type]="entry.schema.type === 'number' || entry.schema.type === 'integer' ? 'number' : 'text'" [value]="primitiveValue('props', entry.key)" (change)="updateTextValue('props', entry, $event)" [required]="schemaRequired('props', entry.key)" [disabled]="!canEdit()">
+                    }
+                  </mat-form-field>
+                } @else {
+                  <div class="unsupported"><code>{{ entry.key }}</code><small>{{ text('unsupportedControl') }}</small></div>
+                }
+              } @empty { <p class="muted">{{ text('noProperties') }}</p> }
+            </section>
+
+            <section class="inspector-section">
+              <h4>{{ text('visibility') }}</h4>
+              @for (device of devices; track device) {
+                <mat-slide-toggle [checked]="block.visibility[device]" (change)="setVisibility(device, $event.checked)" [disabled]="!canEdit()">
+                  <mat-icon>{{ device === 'desktop' ? 'desktop_windows' : device === 'tablet' ? 'tablet_mac' : 'smartphone' }}</mat-icon>{{ text(device) }}
+                </mat-slide-toggle>
+              }
+            </section>
+
+            <section class="inspector-section">
+              <h4>{{ text('responsiveStyle') }} — {{ text(activeDevice()) }}</h4>
+              @for (entry of styleEntries(); track entry.key) {
+                @if (entry.schema.enum; as options) {
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>{{ entry.key }}</mat-label>
+                    <mat-select [value]="primitiveValue('style', entry.key)" (selectionChange)="updateInspectorValue('style', entry.key, $event.value)" [disabled]="!canEdit()">
+                      @for (option of options; track $index) { <mat-option [value]="option">{{ option }}</mat-option> }
+                    </mat-select>
+                  </mat-form-field>
+                } @else if (entry.schema.type === 'boolean') {
+                  <mat-slide-toggle [checked]="primitiveValue('style', entry.key) === true" (change)="updateInspectorValue('style', entry.key, $event.checked)" [disabled]="!canEdit()">{{ entry.key }}</mat-slide-toggle>
+                } @else if (isSupportedControl(entry.schema)) {
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>{{ entry.key }}</mat-label>
+                    <input matInput [type]="entry.schema.type === 'number' || entry.schema.type === 'integer' ? 'number' : 'text'" [value]="primitiveValue('style', entry.key)" (change)="updateTextValue('style', entry, $event)" [disabled]="!canEdit()">
+                  </mat-form-field>
+                } @else {
+                  <div class="unsupported"><code>{{ entry.key }}</code><small>{{ text('unsupportedControl') }}</small></div>
+                }
+              } @empty { <p class="muted">{{ text('noProperties') }}</p> }
+            </section>
+          } @else {
+            <div class="inspector-empty"><mat-icon>touch_app</mat-icon><p>{{ text('selectBlock') }}</p></div>
+          }
+        </mat-card>
+      </aside>
+    </div>
+  }
+
+  <ng-template #tree let-blocks let-parentId="parentId">
+    <div class="tree-drop-list" cdkDropList [cdkDropListData]="dropListData(parentId, blocks)" [cdkDropListEnterPredicate]="canEnter" (cdkDropListDropped)="drop($event)" [class.empty]="blocks.length === 0">
+      @for (block of blocks; track block.id) {
+        <div class="tree-node" cdkDrag [cdkDragData]="blockDragData(block)" [cdkDragDisabled]="!canEdit()">
+          <button type="button" class="tree-node-button" [class.selected]="selectedBlockId() === block.id" (click)="selectBlock(block.id)">
+            <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+            <mat-icon>{{ blockIcon(block) }}</mat-icon>
+            <span><strong>{{ blockLabel(block) }}</strong><small>{{ block.type }}</small></span>
+            @if (!block.visibility[activeDevice()]) { <mat-icon [matTooltip]="text('hidden')">visibility_off</mat-icon> }
+          </button>
+          @if (canHaveChildren(block)) {
+            <ng-container [ngTemplateOutlet]="tree" [ngTemplateOutletContext]="{ $implicit: block.children, parentId: block.id }"/>
+          }
+        </div>
+      } @empty {
+        <div class="tree-empty">{{ parentId === null ? text('emptyDocument') : '＋' }}</div>
+      }
+    </div>
+  </ng-template>
+</section>
