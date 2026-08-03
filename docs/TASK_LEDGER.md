@@ -48,6 +48,9 @@
   - [x] P35 Boundary: transportation/warehouse remain explicit specialized links without duplicate detail content, media or general CTA
   - [ ] P35 Public/Page Builder: Blade listing/detail, SEO, contact/quote routes and block registration (deferred until P21-P31 and frontend template)
 - [ ] P36 Transportation
+  - [x] P36 Admin/API: vehicle types, fleet, media, routes, service areas, featured/publish lifecycle, permissions, audit, cache and vi/en/zh
+  - [x] P36 Boundary/request contract: pickup, delivery, cargo, weight, vehicle preference, date and contact without GPS, dispatch or automatic fare calculation
+  - [ ] P36 Public/Page Builder: SSR capability pages/sections and block registration (deferred until P21-P31 and frontend template)
 - [ ] P37 Warehouses
 - [ ] P38 Lead workflows
 - [ ] P39 News/content

@@ -103,8 +103,10 @@ export const routes: Routes = [
       },
       {
         path: 'transportation',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('transportation'),
+        canActivate: [permissionGuard('transportation.view')],
+        loadComponent: () =>
+          import('./features/transportation/transportation-page').then((page) => page.TransportationPage),
+        data: { breadcrumb: 'menu.transportation' },
       },
       {
         path: 'warehouses',

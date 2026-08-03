@@ -18,7 +18,11 @@ use App\Models\ProductTag;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\ServiceCategory;
+use App\Models\TransportRoute;
+use App\Models\TransportServiceArea;
 use App\Models\User;
+use App\Models\Vehicle;
+use App\Models\VehicleType;
 use App\Policies\BrandPolicy;
 use App\Policies\CropCategoryPolicy;
 use App\Policies\CropPolicy;
@@ -33,6 +37,7 @@ use App\Policies\ProductTagPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\ServiceCategoryPolicy;
 use App\Policies\ServicePolicy;
+use App\Policies\TransportationPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -134,6 +139,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(CropSolution::class, CropSolutionPolicy::class);
         Gate::policy(Service::class, ServicePolicy::class);
         Gate::policy(ServiceCategory::class, ServiceCategoryPolicy::class);
+        Gate::policy(VehicleType::class, TransportationPolicy::class);
+        Gate::policy(Vehicle::class, TransportationPolicy::class);
+        Gate::policy(TransportRoute::class, TransportationPolicy::class);
+        Gate::policy(TransportServiceArea::class, TransportationPolicy::class);
 
         Gate::define(
             'system_health',

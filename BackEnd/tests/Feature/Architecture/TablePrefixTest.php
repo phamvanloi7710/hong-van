@@ -88,9 +88,20 @@ class TablePrefixTest extends TestCase
             'hongvan_social_links',
             'hongvan_translation_keys',
             'hongvan_translation_values',
+            'hongvan_transport_request_status_histories',
+            'hongvan_transport_requests',
+            'hongvan_transport_route_translations',
+            'hongvan_transport_routes',
+            'hongvan_transport_service_area_translations',
+            'hongvan_transport_service_areas',
             'hongvan_users',
             'hongvan_user_permission_overrides',
             'hongvan_user_preferences',
+            'hongvan_vehicle_media',
+            'hongvan_vehicle_translations',
+            'hongvan_vehicle_type_translations',
+            'hongvan_vehicle_types',
+            'hongvan_vehicles',
         ];
 
         $this->assertEqualsCanonicalizing($expectedTables, $tables);

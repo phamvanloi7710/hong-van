@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{ title() }}</h2>
+<mat-dialog-content><form [formGroup]="form"><mat-tab-group>
+  <mat-tab [label]="text('general')"><section class="form-grid">
+    <mat-form-field appearance="outline"><mat-label>{{ text('code') }}</mat-label><input matInput formControlName="code" /></mat-form-field>
+    @if (data.kind === 'vehicles') {
+      <mat-form-field appearance="outline"><mat-label>{{ text('vehicleType') }}</mat-label><mat-select formControlName="vehicle_type_id">@for (type of data.types; track type.public_id) { <mat-option [value]="type.public_id">{{ localizedType(type.public_id) }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('payload') }}</mat-label><input matInput type="number" min="0" formControlName="payload_capacity" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('unit') }}</mat-label><mat-select formControlName="payload_unit"><mat-option value="kg">kg</mat-option><mat-option value="ton">ton</mat-option></mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('availability') }}</mat-label><mat-select formControlName="availability_display">@for (availability of availabilityOptions; track availability) { <mat-option [value]="availability">{{ text(availability) }}</mat-option> }</mat-select></mat-form-field>
+    }
+    @if (data.kind === 'routes') {
+      <mat-form-field appearance="outline"><mat-label>{{ text('origin') }}</mat-label><input matInput formControlName="origin_code" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('destination') }}</mat-label><input matInput formControlName="destination_code" /></mat-form-field>
+    }
+    @if (data.kind === 'types') { <mat-checkbox formControlName="is_active">{{ text('active') }}</mat-checkbox> }
+    @else {
+      <mat-form-field appearance="outline"><mat-label>{{ text('status') }}</mat-label><mat-select formControlName="status">@for (status of statuses; track status) { <mat-option [value]="status">{{ text(status) }}</mat-option> }</mat-select></mat-form-field>
+      <mat-checkbox formControlName="is_featured">{{ text('featured') }}</mat-checkbox>
+    }
+    <mat-form-field appearance="outline"><mat-label>{{ text('order') }}</mat-label><input matInput type="number" min="0" formControlName="sort_order" /></mat-form-field>
+  </section></mat-tab>
+  <mat-tab [label]="text('localizedContent')"><div class="localized-list">@for (locale of locales; track locale) { <section><h3>{{ languageLabel(locale) }}</h3><div class="form-grid">
+    <mat-form-field appearance="outline"><mat-label>{{ text('name') }}</mat-label><input matInput [formControl]="control(locale, 'name')" /></mat-form-field>
+    @if (data.kind !== 'types') { <mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput [formControl]="control(locale, 'slug')" /></mat-form-field> }
+    @if (data.kind !== 'types') { <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('summary') }}</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'summary')"></textarea></mat-form-field> }
+    @if (data.kind === 'types' || data.kind === 'vehicles') { <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('description') }}</mat-label><textarea matInput rows="3" [formControl]="control(locale, 'description')"></textarea></mat-form-field> }
+    @if (data.kind === 'vehicles') {
+      <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('dimensions') }}</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'body_dimensions')"></textarea></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Meta title</mat-label><input matInput [formControl]="control(locale, 'meta_title')" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>Meta description</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'meta_description')"></textarea></mat-form-field>
+    }
+  </div></section> }</div></mat-tab>
+  @if (data.kind === 'vehicles') { <mat-tab [label]="text('media')"><section class="media-panel"><button mat-stroked-button type="button" (click)="chooseMedia()"><mat-icon>perm_media</mat-icon>{{ text('chooseMedia') }}</button><h3>{{ text('selectedMedia') }}</h3><div class="media-list">@for (mediaId of selectedMediaIds(); track mediaId; let index = $index) { <div><mat-icon>{{ index === 0 ? 'image' : 'collections' }}</mat-icon><code>{{ mediaId }}</code><button mat-icon-button type="button" [attr.aria-label]="text('remove')" (click)="removeMedia(mediaId)"><mat-icon>close</mat-icon></button></div> } @empty { <span>—</span> }</div></section></mat-tab> }
+  @if (data.kind !== 'types') { <mat-tab [label]="text('publishing')"><section class="form-grid"><mat-form-field appearance="outline"><mat-label>{{ text('publishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="published_at" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('unpublishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="unpublished_at" /></mat-form-field></section></mat-tab> }
+</mat-tab-group></form></mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ text('cancel') }}</button><button mat-flat-button (click)="submit()">{{ text('save') }}</button></mat-dialog-actions>

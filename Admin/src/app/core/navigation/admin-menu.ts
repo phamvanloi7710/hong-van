@@ -51,6 +51,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'route',
         iconColor: '#1e88e5',
         route: '/transportation',
+        permission: 'transportation.view',
       },
       {
         id: 'warehouses',

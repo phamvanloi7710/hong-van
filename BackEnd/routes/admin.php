@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\V1\Services\ServiceController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
 use App\Http\Controllers\Api\V1\SystemPingController;
+use App\Http\Controllers\Api\V1\Transportation\TransportationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin/v1')
@@ -172,6 +173,23 @@ Route::prefix('admin/v1')
                 Route::post('{service:public_id}/archive', [ServiceController::class, 'archive'])->middleware('permission:services.update')->name('archive');
                 Route::delete('{service:public_id}', [ServiceController::class, 'destroy'])->middleware('permission:services.delete')->name('destroy');
                 Route::post('{service}/restore', [ServiceController::class, 'restore'])->middleware('permission:services.restore')->name('restore');
+            });
+
+            Route::prefix('transportation')->name('transportation.')->group(function (): void {
+                Route::get('types', [TransportationController::class, 'types'])->middleware('permission:transportation.view')->name('types.index');
+                Route::post('types', [TransportationController::class, 'saveType'])->middleware('permission:transportation.create')->name('types.store');
+                Route::put('types/{type:public_id}', [TransportationController::class, 'saveType'])->middleware('permission:transportation.update')->name('types.update');
+                Route::get('vehicles', [TransportationController::class, 'vehicles'])->middleware('permission:transportation.view')->name('vehicles.index');
+                Route::post('vehicles', [TransportationController::class, 'saveVehicle'])->middleware('permission:transportation.create')->name('vehicles.store');
+                Route::put('vehicles/{vehicle:public_id}', [TransportationController::class, 'saveVehicle'])->middleware('permission:transportation.update')->name('vehicles.update');
+                Route::get('routes', [TransportationController::class, 'routes'])->middleware('permission:transportation.view')->name('routes.index');
+                Route::post('routes', [TransportationController::class, 'saveRoute'])->middleware('permission:transportation.create')->name('routes.store');
+                Route::put('routes/{route:public_id}', [TransportationController::class, 'saveRoute'])->middleware('permission:transportation.update')->name('routes.update');
+                Route::get('areas', [TransportationController::class, 'areas'])->middleware('permission:transportation.view')->name('areas.index');
+                Route::post('areas', [TransportationController::class, 'saveArea'])->middleware('permission:transportation.create')->name('areas.store');
+                Route::put('areas/{area:public_id}', [TransportationController::class, 'saveArea'])->middleware('permission:transportation.update')->name('areas.update');
+                Route::post('{kind}/{publicId}/publish', [TransportationController::class, 'publish'])->whereIn('kind', ['vehicles', 'routes', 'areas'])->middleware('permission:transportation.publish')->name('publish');
+                Route::delete('{kind}/{publicId}', [TransportationController::class, 'destroy'])->whereIn('kind', ['types', 'vehicles', 'routes', 'areas'])->middleware('permission:transportation.delete')->name('destroy');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

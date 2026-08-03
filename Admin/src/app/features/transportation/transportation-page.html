@@ -1,0 +1,17 @@
+<section class="transport-page">
+  <header class="page-intro"><div><p>{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><span>{{ text('subtitle') }}</span></div><button mat-stroked-button (click)="reload()"><mat-icon>refresh</mat-icon>{{ text('refresh') }}</button></header>
+  <div class="boundary"><mat-icon>verified_user</mat-icon><span>{{ text('boundary') }}</span></div>
+  <div class="deferred"><mat-icon>visibility_off</mat-icon><span>{{ text('publicDeferred') }}</span></div>
+  @if (loading()) { <div class="state"><mat-spinner diameter="42"></mat-spinner></div> }
+  @else if (error()) { <div class="state error">{{ error() }}</div> }
+  @else { <mat-tab-group animationDuration="180ms">
+    @for (kind of kinds; track kind) { <mat-tab><ng-template mat-tab-label><mat-icon>{{ icon(kind) }}</mat-icon>{{ text(kind) }}</ng-template>
+      <div class="tab-actions"><h3>{{ text(kind) }}</h3><button mat-flat-button [disabled]="saving() || !authStore.hasPermission('transportation.create')" (click)="open(kind)"><mat-icon>add</mat-icon>{{ text('add') }}</button></div>
+      <div class="item-grid">@for (item of items(kind); track item.public_id) { <mat-card class="item-card">
+        <span class="item-icon"><mat-icon>{{ icon(kind) }}</mat-icon></span>
+        <div class="item-body"><div class="item-title"><strong>{{ localizedName(item) }}</strong>@if (item.is_featured) { <mat-icon [matTooltip]="text('featured')">star</mat-icon> }</div><small>{{ item.code }} · {{ details(item, kind) }}</small><div class="chips">@if (item.status) { <mat-chip>{{ text(item.status) }}</mat-chip> }@if (kind === 'types') { <mat-chip>{{ item.is_active ? text('active') : text('archived') }}</mat-chip> }</div></div>
+        <div class="card-actions"><button mat-icon-button [disabled]="saving() || !authStore.hasPermission('transportation.update')" [matTooltip]="text('edit')" (click)="open(kind, item)"><mat-icon>edit</mat-icon></button>@if (kind !== 'types') { <button mat-icon-button [disabled]="saving() || !authStore.hasPermission('transportation.publish')" [matTooltip]="text('publish')" (click)="publish(kind, item)"><mat-icon>publish</mat-icon></button> }<button mat-icon-button [disabled]="saving() || !authStore.hasPermission('transportation.delete')" [matTooltip]="text('delete')" (click)="delete(kind, item)"><mat-icon>delete</mat-icon></button></div>
+      </mat-card> } @empty { <div class="state"><mat-icon>{{ icon(kind) }}</mat-icon><strong>{{ text('empty') }}</strong></div> }</div>
+    </mat-tab> }
+  </mat-tab-group> }
+</section>
