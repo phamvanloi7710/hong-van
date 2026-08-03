@@ -16,6 +16,7 @@ final readonly class SeoMetaManager
     public function __construct(
         private MediaUsageTracker $mediaUsage,
         private AuditTrail $auditTrail,
+        private SitemapCache $sitemaps,
     ) {}
 
     /** @param array<string, mixed> $payload */
@@ -58,6 +59,7 @@ final readonly class SeoMetaManager
                 after: $meta->toArray(),
                 metadata: ['seoable_type' => $type, 'seoable_public_id' => $entity->getAttribute('public_id'), 'locale' => $meta->locale],
             );
+            $this->sitemaps->invalidate();
 
             return $meta;
         });

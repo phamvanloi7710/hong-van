@@ -83,6 +83,7 @@ return [
                 'site_title' => ['label' => 'Default site title', 'type' => 'string', 'public' => true, 'default' => 'CÔNG TY TNHH DV VT HỒNG VÂN', 'rules' => ['nullable', 'string', 'max:255']],
                 'meta_description' => ['label' => 'Default meta description', 'type' => 'text', 'public' => true, 'default' => null, 'rules' => ['nullable', 'string', 'max:500']],
                 'public_indexing_enabled' => ['label' => 'Allow public indexing', 'type' => 'boolean', 'public' => true, 'default' => true, 'rules' => ['required', 'boolean']],
+                'robots_disallow_paths' => ['label' => 'Robots disallow paths', 'type' => 'text', 'public' => false, 'default' => "/admin\n/api\n/preview", 'rules' => ['nullable', 'string', 'max:4000']],
             ],
         ],
         'feature_flags' => [

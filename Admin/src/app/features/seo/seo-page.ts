@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 import { finalize } from 'rxjs';
 
 import { authErrorMessage } from '../../core/auth/auth-error';
@@ -14,11 +15,12 @@ import { I18nService } from '../../core/i18n/i18n.service';
 import { SeoDataService } from './seo-data.service';
 import { SEO_TRANSLATIONS } from './seo.i18n';
 import { SeoMetaPanel } from './seo-meta-panel';
+import { SeoToolsPanel } from './seo-tools-panel';
 import { SeoEntityOption, SeoEntityType, SeoLocale } from './seo.models';
 
 @Component({
   selector: 'hv-seo-page',
-  imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, MatSelectModule, SeoMetaPanel],
+  imports: [ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatProgressSpinnerModule, MatSelectModule, MatTabsModule, SeoMetaPanel, SeoToolsPanel],
   templateUrl: './seo-page.html',
   styleUrl: './seo-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +44,14 @@ export class SeoPage {
   }
 
   text(key: string): string {
-    return SEO_TRANSLATIONS[this.i18n.locale()][key] ?? key;
+    const local = SEO_TRANSLATIONS[this.i18n.locale()][key];
+    if (local) return local;
+    const labels: Record<string, Record<string, string>> = {
+      vi: { metadataTab: 'Metadata nội dung', toolsTab: 'SEO kỹ thuật' },
+      en: { metadataTab: 'Content metadata', toolsTab: 'Technical SEO' },
+      zh: { metadataTab: '内容元数据', toolsTab: '技术 SEO' },
+    };
+    return labels[this.i18n.locale()][key] ?? key;
   }
 
   setType(type: SeoEntityType): void {

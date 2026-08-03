@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Domain\Identity\PermissionService;
+use App\Domain\Seo\SitemapCache;
 use App\Models\Brand;
 use App\Models\Certification;
 use App\Models\Crop;
@@ -179,6 +180,15 @@ class AppServiceProvider extends ServiceProvider
             'system_health',
             static fn (User $user): bool => app(PermissionService::class)->allows($user, 'system.health'),
         );
+
+        foreach ([Product::class, CropSolution::class, Service::class, Post::class, Project::class, Gallery::class, Certification::class, Vehicle::class, TransportRoute::class, TransportServiceArea::class, Warehouse::class] as $sitemapModel) {
+            $sitemapModel::saved(static function (): void {
+                app(SitemapCache::class)->invalidate();
+            });
+            $sitemapModel::deleted(static function (): void {
+                app(SitemapCache::class)->invalidate();
+            });
+        }
     }
 
     private static function authenticationThrottleKey(Request $request): string

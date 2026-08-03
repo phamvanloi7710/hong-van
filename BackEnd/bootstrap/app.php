@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Seo\PublicRedirectController;
 use App\Http\Exceptions\ApiExceptionRenderer;
 use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnsurePermission;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -52,6 +54,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->render(
             static function (Throwable $exception, Request $request): mixed {
+                if ($exception instanceof NotFoundHttpException && ! $request->is('api/*')) {
+                    return app()->call([app(PublicRedirectController::class), 'resolve'], ['request' => $request]);
+                }
                 if (! $request->is('api/*')) {
                     return null;
                 }

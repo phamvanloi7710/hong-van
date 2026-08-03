@@ -80,6 +80,11 @@
   - [x] P42 Admin: permission-gated Annular SEO workspace, entity/locale selection, shared metadata panel, character guidance, SERP/social preview, Media Picker and vi/en/zh
   - [ ] P42 Public integration: bind the resolver/component to final public Blade routes and page-level/Page Builder metadata (deferred until P18-P31 and the frontend template)
 - [ ] P43 Sitemap/schema/redirect
+  - [x] P43 Backend/public technical runtime: cached sitemap index and locale/entity shards, published canonical filtering, hreflang/x-default, database-managed robots.txt and queue regeneration
+  - [x] P43 Redirects: prefixed/commented schema, exact internal 301/302/410 rules, locale scope, reserved/collision/loop validation, hit tracking, audit and permission-gated API
+  - [x] P43 Structured data: real-settings Organization/LocalBusiness/WebSite plus BreadcrumbList/Product/Article/Service/FAQ builders, XSS-safe JSON and public determined-price Offer policy
+  - [x] P43 Admin: Annular technical SEO tab with redirect manager, sitemap health, robots editor and schema preview in vi/en/zh; built, synced and verified on hongvan.local
+  - [ ] P43 Public template binding: insert JSON-LD and visible breadcrumbs into final Blade layouts/pages (deferred until P18-P31 and the frontend template)
 - [ ] P44 Analytics/consent
 - [ ] P45 Dashboard/reports/notifications
 - [ ] P46 Accessibility/performance

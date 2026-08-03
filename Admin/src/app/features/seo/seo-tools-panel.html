@@ -1,0 +1,32 @@
+<section class="tools-panel">
+  @if (loading()) { <div class="state"><mat-spinner diameter="38"/><span>{{ text('loading') }}</span></div> }
+  @else {
+    @if (error()) { <p class="notice error"><mat-icon>error_outline</mat-icon>{{ error() }}</p> }
+    @if (message()) { <p class="notice success"><mat-icon>check_circle</mat-icon>{{ message() }}</p> }
+    <div class="tools-grid">
+      <mat-card class="redirect-card">
+        <header><div><h3>{{ text('redirects') }}</h3><p>{{ text('redirectHelp') }}</p></div><mat-icon>alt_route</mat-icon></header>
+        <form [formGroup]="redirectForm" (ngSubmit)="saveRedirect()" class="redirect-form">
+          <mat-form-field appearance="outline"><mat-label>{{ text('source') }}</mat-label><input matInput formControlName="source_path" placeholder="/old-page"></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ text('target') }}</mat-label><input matInput formControlName="target_path" placeholder="/new-page"></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ text('locale') }}</mat-label><mat-select formControlName="locale">@for (locale of locales; track locale) { <mat-option [value]="locale">{{ locale === '*' ? text('allLocales') : text(locale) }}</mat-option> }</mat-select></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ text('status') }}</mat-label><mat-select formControlName="status_code">@for (status of statuses; track status) { <mat-option [value]="status">{{ statusLabel(status) }}</mat-option> }</mat-select></mat-form-field>
+          <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('note') }}</mat-label><textarea matInput rows="2" formControlName="note"></textarea></mat-form-field>
+          <mat-checkbox formControlName="is_active">{{ text('active') }}</mat-checkbox>
+          <div class="form-actions"><button mat-flat-button type="submit" [disabled]="saving() || !canUpdate()"><mat-icon>save</mat-icon>{{ text('save') }}</button>@if (editingId()) { <button mat-stroked-button type="button" (click)="cancelEdit()">{{ text('cancel') }}</button> }</div>
+        </form>
+        <div class="redirect-list">
+          @for (rule of rules(); track rule.public_id) {
+            <article [class.inactive]="!rule.is_active"><div class="route"><strong>{{ rule.source_path }}</strong><mat-icon>{{ rule.status_code === 410 ? 'block' : 'arrow_forward' }}</mat-icon><span>{{ rule.target_path || statusLabel(rule.status_code) }}</span></div><div class="meta"><span>{{ rule.locale === '*' ? text('allLocales') : text(rule.locale) }}</span><span>{{ statusLabel(rule.status_code) }}</span><span>{{ text('hits') }}: {{ rule.hit_count }}</span></div><div class="row-actions"><button mat-icon-button type="button" [attr.aria-label]="text('edit')" [disabled]="!canUpdate()" (click)="edit(rule)"><mat-icon>edit</mat-icon></button><button mat-icon-button type="button" [attr.aria-label]="text('delete')" [disabled]="!canUpdate()" (click)="delete(rule)"><mat-icon>delete</mat-icon></button></div></article>
+          } @empty { <p class="empty">{{ text('noRedirects') }}</p> }
+        </div>
+      </mat-card>
+
+      <div class="technical-column">
+        <mat-card class="health-card"><header><div><h3>{{ text('sitemapHealth') }}</h3><p [class.warning]="!health()?.public_indexing_enabled">{{ health()?.public_indexing_enabled ? text('indexingOn') : text('indexingOff') }}</p></div><mat-icon>account_tree</mat-icon></header><div class="metrics"><div><strong>{{ health()?.shard_count ?? 0 }}</strong><span>{{ text('shards') }}</span></div><div><strong>{{ health()?.url_count ?? 0 }}</strong><span>{{ text('urls') }}</span></div></div><p>{{ text('generatedAt') }}: {{ health()?.generated_at || text('notGenerated') }}</p><div class="card-actions"><a mat-stroked-button [href]="health()?.sitemap_url" target="_blank"><mat-icon>open_in_new</mat-icon>{{ text('open') }}</a><button mat-flat-button type="button" [disabled]="saving() || !canUpdate()" (click)="regenerate()"><mat-icon>refresh</mat-icon>{{ text('regenerate') }}</button></div></mat-card>
+        <mat-card><header><div><h3>{{ text('robots') }}</h3><p>{{ text('robotsHint') }}</p></div><mat-icon>smart_toy</mat-icon></header><form [formGroup]="robotsForm" (ngSubmit)="saveRobots()"><mat-form-field appearance="outline" class="full"><textarea matInput rows="6" formControlName="disallow_paths" placeholder="/admin&#10;/api"></textarea></mat-form-field><div class="card-actions"><a mat-stroked-button [href]="health()?.robots_url" target="_blank"><mat-icon>open_in_new</mat-icon>{{ text('open') }}</a><button mat-flat-button type="submit" [disabled]="saving() || !canUpdate()"><mat-icon>save</mat-icon>{{ text('saveRobots') }}</button></div></form></mat-card>
+        <mat-card><header><div><h3>{{ text('schema') }}</h3><p>{{ text('schemaType') }}</p></div><mat-icon>data_object</mat-icon></header><form [formGroup]="schemaForm" class="schema-form" (ngSubmit)="previewSchema()"><mat-form-field appearance="outline"><mat-label>{{ text('schemaType') }}</mat-label><mat-select formControlName="type">@for (type of schemaTypes; track type) { <mat-option [value]="type">{{ text(type) }}</mat-option> }</mat-select></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('locale') }}</mat-label><mat-select formControlName="locale">@for (locale of ['vi','en','zh']; track locale) { <mat-option [value]="locale">{{ text(locale) }}</mat-option> }</mat-select></mat-form-field><button mat-flat-button type="submit" [disabled]="saving()"><mat-icon>visibility</mat-icon>{{ text('preview') }}</button></form>@if (schema()?.json; as json) { <pre>{{ json }}</pre> } @else if (schema()) { <p class="empty">{{ text('noSchema') }}</p> }</mat-card>
+      </div>
+    </div>
+  }
+</section>

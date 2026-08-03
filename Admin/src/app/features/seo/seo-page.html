@@ -1,17 +1,24 @@
 <section class="seo-page">
   <header class="page-actions"><div><p class="eyebrow">{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><p>{{ text('description') }}</p></div><button mat-stroked-button type="button" (click)="loadEntities()"><mat-icon>refresh</mat-icon>{{ text('refresh') }}</button></header>
-  <mat-card class="toolbar">
-    <mat-form-field appearance="outline" subscriptSizing="dynamic"><mat-label>{{ text('contentType') }}</mat-label><mat-select [value]="type()" (selectionChange)="setType($event.value)">@for (item of types; track item) { <mat-option [value]="item">{{ text(item) }}</mat-option> }</mat-select></mat-form-field>
-    <mat-form-field appearance="outline" subscriptSizing="dynamic"><mat-label>{{ text('language') }}</mat-label><mat-select [value]="locale()" (selectionChange)="setLocale($event.value)">@for (item of locales; track item) { <mat-option [value]="item">{{ text(item) }}</mat-option> }</mat-select></mat-form-field>
-    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search"><mat-label>{{ text('search') }}</mat-label><input matInput [formControl]="search" (keyup.enter)="loadEntities()"><mat-icon matPrefix>search</mat-icon></mat-form-field>
-    <button mat-flat-button type="button" (click)="loadEntities()"><mat-icon>search</mat-icon>{{ text('search') }}</button>
-  </mat-card>
-  <div class="workspace">
-    <mat-card class="entity-panel"><h3>{{ text('content') }}</h3>
-      @if (loading()) { <div class="state"><mat-spinner diameter="36"/></div> }
-      @else if (error()) { <div class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></div> }
-      @else { <div class="entity-list">@for (entity of entities(); track entity.public_id) { <button type="button" [class.active]="selected()?.public_id === entity.public_id" (click)="select(entity)"><span><strong>{{ entity.label }}</strong><small>{{ entity.code || entity.public_id }}</small></span><em>{{ entity.status || '—' }}</em></button> } @empty { <div class="state">{{ text('empty') }}</div> }</div> }
-    </mat-card>
-    <mat-card class="editor-panel">@if (selected(); as entity) { <hv-seo-meta-panel [entityType]="type()" [entityId]="entity.public_id" [locale]="locale()" [entityLabel]="entity.label"/> } @else { <div class="state"><mat-icon>travel_explore</mat-icon><span>{{ text('selectFirst') }}</span></div> }</mat-card>
-  </div>
+  <mat-tab-group animationDuration="250ms" dynamicHeight>
+    <mat-tab [label]="text('metadataTab')">
+      <div class="tab-content">
+        <mat-card class="toolbar">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic"><mat-label>{{ text('contentType') }}</mat-label><mat-select [value]="type()" (selectionChange)="setType($event.value)">@for (item of types; track item) { <mat-option [value]="item">{{ text(item) }}</mat-option> }</mat-select></mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic"><mat-label>{{ text('language') }}</mat-label><mat-select [value]="locale()" (selectionChange)="setLocale($event.value)">@for (item of locales; track item) { <mat-option [value]="item">{{ text(item) }}</mat-option> }</mat-select></mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="search"><mat-label>{{ text('search') }}</mat-label><input matInput [formControl]="search" (keyup.enter)="loadEntities()"><mat-icon matPrefix>search</mat-icon></mat-form-field>
+          <button mat-flat-button type="button" (click)="loadEntities()"><mat-icon>search</mat-icon>{{ text('search') }}</button>
+        </mat-card>
+        <div class="workspace">
+          <mat-card class="entity-panel"><h3>{{ text('content') }}</h3>
+            @if (loading()) { <div class="state"><mat-spinner diameter="36"/></div> }
+            @else if (error()) { <div class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></div> }
+            @else { <div class="entity-list">@for (entity of entities(); track entity.public_id) { <button type="button" [class.active]="selected()?.public_id === entity.public_id" (click)="select(entity)"><span><strong>{{ entity.label }}</strong><small>{{ entity.code || entity.public_id }}</small></span><em>{{ entity.status || '—' }}</em></button> } @empty { <div class="state">{{ text('empty') }}</div> }</div> }
+          </mat-card>
+          <mat-card class="editor-panel">@if (selected(); as entity) { <hv-seo-meta-panel [entityType]="type()" [entityId]="entity.public_id" [locale]="locale()" [entityLabel]="entity.label"/> } @else { <div class="state"><mat-icon>travel_explore</mat-icon><span>{{ text('selectFirst') }}</span></div> }</mat-card>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab [label]="text('toolsTab')"><hv-seo-tools-panel/></mat-tab>
+  </mat-tab-group>
 </section>

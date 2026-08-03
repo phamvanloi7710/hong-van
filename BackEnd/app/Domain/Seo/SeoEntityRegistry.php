@@ -83,7 +83,7 @@ final class SeoEntityRegistry
     }
 
     /** @return class-string<TranslatableModel> */
-    private function classFor(string $type): string
+    public function classFor(string $type): string
     {
         abort_unless(isset(self::TYPES[$type]), 404);
 

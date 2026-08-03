@@ -22,7 +22,9 @@ use App\Http\Controllers\Api\V1\Products\ProductAttributeController;
 use App\Http\Controllers\Api\V1\Products\ProductCategoryController;
 use App\Http\Controllers\Api\V1\Products\ProductController;
 use App\Http\Controllers\Api\V1\Products\ProductTagController;
+use App\Http\Controllers\Api\V1\Seo\RedirectController;
 use App\Http\Controllers\Api\V1\Seo\SeoMetaController;
+use App\Http\Controllers\Api\V1\Seo\SeoToolsController;
 use App\Http\Controllers\Api\V1\Services\ServiceCategoryController;
 use App\Http\Controllers\Api\V1\Services\ServiceController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
@@ -258,6 +260,17 @@ Route::prefix('admin/v1')
                 Route::get('entities', [SeoMetaController::class, 'entities'])->middleware('permission:seo.view')->name('entities');
                 Route::get('{type}/{publicId}', [SeoMetaController::class, 'show'])->middleware('permission:seo.view')->name('show');
                 Route::put('{type}/{publicId}', [SeoMetaController::class, 'update'])->middleware('permission:seo.update')->name('update');
+            });
+
+            Route::prefix('seo-tools')->name('seo-tools.')->group(function (): void {
+                Route::get('redirects', [RedirectController::class, 'index'])->middleware('permission:seo.view')->name('redirects.index');
+                Route::post('redirects', [RedirectController::class, 'store'])->middleware('permission:seo.update')->name('redirects.store');
+                Route::put('redirects/{redirect:public_id}', [RedirectController::class, 'update'])->middleware('permission:seo.update')->name('redirects.update');
+                Route::delete('redirects/{redirect:public_id}', [RedirectController::class, 'destroy'])->middleware('permission:seo.update')->name('redirects.destroy');
+                Route::get('health', [SeoToolsController::class, 'health'])->middleware('permission:seo.view')->name('health');
+                Route::post('regenerate', [SeoToolsController::class, 'regenerate'])->middleware('permission:seo.update')->name('regenerate');
+                Route::put('robots', [SeoToolsController::class, 'saveRobots'])->middleware('permission:seo.update')->name('robots.update');
+                Route::get('schema-preview', [SeoToolsController::class, 'schemaPreview'])->middleware('permission:seo.view')->name('schema-preview');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

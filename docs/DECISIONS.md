@@ -6,6 +6,7 @@ Delivery order decision: all public frontend/template work is postponed until th
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-019](adr/ADR-019-managed-technical-seo.md) | Published-canonical sitemaps, managed robots, exact internal redirects and real-data structured schemas | Accepted | 2026-08-03 |
 | [ADR-018](adr/ADR-018-typed-seo-metadata-resolution.md) | Typed allowlisted SEO metadata with deterministic fallback, robots and media variants | Accepted | 2026-08-03 |
 | [ADR-017](adr/ADR-017-mysql-fulltext-public-search.md) | Native MySQL FULLTEXT with application-maintained accent-folded text | Accepted | 2026-08-03 |
 | [ADR-016](adr/ADR-016-showcase-media-and-document-policy.md) | Showcase media ownership and certification document visibility | Accepted | 2026-08-03 |
