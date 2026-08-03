@@ -42,6 +42,7 @@ final class PermissionRegistry
             ...self::module('warehouse_requests', 'yêu cầu thuê kho', ['view', 'update', 'export']),
             ...self::module('leads', 'lead', ['view', 'update', 'export']),
             ...self::module('pages', 'trang', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
+            ...self::module('posts', 'bài viết', ['view', 'create', 'update', 'delete', 'restore', 'publish', 'export']),
             ...self::module('media', 'media', ['view', 'create', 'update', 'delete', 'restore']),
         ];
     }

@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\V1\Localization\LocalizationController;
 use App\Http\Controllers\Api\V1\Media\MediaContentController;
 use App\Http\Controllers\Api\V1\Media\MediaController;
 use App\Http\Controllers\Api\V1\Media\MediaFolderController;
+use App\Http\Controllers\Api\V1\Posts\PostController;
+use App\Http\Controllers\Api\V1\Posts\PostTaxonomyController;
 use App\Http\Controllers\Api\V1\Products\BrandController;
 use App\Http\Controllers\Api\V1\Products\ProductAttributeController;
 use App\Http\Controllers\Api\V1\Products\ProductCategoryController;
@@ -217,6 +219,26 @@ Route::prefix('admin/v1')
                 Route::post('{lead:public_id}/status', [LeadController::class, 'status'])->middleware('permission:leads.update')->name('status');
                 Route::post('{lead:public_id}/assign', [LeadController::class, 'assign'])->middleware('permission:leads.update')->name('assign');
                 Route::post('{lead:public_id}/notes', [LeadController::class, 'note'])->middleware('permission:leads.update')->name('notes');
+            });
+
+            Route::prefix('posts')->name('posts.')->group(function (): void {
+                Route::get('/', [PostController::class, 'index'])->middleware('permission:posts.view')->name('index');
+                Route::post('/', [PostController::class, 'store'])->middleware('permission:posts.create')->name('store');
+                Route::get('authors', [PostController::class, 'authors'])->middleware('permission:posts.view')->name('authors');
+                Route::get('categories', [PostTaxonomyController::class, 'categories'])->middleware('permission:posts.view')->name('categories.index');
+                Route::post('categories', [PostTaxonomyController::class, 'storeCategory'])->middleware('permission:posts.create')->name('categories.store');
+                Route::put('categories/{category:public_id}', [PostTaxonomyController::class, 'updateCategory'])->middleware('permission:posts.update')->name('categories.update');
+                Route::delete('categories/{category:public_id}', [PostTaxonomyController::class, 'deleteCategory'])->middleware('permission:posts.delete')->name('categories.destroy');
+                Route::get('tags', [PostTaxonomyController::class, 'tags'])->middleware('permission:posts.view')->name('tags.index');
+                Route::post('tags', [PostTaxonomyController::class, 'storeTag'])->middleware('permission:posts.create')->name('tags.store');
+                Route::put('tags/{tag:public_id}', [PostTaxonomyController::class, 'updateTag'])->middleware('permission:posts.update')->name('tags.update');
+                Route::delete('tags/{tag:public_id}', [PostTaxonomyController::class, 'deleteTag'])->middleware('permission:posts.delete')->name('tags.destroy');
+                Route::get('{post:public_id}', [PostController::class, 'show'])->middleware('permission:posts.view')->name('show');
+                Route::put('{post:public_id}', [PostController::class, 'update'])->middleware('permission:posts.update')->name('update');
+                Route::post('{post:public_id}/publish', [PostController::class, 'publish'])->middleware('permission:posts.publish')->name('publish');
+                Route::post('{post:public_id}/archive', [PostController::class, 'archive'])->middleware('permission:posts.update')->name('archive');
+                Route::delete('{post:public_id}', [PostController::class, 'destroy'])->middleware('permission:posts.delete')->name('destroy');
+                Route::post('{post}/restore', [PostController::class, 'restore'])->middleware('permission:posts.restore')->name('restore');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

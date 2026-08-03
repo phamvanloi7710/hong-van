@@ -123,8 +123,9 @@ export const routes: Routes = [
       },
       {
         path: 'content-pages',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('content-pages'),
+        canActivate: [permissionGuard('posts.view')],
+        loadComponent: () => import('./features/posts/post-page').then((page) => page.PostPage),
+        data: { breadcrumb: 'menu.contentPages' },
       },
       {
         path: 'page-builder',

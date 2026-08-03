@@ -83,6 +83,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'description',
         iconColor: '#3949ab',
         route: '/content-pages',
+        permission: 'posts.view',
       },
       {
         id: 'media',

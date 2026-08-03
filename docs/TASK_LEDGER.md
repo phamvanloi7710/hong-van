@@ -61,6 +61,10 @@
   - [x] P38 Admin: permission-gated unified inbox, filters, assignee, transition policy, notes, timeline, metrics, CSV export and vi/en/zh
   - [ ] P38 Public/Page Builder: wire P25 form blocks to P38 endpoints (deferred until P21-P31 and frontend template)
 - [ ] P39 News/content
+  - [x] P39 Backend: categories, tags, localized posts, author, featured media, publish/schedule lifecycle, slug history, audit, cache and permissions
+  - [x] P39 Security/data source: allowlisted HTML sanitizer, published-only queries, locale fallback, old-slug redirect contract, related posts and eager loading
+  - [x] P39 Admin: Annular three-tab CMS, rich text editor, Media Picker, preview, scheduling and vi/en/zh
+  - [ ] P39 Public/Page Builder: SSR listing/category/tag/detail, pagination, related content, RSS and post-list block registration (deferred until P21-P31 and frontend template)
 - [ ] P40 Showcase
 - [ ] P41 Public search/filter
 - [ ] P42 SEO metadata

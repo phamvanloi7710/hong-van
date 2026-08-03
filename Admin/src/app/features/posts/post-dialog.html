@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{ text(data.post ? 'editPost' : 'createPost') }}</h2>
+<mat-dialog-content><form [formGroup]="form" class="post-form">
+  <mat-tab-group animationDuration="150ms">
+    <mat-tab [label]="text('general')"><section class="form-grid">
+      <mat-form-field appearance="outline"><mat-label>{{ text('code') }}</mat-label><input matInput formControlName="code" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('author') }}</mat-label><mat-select formControlName="author_id"><mat-option [value]="null">{{ text('currentAuthor') }}</mat-option>@for (author of data.authors; track author.public_id) { <mat-option [value]="author.public_id">{{ author.name }} · {{ author.email }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('category') }}</mat-label><mat-select formControlName="category_id"><mat-option [value]="null">{{ text('noSelection') }}</mat-option>@for (category of data.categories; track category.public_id) { <mat-option [value]="category.public_id">{{ categoryName(category.public_id) }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('tagSelection') }}</mat-label><mat-select formControlName="tag_ids" multiple>@for (tag of data.tags; track tag.public_id) { <mat-option [value]="tag.public_id">{{ tagName(tag.public_id) }}</mat-option> }</mat-select></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('status') }}</mat-label><mat-select formControlName="status">@for (status of statuses; track status) { <mat-option [value]="status">{{ text(status) }}</mat-option> }</mat-select></mat-form-field>
+      <mat-checkbox formControlName="is_featured">{{ text('featured') }}</mat-checkbox>
+      <section class="media wide"><div><strong>{{ text('featuredImage') }}</strong><span>{{ featuredMedia()?.name ?? '—' }}</span></div><button mat-stroked-button type="button" (click)="chooseImage()"><mat-icon>perm_media</mat-icon>{{ text('chooseImage') }}</button>@if (featuredMedia()) { <button mat-button type="button" (click)="featuredMedia.set(null)">{{ text('removeImage') }}</button> }</section>
+    </section></mat-tab>
+    <mat-tab [label]="text('localizedContent')"><div class="localized">@for (locale of locales; track locale) { <section><h3>{{ languageLabel(locale) }}</h3><div class="form-grid">
+      <mat-form-field appearance="outline"><mat-label>{{ text('titleField') }}</mat-label><input matInput [formControl]="control(locale, 'title')" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('slug') }}</mat-label><input matInput [formControl]="control(locale, 'slug')" /></mat-form-field>
+      <mat-form-field appearance="outline" class="wide"><mat-label>{{ text('excerpt') }}</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'excerpt')"></textarea></mat-form-field>
+      <div class="wide"><span class="editor-label">{{ text('content') }}</span><hv-post-editor [formControl]="control(locale, 'content_html')" /></div>
+      <mat-form-field appearance="outline"><mat-label>{{ text('metaTitle') }}</mat-label><input matInput [formControl]="control(locale, 'meta_title')" /></mat-form-field>
+      <mat-form-field appearance="outline"><mat-label>{{ text('metaDescription') }}</mat-label><textarea matInput rows="2" [formControl]="control(locale, 'meta_description')"></textarea></mat-form-field>
+      <div class="preview wide"><h4>{{ text('preview') }}</h4>@if (control(locale, 'content_html').value) { <article [innerHTML]="control(locale, 'content_html').value"></article> } @else { <span>{{ text('previewEmpty') }}</span> }</div>
+    </div></section> }</div></mat-tab>
+    <mat-tab [label]="text('publishing')"><section class="form-grid"><mat-form-field appearance="outline"><mat-label>{{ text('scheduledFor') }}</mat-label><input matInput type="datetime-local" formControlName="scheduled_for" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('publishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="published_at" /></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('unpublishedAt') }}</mat-label><input matInput type="datetime-local" formControlName="unpublished_at" /></mat-form-field><p class="notice wide"><mat-icon>verified_user</mat-icon>{{ text('sanitizerNotice') }}</p></section></mat-tab>
+  </mat-tab-group>
+</form></mat-dialog-content>
+<mat-dialog-actions align="end"><button mat-button mat-dialog-close>{{ text('cancel') }}</button><button mat-flat-button (click)="submit()">{{ text('save') }}</button></mat-dialog-actions>
