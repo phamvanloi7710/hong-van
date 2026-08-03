@@ -53,6 +53,7 @@
 - `scripts/create-build-artifact.ps1 -SkipInstall` và Bash counterpart: PASS; 125 files, `sha256sum --check` PASS trên Git Bash.
 - `git diff --check`: PASS.
 - GitLab pipeline đầu tiên `#2726801250` xác nhận YAML hợp lệ nhưng Gitleaks chặn một fake Stripe key trong tài liệu đào tạo cũ; ignore được khóa theo fingerprint lịch sử duy nhất và full-history scan local được chạy lại trước pipeline kế tiếp.
+- GitLab pipeline thứ hai `#2726814009` pass security/Admin nhưng phát hiện container backend thiếu GD WebP/AVIF và dùng `APP_ENV=ci` làm auth tests nhận 419; job được sửa sang `APP_ENV=testing`, bật encrypted session và compile đủ image codecs trước lần chạy kế tiếp.
 
 ## Risks
 
