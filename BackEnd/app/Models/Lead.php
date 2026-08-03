@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use LogicException;
 
-#[Fillable(['type', 'status', 'source', 'contact_name', 'contact_phone', 'contact_email', 'original_payload', 'idempotency_key_hash', 'dedupe_hash', 'ip_hash', 'user_agent_hash', 'consent_at', 'privacy_policy_version', 'assigned_to', 'first_contacted_at', 'resolved_at', 'retention_until', 'anonymized_at'])]
+#[Fillable(['type', 'status', 'source', 'contact_name', 'contact_phone', 'contact_email', 'original_payload', 'idempotency_key_hash', 'dedupe_hash', 'ip_hash', 'user_agent_hash', 'consent_at', 'privacy_policy_version', 'assigned_to', 'first_contacted_at', 'next_follow_up_at', 'resolved_at', 'retention_until', 'anonymized_at'])]
 final class Lead extends Model
 {
     use HasPublicId;
@@ -81,7 +81,7 @@ final class Lead extends Model
         return [
             'contact_name' => 'encrypted', 'contact_phone' => 'encrypted', 'contact_email' => 'encrypted',
             'original_payload' => 'encrypted:array', 'consent_at' => 'immutable_datetime',
-            'first_contacted_at' => 'immutable_datetime', 'resolved_at' => 'immutable_datetime',
+            'first_contacted_at' => 'immutable_datetime', 'next_follow_up_at' => 'immutable_datetime', 'resolved_at' => 'immutable_datetime',
             'retention_until' => 'immutable_datetime', 'anonymized_at' => 'immutable_datetime',
         ];
     }

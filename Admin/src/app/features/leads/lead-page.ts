@@ -17,6 +17,7 @@ import { AuthStore } from '../../core/auth/auth.store';
 import { I18nService } from '../../core/i18n/i18n.service';
 import { LeadDataService } from './lead-data.service';
 import { LEAD_TRANSLATIONS } from './lead.i18n';
+import { LEAD_FOLLOW_UP_TRANSLATIONS } from './lead-followup.i18n';
 import { Lead, LeadAssignee, LeadAssignmentFilter, LeadMetrics, LeadStatus, LeadType } from './lead.models';
 
 @Component({
@@ -46,10 +47,11 @@ export class LeadPage {
   nextStatus: LeadStatus | '' = '';
   assigneeId = '';
   noteBody = '';
+  followUpAt = '';
 
   constructor() { this.reload(); }
 
-  text(key: string): string { return LEAD_TRANSLATIONS[this.i18n.locale()][key] ?? key; }
+  text(key: string): string { return LEAD_FOLLOW_UP_TRANSLATIONS[this.i18n.locale()][key] ?? LEAD_TRANSLATIONS[this.i18n.locale()][key] ?? key; }
 
   reload(): void {
     this.loading.set(true); this.error.set(null);
@@ -59,7 +61,7 @@ export class LeadPage {
   }
 
   select(lead: Lead): void {
-    this.service.show(lead.public_id).subscribe({ next: (detail) => { this.detail.set(detail); this.nextStatus = ''; this.assigneeId = detail.assignee?.public_id ?? ''; }, error: (error: unknown) => this.snackBar.open(authErrorMessage(error, this.text('loadError')), this.text('close'), { duration: 5000 }) });
+    this.service.show(lead.public_id).subscribe({ next: (detail) => { this.detail.set(detail); this.nextStatus = ''; this.assigneeId = detail.assignee?.public_id ?? ''; this.followUpAt = toDateTimeLocal(detail.next_follow_up_at); }, error: (error: unknown) => this.snackBar.open(authErrorMessage(error, this.text('loadError')), this.text('close'), { duration: 5000 }) });
   }
 
   changeStatus(): void {
@@ -81,6 +83,12 @@ export class LeadPage {
     this.run(this.service.addNote(lead.public_id, body), () => { this.noteBody = ''; });
   }
 
+  scheduleFollowUp(): void {
+    const lead = this.detail();
+    if (!lead) return;
+    this.run(this.service.scheduleFollowUp(lead.public_id, this.followUpAt ? new Date(this.followUpAt).toISOString() : null));
+  }
+
   export(): void {
     this.service.export({ type: this.type, status: this.status }).subscribe({ next: (blob) => { const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`; anchor.click(); URL.revokeObjectURL(url); this.snackBar.open(this.text('exported'), this.text('close'), { duration: 3000 }); }, error: (error: unknown) => this.snackBar.open(authErrorMessage(error, this.text('operationError')), this.text('close'), { duration: 5000 }) });
   }
@@ -94,4 +102,12 @@ export class LeadPage {
     this.service.list({ type: this.type, status: this.status, assignment: this.assignment }).subscribe((page) => this.leads.set(page.items));
     this.service.metrics().subscribe((metrics) => this.metrics.set(metrics));
   }
+}
+
+function toDateTimeLocal(value: string | null): string {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
+  return local.toISOString().slice(0, 16);
 }

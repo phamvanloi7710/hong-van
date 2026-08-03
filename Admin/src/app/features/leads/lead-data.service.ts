@@ -43,6 +43,12 @@ export class LeadDataService {
     return this.http.post<ApiEnvelope<Lead>>(`${this.url}/${publicId}/notes`, { body }).pipe(map((response) => response.data));
   }
 
+  scheduleFollowUp(publicId: string, nextFollowUpAt: string | null): Observable<Lead> {
+    return this.http
+      .put<ApiEnvelope<Lead>>(`${this.url}/${publicId}/follow-up`, { next_follow_up_at: nextFollowUpAt })
+      .pipe(map((response) => response.data));
+  }
+
   export(filters: Pick<LeadFilters, 'type' | 'status'>): Observable<Blob> {
     let params = new HttpParams();
     if (filters.type) params = params.set('type', filters.type);

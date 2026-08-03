@@ -76,6 +76,7 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
+        canActivate: [permissionGuard('dashboard.view')],
         loadComponent: () =>
           import('./features/dashboard/dashboard').then((page) => page.Dashboard),
         data: { breadcrumb: 'menu.dashboard' },

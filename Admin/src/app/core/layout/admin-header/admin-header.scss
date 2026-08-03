@@ -127,6 +127,28 @@
   position: absolute;
 }
 
+.notification-button { position: relative; }
+.notification-badge { align-items: center; background: #ff4081; border: 2px solid var(--hv-theme-primary-strong); border-radius: 10px; color: #fff; display: flex; font-size: .58rem; font-weight: 700; height: 17px; justify-content: center; min-width: 17px; padding: 0 3px; position: absolute; right: 1px; top: 2px; }
+
+::ng-deep .notification-menu.mat-mdc-menu-panel { max-width: none; width: min(390px, calc(100vw - 16px)); }
+.notification-panel { background: var(--hv-theme-surface); color: var(--hv-theme-text); width: min(390px, calc(100vw - 16px)); }
+.notification-panel > header { align-items: center; border-bottom: 1px solid var(--hv-theme-border); display: flex; justify-content: space-between; padding: 14px 16px; }
+.notification-panel > header span { color: var(--hv-theme-primary); font-size: .72rem; }
+.notification-list { max-height: min(480px, 65vh); overflow-y: auto; }
+.notification-row { align-items: center; background: transparent; border: 0; color: inherit; cursor: pointer; display: grid; gap: 10px; grid-template-columns: 36px 1fr 8px; padding: 12px 14px; text-align: left; width: 100%; }
+.notification-row + .notification-row { border-top: 1px solid var(--hv-theme-border); }
+.notification-row.unread { background: color-mix(in srgb, var(--hv-theme-primary) 8%, var(--hv-theme-surface)); }
+.notification-row > span:nth-child(2) { display: grid; min-width: 0; }
+.notification-row strong { font-size: .82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notification-row small, .notification-row time { color: var(--hv-theme-muted); font-size: .68rem; }
+.notification-row i { background: var(--hv-theme-primary); border-radius: 50%; height: 7px; width: 7px; }
+.notification-icon { align-items: center; background: color-mix(in srgb, var(--hv-theme-primary) 14%, transparent); border-radius: 50%; color: var(--hv-theme-primary); display: flex; height: 36px; justify-content: center; width: 36px; }
+.notification-icon mat-icon { font-size: 20px; height: 20px; width: 20px; }
+.notification-empty { color: var(--hv-theme-muted); padding: 30px 16px; text-align: center; }
+.notification-empty.error { color: #d32f2f; }
+.notification-panel > footer { border-top: 1px solid var(--hv-theme-border); display: flex; justify-content: space-between; padding: 6px; }
+.notification-panel > footer a, .notification-panel > footer button { font-size: .72rem; }
+
 @media (max-width: 960px) {
   .pin-button,
   .desktop-action {

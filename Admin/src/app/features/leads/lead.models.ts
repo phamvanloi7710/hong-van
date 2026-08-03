@@ -27,6 +27,7 @@ export interface Lead {
   readonly consent_at: string;
   readonly privacy_policy_version: string;
   readonly anonymized_at: string | null;
+  readonly next_follow_up_at: string | null;
   readonly created_at: string;
   readonly updated_at: string;
 }

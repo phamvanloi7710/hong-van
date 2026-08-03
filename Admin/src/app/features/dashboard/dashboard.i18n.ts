@@ -1,0 +1,40 @@
+import { AdminLocale } from '../../core/i18n/i18n.service';
+
+export const DASHBOARD_TRANSLATIONS: Record<AdminLocale, Readonly<Record<string, string>>> = {
+  vi: {
+    eyebrow: 'VẬN HÀNH HỆ THỐNG', title: 'Tổng quan quản trị', subtitle: 'Số liệu thật theo quyền truy cập và khoảng ngày đã chọn.',
+    from: 'Từ ngày', to: 'Đến ngày', apply: 'Áp dụng', refresh: 'Làm mới', export: 'Xuất báo cáo lead',
+    products: 'Sản phẩm', published: 'Đã xuất bản', contentDrafts: 'Nội dung nháp', scheduled: 'Đã lên lịch',
+    newLeads: 'Lead mới', inRange: 'Trong khoảng ngày', overdue: 'Quá hạn chăm sóc', followUp: 'Cần xử lý ngay',
+    leadTrend: 'Xu hướng lead', productTrend: 'Sản phẩm xuất bản', noChartData: 'Chưa có dữ liệu trong khoảng ngày này.',
+    leadStatus: 'Lead theo trạng thái', leadType: 'Lead theo loại', recentActivity: 'Hoạt động gần đây',
+    topSearches: 'Từ khóa tìm kiếm nhiều', searches: 'lượt tìm', results: 'kết quả', analyticsDisabled: 'Analytics đang tắt hoặc bạn không có quyền xem.',
+    noData: 'Chưa có dữ liệu.', noPermission: 'Không có quyền xem nhóm dữ liệu này.', loadError: 'Không thể tải dữ liệu dashboard.',
+    reportReady: 'Báo cáo đã sẵn sàng và được tải xuống.', reportQueued: 'Báo cáo lớn đang được xử lý trong hàng đợi.', reportFailed: 'Không thể tạo báo cáo.',
+    close: 'Đóng', cached: 'Dữ liệu tổng hợp được cache {seconds} giây.', pagesDeferred: 'Số liệu page sẽ có sau khi Page Builder được triển khai.',
+  },
+  en: {
+    eyebrow: 'SYSTEM OPERATIONS', title: 'Administration overview', subtitle: 'Real metrics scoped by your permissions and selected date range.',
+    from: 'From', to: 'To', apply: 'Apply', refresh: 'Refresh', export: 'Export lead report',
+    products: 'Products', published: 'Published', contentDrafts: 'Content drafts', scheduled: 'Scheduled',
+    newLeads: 'New leads', inRange: 'In selected range', overdue: 'Overdue follow-ups', followUp: 'Requires attention',
+    leadTrend: 'Lead trend', productTrend: 'Published products', noChartData: 'No data in this date range.',
+    leadStatus: 'Leads by status', leadType: 'Leads by type', recentActivity: 'Recent activity',
+    topSearches: 'Top search terms', searches: 'searches', results: 'results', analyticsDisabled: 'Analytics is disabled or you do not have access.',
+    noData: 'No data yet.', noPermission: 'You do not have access to this data group.', loadError: 'Unable to load dashboard data.',
+    reportReady: 'The report is ready and has been downloaded.', reportQueued: 'The large report is being processed in the queue.', reportFailed: 'Unable to create the report.',
+    close: 'Close', cached: 'Aggregates are cached for {seconds} seconds.', pagesDeferred: 'Page metrics will be available after Page Builder is implemented.',
+  },
+  zh: {
+    eyebrow: '系统运营', title: '管理总览', subtitle: '按您的权限和所选日期范围显示真实数据。',
+    from: '开始日期', to: '结束日期', apply: '应用', refresh: '刷新', export: '导出线索报表',
+    products: '产品', published: '已发布', contentDrafts: '内容草稿', scheduled: '已排期',
+    newLeads: '新线索', inRange: '所选日期内', overdue: '逾期跟进', followUp: '需要立即处理',
+    leadTrend: '线索趋势', productTrend: '已发布产品', noChartData: '此日期范围内暂无数据。',
+    leadStatus: '按状态统计线索', leadType: '按类型统计线索', recentActivity: '最近活动',
+    topSearches: '热门搜索词', searches: '次搜索', results: '个结果', analyticsDisabled: 'Analytics 已关闭或您无权查看。',
+    noData: '暂无数据。', noPermission: '您无权查看此数据组。', loadError: '无法加载总览数据。',
+    reportReady: '报表已生成并下载。', reportQueued: '大型报表正在队列中处理。', reportFailed: '无法生成报表。',
+    close: '关闭', cached: '汇总数据缓存 {seconds} 秒。', pagesDeferred: 'Page Builder 实现后将提供页面统计。',
+  },
+};

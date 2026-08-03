@@ -1,130 +1,87 @@
-<section class="dashboard" [attr.aria-label]="'dashboard.aria' | hvT">
-  <div class="tiles-grid">
-    <mat-card class="tile gradient-green">
-      <mat-icon>inventory_2</mat-icon>
-      <h2>—</h2>
-      <p>{{ 'dashboard.products' | hvT }}</p>
-    </mat-card>
-    <mat-card class="tile gradient-red">
-      <mat-icon>handyman</mat-icon>
-      <h2>—</h2>
-      <p>{{ 'dashboard.services' | hvT }}</p>
-    </mat-card>
-    <mat-card class="tile gradient-orange">
-      <mat-icon>warehouse</mat-icon>
-      <h2>—</h2>
-      <p>{{ 'dashboard.warehouses' | hvT }}</p>
-    </mat-card>
-    <mat-card class="tile gradient-pink">
-      <mat-icon>request_quote</mat-icon>
-      <h2>—</h2>
-      <p>{{ 'dashboard.quotes' | hvT }}</p>
-    </mat-card>
-    <mat-card class="tile gradient-gray">
-      <mat-icon>article</mat-icon>
-      <h2>—</h2>
-      <p>{{ 'dashboard.posts' | hvT }}</p>
-    </mat-card>
-    <mat-card class="tile gradient-brown">
-      <mat-icon>group</mat-icon>
-      <h2>—</h2>
-      <p>{{ 'dashboard.users' | hvT }}</p>
-    </mat-card>
-  </div>
-
-  <div class="info-grid">
-    <mat-card class="info-card gradient-purple">
-      <header>
-        <span>{{ 'dashboard.publishedProducts' | hvT }}</span><span><mat-icon>trending_up</mat-icon> 0%</span>
-      </header>
-      <div class="bar-chart" aria-hidden="true">
-        <i style="height: 45%"></i><i style="height: 72%"></i><i style="height: 32%"></i>
-        <i style="height: 86%"></i><i style="height: 64%"></i><i style="height: 38%"></i>
-        <i style="height: 78%"></i><i style="height: 55%"></i><i style="height: 90%"></i>
-        <i style="height: 47%"></i><i style="height: 68%"></i><i style="height: 82%"></i>
-      </div>
-    </mat-card>
-    <mat-card class="info-card gradient-teal">
-      <header>
-        <span>{{ 'dashboard.quoteRequests' | hvT }}</span><span><mat-icon>trending_up</mat-icon> 0%</span>
-      </header>
-      <svg class="line-chart" viewBox="0 0 220 100" preserveAspectRatio="none" aria-hidden="true">
-        <polyline
-          points="0,76 12,18 25,58 38,30 52,82 66,14 78,45 91,28 105,72 118,38 132,54 146,86 160,43 175,65 190,31 203,77 220,20"
-        />
-      </svg>
-    </mat-card>
-    <mat-card class="info-card gradient-indigo">
-      <header>
-        <span>{{ 'dashboard.pendingContent' | hvT }}</span><span><mat-icon>trending_down</mat-icon> 0%</span>
-      </header>
-      <div class="bar-chart" aria-hidden="true">
-        <i style="height: 34%"></i><i style="height: 65%"></i><i style="height: 48%"></i>
-        <i style="height: 87%"></i><i style="height: 39%"></i><i style="height: 76%"></i>
-        <i style="height: 54%"></i><i style="height: 92%"></i><i style="height: 46%"></i>
-        <i style="height: 72%"></i><i style="height: 36%"></i><i style="height: 81%"></i>
-      </div>
-    </mat-card>
-    <mat-card class="info-card gradient-amber">
-      <header>
-        <span>{{ 'dashboard.contacts' | hvT }}</span><span><mat-icon>trending_up</mat-icon> 0%</span>
-      </header>
-      <svg class="line-chart" viewBox="0 0 220 100" preserveAspectRatio="none" aria-hidden="true">
-        <polyline
-          points="0,82 12,60 25,74 38,36 52,62 66,42 78,78 91,22 105,65 118,48 132,72 146,32 160,55 175,18 190,64 203,40 220,76"
-        />
-      </svg>
-    </mat-card>
-  </div>
-
-  <div class="dashboard-panels">
-    <mat-card class="panel disk-panel">
-      <h2>{{ 'dashboard.storage' | hvT }}</h2>
-      <div class="panel-controls">
-        <label><input type="checkbox" checked disabled /> {{ 'dashboard.systemFiles' | hvT }}</label>
-        <label><input type="checkbox" checked disabled /> {{ 'dashboard.media' | hvT }}</label>
-      </div>
-      <div class="disk-chart" aria-hidden="true"><span></span></div>
-    </mat-card>
-
-    <mat-card class="panel todo-panel">
-      <h2>{{ 'dashboard.todo' | hvT }}</h2>
-      <div class="task-input">
-        <input type="text" [placeholder]="'dashboard.todoPlaceholder' | hvT" /><mat-icon>add</mat-icon>
-      </div>
-      <ul>
-        <li>{{ 'dashboard.todoCompany' | hvT }}</li>
-        <li>{{ 'dashboard.todoProducts' | hvT }}</li>
-        <li>{{ 'dashboard.todoServices' | hvT }}</li>
-        <li>{{ 'dashboard.todoPublic' | hvT }}</li>
-      </ul>
-    </mat-card>
-  </div>
-
-  <div class="performance-grid">
-    <mat-card class="analytics-card gradient-purple" [attr.aria-label]="'dashboard.activityChart' | hvT">
-      <svg viewBox="0 0 700 240" preserveAspectRatio="none" aria-hidden="true">
-        <polyline
-          points="0,195 50,138 100,168 150,62 200,120 250,46 300,104 350,75 400,145 450,88 500,170 550,96 600,132 650,52 700,84"
-        />
-      </svg>
-    </mat-card>
-    <div class="progress-column">
-      <mat-card
-        ><div><strong>0</strong><span>{{ 'dashboard.products' | hvT }}</span></div>
-        <mat-progress-bar mode="determinate" value="0" />
-        <p>{{ 'dashboard.noStats' | hvT }}</p></mat-card
-      >
-      <mat-card
-        ><div><strong>0</strong><span>{{ 'dashboard.quoteRequests' | hvT }}</span></div>
-        <mat-progress-bar mode="determinate" value="0" />
-        <p>{{ 'dashboard.noStats' | hvT }}</p></mat-card
-      >
-      <mat-card
-        ><div><strong>0</strong><span>{{ 'dashboard.contacts' | hvT }}</span></div>
-        <mat-progress-bar mode="determinate" value="0" />
-        <p>{{ 'dashboard.noStats' | hvT }}</p></mat-card
-      >
+<section class="dashboard" aria-labelledby="dashboard-title">
+  <header class="dashboard-head">
+    <div>
+      <p>{{ text('eyebrow') }}</p>
+      <h1 id="dashboard-title">{{ text('title') }}</h1>
+      <span>{{ text('subtitle') }}</span>
     </div>
-  </div>
+    <form class="range-filter" [formGroup]="filters" (ngSubmit)="load()">
+      <label>{{ text('from') }}<input type="date" formControlName="from" /></label>
+      <label>{{ text('to') }}<input type="date" formControlName="to" /></label>
+      <button mat-stroked-button type="submit" [disabled]="loading()"><mat-icon>filter_alt</mat-icon>{{ text('apply') }}</button>
+      <button mat-icon-button type="button" [attr.aria-label]="text('refresh')" (click)="load()"><mat-icon>refresh</mat-icon></button>
+      @if (authStore.hasPermission('leads.export')) {
+        <button mat-flat-button type="button" [disabled]="exporting()" (click)="exportLeads()"><mat-icon>download</mat-icon>{{ text('export') }}</button>
+      }
+    </form>
+  </header>
+
+  @if (loading() && !snapshot()) {
+    <div class="page-state"><mat-spinner diameter="44"></mat-spinner></div>
+  } @else if (error()) {
+    <div class="page-state error"><mat-icon>error_outline</mat-icon>{{ error() }}</div>
+  } @else if (snapshot(); as data) {
+    <div class="tiles-grid">
+      @if (data.cards.products; as products) {
+        <a class="tile gradient-green" routerLink="/products"><mat-icon>inventory_2</mat-icon><div><strong>{{ products.total }}</strong><span>{{ text('products') }}</span><small>{{ products.published }} {{ text('published') }}</small></div></a>
+      } @else { <div class="tile unavailable"><mat-icon>lock</mat-icon><div><strong>—</strong><span>{{ text('products') }}</span><small>{{ text('noPermission') }}</small></div></div> }
+      @if (data.cards.content; as content) {
+        <a class="tile gradient-indigo" routerLink="/content-pages"><mat-icon>article</mat-icon><div><strong>{{ content.drafts }}</strong><span>{{ text('contentDrafts') }}</span><small>{{ content.scheduled }} {{ text('scheduled') }}</small></div></a>
+      } @else { <div class="tile unavailable"><mat-icon>lock</mat-icon><div><strong>—</strong><span>{{ text('contentDrafts') }}</span><small>{{ text('noPermission') }}</small></div></div> }
+      @if (data.cards.leads; as leads) {
+        <a class="tile gradient-teal" routerLink="/leads"><mat-icon>contact_mail</mat-icon><div><strong>{{ leads.new_in_range }}</strong><span>{{ text('newLeads') }}</span><small>{{ text('inRange') }}</small></div></a>
+        <a class="tile gradient-red" routerLink="/leads"><mat-icon>notification_important</mat-icon><div><strong>{{ leads.overdue_follow_up }}</strong><span>{{ text('overdue') }}</span><small>{{ text('followUp') }}</small></div></a>
+      } @else {
+        <div class="tile unavailable"><mat-icon>lock</mat-icon><div><strong>—</strong><span>{{ text('newLeads') }}</span><small>{{ text('noPermission') }}</small></div></div>
+        <div class="tile unavailable"><mat-icon>lock</mat-icon><div><strong>—</strong><span>{{ text('overdue') }}</span><small>{{ text('noPermission') }}</small></div></div>
+      }
+    </div>
+
+    <div class="charts-grid">
+      <mat-card class="chart-card">
+        <header><div><mat-icon>query_stats</mat-icon><h2>{{ text('leadTrend') }}</h2></div><strong>{{ data.cards.leads?.total ?? 0 }}</strong></header>
+        @if (data.charts.leads.length) {
+          <div class="bar-chart" [attr.aria-label]="text('leadTrend')">
+            @for (point of data.charts.leads; track point.date) { <div class="bar-column" [title]="point.date + ': ' + point.value"><span [style.height.%]="chartHeight(point, leadChartMax())"></span><small>{{ point.date.slice(5) }}</small></div> }
+          </div>
+        } @else { <div class="empty-chart">{{ text('noChartData') }}</div> }
+      </mat-card>
+      <mat-card class="chart-card product-chart">
+        <header><div><mat-icon>trending_up</mat-icon><h2>{{ text('productTrend') }}</h2></div><strong>{{ data.cards.products?.published ?? 0 }}</strong></header>
+        @if (data.charts.published_products.length) {
+          <div class="bar-chart" [attr.aria-label]="text('productTrend')">
+            @for (point of data.charts.published_products; track point.date) { <div class="bar-column" [title]="point.date + ': ' + point.value"><span [style.height.%]="chartHeight(point, productChartMax())"></span><small>{{ point.date.slice(5) }}</small></div> }
+          </div>
+        } @else { <div class="empty-chart">{{ text('noChartData') }}</div> }
+      </mat-card>
+    </div>
+
+    <div class="details-grid">
+      <mat-card class="breakdown-card">
+        <h2><mat-icon>donut_small</mat-icon>{{ text('leadStatus') }}</h2>
+        @for (entry of entries(data.cards.leads?.by_status); track entry[0]) { <div class="breakdown-row"><span>{{ entry[0] }}</span><i><b [style.width.%]="data.cards.leads?.total ? (entry[1] / data.cards.leads!.total) * 100 : 0"></b></i><strong>{{ entry[1] }}</strong></div> } @empty { <p class="empty">{{ text('noData') }}</p> }
+        <h2 class="second"><mat-icon>category</mat-icon>{{ text('leadType') }}</h2>
+        @for (entry of entries(data.cards.leads?.by_type); track entry[0]) { <div class="breakdown-row"><span>{{ entry[0] }}</span><i><b [style.width.%]="data.cards.leads?.total ? (entry[1] / data.cards.leads!.total) * 100 : 0"></b></i><strong>{{ entry[1] }}</strong></div> } @empty { <p class="empty">{{ text('noData') }}</p> }
+      </mat-card>
+
+      <mat-card class="activity-card">
+        <h2><mat-icon>history</mat-icon>{{ text('recentActivity') }}</h2>
+        @for (activity of data.recent_activity; track activity.public_id) {
+          <div class="activity-row"><span class="activity-icon"><mat-icon>bolt</mat-icon></span><div><strong>{{ activity.action }}</strong><small>{{ activity.subject_type }} · {{ activity.subject_public_id || '—' }}</small><time>{{ formattedTime(activity.occurred_at) }}</time></div></div>
+        } @empty { <p class="empty">{{ data.capabilities.activity ? text('noData') : text('noPermission') }}</p> }
+      </mat-card>
+
+      <mat-card class="search-card">
+        <h2><mat-icon>manage_search</mat-icon>{{ text('topSearches') }}</h2>
+        @if (data.analytics.enabled) {
+          @for (term of data.analytics.top_search_terms; track term.term) { <div class="search-row"><span>{{ term.term }}</span><strong>{{ term.searches }} {{ text('searches') }}</strong><small>{{ term.results }} {{ text('results') }}</small></div> } @empty { <p class="empty">{{ text('noData') }}</p> }
+        } @else { <p class="empty">{{ text('analyticsDisabled') }}</p> }
+      </mat-card>
+    </div>
+
+    <footer class="dashboard-note">
+      <span><mat-icon>schedule</mat-icon>{{ text('cached', { seconds: data.cache_ttl_seconds }) }}</span>
+      @if (!data.capabilities.pages) { <span><mat-icon>info</mat-icon>{{ text('pagesDeferred') }}</span> }
+    </footer>
+  }
 </section>

@@ -91,7 +91,11 @@
   - [x] P44 Event/Page Builder boundary: allowlisted lead_submit/product_view parameters without PII and no arbitrary script URL/setting/provider
   - [x] P44 Admin: Annular settings card, provider/policy controls, client/backend validation, masking and vi/en/zh; built, synced and verified on hongvan.local
   - [ ] P44 Public template binding: render banner/preferences, load the consent client and wire lead/product events in final Blade template (deferred to the last frontend stage)
-- [ ] P45 Dashboard/reports/notifications
+- [x] P45 Dashboard/reports/notifications
+  - [x] P45 Dashboard API/Admin: real product, content, scoped lead, overdue follow-up, date-range chart, recent activity and opt-in search metrics with responsive Annular UI in vi/en/zh
+  - [x] P45 Notification center: per-user unread/read/all state, header badge/menu, safe internal deep links and no cross-user access
+  - [x] P45 Reports: synchronous small lead CSV, queued large export, owner-only private download, expiry and CSV formula-injection protection
+  - [x] P45 Data isolation/cache: assigned-lead default, explicit `leads.view_all`, permission-aware cards, aggregate TTL and model-event invalidation
 - [ ] P46 Accessibility/performance
 - [ ] P47 Seed/demo content
 - [ ] P48 Backend QA

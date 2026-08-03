@@ -121,8 +121,16 @@
   >
     <mat-icon>apps</mat-icon>
   </button>
-  <button mat-icon-button type="button" [attr.aria-label]="'header.notifications' | hvT">
+  <button
+    mat-icon-button
+    type="button"
+    class="notification-button"
+    [attr.aria-label]="'header.notifications' | hvT"
+    [matMenuTriggerFor]="notificationMenu"
+    (menuOpened)="loadNotifications()"
+  >
     <mat-icon>notifications</mat-icon>
+    @if (unreadNotifications() > 0) { <span class="notification-badge">{{ unreadNotifications() > 99 ? '99+' : unreadNotifications() }}</span> }
   </button>
   <button
     mat-icon-button
@@ -143,6 +151,28 @@
         <span>{{ locale.labelKey | hvT }}</span>
       </button>
     }
+  </mat-menu>
+
+  <mat-menu #notificationMenu="matMenu" xPosition="before" class="notification-menu">
+    <div class="notification-panel">
+      <header><strong>{{ notificationText('title') }}</strong>@if (unreadNotifications()) { <span>{{ unreadNotifications() }} {{ notificationText('unread') }}</span> }</header>
+      @if (notificationLoading() && !notifications().length) {
+        <div class="notification-empty">…</div>
+      } @else if (notificationError()) {
+        <div class="notification-empty error">{{ notificationError() }}</div>
+      } @else {
+        <div class="notification-list">
+          @for (notification of notifications(); track notification.id) {
+            <button type="button" class="notification-row" [class.unread]="!notification.read_at" (click)="openNotification(notification)">
+              <span class="notification-icon"><mat-icon>{{ notification.kind === 'LeadReceivedNotification' ? 'contact_mail' : 'notifications' }}</mat-icon></span>
+              <span><strong>{{ notificationText('leadReceived') }}</strong><small>{{ notificationDetails(notification) }}</small><time>{{ notificationTime(notification) }}</time></span>
+              @if (!notification.read_at) { <i aria-hidden="true"></i> }
+            </button>
+          } @empty { <div class="notification-empty">{{ notificationText('empty') }}</div> }
+        </div>
+      }
+      <footer><button mat-button type="button" [disabled]="unreadNotifications() === 0" (click)="markAllNotificationsRead()"><mat-icon>done_all</mat-icon>{{ notificationText('markAll') }}</button><a mat-button routerLink="/dashboard"><mat-icon>dashboard</mat-icon>{{ notificationText('viewAll') }}</a></footer>
+    </div>
   </mat-menu>
 
   <mat-menu #userMenu="matMenu" xPosition="before">

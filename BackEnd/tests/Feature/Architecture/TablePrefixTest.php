@@ -99,6 +99,7 @@ class TablePrefixTest extends TestCase
             'hongvan_product_translations',
             'hongvan_products',
             'hongvan_redirects',
+            'hongvan_report_exports',
             'hongvan_projects',
             'hongvan_project_translations',
             'hongvan_project_media',

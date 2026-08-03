@@ -9,6 +9,7 @@ final class PermissionRegistry
     /** @var list<string> */
     public const ACTIONS = [
         'view',
+        'view_all',
         'create',
         'update',
         'delete',
@@ -41,6 +42,7 @@ final class PermissionRegistry
             ...self::module('warehouses', 'kho bãi', ['view', 'create', 'update', 'delete', 'publish']),
             ...self::module('warehouse_requests', 'yêu cầu thuê kho', ['view', 'update', 'export']),
             ...self::module('leads', 'lead', ['view', 'update', 'export']),
+            self::permission('leads', 'view_all', 'Xem táº¥t cáº£ lead'),
             ...self::module('pages', 'trang', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
             ...self::module('posts', 'bài viết', ['view', 'create', 'update', 'delete', 'restore', 'publish', 'export']),
             ...self::module('showcase', 'trưng bày doanh nghiệp', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
@@ -68,6 +70,7 @@ final class PermissionRegistry
     {
         $actionLabels = [
             'view' => 'Xem',
+            'view_all' => 'Xem táº¥t cáº£',
             'create' => 'Tạo',
             'update' => 'Cập nhật',
             'delete' => 'Xóa',

@@ -6,6 +6,9 @@ use App\Http\Controllers\Api\V1\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\V1\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\V1\CropSolutions\CropReferenceController;
 use App\Http\Controllers\Api\V1\CropSolutions\CropSolutionController;
+use App\Http\Controllers\Api\V1\Dashboard\DashboardController;
+use App\Http\Controllers\Api\V1\Dashboard\NotificationController;
+use App\Http\Controllers\Api\V1\Dashboard\ReportExportController;
 use App\Http\Controllers\Api\V1\Identity\PermissionController;
 use App\Http\Controllers\Api\V1\Identity\RoleController;
 use App\Http\Controllers\Api\V1\Identity\UserController;
@@ -56,6 +59,16 @@ Route::prefix('admin/v1')
         });
 
         Route::middleware('auth:sanctum')->group(function (): void {
+            Route::get('dashboard', DashboardController::class)->middleware('permission:dashboard.view')->name('dashboard.show');
+            Route::prefix('dashboard')->name('dashboard.')->group(function (): void {
+                Route::get('notifications', [NotificationController::class, 'index'])->middleware('permission:dashboard.view')->name('notifications.index');
+                Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->middleware('permission:dashboard.view')->name('notifications.read-all');
+                Route::post('notifications/{notification}/read', [NotificationController::class, 'read'])->middleware('permission:dashboard.view')->name('notifications.read');
+                Route::post('reports/leads', [ReportExportController::class, 'store'])->middleware(['permission:dashboard.view', 'permission:leads.export'])->name('reports.store');
+                Route::get('reports/{reportExport:public_id}', [ReportExportController::class, 'show'])->middleware(['permission:dashboard.view', 'permission:leads.export'])->name('reports.show');
+                Route::get('reports/{reportExport:public_id}/download', [ReportExportController::class, 'download'])->middleware(['permission:dashboard.view', 'permission:leads.export'])->name('reports.download');
+            });
+
             Route::get('preferences', [UserPreferenceController::class, 'show'])->name('preferences.show');
             Route::put('preferences', [UserPreferenceController::class, 'update'])->name('preferences.update');
             Route::delete('preferences', [UserPreferenceController::class, 'destroy'])->name('preferences.destroy');
@@ -223,6 +236,7 @@ Route::prefix('admin/v1')
                 Route::post('{lead:public_id}/status', [LeadController::class, 'status'])->middleware('permission:leads.update')->name('status');
                 Route::post('{lead:public_id}/assign', [LeadController::class, 'assign'])->middleware('permission:leads.update')->name('assign');
                 Route::post('{lead:public_id}/notes', [LeadController::class, 'note'])->middleware('permission:leads.update')->name('notes');
+                Route::put('{lead:public_id}/follow-up', [LeadController::class, 'followUp'])->middleware('permission:leads.update')->name('follow-up');
             });
 
             Route::prefix('posts')->name('posts.')->group(function (): void {

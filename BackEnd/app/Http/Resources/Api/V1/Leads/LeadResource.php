@@ -30,6 +30,7 @@ final class LeadResource extends JsonResource
             'consent_at' => $lead->consent_at?->utc()->toISOString(),
             'privacy_policy_version' => $lead->privacy_policy_version,
             'anonymized_at' => $lead->anonymized_at?->utc()->toISOString(),
+            'next_follow_up_at' => $lead->next_follow_up_at?->utc()->toISOString(),
             'created_at' => $lead->created_at?->utc()->toISOString(),
             'updated_at' => $lead->updated_at?->utc()->toISOString(),
         ];

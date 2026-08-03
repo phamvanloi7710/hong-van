@@ -30,6 +30,9 @@ pre { max-height: 260px; overflow: auto; padding: 12px; border-radius: 5px; whit
 .workflow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .workflow > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
 .workflow mat-form-field, .note-form mat-form-field { width: 100%; }
+.workflow .follow-up-control { grid-column: 1 / -1; }
+.follow-up-control label { color: #6c757d; display: grid; font-size: 12px; gap: 4px; }
+.follow-up-control input { border: 1px solid #bbb; border-radius: 4px; min-height: 40px; padding: 0 10px; }
 .note-form { display: grid; }
 .note-form button { justify-self: end; }
 .history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }

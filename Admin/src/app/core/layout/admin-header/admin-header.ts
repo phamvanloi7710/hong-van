@@ -29,6 +29,10 @@ import {
 } from '../../navigation/admin-menu';
 import { AdminMenuItem } from '../../navigation/admin-menu.model';
 import { AdminPreferencesStore } from '../../preferences/admin-preferences.store';
+import { DateTimeService } from '../../i18n/date-time.service';
+import { DashboardDataService } from '../../../features/dashboard/dashboard-data.service';
+import { DashboardNotification } from '../../../features/dashboard/dashboard.models';
+import { NOTIFICATION_TRANSLATIONS } from './notification.i18n';
 
 @Component({
   selector: 'hv-admin-header',
@@ -52,6 +56,8 @@ export class AdminHeader {
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly dashboardData = inject(DashboardDataService);
+  private readonly dateTimes = inject(DateTimeService);
   readonly preferences = inject(AdminPreferencesStore);
   readonly i18n = inject(I18nService);
 
@@ -64,6 +70,10 @@ export class AdminHeader {
   readonly searchOpened = signal(false);
   readonly logoutPending = signal(false);
   readonly logoutError = signal<string | null>(null);
+  readonly notifications = signal<readonly DashboardNotification[]>([]);
+  readonly unreadNotifications = signal(0);
+  readonly notificationLoading = signal(false);
+  readonly notificationError = signal<string | null>(null);
   readonly authStore = this.authService.store;
   readonly locales = ADMIN_LOCALES;
   readonly availableFavoriteMenuItems = computed(() =>
@@ -77,6 +87,10 @@ export class AdminHeader {
         item !== undefined && item.route !== undefined && this.authStore.hasPermission(item.permission),
       ),
   );
+
+  constructor() {
+    this.loadNotifications();
+  }
 
   toggleSearch(): void {
     this.searchOpened.update((opened) => !opened);
@@ -99,6 +113,60 @@ export class AdminHeader {
 
   selectLocale(locale: AdminLocale): void {
     this.preferences.updateLocale(locale);
+  }
+
+  notificationText(key: string, parameters: Readonly<Record<string, string | number>> = {}): string {
+    const value = NOTIFICATION_TRANSLATIONS[this.i18n.locale()][key] ?? key;
+    return Object.entries(parameters).reduce((result, [name, replacement]) => result.replaceAll(`{${name}}`, String(replacement)), value);
+  }
+
+  loadNotifications(): void {
+    if (!this.authStore.hasPermission('dashboard.view')) return;
+    this.notificationLoading.set(true);
+    this.notificationError.set(null);
+    this.dashboardData.notifications().pipe(finalize(() => this.notificationLoading.set(false)), takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (page) => {
+        this.notifications.set(page.items);
+        this.unreadNotifications.set(page.unread_count);
+      },
+      error: () => this.notificationError.set(this.notificationText('loadError')),
+    });
+  }
+
+  openNotification(notification: DashboardNotification): void {
+    const navigate = (): void => {
+      if (notification.deep_link) void this.router.navigateByUrl(notification.deep_link.replace(/^\/admin/, '') || '/dashboard');
+    };
+    if (notification.read_at) {
+      navigate();
+      return;
+    }
+    this.dashboardData.markNotificationRead(notification.id).subscribe({
+      next: (updated) => {
+        this.notifications.update((items) => items.map((item) => item.id === updated.id ? updated : item));
+        this.unreadNotifications.update((count) => Math.max(0, count - 1));
+        navigate();
+      },
+      error: () => this.notificationError.set(this.notificationText('loadError')),
+    });
+  }
+
+  markAllNotificationsRead(): void {
+    this.dashboardData.markAllNotificationsRead().subscribe({
+      next: (count) => {
+        this.unreadNotifications.set(count);
+        this.notifications.update((items) => items.map((item) => ({ ...item, read_at: item.read_at ?? new Date().toISOString() })));
+      },
+      error: () => this.notificationError.set(this.notificationText('loadError')),
+    });
+  }
+
+  notificationDetails(notification: DashboardNotification): string {
+    return this.notificationText('leadDetail', { type: notification.data.type ?? 'lead', status: notification.data.status ?? 'new' });
+  }
+
+  notificationTime(notification: DashboardNotification): string {
+    return this.dateTimes.format(notification.created_at);
   }
 
   logout(): void {

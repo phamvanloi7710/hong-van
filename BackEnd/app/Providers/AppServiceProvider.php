@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Domain\Dashboard\DashboardCache;
 use App\Domain\Identity\PermissionService;
 use App\Domain\Seo\SitemapCache;
+use App\Models\AuditLog;
 use App\Models\Brand;
 use App\Models\Certification;
 use App\Models\Crop;
@@ -12,6 +14,7 @@ use App\Models\CropSolution;
 use App\Models\CropStage;
 use App\Models\Gallery;
 use App\Models\GalleryItem;
+use App\Models\Lead;
 use App\Models\Media;
 use App\Models\Partner;
 use App\Models\Permission;
@@ -25,6 +28,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductTag;
 use App\Models\Project;
 use App\Models\Role;
+use App\Models\SearchLog;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\TransportRoute;
@@ -187,6 +191,15 @@ class AppServiceProvider extends ServiceProvider
             });
             $sitemapModel::deleted(static function (): void {
                 app(SitemapCache::class)->invalidate();
+            });
+        }
+
+        foreach ([Product::class, Post::class, Lead::class, SearchLog::class, AuditLog::class] as $dashboardModel) {
+            $dashboardModel::saved(static function (): void {
+                app(DashboardCache::class)->invalidate();
+            });
+            $dashboardModel::deleted(static function (): void {
+                app(DashboardCache::class)->invalidate();
             });
         }
     }

@@ -6,6 +6,7 @@ use App\Domain\Audit\AuditTrail;
 use App\Models\Lead;
 use App\Models\LeadNote;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -55,6 +56,20 @@ final readonly class LeadWorkflowManager
         $this->audit->record('lead.note.added', $actor, 'lead', $lead->public_id, after: ['type' => $lead->type, 'note_public_id' => $note->public_id]);
 
         return $note->load('author');
+    }
+
+    public function scheduleFollowUp(Lead $lead, User $actor, ?string $nextFollowUpAt): Lead
+    {
+        $before = $lead->next_follow_up_at === null ? null : CarbonImmutable::parse((string) $lead->next_follow_up_at)->utc()->toISOString();
+        $lead->forceFill([
+            'next_follow_up_at' => $nextFollowUpAt === null ? null : CarbonImmutable::parse($nextFollowUpAt)->utc(),
+        ])->save();
+        $this->audit->record('lead.follow_up.scheduled', $actor, 'lead', $lead->public_id, before: ['next_follow_up_at' => $before], after: [
+            'next_follow_up_at' => $lead->next_follow_up_at === null ? null : CarbonImmutable::parse((string) $lead->next_follow_up_at)->utc()->toISOString(),
+            'type' => $lead->type,
+        ]);
+
+        return $lead->fresh($this->relations());
     }
 
     /** @return list<string> */
