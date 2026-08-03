@@ -83,6 +83,21 @@ final class PageBuilderApiTest extends TestCase
             ->assertUnprocessable()->assertJsonValidationErrors('document.blocks.0.props.label');
     }
 
+    public function test_page_builder_document_preserves_valid_empty_string_defaults(): void
+    {
+        $this->actingAs($this->superAdmin());
+        $pageId = $this->postJson('/api/admin/v1/page-builder/pages', $this->metadataPayload())
+            ->assertCreated()
+            ->json('data.public_id');
+
+        $document = PageDocumentSchema::emptyDocument();
+        $document['blocks'][] = $this->placeholder('block-empty-label-01', '');
+
+        $this->putJson("/api/admin/v1/page-builder/pages/{$pageId}/draft", ['document' => $document])
+            ->assertOk()
+            ->assertJsonPath('data.draft.document.blocks.0.props.label', '');
+    }
+
     public function test_page_builder_permissions_are_enforced(): void
     {
         $this->actingAs(User::factory()->create());

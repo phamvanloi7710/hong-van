@@ -17,6 +17,25 @@ import {
 } from './page-builder.models';
 
 describe('Page Builder immutable document operations', () => {
+  it('creates a valid block id when randomUUID is unavailable on an HTTP custom domain', () => {
+    const originalCrypto = globalThis.crypto;
+    vi.stubGlobal('crypto', {
+      getRandomValues: (bytes: Uint8Array) => {
+        bytes.set(Array.from({ length: 16 }, (_, index) => index));
+        return bytes;
+      },
+    });
+
+    try {
+      const added = addBlock(emptyPageBuilderDocument(1), registryFixture(), 'layout.section', null, 0);
+      expect(added.ok).toBe(true);
+      if (!added.ok) return;
+      expect(added.blockId).toBe('00010203-0405-4607-8809-0a0b0c0d0e0f');
+    } finally {
+      vi.stubGlobal('crypto', originalCrypto);
+    }
+  });
+
   it('adds nested blocks without mutating input and rejects invalid parent relationships', () => {
     const registry = registryFixture();
     const initial = emptyPageBuilderDocument(1);

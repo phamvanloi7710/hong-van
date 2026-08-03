@@ -31,6 +31,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->convertEmptyStringsToNull(except: [
+            static fn (Request $request): bool => $request->is('api/admin/v1/page-builder/*')
+                && $request->has('document'),
+        ]);
         $middleware->redirectGuestsTo(
             static fn (Request $request): ?string => $request->is('api/*') ? null : '/admin/login',
         );
