@@ -83,6 +83,7 @@
   - [x] Iframe dùng đúng Blade renderer/CSS public, `noindex`, CSP `frame-ancestors 'self'`, overlay chọn block an toàn và không cho điều hướng/gửi form trong preview
   - [x] Angular debounce update, heartbeat/reconnect và `postMessage` kiểm tra chính xác origin, iframe source, token, schema version cùng message allowlist
   - [x] Backend 4 test/38 assertions, full backend 215 test/1956 assertions, Angular 30 file/61 test, Playwright preview 1 test, PHPStan/Pint/lint/build và UAT `hongvan.local` đạt
+  - [x] Seeder demo idempotent tạo 6 page `vi/en/zh`; Chrome UAT xác nhận cả 6 iframe render 2 block, handshake ready ổn định và không có warning/error
 - [ ] P28 Versioning/publishing
 - [ ] P29 Templates/import/export/locks
 - [ ] P30 Menus/global regions

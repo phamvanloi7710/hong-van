@@ -32,6 +32,10 @@
                 if (event.origin !== origin || event.source !== window.parent) return;
                 const message = event.data;
                 if (!message || message.channel !== channel || message.schemaVersion !== schemaVersion || message.token !== token) return;
+                if (message.type === 'preview.handshake') {
+                    send('preview.ready');
+                    return;
+                }
                 if (message.type === 'preview.refresh') {
                     window.location.reload();
                     return;

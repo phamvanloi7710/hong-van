@@ -31,6 +31,7 @@ test('Blade iframe preview enforces the message contract and follows editor upda
   const frame = page.frameLocator('iframe[title="Blade iframe host"]');
   await expect(frame.locator(`[data-block-id="${blockId}"]`)).toContainText('Blade renderer block');
   await expect(frame.locator('#preview-status')).toHaveText('ready-1');
+  await expect(page.getByText('Blade preview đã sẵn sàng', { exact: true })).toBeVisible();
 
   await frame.locator('body').evaluate((body, payload) => {
     window.parent.postMessage(payload, window.location.origin);
@@ -104,7 +105,7 @@ function previewHtml(): string {
   return `<!doctype html><html><body><main><div class="pb-foundation-placeholder" data-block-id="${blockId}">Blade renderer block</div><output id="preview-status">ready-1</output></main><script>
     (() => {
       const channel = 'hongvan.page-builder.preview'; const schemaVersion = 1; const token = '${token}'; const origin = location.origin; let revision = 1;
-      addEventListener('message', (event) => { const message = event.data; if (event.origin !== origin || event.source !== parent || !message || message.channel !== channel || message.schemaVersion !== schemaVersion || message.token !== token) return; if (message.type === 'preview.refresh') document.querySelector('#preview-status').textContent = 'ready-' + (++revision); });
+      addEventListener('message', (event) => { const message = event.data; if (event.origin !== origin || event.source !== parent || !message || message.channel !== channel || message.schemaVersion !== schemaVersion || message.token !== token) return; if (message.type === 'preview.handshake') parent.postMessage({ channel, schemaVersion, type: 'preview.ready', token }, origin); if (message.type === 'preview.refresh') document.querySelector('#preview-status').textContent = 'ready-' + (++revision); });
       document.querySelector('[data-block-id]').addEventListener('click', () => parent.postMessage({ channel, schemaVersion, type: 'preview.block-selected', token, blockId: '${blockId}' }, origin));
       parent.postMessage({ channel, schemaVersion, type: 'preview.ready', token }, origin);
     })();

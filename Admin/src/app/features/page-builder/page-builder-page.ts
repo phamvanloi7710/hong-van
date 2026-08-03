@@ -344,7 +344,9 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   }
 
   onPreviewFrameLoad(): void {
-    if (this.previewSession() !== null) this.previewStatus.set('loading');
+    if (this.previewSession() === null) return;
+    this.previewStatus.set('loading');
+    this.postPreviewMessage('preview.handshake');
   }
 
   setPaletteSearch(value: string): void {
@@ -651,9 +653,9 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
             this.data.closePreview(session).subscribe();
             return;
           }
-          if (!this.acceptPreviewUrl(session)) return;
           this.previewSession.set(session);
           this.previewStatus.set('loading');
+          if (!this.acceptPreviewUrl(session)) return;
           this.schedulePreviewRefresh(session);
         },
         error: (error: unknown) => this.handlePreviewError(error, false),
@@ -722,7 +724,7 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     if (session !== null) this.data.closePreview(session).subscribe({ error: () => undefined });
   }
 
-  private postPreviewMessage(type: 'preview.refresh' | 'preview.scroll-to-block', blockId?: string): void {
+  private postPreviewMessage(type: 'preview.handshake' | 'preview.refresh' | 'preview.scroll-to-block', blockId?: string): void {
     const session = this.previewSession();
     const target = this.previewFrame?.nativeElement.contentWindow;
     if (session === null || target === null || target === undefined) return;
