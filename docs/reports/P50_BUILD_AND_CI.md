@@ -52,6 +52,7 @@
   - smoke được chạy lại sau compatibility fix: `/health` 200, public ping 200, `/admin/` 200, unauth Admin API 401.
 - `scripts/create-build-artifact.ps1 -SkipInstall` và Bash counterpart: PASS; 125 files, `sha256sum --check` PASS trên Git Bash.
 - `git diff --check`: PASS.
+- GitLab pipeline đầu tiên `#2726801250` xác nhận YAML hợp lệ nhưng Gitleaks chặn một fake Stripe key trong tài liệu đào tạo cũ; ignore được khóa theo fingerprint lịch sử duy nhất và full-history scan local được chạy lại trước pipeline kế tiếp.
 
 ## Risks
 

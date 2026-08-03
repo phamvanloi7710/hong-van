@@ -43,7 +43,7 @@ secret_and_source_policy:
   variables:
     GIT_DEPTH: '0'
   script:
-    - gitleaks git --redact --no-banner .
+    - gitleaks git --gitleaks-ignore-path .gitleaksignore --redact --no-banner .
     - |
       unexpected="$(git ls-files Template FrontEndTemplate SourceIntegrations \
         | grep -Ev '(^|/)(AGENTS\.md|README_PLACE_[A-Z_]+\.md)$' || true)"

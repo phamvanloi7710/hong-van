@@ -12,6 +12,8 @@ Repository chính nằm trên GitLab, vì vậy `.gitlab-ci.yml` là pipeline th
 
 Mọi job dừng ngay khi prefix, migration, audit theo ngưỡng, test hoặc build lỗi. Không có secret production trong pipeline; `APP_KEY` cố định chỉ dành cho container CI tạm thời.
 
+`.gitleaksignore` chỉ chứa fingerprint duy nhất của chuỗi `sk_live_abc123` giả trong ví dụ đào tạo bảo mật đã commit từ trước. Không ignore theo cả file, cả rule hoặc pattern rộng.
+
 ## Lockfile và cache
 
 - PHP cài đúng `BackEnd/composer.lock`; cache chỉ chứa Composer download cache, không cache `vendor/`.
