@@ -107,6 +107,10 @@
   - [x] P47 Product factory: draft, published, archived, contact, fixed and range states
   - [ ] P47 Page templates/documents: deferred until the P18-P31 Page Builder registry and final frontend template exist; no unvalidated document was fabricated
 - [ ] P48 Backend QA
+  - [x] P48 MySQL QA: 164 tests/1266 assertions, Xdebug line coverage baseline 81.5%, critical-domain behavior matrix reviewed
+  - [x] P48 Architecture/security: table prefix/comments, controller 150-line threshold, no Blade DB query, published-only public sources and no arbitrary Page Builder renderer capability
+  - [x] P48 Operations: media queue idempotency, scheduled post idempotency/without-overlap, fresh/rollback/remigrate, no pending migration, route/config cache, Pint, Larastan and Composer audit
+  - [ ] P48 Page Builder publish/version/preview tests: deferred until P21-P31 backend exists; the current repository only contains placeholder directories
 - [ ] P49 Angular/E2E/visual QA
 - [ ] P50 Build/CI
 - [ ] P51 Docker/deployment

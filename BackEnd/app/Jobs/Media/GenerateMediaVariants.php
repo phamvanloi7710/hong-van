@@ -35,6 +35,10 @@ final class GenerateMediaVariants implements ShouldQueue
     {
         $media = Media::withTrashed()->findOrFail($this->mediaId);
         $operation = MediaOperation::query()->findOrFail($this->operationId);
+        if ($operation->status === 'completed') {
+            return;
+        }
+
         if ($media->trashed()) {
             $operation->forceFill([
                 'status' => 'completed',

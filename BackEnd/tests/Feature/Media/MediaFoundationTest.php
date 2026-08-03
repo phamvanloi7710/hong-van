@@ -92,11 +92,18 @@ class MediaFoundationTest extends TestCase
 
         $this->assertSame('ready', $media->fresh()->status);
         $this->assertSame('completed', $operation->fresh()->status);
-        $this->assertGreaterThanOrEqual(2, $media->variants()->where('status', 'ready')->count());
+        $variantCount = $media->variants()->where('status', 'ready')->count();
+        $this->assertGreaterThanOrEqual(2, $variantCount);
         foreach ($media->variants as $variant) {
             Storage::disk($variant->disk)->assertExists($variant->path);
         }
         $this->assertDatabaseHas('hongvan_audit_logs', ['action' => 'media.variants.generated', 'subject_public_id' => $media->public_id]);
+
+        $job->handle(app(ImageVariantGenerator::class), app(AuditTrail::class));
+
+        $this->assertSame($variantCount, $media->variants()->where('status', 'ready')->count());
+        $this->assertSame(1, $operation->fresh()->attempts);
+        $this->assertDatabaseCount('hongvan_audit_logs', 2);
     }
 
     public function test_api_permissions_allowlisted_filters_and_authenticated_content_are_enforced(): void
