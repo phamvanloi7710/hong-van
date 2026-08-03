@@ -11,7 +11,7 @@
     margin-block: 0 0.65em;
     font-family: var(--font-display);
     color: var(--color-text);
-    font-weight: 800;
+    font-weight: var(--heading-weight, 800);
     line-height: var(--line-height-heading);
     text-wrap: balance;
 }
@@ -45,14 +45,14 @@
 
 .button {
     display: inline-flex;
-    min-height: 2.75rem;
+    min-height: var(--button-min-height, 2.75rem);
     align-items: center;
     justify-content: center;
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-3) var(--button-padding-x, var(--space-5));
     border: 1px solid transparent;
-    border-radius: var(--radius-sm);
+    border-radius: var(--button-radius, var(--radius-sm));
     cursor: pointer;
-    font-weight: 700;
+    font-weight: var(--button-weight, 700);
     text-decoration: none;
     transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
 }

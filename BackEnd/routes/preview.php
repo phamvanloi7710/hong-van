@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\PublicSite\ThemePreviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('preview')
     ->name('preview.')
     ->group(function (): void {
-        // Preview endpoints must use signed, expiring URLs and noindex responses.
+        Route::get('theme/{theme:public_id}/{version:public_id}', ThemePreviewController::class)
+            ->middleware('signed')
+            ->name('theme');
     });

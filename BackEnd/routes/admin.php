@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
 use App\Http\Controllers\Api\V1\Showcase\ShowcaseController;
 use App\Http\Controllers\Api\V1\SystemPingController;
+use App\Http\Controllers\Api\V1\Themes\ThemeController;
 use App\Http\Controllers\Api\V1\Transportation\TransportationController;
 use App\Http\Controllers\Api\V1\Warehouses\WarehouseController;
 use Illuminate\Support\Facades\Route;
@@ -285,6 +286,15 @@ Route::prefix('admin/v1')
                 Route::post('regenerate', [SeoToolsController::class, 'regenerate'])->middleware('permission:seo.update')->name('regenerate');
                 Route::put('robots', [SeoToolsController::class, 'saveRobots'])->middleware('permission:seo.update')->name('robots.update');
                 Route::get('schema-preview', [SeoToolsController::class, 'schemaPreview'])->middleware('permission:seo.view')->name('schema-preview');
+            });
+
+            Route::prefix('themes')->name('themes.')->group(function (): void {
+                Route::get('active', [ThemeController::class, 'active'])->middleware('permission:themes.view')->name('active');
+                Route::get('{theme:public_id}', [ThemeController::class, 'show'])->middleware('permission:themes.view')->name('show');
+                Route::put('{theme:public_id}/draft', [ThemeController::class, 'updateDraft'])->middleware('permission:themes.update')->name('draft.update');
+                Route::post('{theme:public_id}/preview', [ThemeController::class, 'preview'])->middleware('permission:themes.view')->name('preview');
+                Route::post('{theme:public_id}/publish', [ThemeController::class, 'publish'])->middleware('permission:themes.publish')->name('publish');
+                Route::post('{theme:public_id}/rollback/{version:public_id}', [ThemeController::class, 'rollback'])->middleware('permission:themes.publish')->name('rollback');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

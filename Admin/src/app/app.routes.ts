@@ -140,6 +140,12 @@ export const routes: Routes = [
         data: placeholderData('page-builder'),
       },
       {
+        path: 'theme-studio',
+        canActivate: [permissionGuard('themes.view')],
+        loadComponent: () => import('./features/theme-studio/theme-studio-page').then((page) => page.ThemeStudioPage),
+        data: { breadcrumb: 'menu.themeStudio' },
+      },
+      {
         path: 'seo',
         canActivate: [permissionGuard('seo.view')],
         loadComponent: () => import('./features/seo/seo-page').then((page) => page.SeoPage),

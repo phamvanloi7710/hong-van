@@ -5,6 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="color-scheme" content="light">
         <meta name="theme-color" content="#63b82e">
+        @if ($isThemePreview ?? false)
+            <meta name="robots" content="noindex, nofollow">
+        @endif
         <title>{{ $metaTitle ?? config('app.name') }}</title>
         @if (! empty($metaDescription))
             <meta name="description" content="{{ $metaDescription }}">
@@ -22,6 +25,7 @@
         @if ($publicViteReady)
             @vite(['resources/css/public/app.css', 'resources/js/public/app.js'])
         @endif
+        <style data-public-theme-version="{{ $publicThemeVersion ?? 'config-default' }}">{!! $publicThemeCss ?? '' !!}</style>
         @stack('head')
     </head>
     <body class="public-page public-page--{{ $currentPage ?? 'default' }}">

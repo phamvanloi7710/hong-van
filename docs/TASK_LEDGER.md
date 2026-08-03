@@ -34,7 +34,13 @@
   - [x] Loại WooCommerce/cart/checkout/payment/account/wishlist/quick-buy và nội dung doanh nghiệp mẫu
   - [x] Bootstrap 5.3.8, jQuery 4.0.0 và Font Awesome Free 7.3.1 tự host qua Vite theo yêu cầu chủ dự án
   - [x] vi/en/zh, build, 9 test public/96 assertions, full backend 173 test/1362 assertions và UAT `hongvan.local`
-- [ ] P20 Public theme studio
+- [x] P20 Public theme studio
+  - [x] `hongvan_themes` và `hongvan_theme_versions` có prefix/comment đầy đủ, version immutable, draft kế tiếp và seed token từ P19
+  - [x] Token allowlist cho màu/font/kích thước/spacing/radius/shadow/container/button/heading/section/animation; từ chối CSS/JavaScript tùy ý
+  - [x] API permission-gated cho draft, signed preview, publish, rollback; cache public invalidation và audit publish/rollback
+  - [x] Angular Theme Studio theo Annular, typed controls, lịch sử version, vi/en/zh, build và sync Laravel
+  - [x] Blade public và signed noindex preview dùng cùng server compiler; Chrome UAT trên `hongvan.local` đạt
+  - [x] Backend 3 test/24 assertions, database comment test, Admin 27 file/52 test, Pint, Larastan và migration rollback/remigrate đạt
 - [ ] P21 Page Builder schema/registry
 - [ ] P22 Layout blocks
 - [ ] P23 Content/media blocks

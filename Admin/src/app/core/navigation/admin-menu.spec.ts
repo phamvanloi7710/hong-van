@@ -9,8 +9,8 @@ describe('ADMIN_MENU_ITEMS', () => {
     const leafItems = ADMIN_MENU_ITEMS.flatMap((item) => item.children ?? [item]);
 
     expect(leafItems.every((item) => item.route !== undefined)).toBe(true);
-    expect(NAVIGABLE_ADMIN_MENU_ITEMS).toHaveLength(16);
-    expect(new Set(NAVIGABLE_ADMIN_MENU_ITEMS.map((item) => item.route)).size).toBe(16);
+    expect(NAVIGABLE_ADMIN_MENU_ITEMS).toHaveLength(17);
+    expect(new Set(NAVIGABLE_ADMIN_MENU_ITEMS.map((item) => item.route)).size).toBe(17);
   });
 
   it('resolves placeholder routes for the page header and favorite menu', () => {

@@ -109,6 +109,14 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         route: '/page-builder',
       },
       {
+        id: 'theme-studio',
+        labelKey: 'menu.themeStudio',
+        icon: 'palette',
+        iconColor: '#43a047',
+        route: '/theme-studio',
+        permission: 'themes.view',
+      },
+      {
         id: 'seo',
         labelKey: 'menu.seo',
         icon: 'travel_explore',

@@ -1,0 +1,56 @@
+<section class="theme-studio">
+  <header class="page-header">
+    <div><p class="eyebrow">{{ text('eyebrow') }}</p><h2>{{ text('title') }}</h2><p>{{ text('description') }}</p></div>
+    <div class="page-actions">
+      <button mat-stroked-button type="button" (click)="load()" [disabled]="loading() || saving()"><mat-icon>refresh</mat-icon>{{ text('refresh') }}</button>
+      <button mat-stroked-button type="button" (click)="preview()" [disabled]="!theme() || saving()"><mat-icon>visibility</mat-icon>{{ text('preview') }}</button>
+      <button mat-flat-button type="button" (click)="save()" [disabled]="!theme() || form.invalid || saving()"><mat-icon>save</mat-icon>{{ text('save') }}</button>
+      <button mat-flat-button class="publish" type="button" (click)="publish()" [disabled]="!theme() || saving()"><mat-icon>publish</mat-icon>{{ text('publish') }}</button>
+    </div>
+  </header>
+
+  @if (loading()) { <div class="state"><mat-spinner diameter="42"/><span>{{ text('loading') }}</span></div> }
+  @else if (error()) { <div class="state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></div> }
+  @else if (theme(); as currentTheme) {
+    <div class="summary">
+      <mat-card><span>{{ text('currentDraft') }}</span><strong>v{{ currentTheme.draft.version_number }}</strong><small>{{ currentTheme.draft.checksum.slice(0, 12) }}</small></mat-card>
+      <mat-card><span>{{ text('currentPublished') }}</span><strong>v{{ currentTheme.published?.version_number ?? '—' }}</strong><small>{{ currentTheme.published?.checksum?.slice(0, 12) ?? '—' }}</small></mat-card>
+      <p><mat-icon>verified_user</mat-icon>{{ text('draftNotice') }}</p>
+    </div>
+
+    <div class="workspace">
+      <form class="token-editor" [formGroup]="form">
+        @for (group of groups; track group) {
+          <mat-card class="token-group">
+            <h3>{{ text(group) }}</h3>
+            <div class="control-grid">
+              @for (control of controlsFor(group); track controlName(control)) {
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>{{ tokenName(control.key) }}</mat-label>
+                  @if (control.kind === 'select') {
+                    <mat-select [formControlName]="controlName(control)">@for (option of control.options; track option) { <mat-option [value]="option">{{ text(option) }}</mat-option> }</mat-select>
+                  } @else {
+                    <input matInput [type]="control.kind" [formControlName]="controlName(control)" [min]="control.min ?? null" [max]="control.max ?? null" [step]="control.step ?? 1">
+                    @if (control.kind === 'color') { <span matSuffix class="color-value">{{ form.controls[controlName(control)].value }}</span> }
+                  }
+                </mat-form-field>
+              }
+            </div>
+          </mat-card>
+        }
+      </form>
+
+      <mat-card class="history">
+        <h3>{{ text('versions') }}</h3>
+        <div class="version-list">
+          @for (version of currentTheme.versions; track version.public_id) {
+            <article>
+              <div><strong>{{ text('version') }} {{ version.version_number }}</strong><span class="status" [class.live]="currentTheme.published?.public_id === version.public_id">{{ status(version) }}</span><small>{{ version.published_at ? (version.published_at | date:'medium') : '—' }}</small></div>
+              @if (version.status === 'published' && currentTheme.published?.public_id !== version.public_id) { <button mat-stroked-button type="button" (click)="rollback(version)" [disabled]="saving()"><mat-icon>history</mat-icon>{{ text('rollback') }}</button> }
+            </article>
+          } @empty { <div class="state compact">{{ text('empty') }}</div> }
+        </div>
+      </mat-card>
+    </div>
+  } @else { <div class="state">{{ text('empty') }}</div> }
+</section>

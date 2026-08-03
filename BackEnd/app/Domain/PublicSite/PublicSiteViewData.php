@@ -4,6 +4,7 @@ namespace App\Domain\PublicSite;
 
 use App\Domain\Localization\LocaleRegistry;
 use App\Domain\Settings\CompanySettingsService;
+use App\Domain\Themes\PublicThemeRuntime;
 use Illuminate\Support\Facades\App;
 
 final readonly class PublicSiteViewData
@@ -11,6 +12,7 @@ final readonly class PublicSiteViewData
     public function __construct(
         private CompanySettingsService $settings,
         private LocaleRegistry $locales,
+        private PublicThemeRuntime $themeRuntime,
     ) {}
 
     /** @return array<string, mixed> */
@@ -23,6 +25,7 @@ final readonly class PublicSiteViewData
         $siteTitle = (string) $this->setting($payload, 'seo_defaults', 'site_title');
         $pageTitle = (string) trans("public.pages.{$page}.title");
         $titleSuffix = $siteTitle ?: $companyName;
+        $publicTheme = $this->themeRuntime->published();
 
         return [
             'currentPage' => $page,
@@ -46,6 +49,9 @@ final readonly class PublicSiteViewData
             'localeLinks' => $this->localeLinks($page),
             'homeUrl' => $this->pageUrl('home', $locale),
             'quoteUrl' => $this->pageUrl('home', $locale).'#contact',
+            'publicThemeCss' => $publicTheme['css'],
+            'publicThemeVersion' => $publicTheme['version'],
+            'isThemePreview' => false,
         ];
     }
 
