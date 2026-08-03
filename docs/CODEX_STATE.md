@@ -3,7 +3,7 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P48
+current_prompt: P49
 last_completed_prompt: 45
 status: PARTIAL
 admin_template_gate: READY
@@ -50,8 +50,8 @@ latest_angular_core_patch: 22.1.0
 latest_angular_cli_patch: 22.1.2
 latest_typescript_patch: 6.0.3
 latest_admin_lint: passed_angular_eslint_22_1_0
-latest_admin_test: passed_vitest_26_files_50_tests
-latest_admin_build: passed_angular_production_initial_122_92_kb_estimated_26_81_kb
+latest_admin_test: passed_vitest_26_files_51_tests
+latest_admin_build: passed_angular_production_initial_123_39_kb_estimated_27_04_kb
 latest_admin_sync: passed_122_files_to_laravel_public_admin_browser
 latest_admin_template_rework: passed_live_annular_comparison_shell_dashboard_auth
 latest_admin_preferences: passed_server_per_user_theme_locale_favorites_with_serial_writes
@@ -61,8 +61,8 @@ latest_admin_navigation: passed_live_clicks_for_all_16_sidebar_routes_on_hongvan
 latest_admin_menu_icons: passed_shared_per_item_palette_for_favorites_sidebar_and_horizontal_menu
 latest_admin_page_headers: passed_route_aware_titles_and_icons_for_all_16_admin_routes
 latest_admin_placeholders: passed_9_routable_vi_en_zh_pages_for_pending_business_modules
-latest_e2e: passed_playwright_p17_3_tests_media_workflow_trash_restore_and_visual_baseline
-latest_visual_qa: passed_p17_followup_hongvan_local_favorite_panel_vi_en_zh_and_no_horizontal_overflow
+latest_e2e: passed_playwright_p49_14_tests_auth_rbac_theme_product_media_lead_seo_accessibility_assets
+latest_visual_qa: passed_p49_reviewed_admin_shell_and_media_snapshots_live_hongvan_local_zero_console_errors
 latest_company_settings: passed_12_groups_36_keys_secret_masking_cache_invalidation_and_public_view_model
 latest_company_directories: passed_branches_business_hours_social_links_contact_channels_order_and_status
 latest_p13_runtime: passed_hongvan_local_admin_settings_vi_en_zh_annular_dialogs_and_390x844_no_overflow
@@ -195,7 +195,8 @@ open_blockers:
   - P46 public/Page Builder accessibility, final responsive behavior, Lighthouse/Core Web Vitals and axe remain deferred until P18-P31 and the frontend template; no Lighthouse score was fabricated.
   - P47 demo page templates/documents remain deferred until the versioned Page Builder registry exists in P18-P31 and the final frontend template is supplied; no invalid JSON document was seeded.
   - P48 Page Builder publish/version/preview behavioral coverage remains deferred until P21-P31; only the static arbitrary-renderer architecture guard can run against the current placeholder domain.
-next_prompt: 49_ANGULAR_E2E_AND_VISUAL_QA
+  - P49 Page Builder preview/publish/rollback, canvas snapshots and public desktop/tablet/mobile QA remain deferred until P21-P31 and the final frontend template; current Admin workflows pass 14 Playwright tests.
+next_prompt: 50_BUILD_SCRIPTS_AND_CI_PIPELINES
 next_prompt_gate: ADMIN_ALLOWED_PUBLIC_FRONTEND_REMAINS_LAST
 ```
 

@@ -1,4 +1,5 @@
-import { expect, Page, test } from '@playwright/test';
+import { Page } from '@playwright/test';
+import { expect, test } from './support/qa-test';
 
 const permissions = [
   'dashboard.view',
@@ -52,6 +53,10 @@ for (const viewport of [
 
 async function mockAdminApi(page: Page): Promise<void> {
   await page.route('**/api/admin/v1/**', async (route) => {
+    if (new URL(route.request().url()).pathname.endsWith('/dashboard')) {
+      await route.fulfill({ json: envelope(accessibilityDashboard()) });
+      return;
+    }
     await route.fulfill({ json: envelope([]) });
   });
   await page.route('**/api/admin/v1/auth/me', async (route) => {
@@ -88,40 +93,25 @@ async function mockAdminApi(page: Page): Promise<void> {
     });
   });
   await page.route('**/api/admin/v1/dashboard**', async (route) => {
-    await route.fulfill({
-      json: envelope({
-        range: { from: '2026-07-05', to: '2026-08-03', timezone: 'Asia/Ho_Chi_Minh' },
-        capabilities: {
-          products: true,
-          content: true,
-          leads: true,
-          activity: true,
-          analytics: false,
-          pages: false,
-          top_viewed: false,
-        },
-        cards: {
-          products: { total: 3, published: 2 },
-          content: { drafts: 1, scheduled: 0, pages: null },
-          leads: {
-            total: 1,
-            new_in_range: 1,
-            overdue_follow_up: 0,
-            by_type: { contact: 1 },
-            by_status: { new: 1 },
-          },
-        },
-        charts: {
-          leads: [{ date: '2026-08-03', value: 1 }],
-          published_products: [{ date: '2026-08-03', value: 2 }],
-        },
-        recent_activity: [],
-        analytics: { enabled: false, top_search_terms: [], top_viewed: [] },
-        generated_at: '2026-08-03T00:00:00Z',
-        cache_ttl_seconds: 60,
-      }),
-    });
+    await route.fulfill({ json: envelope(accessibilityDashboard()) });
   });
+}
+
+function accessibilityDashboard() {
+  return {
+    range: { from: '2026-07-05', to: '2026-08-03', timezone: 'Asia/Ho_Chi_Minh' },
+    capabilities: { products: true, content: true, leads: true, activity: true, analytics: false, pages: false, top_viewed: false },
+    cards: {
+      products: { total: 3, published: 2 },
+      content: { drafts: 1, scheduled: 0, pages: null },
+      leads: { total: 1, new_in_range: 1, overdue_follow_up: 0, by_type: { contact: 1 }, by_status: { new: 1 } },
+    },
+    charts: { leads: [{ date: '2026-08-03', value: 1 }], published_products: [{ date: '2026-08-03', value: 2 }] },
+    recent_activity: [],
+    analytics: { enabled: false, top_search_terms: [], top_viewed: [] },
+    generated_at: '2026-08-03T00:00:00Z',
+    cache_ttl_seconds: 60,
+  };
 }
 
 function envelope(data: unknown): {

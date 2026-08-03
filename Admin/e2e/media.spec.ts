@@ -1,5 +1,6 @@
-import { expect, Page, test } from '@playwright/test';
+import { Page } from '@playwright/test';
 import path from 'node:path';
+import { expect, test } from './support/qa-test';
 
 const mediaId = '01K1MEDIA000000000000000001';
 const folderId = '01K1FOLDER0000000000000001';

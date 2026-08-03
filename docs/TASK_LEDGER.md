@@ -112,6 +112,10 @@
   - [x] P48 Operations: media queue idempotency, scheduled post idempotency/without-overlap, fresh/rollback/remigrate, no pending migration, route/config cache, Pint, Larastan and Composer audit
   - [ ] P48 Page Builder publish/version/preview tests: deferred until P21-P31 backend exists; the current repository only contains placeholder directories
 - [ ] P49 Angular/E2E/visual QA
+  - [x] P49 Admin gates: lint, 26-file/51-test Vitest, production build, Laravel sync và 14-test Playwright pass
+  - [x] P49 Critical admin workflows: login/logout, RBAC, per-user theme, product CRUD + Media Picker, lead status/note, SEO edit, media lifecycle và accessibility smoke
+  - [x] P49 Visual/runtime: admin shell và Media Manager snapshots review; live hongvan.local dashboard/products dùng bundle mới, đúng `/admin/` asset path và zero console errors
+  - [ ] P49 Page Builder/public: preview/publish/rollback, canvas và public desktop/tablet/mobile deferred vì P21-P31 cùng final frontend template chưa tồn tại
 - [ ] P50 Build/CI
 - [ ] P51 Docker/deployment
 - [ ] P52 Backup/monitoring
