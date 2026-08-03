@@ -6,6 +6,9 @@ Delivery order decision: all public frontend/template work is postponed until th
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-016](adr/ADR-016-showcase-media-and-document-policy.md) | Showcase media ownership and certification document visibility | Accepted | 2026-08-03 |
+| [ADR-015](adr/ADR-015-post-content-sanitization-and-publishing.md) | Post HTML sanitization, scheduling and slug history | Accepted | 2026-08-03 |
+| [ADR-014](adr/ADR-014-unified-lead-intake-workflow.md) | Unified lead intake, immutable submission and workflow history | Accepted | 2026-08-03 |
 | [ADR-001](adr/ADR-001-laravel-blade-public.md) | Laravel Blade for the public website | Accepted | 2026-08-02 |
 | [ADR-002](adr/ADR-002-angular-admin.md) | Angular SPA for Admin | Accepted | 2026-08-02 |
 | [ADR-003](adr/ADR-003-explicit-table-prefix.md) | Explicit `hongvan_` table prefix | Accepted | 2026-08-02 |

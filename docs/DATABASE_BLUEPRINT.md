@@ -256,6 +256,7 @@ hongvan_post_tag_links
 hongvan_galleries
 hongvan_gallery_translations
 hongvan_gallery_items
+hongvan_gallery_item_translations
 hongvan_partners
 hongvan_partner_translations
 hongvan_certifications
@@ -263,6 +264,7 @@ hongvan_certification_translations
 hongvan_projects
 hongvan_project_translations
 hongvan_project_media
+hongvan_project_media_translations
 ```
 
 ## SEO, redirect và analytics

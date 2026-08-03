@@ -66,6 +66,10 @@
   - [x] P39 Admin: Annular three-tab CMS, rich text editor, Media Picker, preview, scheduling and vi/en/zh
   - [ ] P39 Public/Page Builder: SSR listing/category/tag/detail, pagination, related content, RSS and post-list block registration (deferred until P21-P31 and frontend template)
 - [ ] P40 Showcase
+  - [x] P40 Backend: galleries/items, partners, certifications, projects/case studies, localized alt/captions, media usage, document visibility, status/order/featured, permissions, audit and cache
+  - [x] P40 Admin: Annular four-tab CRUD, Media Picker, certificate PDF policy and vi/en/zh
+  - [x] P40 Data source: published-only records, locale fallback, eager media and no fabricated showcase seed data
+  - [ ] P40 Public/Page Builder: SSR sections/detail pages and block registration (deferred until P21-P31 and frontend template)
 - [ ] P41 Public search/filter
 - [ ] P42 SEO metadata
 - [ ] P43 Sitemap/schema/redirect

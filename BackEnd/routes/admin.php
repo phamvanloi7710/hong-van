@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\V1\Services\ServiceCategoryController;
 use App\Http\Controllers\Api\V1\Services\ServiceController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
+use App\Http\Controllers\Api\V1\Showcase\ShowcaseController;
 use App\Http\Controllers\Api\V1\SystemPingController;
 use App\Http\Controllers\Api\V1\Transportation\TransportationController;
 use App\Http\Controllers\Api\V1\Warehouses\WarehouseController;
@@ -239,6 +240,17 @@ Route::prefix('admin/v1')
                 Route::post('{post:public_id}/archive', [PostController::class, 'archive'])->middleware('permission:posts.update')->name('archive');
                 Route::delete('{post:public_id}', [PostController::class, 'destroy'])->middleware('permission:posts.delete')->name('destroy');
                 Route::post('{post}/restore', [PostController::class, 'restore'])->middleware('permission:posts.restore')->name('restore');
+            });
+
+            Route::prefix('showcase')->name('showcase.')->group(function (): void {
+                Route::get('{kind}', [ShowcaseController::class, 'index'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.view')->name('index');
+                Route::post('{kind}', [ShowcaseController::class, 'store'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.create')->name('store');
+                Route::get('{kind}/{publicId}', [ShowcaseController::class, 'show'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.view')->name('show');
+                Route::put('{kind}/{publicId}', [ShowcaseController::class, 'update'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.update')->name('update');
+                Route::post('{kind}/{publicId}/publish', [ShowcaseController::class, 'publish'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.publish')->name('publish');
+                Route::post('{kind}/{publicId}/archive', [ShowcaseController::class, 'archive'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.update')->name('archive');
+                Route::delete('{kind}/{publicId}', [ShowcaseController::class, 'destroy'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.delete')->name('destroy');
+                Route::post('{kind}/{publicId}/restore', [ShowcaseController::class, 'restore'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.restore')->name('restore');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

@@ -94,6 +94,14 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         permission: 'media.view',
       },
       {
+        id: 'showcase',
+        labelKey: 'menu.showcase',
+        icon: 'collections',
+        iconColor: '#8e24aa',
+        route: '/showcase',
+        permission: 'showcase.view',
+      },
+      {
         id: 'page-builder',
         labelKey: 'menu.pageBuilder',
         icon: 'dashboard_customize',

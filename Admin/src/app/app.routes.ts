@@ -128,6 +128,12 @@ export const routes: Routes = [
         data: { breadcrumb: 'menu.contentPages' },
       },
       {
+        path: 'showcase',
+        canActivate: [permissionGuard('showcase.view')],
+        loadComponent: () => import('./features/showcase/showcase-page').then((page) => page.ShowcasePage),
+        data: { breadcrumb: 'menu.showcase' },
+      },
+      {
         path: 'page-builder',
         loadComponent: loadModulePlaceholder,
         data: placeholderData('page-builder'),

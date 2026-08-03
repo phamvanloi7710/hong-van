@@ -45,6 +45,9 @@ PUT /api/admin/v1/settings/business-hours/global
 PUT /api/admin/v1/settings/branches/{public_id}/business-hours
 POST|PUT|DELETE /api/admin/v1/settings/social-links[/{public_id}]
 POST|PUT|DELETE /api/admin/v1/settings/contact-channels[/{public_id}]
+GET|POST /api/admin/v1/showcase/{galleries|gallery-items|partners|certifications|projects}
+GET|PUT|DELETE /api/admin/v1/showcase/{kind}/{public_id}
+POST /api/admin/v1/showcase/{kind}/{public_id}/{publish|archive|restore}
 ```
 
 Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Admin ping dùng `auth` và Gate `system_health`, được P11 ánh xạ vào permission `system.health`. Identity API dùng Sanctum, permission middleware, Policy và Form Request; filter/sort chỉ nhận key trong allowlist phía server.
@@ -54,6 +57,8 @@ Settings API dùng `settings.view`, `settings.update` và `settings.manage_setti
 Audit API chỉ đọc, yêu cầu `audit.view`, phân trang chuẩn và chỉ chấp nhận filter/sort được allowlist cho action, actor, subject, request ID và khoảng thời gian. Không có endpoint create/update/delete/export trong P15; dữ liệu audit chỉ được ghi qua `AuditTrail` phía server sau khi đã redaction.
 
 Media API yêu cầu Sanctum, `MediaPolicy` và các permission `media.view|create|update|delete|restore`. List hỗ trợ search/filter/sort allowlist, gồm folder gốc, visibility và lock; upload dùng limiter `uploads` và multipart field `file`. Folder có create/rename/lock; media có metadata/move/lock/visibility/trash/restore/retry. Resource trả URL content cùng origin được tạo từ `public_id`, không làm lộ storage path. Thay đổi media/folder bị khóa trả `409`; xóa vĩnh viễn bị từ chối khi `hongvan_media_usages` còn tham chiếu.
+
+Showcase API yêu cầu Sanctum, `ShowcasePolicy` và permission namespace `showcase.*`. Năm resource dùng chung allowlist search/status/featured/trash/order; media được đăng ký vào `hongvan_media_usages`. Tài liệu chứng nhận chỉ được nguồn dữ liệu public trả về khi record đã published và `document_visibility=public`.
 
 ## Response thành công
 
