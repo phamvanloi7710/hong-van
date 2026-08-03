@@ -10,7 +10,7 @@ return [
     'validation' => [
         'payload_too_large' => '文档超过允许的大小。', 'schema_version' => '不支持此 PageDocument 版本。',
         'ulid' => '该值必须是有效的 ULID。', 'blocks_list' => 'Blocks 必须是顺序数组。', 'block_object' => 'Block 必须是对象。',
-        'block_id' => 'Block ID 无效。', 'duplicate_id' => 'Block ID 重复。', 'unknown_block' => 'Block 类型未注册。',
+        'block_id' => 'Block ID 无效。', 'duplicate_id' => 'Block ID 重复。', 'unknown_block' => 'Block 类型未注册。', 'unknown_form' => '表单类型未注册。',
         'block_version' => '不支持此 Block 版本。', 'invalid_parent' => '该 Block 不允许位于根级。', 'invalid_child' => '父 Block 不允许此子 Block。',
         'children_list' => 'Children 必须是顺序数组。', 'children_not_allowed' => '该 Block 不允许子 Block。', 'children_min' => '子 Block 数量少于允许值。',
         'children_max' => '子 Block 数量超过允许值。', 'block_depth' => 'Block 超过该布局允许的嵌套深度。', 'too_many_blocks' => '文档中的 Block 过多。',

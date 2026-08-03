@@ -8,6 +8,8 @@ final readonly class PageRenderOptions
         public string $locale,
         public bool $preview = false,
         public bool $sampleData = false,
+        public ?string $contextType = null,
+        public ?string $contextPublicId = null,
     ) {}
 
     public static function published(?string $locale = null): self

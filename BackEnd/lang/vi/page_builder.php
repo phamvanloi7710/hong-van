@@ -16,6 +16,7 @@ return [
         'block_id' => 'ID block không hợp lệ.',
         'duplicate_id' => 'ID block bị trùng.',
         'unknown_block' => 'Loại block không có trong registry.',
+        'unknown_form' => 'Loại biểu mẫu không có trong registry.',
         'block_version' => 'Phiên bản block không được hỗ trợ.',
         'invalid_parent' => 'Block không được phép ở cấp gốc.',
         'invalid_child' => 'Block con không hợp lệ với block cha.',

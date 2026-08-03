@@ -30,6 +30,7 @@ final class LayoutBlockDefinitions
         'business.service-grid', 'business.fleet', 'business.route-list', 'business.warehouse-cards',
         'business.stats', 'business.partner-logos', 'business.certificate-list', 'business.project-list',
         'business.post-list', 'business.cta', 'business.breadcrumb',
+        'form.contact', 'form.product-quote', 'form.transport-request', 'form.warehouse-request',
     ];
 
     /** @return list<BlockDefinition> */

@@ -6,6 +6,7 @@ Delivery order decision: public frontend/template work was postponed until the o
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-025](adr/ADR-025-versioned-allowlisted-page-builder-forms.md) | Form Page Builder versioned, field/action allowlist và product context ký có thời hạn | Accepted | 2026-08-03 |
 | [ADR-024](adr/ADR-024-versioned-allowlisted-public-theme.md) | Public theme versioned, token allowlist và server CSS compiler dùng chung cho preview/published | Accepted | 2026-08-03 |
 | [ADR-023](adr/ADR-023-normalize-wordpress-clone-into-laravel-vite.md) | Chuẩn hóa WordPress clone thành Blade/Vite, loại runtime WordPress và toàn bộ e-commerce | Accepted | 2026-08-03 |
 | [ADR-022](adr/ADR-022-gitlab-reproducible-ci.md) | GitLab CI reproducible theo lockfile, có security gate và artifact checksum | Accepted | 2026-08-03 |

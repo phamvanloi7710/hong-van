@@ -65,7 +65,12 @@
   - [x] Query tách khỏi Blade, published-only, locale fallback, empty state an toàn và sample data chỉ trong preview context
   - [x] Cache dependency tag theo data source và memo hóa binding trùng để không tăng query
   - [x] DynamicBlock 5 test/32 assertions, Page Builder 26 test/169 assertions, full backend 202 test/1565 assertions, Pint, PHPStan và Vite build/budget đạt
-- [ ] P25 Form blocks
+- [x] P25 Form blocks
+  - [x] 4 contract versioned cố định: contact, product quote, transport request và warehouse request; field/validation/consent/layout từ server registry, không cho field/action tùy ý
+  - [x] Blade form `vi/en/zh` có CSRF, honeypot, accessible error/success state, responsive layout và route POST cùng origin
+  - [x] Dùng lại P38 `LeadIntakeService`: consent, idempotency/dedup, shared rate limit, persistence thống nhất và notification qua queue
+  - [x] Product quote tự gắn product context; token ký có hạn được đối chiếu product/block để chặn sửa hidden context
+  - [x] FormBlock 4 test/300 assertions, PublicForm 5 test/51 assertions, full backend 211 test/1916 assertions, Pint, PHPStan và Vite build/budget đạt
 - [ ] P26 Angular Page Builder editor
 - [ ] P27 Blade iframe preview
 - [ ] P28 Versioning/publishing
@@ -91,11 +96,11 @@
   - [x] P37 Admin/API: warehouses, translations, media, facilities, services, map privacy, business hours, featured/publish, permissions, audit, cache and vi/en/zh
   - [x] P37 Boundary/request contract: goods, area/volume, duration, start date, storage requirements, location and contact without bins, inventory or inbound/outbound operations
   - [ ] P37 Public/Page Builder: SSR listing/detail, privacy-aware map rendering and block registration (deferred until P21-P31; P19 presentation contract ready)
-- [ ] P38 Lead workflows
+- [x] P38 Lead workflows
   - [x] P38 Backend: unified lead core, encrypted immutable submission, contact/quote items, transport/warehouse mapping, assignment, status timeline, notes, retention and safe export
   - [x] P38 Public API: contact, quote, transport and warehouse intake with consent, honeypot, shared rate limit, idempotency/dedup and queued email/database notification
   - [x] P38 Admin: permission-gated unified inbox, filters, assignee, transition policy, notes, timeline, metrics, CSV export and vi/en/zh
-  - [ ] P38 Public/Page Builder: wire P25 form blocks to P38 endpoints (deferred until P21-P31; P19 contact layout ready)
+  - [x] P38 Public/Page Builder: P25 form blocks đã nối vào intake service/queue hiện hữu với CSRF, consent, anti-spam, dedup và signed product context
 - [ ] P39 News/content
   - [x] P39 Backend: categories, tags, localized posts, author, featured media, publish/schedule lifecycle, slug history, audit, cache and permissions
   - [x] P39 Security/data source: allowlisted HTML sanitizer, published-only queries, locale fallback, old-slug redirect contract, related posts and eager loading

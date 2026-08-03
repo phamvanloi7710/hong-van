@@ -10,7 +10,7 @@ return [
     'validation' => [
         'payload_too_large' => 'The document exceeds the allowed payload size.', 'schema_version' => 'The PageDocument version is not supported.',
         'ulid' => 'The value must be a valid ULID.', 'blocks_list' => 'Blocks must be a sequential array.', 'block_object' => 'A block must be an object.',
-        'block_id' => 'The block ID is invalid.', 'duplicate_id' => 'The block ID is duplicated.', 'unknown_block' => 'The block type is not registered.',
+        'block_id' => 'The block ID is invalid.', 'duplicate_id' => 'The block ID is duplicated.', 'unknown_block' => 'The block type is not registered.', 'unknown_form' => 'The form type is not registered.',
         'block_version' => 'The block version is not supported.', 'invalid_parent' => 'The block is not allowed at the root.', 'invalid_child' => 'The child block is not allowed by its parent.',
         'children_list' => 'Children must be a sequential array.', 'children_not_allowed' => 'This block does not allow children.', 'children_min' => 'The block has fewer children than allowed.',
         'children_max' => 'The block has more children than allowed.', 'block_depth' => 'The block exceeds its layout nesting limit.', 'too_many_blocks' => 'The document has too many blocks.',

@@ -2,11 +2,26 @@
 
 use App\Http\Controllers\AdminSpaController;
 use App\Http\Controllers\PublicSite\PublicPageController;
+use App\Http\Controllers\PublicSite\PublicFormController;
 use App\Http\Controllers\Seo\RobotsController;
 use App\Http\Controllers\Seo\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('public.locale')->group(function (): void {
+    Route::controller(PublicFormController::class)->prefix('forms')->name('public.forms.')->middleware('throttle:public.forms')->group(function (): void {
+        Route::post('contact', 'contact')->name('contact');
+        Route::post('quote', 'quote')->name('quote');
+        Route::post('transport', 'transport')->name('transport');
+        Route::post('warehouse', 'warehouse')->name('warehouse');
+    });
+    Route::controller(PublicFormController::class)->prefix('{locale}/forms')->name('public.forms.localized.')->middleware('throttle:public.forms')
+        ->whereIn('locale', config('localization.supported_locales', ['vi', 'en', 'zh']))
+        ->group(function (): void {
+            Route::post('contact', 'contact')->name('contact');
+            Route::post('quote', 'quote')->name('quote');
+            Route::post('transport', 'transport')->name('transport');
+            Route::post('warehouse', 'warehouse')->name('warehouse');
+        });
     Route::get('/', [PublicPageController::class, 'home'])->name('public.home');
     Route::get('/privacy', [PublicPageController::class, 'privacy'])->name('public.privacy');
     Route::get('/terms', [PublicPageController::class, 'terms'])->name('public.terms');

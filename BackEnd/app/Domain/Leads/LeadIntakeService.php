@@ -86,8 +86,8 @@ final readonly class LeadIntakeService
      */
     private function submit(string $type, array $data, Request $request, callable $persistDetails): LeadSubmission
     {
-        $payload = Arr::except($data, ['website']);
-        $idempotency = trim((string) $request->header('Idempotency-Key', ''));
+        $payload = Arr::except($data, ['website', '_form_definition', '_block_id', '_idempotency_key', 'form_context_token']);
+        $idempotency = trim((string) ($request->header('Idempotency-Key') ?: $request->input('_idempotency_key', '')));
         if (mb_strlen($idempotency) > 200) {
             throw ValidationException::withMessages(['idempotency_key' => [__('leads.invalid_idempotency_key')]]);
         }
