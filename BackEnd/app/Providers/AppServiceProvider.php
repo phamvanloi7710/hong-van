@@ -23,6 +23,9 @@ use App\Models\TransportServiceArea;
 use App\Models\User;
 use App\Models\Vehicle;
 use App\Models\VehicleType;
+use App\Models\Warehouse;
+use App\Models\WarehouseFacility;
+use App\Models\WarehouseService;
 use App\Policies\BrandPolicy;
 use App\Policies\CropCategoryPolicy;
 use App\Policies\CropPolicy;
@@ -39,6 +42,7 @@ use App\Policies\ServiceCategoryPolicy;
 use App\Policies\ServicePolicy;
 use App\Policies\TransportationPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\WarehousePolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Middleware\TrustHosts;
@@ -143,6 +147,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Vehicle::class, TransportationPolicy::class);
         Gate::policy(TransportRoute::class, TransportationPolicy::class);
         Gate::policy(TransportServiceArea::class, TransportationPolicy::class);
+        Gate::policy(Warehouse::class, WarehousePolicy::class);
+        Gate::policy(WarehouseFacility::class, WarehousePolicy::class);
+        Gate::policy(WarehouseService::class, WarehousePolicy::class);
 
         Gate::define(
             'system_health',

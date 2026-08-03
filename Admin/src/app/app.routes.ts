@@ -110,8 +110,10 @@ export const routes: Routes = [
       },
       {
         path: 'warehouses',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('warehouses'),
+        canActivate: [permissionGuard('warehouses.view')],
+        loadComponent: () =>
+          import('./features/warehouses/warehouse-page').then((page) => page.WarehousePage),
+        data: { breadcrumb: 'menu.warehouses' },
       },
       {
         path: 'leads',

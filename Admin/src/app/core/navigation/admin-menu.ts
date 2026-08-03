@@ -59,6 +59,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'warehouse',
         iconColor: '#6d4c41',
         route: '/warehouses',
+        permission: 'warehouses.view',
       },
       {
         id: 'leads',

@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
 use App\Http\Controllers\Api\V1\Settings\CompanySettingsController;
 use App\Http\Controllers\Api\V1\SystemPingController;
 use App\Http\Controllers\Api\V1\Transportation\TransportationController;
+use App\Http\Controllers\Api\V1\Warehouses\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin/v1')
@@ -190,6 +191,20 @@ Route::prefix('admin/v1')
                 Route::put('areas/{area:public_id}', [TransportationController::class, 'saveArea'])->middleware('permission:transportation.update')->name('areas.update');
                 Route::post('{kind}/{publicId}/publish', [TransportationController::class, 'publish'])->whereIn('kind', ['vehicles', 'routes', 'areas'])->middleware('permission:transportation.publish')->name('publish');
                 Route::delete('{kind}/{publicId}', [TransportationController::class, 'destroy'])->whereIn('kind', ['types', 'vehicles', 'routes', 'areas'])->middleware('permission:transportation.delete')->name('destroy');
+            });
+
+            Route::prefix('warehouses')->name('warehouses.')->group(function (): void {
+                Route::get('/', [WarehouseController::class, 'index'])->middleware('permission:warehouses.view')->name('index');
+                Route::post('/', [WarehouseController::class, 'saveWarehouse'])->middleware('permission:warehouses.create')->name('store');
+                Route::get('facilities', [WarehouseController::class, 'facilities'])->middleware('permission:warehouses.view')->name('facilities.index');
+                Route::post('facilities', [WarehouseController::class, 'saveFacility'])->middleware('permission:warehouses.create')->name('facilities.store');
+                Route::put('facilities/{facility:public_id}', [WarehouseController::class, 'saveFacility'])->middleware('permission:warehouses.update')->name('facilities.update');
+                Route::get('services', [WarehouseController::class, 'services'])->middleware('permission:warehouses.view')->name('services.index');
+                Route::post('services', [WarehouseController::class, 'saveService'])->middleware('permission:warehouses.create')->name('services.store');
+                Route::put('services/{service:public_id}', [WarehouseController::class, 'saveService'])->middleware('permission:warehouses.update')->name('services.update');
+                Route::put('{warehouse:public_id}', [WarehouseController::class, 'saveWarehouse'])->middleware('permission:warehouses.update')->name('update');
+                Route::post('{warehouse:public_id}/publish', [WarehouseController::class, 'publish'])->middleware('permission:warehouses.publish')->name('publish');
+                Route::delete('{kind}/{publicId}', [WarehouseController::class, 'destroy'])->whereIn('kind', ['warehouses', 'facilities', 'services'])->middleware('permission:warehouses.delete')->name('destroy');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

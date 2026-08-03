@@ -52,6 +52,9 @@
   - [x] P36 Boundary/request contract: pickup, delivery, cargo, weight, vehicle preference, date and contact without GPS, dispatch or automatic fare calculation
   - [ ] P36 Public/Page Builder: SSR capability pages/sections and block registration (deferred until P21-P31 and frontend template)
 - [ ] P37 Warehouses
+  - [x] P37 Admin/API: warehouses, translations, media, facilities, services, map privacy, business hours, featured/publish, permissions, audit, cache and vi/en/zh
+  - [x] P37 Boundary/request contract: goods, area/volume, duration, start date, storage requirements, location and contact without bins, inventory or inbound/outbound operations
+  - [ ] P37 Public/Page Builder: SSR listing/detail, privacy-aware map rendering and block registration (deferred until P21-P31 and frontend template)
 - [ ] P38 Lead workflows
 - [ ] P39 News/content
 - [ ] P40 Showcase

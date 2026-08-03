@@ -102,6 +102,17 @@ class TablePrefixTest extends TestCase
             'hongvan_vehicle_type_translations',
             'hongvan_vehicle_types',
             'hongvan_vehicles',
+            'hongvan_warehouse_facilities',
+            'hongvan_warehouse_facility_assignments',
+            'hongvan_warehouse_facility_translations',
+            'hongvan_warehouse_media',
+            'hongvan_warehouse_request_status_histories',
+            'hongvan_warehouse_requests',
+            'hongvan_warehouse_service_assignments',
+            'hongvan_warehouse_service_translations',
+            'hongvan_warehouse_services',
+            'hongvan_warehouse_translations',
+            'hongvan_warehouses',
         ];
 
         $this->assertEqualsCanonicalizing($expectedTables, $tables);
