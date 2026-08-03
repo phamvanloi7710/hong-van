@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Identity\PermissionController;
 use App\Http\Controllers\Api\V1\Identity\RoleController;
 use App\Http\Controllers\Api\V1\Identity\UserController;
 use App\Http\Controllers\Api\V1\Identity\UserPreferenceController;
+use App\Http\Controllers\Api\V1\Leads\LeadController;
 use App\Http\Controllers\Api\V1\Localization\LocalizationController;
 use App\Http\Controllers\Api\V1\Media\MediaContentController;
 use App\Http\Controllers\Api\V1\Media\MediaController;
@@ -205,6 +206,17 @@ Route::prefix('admin/v1')
                 Route::put('{warehouse:public_id}', [WarehouseController::class, 'saveWarehouse'])->middleware('permission:warehouses.update')->name('update');
                 Route::post('{warehouse:public_id}/publish', [WarehouseController::class, 'publish'])->middleware('permission:warehouses.publish')->name('publish');
                 Route::delete('{kind}/{publicId}', [WarehouseController::class, 'destroy'])->whereIn('kind', ['warehouses', 'facilities', 'services'])->middleware('permission:warehouses.delete')->name('destroy');
+            });
+
+            Route::prefix('leads')->name('leads.')->group(function (): void {
+                Route::get('/', [LeadController::class, 'index'])->middleware('permission:leads.view')->name('index');
+                Route::get('metrics', [LeadController::class, 'metrics'])->middleware('permission:leads.view')->name('metrics');
+                Route::get('assignees', [LeadController::class, 'assignees'])->middleware('permission:leads.view')->name('assignees');
+                Route::get('export', [LeadController::class, 'export'])->middleware('permission:leads.export')->name('export');
+                Route::get('{lead:public_id}', [LeadController::class, 'show'])->middleware('permission:leads.view')->name('show');
+                Route::post('{lead:public_id}/status', [LeadController::class, 'status'])->middleware('permission:leads.update')->name('status');
+                Route::post('{lead:public_id}/assign', [LeadController::class, 'assign'])->middleware('permission:leads.update')->name('assign');
+                Route::post('{lead:public_id}/notes', [LeadController::class, 'note'])->middleware('permission:leads.update')->name('notes');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

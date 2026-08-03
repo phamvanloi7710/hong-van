@@ -56,6 +56,7 @@ final class WarehouseApiTest extends TestCase
             'start_date' => now()->addDay()->toDateString(), 'storage_requirements' => 'Dry storage',
             'preferred_location' => 'Near the city', 'contact_name' => 'Requester', 'contact_phone' => '0900000000',
             'contact_email' => 'requester@example.test',
+            'consent' => true, 'privacy_policy_version' => config('leads.privacy_policy_version'),
         ])->assertCreated()->assertJsonPath('data.status', 'new')->assertJsonMissingPath('data.ip_hash');
         $this->assertDatabaseCount('hongvan_warehouse_requests', 1);
         $this->assertDatabaseCount('hongvan_warehouse_request_status_histories', 1);

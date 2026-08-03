@@ -56,6 +56,10 @@
   - [x] P37 Boundary/request contract: goods, area/volume, duration, start date, storage requirements, location and contact without bins, inventory or inbound/outbound operations
   - [ ] P37 Public/Page Builder: SSR listing/detail, privacy-aware map rendering and block registration (deferred until P21-P31 and frontend template)
 - [ ] P38 Lead workflows
+  - [x] P38 Backend: unified lead core, encrypted immutable submission, contact/quote items, transport/warehouse mapping, assignment, status timeline, notes, retention and safe export
+  - [x] P38 Public API: contact, quote, transport and warehouse intake with consent, honeypot, shared rate limit, idempotency/dedup and queued email/database notification
+  - [x] P38 Admin: permission-gated unified inbox, filters, assignee, transition policy, notes, timeline, metrics, CSV export and vi/en/zh
+  - [ ] P38 Public/Page Builder: wire P25 form blocks to P38 endpoints (deferred until P21-P31 and frontend template)
 - [ ] P39 News/content
 - [ ] P40 Showcase
 - [ ] P41 Public search/filter

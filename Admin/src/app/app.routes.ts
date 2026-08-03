@@ -117,8 +117,9 @@ export const routes: Routes = [
       },
       {
         path: 'leads',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('leads'),
+        canActivate: [permissionGuard('leads.view')],
+        loadComponent: () => import('./features/leads/lead-page').then((page) => page.LeadPage),
+        data: { breadcrumb: 'menu.leads' },
       },
       {
         path: 'content-pages',

@@ -65,6 +65,8 @@ return [
                 'enabled' => ['label' => 'Enable quote requests', 'type' => 'boolean', 'public' => true, 'default' => true, 'rules' => ['required', 'boolean']],
                 'recipient_email' => ['label' => 'Quote recipient email', 'type' => 'string', 'public' => false, 'default' => null, 'rules' => ['nullable', 'email', 'max:255']],
                 'auto_reply_enabled' => ['label' => 'Enable automatic reply', 'type' => 'boolean', 'public' => false, 'default' => false, 'rules' => ['required', 'boolean']],
+                'lead_notifications_enabled' => ['label' => 'Enable lead notifications', 'type' => 'boolean', 'public' => false, 'default' => true, 'rules' => ['required', 'boolean']],
+                'database_notifications_enabled' => ['label' => 'Enable database notifications', 'type' => 'boolean', 'public' => false, 'default' => true, 'rules' => ['required', 'boolean']],
             ],
         ],
         'email' => [

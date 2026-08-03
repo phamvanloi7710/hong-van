@@ -20,6 +20,16 @@ final class AuditRedactor
         'file',
         'upload',
         'contents',
+        'email',
+        'phone',
+        'message',
+        'payload',
+        'address',
+        'location',
+        'description',
+        'note',
+        'contact_name',
+        'company',
     ];
 
     /** @param array<array-key, mixed> $data

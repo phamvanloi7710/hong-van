@@ -50,6 +50,7 @@ final class TransportationApiTest extends TestCase
             'pickup_location' => 'Pickup', 'delivery_location' => 'Delivery', 'cargo_description' => 'Packaged cargo',
             'cargo_weight' => 1200, 'weight_unit' => 'kg', 'requested_date' => now()->addDay()->toDateString(),
             'contact_name' => 'Requester', 'contact_phone' => '0900000000', 'contact_email' => 'requester@example.test',
+            'consent' => true, 'privacy_policy_version' => config('leads.privacy_policy_version'),
         ])->assertCreated()->assertJsonPath('data.status', 'new');
         $this->assertDatabaseCount('hongvan_transport_requests', 1);
         $this->assertDatabaseCount('hongvan_transport_request_status_histories', 1);

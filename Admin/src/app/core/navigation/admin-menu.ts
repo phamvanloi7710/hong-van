@@ -67,6 +67,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'contact_mail',
         iconColor: '#d81b60',
         route: '/leads',
+        permission: 'leads.view',
       },
     ],
   },

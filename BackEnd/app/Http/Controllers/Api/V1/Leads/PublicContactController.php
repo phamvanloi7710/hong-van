@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Warehouses;
+namespace App\Http\Controllers\Api\V1\Leads;
 
 use App\Domain\Leads\LeadIntakeService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Warehouses\StoreWarehouseRequest;
+use App\Http\Requests\Api\V1\Leads\StoreContactRequest;
 use App\Http\Resources\Api\V1\Leads\PublicLeadResource;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\JsonResponse;
 
-final class PublicWarehouseRequestController extends Controller
+final class PublicContactController extends Controller
 {
-    public function __invoke(StoreWarehouseRequest $request, LeadIntakeService $intake, ApiResponse $response): JsonResponse
+    public function __invoke(StoreContactRequest $request, LeadIntakeService $intake, ApiResponse $response): JsonResponse
     {
-        $submission = $intake->warehouse($request->validated(), $request);
+        $submission = $intake->contact($request->validated(), $request);
 
         return $response->success(PublicLeadResource::make($submission)->resolve($request), __('leads.received'), $submission->created ? 201 : 200);
     }
