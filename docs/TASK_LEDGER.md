@@ -102,6 +102,10 @@
   - [x] P46 Baseline: real production bundle sizes recorded; unavailable Lighthouse explicitly documented without fabricated scores
   - [ ] P46 Public/Page Builder: final forms, gallery, blocks, axe/Lighthouse and Core Web Vitals remain deferred until P18-P31 and the frontend template
 - [ ] P47 Seed/demo content
+  - [x] P47 Production-safe: idempotent languages, permissions/role, confirmed settings/catalog defaults and optional super admin from environment
+  - [x] P47 Explicit demo: locally generated media plus labelled vi/en/zh product, service, crop, vehicle and warehouse fixtures; repeat seed creates no duplicates
+  - [x] P47 Product factory: draft, published, archived, contact, fixed and range states
+  - [ ] P47 Page templates/documents: deferred until the P18-P31 Page Builder registry and final frontend template exist; no unvalidated document was fabricated
 - [ ] P48 Backend QA
 - [ ] P49 Angular/E2E/visual QA
 - [ ] P50 Build/CI

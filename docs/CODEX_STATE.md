@@ -3,7 +3,7 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P46
+current_prompt: P47
 last_completed_prompt: 45
 status: PARTIAL
 admin_template_gate: READY
@@ -161,6 +161,9 @@ latest_p46_responsive: passed_playwright_chrome_390x844_768x1024_1440x900_withou
 latest_p46_performance: passed_admin_initial_123_39_kb_transfer_27_04_kb_largest_lazy_256_83_kb_public_css_54_31_kb_js_48_62_kb_budget_gates
 latest_p46_test: passed_backend_148_tests_1225_assertions_admin_lint_26_files_51_tests_full_e2e_7_tests_build_sync_122_files_public_vite_budget
 latest_p46_runtime: passed_hongvan_local_live_skip_link_main_focus_single_h1_navigation_landmark_latest_bundle
+latest_p47_seeders: passed_production_safe_database_seeder_explicit_demo_seeder_vi_en_zh_labelled_local_media_and_repeat_without_duplicates
+latest_p47_database: passed_migrate_fresh_seed_and_double_demo_seed_on_explicit_hongvan_testing_only
+latest_p47_test: passed_seeder_3_tests_22_assertions_full_backend_151_tests_1247_assertions_larastan_level_6_pint
 latest_admin_smoke: passed_hongvan_local_root_deep_link_asset_cache
 open_blockers:
   - Admin template is missing package-lock.json, public/ assets and a root license file.
@@ -186,7 +189,8 @@ open_blockers:
   - P43 final public template insertion of JSON-LD and visible breadcrumbs remains deferred until P18-P31 and the frontend template; builders, sitemap, robots and redirect runtime are ready.
   - P44 public consent banner/preferences, browser event wiring and frontend E2E remain deferred until the final Blade template; API, provider registry, CSP and Admin configuration are ready.
   - P46 public/Page Builder accessibility, final responsive behavior, Lighthouse/Core Web Vitals and axe remain deferred until P18-P31 and the frontend template; no Lighthouse score was fabricated.
-next_prompt: 47_SEEDERS_AND_DEMO_CONTENT
+  - P47 demo page templates/documents remain deferred until the versioned Page Builder registry exists in P18-P31 and the final frontend template is supplied; no invalid JSON document was seeded.
+next_prompt: 48_BACKEND_QA
 next_prompt_gate: ADMIN_ALLOWED_PUBLIC_FRONTEND_REMAINS_LAST
 ```
 
