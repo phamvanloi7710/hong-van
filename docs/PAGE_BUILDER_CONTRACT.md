@@ -1,21 +1,15 @@
 # PAGE BUILDER CONTRACT
 
-## Mục tiêu
+## Trạng thái triển khai
 
-Admin kéo thả để tạo và chỉnh sửa mọi page public. Preview phải đúng style ngoài frontend.
+P21 đã triển khai foundation backend. P22–P25 sẽ bổ sung block thực tế, P26 triển khai editor Angular, P27 preview, P28 version/publish, P29 reusable/global blocks, P30 template và P31 public renderer. Foundation hiện không tự nhận Blade view/class, không `eval` và không lưu mã thực thi trong database.
 
-## Nguyên tắc quan trọng nhất
-
-**Angular không tự dựng một bản HTML giả lập riêng cho canvas.**
-
-Canvas sử dụng iframe chứa cùng Blade renderer và CSS mà public page sử dụng. Angular chỉ điều khiển document, selection, drag/drop, property panel và gửi phiên preview.
-
-## Document schema đề xuất
+## PageDocument schema v1
 
 ```json
 {
   "schemaVersion": 1,
-  "themeVersionId": "01...",
+  "themeVersionId": null,
   "pageSettings": {
     "container": "default",
     "background": "surface",
@@ -24,20 +18,12 @@ Canvas sử dụng iframe chứa cùng Blade renderer và CSS mà public page s�
   },
   "blocks": [
     {
-      "id": "01...",
-      "type": "hero.split",
+      "id": "block-home-0001",
+      "type": "foundation.placeholder",
       "version": 1,
-      "props": {},
-      "style": {
-        "desktop": {},
-        "tablet": {},
-        "mobile": {}
-      },
-      "visibility": {
-        "desktop": true,
-        "tablet": true,
-        "mobile": true
-      },
+      "props": { "label": "" },
+      "style": { "desktop": {}, "tablet": {}, "mobile": {} },
+      "visibility": { "desktop": true, "tablet": true, "mobile": true },
       "bindings": {},
       "children": []
     }
@@ -45,144 +31,83 @@ Canvas sử dụng iframe chứa cùng Blade renderer và CSS mà public page s�
 }
 ```
 
-## Registry
+`PageDocumentSchema` là nguồn chân lý cho version và giới hạn: tối đa 512 KiB, độ sâu 12 và 300 block. Root, `pageSettings` và từng block chỉ nhận field trong allowlist. `themeVersionId` chỉ nhận ULID hoặc `null`.
 
-Mỗi block registry entry phải khai báo:
+## BlockRegistry phía server
 
-- `type`.
-- `version`.
-- Nhãn và nhóm.
-- Icon/thumbnail.
-- Schema props.
-- Giá trị mặc định.
-- Schema style responsive.
-- Allowed children/parent.
-- Data source/binding được phép.
-- Blade view cố định.
-- Permission cần thiết.
-- Migration từ block version cũ.
-- Sanitization.
-- Cache tags.
-- Test fixtures.
+Mỗi `BlockDefinition` khai báo đầy đủ:
 
-Không được dùng tên Blade view lấy trực tiếp từ database.
+- `type`, version, nhãn `vi|en|zh`, category, icon và thumbnail.
+- schema riêng cho `props`, `style`, `visibility`, `bindings` và defaults.
+- quyền đặt ở root, parent/children hợp lệ.
+- data dependencies, permission và cache tags.
+- renderer class cố định trong code, sanitizer, migration tuần tự và test fixture.
 
-## Nhóm block
+API chỉ trả metadata an toàn; không trả renderer/sanitizer class, namespace, Blade view hoặc path nội bộ. P21 chỉ đăng ký `foundation.placeholder` làm fixture nền móng. Layout/content/media/business/form block thuộc P22–P25.
 
-### Layout
+## Validation và migration
 
-- Section.
-- Container.
-- Grid.
-- Columns.
-- Stack.
-- Spacer.
-- Divider.
-- Tabs/accordion nếu frontend template có.
+`PageDocumentValidator`:
 
-### Content
+- trả lỗi theo path như `document.blocks.0.props.label`;
+- từ chối block type/version không có trong registry, field tùy ý và quan hệ parent/child sai;
+- phát hiện duplicate block ID, binding tham chiếu không tồn tại và cycle;
+- từ chối Blade, PHP, script, `javascript:`, HTML event handler và `data:text/html`;
+- áp dụng sanitizer của block trước khi document được lưu;
+- tính checksum SHA-256 trên document canonical.
 
-- Heading.
-- Rich text.
-- Button.
-- Icon.
-- List.
-- Table.
-- Quote.
-- Badge.
-- Card.
-- FAQ.
+`PageDocumentMigrator` chỉ nâng block tuần tự `n -> n+1`; import thiếu migration, version tương lai hoặc schema không hỗ trợ bị từ chối trước khi lưu.
 
-### Media
+## Database và version contract
 
-- Image.
-- Gallery.
-- Video embed allowlist.
-- Background media.
-- Image-text split.
-- Logo cloud.
-
-### Business
-
-- Hero.
-- Product categories.
-- Product grid/list.
-- Featured products.
-- Crop solution grid.
-- Services.
-- Fleet.
-- Transport routes.
-- Warehouses.
-- Company statistics.
-- Partners.
-- Certifications.
-- Projects/case studies.
-- Posts/news.
-- Breadcrumb.
-- CTA.
-
-### Forms
-
-- Contact.
-- Product quote.
-- Transport request.
-- Warehouse request.
-- Newsletter only if scope is approved.
-
-## Preview session
-
-Đề xuất:
+P21 tạo các bảng có prefix/comment đầy đủ:
 
 ```text
-POST /api/admin/v1/page-builder/preview-sessions
-PUT  /api/admin/v1/page-builder/preview-sessions/{token}
-GET  /preview/page-builder/{signedToken}
+hongvan_pages
+hongvan_page_translations
+hongvan_page_versions
+hongvan_page_publish_schedules
+hongvan_page_locks
+hongvan_page_templates
+hongvan_page_template_versions
+hongvan_page_preview_sessions
 ```
 
-- Session tạm lưu Redis.
-- Token ký, hết hạn.
-- Preview response có `noindex`, CSP chặt.
-- Iframe và Angular giao tiếp bằng `postMessage` với origin allowlist.
-- Debounce update.
-- Không ghi version DB cho từng phím gõ.
+`document_json` chỉ chứa PageDocument đã validate. `hongvan_pages` trỏ tới draft mutable và published version. Model chặn update/delete một version đã có status `published`; publish/rollback ở P28 phải tạo lịch sử mới thay vì sửa document đã công bố. Lock và preview chỉ lưu hash token, không lưu raw token.
 
-## Versioning
+## API P21
 
-- Draft mutable thông qua autosave.
-- Khi save milestone, tạo immutable version.
-- Publish trỏ `published_version_id`.
-- Scheduled publish qua scheduler/queue.
-- Rollback tạo version mới từ version cũ, không sửa lịch sử.
-- Audit đầy đủ.
+Tất cả endpoint dùng Sanctum, permission `pages.*`, `PagePolicy`, response contract chung và ID public:
 
-## An toàn
+```text
+GET  /api/admin/v1/page-builder/registry
+GET  /api/admin/v1/page-builder/pages
+POST /api/admin/v1/page-builder/pages
+GET  /api/admin/v1/page-builder/pages/{public_id}
+PUT  /api/admin/v1/page-builder/pages/{public_id}
+PUT  /api/admin/v1/page-builder/pages/{public_id}/draft
+```
 
-- Rich text sanitize server-side.
-- Không cho script.
-- Không cho event handler HTML.
-- Không cho CSS tùy ý mặc định.
-- Video chỉ từ provider allowlist.
-- Link protocol allowlist.
-- Dynamic query parameters allowlist.
-- Binding chỉ đến data source registry.
-- Giới hạn depth, số block, payload size.
-- Validate cycle/recursive children.
-- Import JSON phải qua schema migration và validation.
+P21 chỉ cung cấp CRUD metadata và lưu draft document. Chưa có publish, schedule, lock API, preview iframe hoặc editor Angular.
 
-## Hiệu năng
+## Cache contract
 
-- Cache published document và rendered fragment.
-- Cache key gồm page, locale, published version, theme version.
-- Media dùng variant phù hợp.
-- Không query N+1 trong dynamic blocks.
-- Eager load theo block data dependency.
-- Invalidate cache theo tags khi entity thay đổi.
+Published cache key:
 
-## Điều kiện nghiệm thu cốt lõi
+```text
+page-builder:published:{pagePublicId}:{locale}:{pageVersionPublicId}:{themeVersionPublicId|theme-none}
+```
 
-1. Cùng một document cho preview và public tạo markup tương đương.
-2. Block không hợp lệ bị từ chối với lỗi chỉ rõ path.
-3. Publish/rollback không mất lịch sử.
-4. Không thể inject Blade/PHP/JS.
-5. Responsive preview đúng breakpoint của frontend.
-6. Theme token đổi trong admin phản ánh ra preview và public.
+Logical tags gồm `page-builder`, `page:{publicId}`, `page-version:{publicId}` và `theme-version:{publicId}`. P31 renderer phải dùng đúng key/tag này và invalidate khi page version, theme version hoặc data dependency thay đổi.
+
+## Preview và Angular canvas (deferred)
+
+P27 sẽ dùng signed expiring URL, owner check, Redis TTL, `noindex`, CSP chặt và `postMessage` với origin allowlist. Angular canvas dùng iframe của cùng Blade renderer/CSS public; không dựng một renderer HTML khác ở client.
+
+## Điều kiện an toàn đã kiểm chứng ở P21
+
+1. Database không lưu Blade/PHP/view name.
+2. Unknown block, arbitrary `view`, script payload, duplicate ID, invalid child, excessive depth và cycle đều bị từ chối.
+3. Registry API typed và không lộ class/path nội bộ.
+4. Published PageVersion bất biến ở model contract.
+5. Migration block bắt buộc tuần tự trước validation.

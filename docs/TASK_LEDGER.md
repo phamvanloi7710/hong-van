@@ -41,7 +41,12 @@
   - [x] Angular Theme Studio theo Annular, typed controls, lịch sử version, vi/en/zh, build và sync Laravel
   - [x] Blade public và signed noindex preview dùng cùng server compiler; Chrome UAT trên `hongvan.local` đạt
   - [x] Backend 3 test/24 assertions, database comment test, Admin 27 file/52 test, Pint, Larastan và migration rollback/remigrate đạt
-- [ ] P21 Page Builder schema/registry
+- [x] P21 Page Builder schema/registry
+  - [x] 8 bảng Page Builder có prefix/comment/constraint/rollback; published page/template version bất biến
+  - [x] PageDocument schema v1, typed BlockRegistry, sanitizer, cache contract và block migrator tuần tự
+  - [x] Validator path-specific chặn unknown type/view/script, duplicate ID, invalid child, quá depth/block/payload và binding cycle
+  - [x] Permission-gated registry metadata cùng Page metadata/draft API shell; không lộ renderer/sanitizer class/path
+  - [x] P21 test, PageDocument test, DatabaseCommentTest, PHPStan, Pint, migration rollback/remigrate và WAMP migration đạt
 - [ ] P22 Layout blocks
 - [ ] P23 Content/media blocks
 - [ ] P24 Dynamic business blocks

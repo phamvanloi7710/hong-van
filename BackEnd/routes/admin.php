@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\V1\Localization\LocalizationController;
 use App\Http\Controllers\Api\V1\Media\MediaContentController;
 use App\Http\Controllers\Api\V1\Media\MediaController;
 use App\Http\Controllers\Api\V1\Media\MediaFolderController;
+use App\Http\Controllers\Api\V1\PageBuilder\PageBuilderController;
 use App\Http\Controllers\Api\V1\Posts\PostController;
 use App\Http\Controllers\Api\V1\Posts\PostTaxonomyController;
 use App\Http\Controllers\Api\V1\Products\BrandController;
@@ -295,6 +296,15 @@ Route::prefix('admin/v1')
                 Route::post('{theme:public_id}/preview', [ThemeController::class, 'preview'])->middleware('permission:themes.view')->name('preview');
                 Route::post('{theme:public_id}/publish', [ThemeController::class, 'publish'])->middleware('permission:themes.publish')->name('publish');
                 Route::post('{theme:public_id}/rollback/{version:public_id}', [ThemeController::class, 'rollback'])->middleware('permission:themes.publish')->name('rollback');
+            });
+
+            Route::prefix('page-builder')->name('page-builder.')->group(function (): void {
+                Route::get('registry', [PageBuilderController::class, 'registry'])->middleware('permission:pages.view')->name('registry');
+                Route::get('pages', [PageBuilderController::class, 'index'])->middleware('permission:pages.view')->name('pages.index');
+                Route::post('pages', [PageBuilderController::class, 'store'])->middleware('permission:pages.create')->name('pages.store');
+                Route::get('pages/{page:public_id}', [PageBuilderController::class, 'show'])->middleware('permission:pages.view')->name('pages.show');
+                Route::put('pages/{page:public_id}', [PageBuilderController::class, 'update'])->middleware('permission:pages.update')->name('pages.update');
+                Route::put('pages/{page:public_id}/draft', [PageBuilderController::class, 'saveDraft'])->middleware('permission:pages.update')->name('pages.draft.update');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

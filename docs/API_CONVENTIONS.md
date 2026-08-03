@@ -48,6 +48,10 @@ POST|PUT|DELETE /api/admin/v1/settings/contact-channels[/{public_id}]
 GET|POST /api/admin/v1/showcase/{galleries|gallery-items|partners|certifications|projects}
 GET|PUT|DELETE /api/admin/v1/showcase/{kind}/{public_id}
 POST /api/admin/v1/showcase/{kind}/{public_id}/{publish|archive|restore}
+GET /api/admin/v1/page-builder/registry
+GET|POST /api/admin/v1/page-builder/pages
+GET|PUT /api/admin/v1/page-builder/pages/{public_id}
+PUT /api/admin/v1/page-builder/pages/{public_id}/draft
 ```
 
 Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Admin ping dùng `auth` và Gate `system_health`, được P11 ánh xạ vào permission `system.health`. Identity API dùng Sanctum, permission middleware, Policy và Form Request; filter/sort chỉ nhận key trong allowlist phía server.
@@ -59,6 +63,8 @@ Audit API chỉ đọc, yêu cầu `audit.view`, phân trang chuẩn và chỉ c
 Media API yêu cầu Sanctum, `MediaPolicy` và các permission `media.view|create|update|delete|restore`. List hỗ trợ search/filter/sort allowlist, gồm folder gốc, visibility và lock; upload dùng limiter `uploads` và multipart field `file`. Folder có create/rename/lock; media có metadata/move/lock/visibility/trash/restore/retry. Resource trả URL content cùng origin được tạo từ `public_id`, không làm lộ storage path. Thay đổi media/folder bị khóa trả `409`; xóa vĩnh viễn bị từ chối khi `hongvan_media_usages` còn tham chiếu.
 
 Showcase API yêu cầu Sanctum, `ShowcasePolicy` và permission namespace `showcase.*`. Năm resource dùng chung allowlist search/status/featured/trash/order; media được đăng ký vào `hongvan_media_usages`. Tài liệu chứng nhận chỉ được nguồn dữ liệu public trả về khi record đã published và `document_visibility=public`.
+
+Page Builder API P21 yêu cầu Sanctum, `PagePolicy` và permission `pages.view|create|update`. Registry chỉ trả schema/default/constraint metadata typed, tuyệt đối không trả renderer/sanitizer class hoặc Blade path. Page CRUD hiện chỉ gồm metadata và draft shell; document phải qua `PageDocumentValidator`, còn publish/preview/lock/schedule được triển khai ở prompt chuyên biệt sau.
 
 ## Response thành công
 

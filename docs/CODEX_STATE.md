@@ -3,8 +3,8 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P20
-last_completed_prompt: 20
+current_prompt: P21
+last_completed_prompt: 21
 status: DONE
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
@@ -33,6 +33,12 @@ latest_public_theme_security: passed_strict_key_color_font_shadow_animation_vali
 latest_public_theme_admin: passed_annular_theme_studio_typed_controls_history_preview_publish_rollback_permissions_and_vi_en_zh
 latest_public_theme_test: passed_p20_backend_3_tests_24_assertions_database_comment_1_test_3_assertions_admin_27_files_52_tests_larastan_pint
 latest_public_theme_runtime: passed_chrome_hongvan_local_admin_theme_studio_live_v1_draft_v2_signed_preview_noindex_and_public_published_version
+latest_page_builder_foundation: passed_p21_8_prefixed_commented_tables_page_document_v1_typed_registry_validator_migrator_cache_and_draft_api
+latest_page_builder_security: passed_unknown_type_arbitrary_view_blade_php_js_event_handler_duplicate_id_invalid_child_depth_payload_reference_and_cycle_guards
+latest_page_builder_versioning: passed_mutable_draft_pointer_published_model_immutability_template_versions_schedule_lock_and_hashed_preview_session_schema
+latest_page_builder_api: passed_permission_guarded_registry_metadata_and_page_metadata_draft_shell_without_internal_renderer_or_path_leak
+latest_page_builder_test: passed_p21_page_builder_8_tests_38_assertions_page_document_3_tests_6_assertions_full_backend_184_tests_1434_assertions
+latest_page_builder_runtime: passed_hongvan_local_authenticated_admin_page_builder_route_zero_console_errors_and_live_registry_unauthenticated_guard_401_request_id_locale_vi
 latest_public_asset_cache: configured_hashed_vite_assets_and_apache_immutable_header_wamp_restart_pending
 latest_frontend_template_inventory: passed_p19_wordpress_clone_558_files_45852960_bytes_tree_c8afab99d6faf61d181abfe7923eec196604d4c9_read_only
 latest_prerequisite_check: passed_php_8_5_9_node_24_15_0
@@ -40,8 +46,8 @@ latest_readonly_source_check: passed_powershell_and_git_bash
 latest_laravel_13_patch: 13.23.0
 latest_php_85_patch: 8.5.9
 latest_database_runtime: passed_mysql_9_1_0_wamp_local_hongvan_platform_utf8mb4_0900_ai_ci_innodb
-latest_database_migration: passed_p20_local_mysql_migrate_and_hongvan_testing_rollback_remigrate_117_prefixed_tables
-latest_database_prefix_check: passed_p20_117_prefixed_tables
+latest_database_migration: passed_p21_local_mysql_migrate_and_hongvan_testing_rollback_remigrate_page_builder_tables
+latest_database_prefix_check: passed_p21_all_page_builder_tables_hongvan_prefixed
 latest_database_comment_check: passed_database_comment_test_all_p20_tables_and_columns_commented
 latest_database_engine_guard: passed_explicit_innodb_against_wamp_myisam_default
 latest_api_test: passed_api_filter_8_tests_65_assertions
@@ -55,9 +61,9 @@ latest_rbac_test: passed_permission_filter_8_tests_35_assertions
 latest_rbac_runtime: passed_hongvan_local_identity_crud_ui_refresh_permission_guard_and_hidden_menu
 latest_super_admin_bootstrap: passed_local_environment_account_login_with_90_permissions
 latest_admin_asset_mime: passed_explicit_javascript_css_font_and_image_content_types
-latest_backend_test: passed_phpunit_170_tests_1328_assertions_mysql
+latest_backend_test: passed_phpunit_184_tests_1434_assertions_mysql
 latest_backend_format: passed_pint
-latest_backend_static_analysis: passed_larastan_level_6
+latest_backend_static_analysis: passed_larastan_level_6_464_files
 latest_backend_build: passed_vite_7_3_6
 latest_angular_core_patch: 22.1.0
 latest_angular_cli_patch: 22.1.2
@@ -195,13 +201,13 @@ open_blockers:
   - P19 re-audited and ported the current 558-file FrontEndTemplate without modifying it; real Media assets remain pending owner-approved content because the clone contains another brand and no sufficient standalone license.
   - P33 public Blade catalog, quote CTA, SEO metadata and public E2E remain deferred until P31 business-data routing is available; P19 presentation contracts are ready.
   - P34 public SSR/SEO/internal links remain deferred until P21-P31 binding; P19 presentation contracts are ready.
-  - P34 Page Builder block registration remains deferred until the P21-P31 foundation; the domain data source contract is ready.
+  - P34 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and domain data source contract are ready.
   - P35 public Blade listing/detail, SEO and contact/quote form routes remain deferred until P31; P19 listing/detail/contact presentation contracts are ready.
-  - P35 Page Builder block registration remains deferred until the P21-P31 foundation; the allowlisted service data source contract is ready.
+  - P35 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and allowlisted service data source contract are ready.
   - P36 public SSR capability pages/sections remain deferred until P31; P19 service presentation contracts are ready.
-  - P36 Page Builder block registration remains deferred until the P21-P31 foundation; the allowlisted transportation data source contract is ready.
+  - P36 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and allowlisted transportation data source contract are ready.
   - P37 public SSR warehouse listing/detail and privacy-aware map rendering remain deferred until P31; P19 presentation contracts are ready.
-  - P37 Page Builder block registration remains deferred until the P21-P31 foundation; the allowlisted warehouse data source contract is ready.
+  - P37 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and allowlisted warehouse data source contract are ready.
   - P38 public Page Builder form-block wiring remains deferred until P25/P21-P31; the public intake endpoints and P19 contact layout are ready.
   - P39 public SSR listing/category/tag/detail/pagination/related/RSS remains deferred until P31; P19 listing/content presentation contracts are ready.
   - P39 Page Builder post-list block registration remains deferred until P21-P31; the published-only data source contract is ready.
@@ -213,12 +219,12 @@ open_blockers:
   - P43 final public template insertion of JSON-LD and visible breadcrumbs remains deferred until P21-P31; builders, sitemap, robots, redirects and P19 layout are ready.
   - P44 public consent banner/preferences, browser event wiring and frontend E2E remain deferred until its assigned public binding; API, provider registry, CSP, Admin configuration and P19 layout are ready.
   - P46 Page Builder accessibility, Lighthouse/Core Web Vitals and axe remain deferred until P21-P31; P19 responsive desktop/tablet/mobile UAT passed and no Lighthouse score was fabricated.
-  - P47 demo page templates/documents remain deferred until the versioned Page Builder registry exists in P21-P31; no invalid JSON document was seeded.
-  - P48 Page Builder publish/version/preview behavioral coverage remains deferred until P21-P31; only the static arbitrary-renderer architecture guard can run against the current placeholder domain.
+  - P47 demo page templates/documents remain deferred until P22-P25 block catalogs and P30 templates exist; the P21 versioned registry now validates documents.
+  - P48 Page Builder publish/preview behavioral coverage remains deferred until P27-P28; P21 now covers schema, injection, migration and published-version immutability.
   - P49 Page Builder preview/publish/rollback and canvas snapshots remain deferred until P21-P31; P19 public desktop/tablet/mobile UAT passed and current Admin workflows pass 14 Playwright tests.
-next_prompt: 20_PUBLIC_THEME_STUDIO
+next_prompt: 22_LAYOUT_BLOCKS
 standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
-next_prompt_gate: READY_P19_DONE_STOPPED_BEFORE_P20
+next_prompt_gate: READY_P21_DONE_STOPPED_BEFORE_P22
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

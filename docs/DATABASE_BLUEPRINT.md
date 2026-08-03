@@ -64,6 +64,8 @@ P15 bổ sung `hongvan_audit_logs` theo cơ chế append-only. Bảng lưu đị
 
 P16 triển khai đủ bảy bảng Media nêu dưới đây. Bản ghi gốc và variant chỉ lưu `disk` + `path` do server sinh, metadata đã kiểm tra, SHA-256, kích thước, MIME và trạng thái; không lưu URL public cố định. `hongvan_media_usages` là registry tham chiếu theo owner contract để chặn xóa file đang dùng, còn `hongvan_media_operations` lưu vòng đời queue/retry/cleanup. P17 bổ sung `is_locked` có comment/index cho media và folder để port workflow khóa từ source StayHub; tổng cộng 87 cột Media đều có comment và các bảng dùng index, unique, foreign key, rollback cùng prefix `hongvan_`.
 
+P21 triển khai đủ tám bảng Page Builder trong danh sách dưới đây. `hongvan_page_versions.document_json` và `hongvan_page_template_versions.document_json` chỉ lưu PageDocument đã qua server registry/validator; version published bị chặn update/delete. Page/template dùng con trỏ draft/published rõ ràng, schedule có due index, lock/preview chỉ lưu SHA-256 token hash và mọi bảng/cột đều có comment, constraint cùng rollback hợp lệ.
+
 ## Core và Identity dự kiến
 
 ```text
@@ -133,7 +135,7 @@ hongvan_global_regions
 hongvan_global_region_versions
 ```
 
-`hongvan_page_versions.document_json` chứa document có schema version và phải được validate bằng registry. Version đã publish không được update tại chỗ.
+`hongvan_page_versions.document_json` chứa PageDocument schema v1 đã validate bằng `BlockRegistry`; không chứa Blade view, PHP hoặc JavaScript tùy ý. Version đã publish không được update hoặc delete tại chỗ. Rollback sau này phải tạo version mới hoặc đổi con trỏ theo contract P28 mà không sửa lịch sử.
 
 ## Products
 
