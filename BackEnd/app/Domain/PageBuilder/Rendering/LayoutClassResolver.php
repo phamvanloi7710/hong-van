@@ -14,6 +14,8 @@ final class LayoutClassResolver
         'justify' => ['start', 'center', 'end', 'between'],
         'direction' => ['vertical', 'horizontal'],
         'columns' => ['1', '2', '3', '4'],
+        'textAlign' => ['start', 'center', 'end'],
+        'spacing' => ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl'],
     ];
 
     /**

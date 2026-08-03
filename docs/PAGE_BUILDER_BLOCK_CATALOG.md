@@ -79,3 +79,53 @@ Divider:   props={variant:solid,color:border}; mobile={marginY:md}
 ```
 
 Fixture tổng hợp cho preview/test nằm ở `App\Domain\PageBuilder\LayoutPreviewFixture` và chứa đủ cả 7 layout block. Tabs/Accordion chưa được thêm ở P22 vì contract behavior/ARIA của template chưa sẵn sàng; chúng không phải điều kiện bắt buộc của prompt này.
+
+## Content và media blocks — P23
+
+Tất cả block P23 có version `1`, renderer/Blade view cố định ở server, không có children và chỉ được đặt trong layout parent hợp lệ. Style chung chỉ nhận `textAlign=start|center|end` và spacing token `none|xs|sm|md|lg|xl|2xl|3xl` cho desktop/tablet/mobile.
+
+| Type | Props chính | Markup/a11y | Media/cache |
+| --- | --- | --- | --- |
+| `content.heading` | `text`, `level=1..6`, `anchorId` | `<h1>`–`<h6>`; mặc định H2; tối đa một H1/document | `page-builder:content` |
+| `content.rich-text` | sanitized `html` | Chỉ render `HtmlString` sau server sanitizer; chặn script/event/unsafe URL | không dùng media |
+| `content.button` | `label`, safe `url`, `_self|_blank`, variant | `<a>`; `_blank` luôn có `noopener noreferrer` | không dùng media |
+| `content.icon` | icon allowlist, `label`, `decorative`, tone | Icon có accessible label hoặc `aria-hidden` | không dùng media |
+| `content.list` | `ordered`, 1–50 items | `<ol>` hoặc `<ul>` | không dùng media |
+| `content.quote` | `text`, attribution, safe cite URL | `<blockquote>`, `<cite>` | không dùng media |
+| `content.table` | caption, 1–8 headers, 1–50 rows | Caption bắt buộc, `scope=col`, vùng cuộn keyboard-focusable | không dùng media |
+| `content.badge` | text, tone | Nhãn inline không tương tác | không dùng media |
+| `content.card` | title/body, optional safe link pair, tone | `<article>` và heading | không dùng media |
+| `media.image` | Media ULID, alt/decorative, caption, loading, width | `<figure><picture><img>`; width/height và alt bắt buộc trừ decorative | batch media + responsive AVIF/WebP sources |
+| `media.image-text` | Image props, heading/text, position, optional link | `<article>`; mobile tự stack | batch media |
+| `media.gallery` | label, 2–4 columns, 1–24 image items | Static `role=list`, figure/caption, lazy loading; không tạo interaction giả | batch media, không N+1 |
+| `media.video-embed` | `youtube-nocookie|vimeo`, safe video ID, title, loading | iframe có title, allowlist và strict referrer policy | privacy-friendly provider URL |
+| `media.logo-cloud` | label, 1–24 logo/link items | `<ul>`, mỗi logo bắt buộc alt; link target an toàn | batch media |
+| `content.faq` | heading, `verified`, 1–30 question/answer | `<details>/<summary>`; chỉ phát FAQPage JSON-LD khi `verified=true` | `page-builder:content` |
+
+Ví dụ media image:
+
+```json
+{
+  "id": "image-company-0001",
+  "type": "media.image",
+  "version": 1,
+  "props": {
+    "mediaId": "01K00000000000000000000000",
+    "alt": "Mô tả nội dung hình ảnh",
+    "decorative": false,
+    "caption": "",
+    "loading": "lazy",
+    "width": "intrinsic"
+  },
+  "style": {
+    "desktop": { "textAlign": "start", "spacing": "none" },
+    "tablet": { "textAlign": "start", "spacing": "none" },
+    "mobile": { "textAlign": "start", "spacing": "none" }
+  },
+  "visibility": { "desktop": true, "tablet": true, "mobile": true },
+  "bindings": {},
+  "children": []
+}
+```
+
+Mỗi definition có defaults và `testFixture`. `ContentBlockTest` phủ toàn bộ content renderer/sanitizer; `MediaBlockTest` phủ đủ 5 media block, responsive sources, alt/decorative, public-ready policy, usage sync và query-count invariant.

@@ -20,7 +20,13 @@ final class LayoutBlockDefinitions
 
     private const LAYOUT_PARENTS = ['layout.section', 'layout.container', 'layout.stack', 'layout.grid', 'layout.columns'];
 
-    private const CONTENT_CHILDREN = ['layout.container', 'layout.stack', 'layout.grid', 'layout.columns', 'layout.spacer', 'layout.divider', 'foundation.placeholder'];
+    private const CONTENT_CHILDREN = [
+        'layout.container', 'layout.stack', 'layout.grid', 'layout.columns', 'layout.spacer', 'layout.divider',
+        'foundation.placeholder',
+        'content.heading', 'content.rich-text', 'content.button', 'content.icon', 'content.list', 'content.quote',
+        'content.table', 'content.badge', 'content.card', 'media.image', 'media.image-text', 'media.gallery',
+        'media.video-embed', 'media.logo-cloud', 'content.faq',
+    ];
 
     /** @return list<BlockDefinition> */
     public static function definitions(): array
@@ -117,7 +123,7 @@ final class LayoutBlockDefinitions
                 'columns' => self::enum(['1', '2', '3', '4']), 'gap' => self::enum(self::SPACING), 'align' => self::enum(self::ALIGN),
             ], ['columns', 'gap', 'align']),
             defaults: $defaults, allowRoot: false, parents: ['layout.section', 'layout.container', 'layout.stack'],
-            children: ['layout.container', 'layout.stack', 'layout.spacer', 'layout.divider', 'foundation.placeholder'],
+            children: array_values(array_diff(self::CONTENT_CHILDREN, ['layout.grid', 'layout.columns'])),
             maxDepth: 8, minChildren: 1, maxChildren: 12, renderer: GridBlockRenderer::class,
         );
     }
@@ -138,7 +144,7 @@ final class LayoutBlockDefinitions
             ], ['desktopPreset', 'tabletPreset', 'mobilePreset']),
             style: self::responsiveSchema(['gap' => self::enum(self::SPACING), 'align' => self::enum(self::ALIGN)], ['gap', 'align']),
             defaults: $defaults, allowRoot: false, parents: ['layout.section', 'layout.container', 'layout.stack'],
-            children: ['layout.container', 'layout.stack', 'layout.spacer', 'layout.divider', 'foundation.placeholder'],
+            children: array_values(array_diff(self::CONTENT_CHILDREN, ['layout.grid', 'layout.columns'])),
             maxDepth: 8, minChildren: 2, maxChildren: 4, renderer: ColumnsBlockRenderer::class,
         );
     }

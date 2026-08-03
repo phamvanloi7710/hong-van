@@ -2,7 +2,7 @@
 
 ## Trạng thái triển khai
 
-P21 đã triển khai foundation backend và P22 đã bổ sung 7 layout block nền. P23–P25 sẽ bổ sung content/media/business/form block, P26 triển khai editor Angular, P27 preview, P28 version/publish, P29 reusable/global blocks, P30 template và P31 public routing. Foundation không tự nhận Blade view/class, không `eval` và không lưu mã thực thi trong database.
+P21 đã triển khai foundation backend, P22 bổ sung 7 layout block và P23 bổ sung 15 content/media block. P24–P25 sẽ bổ sung business/form block, P26 triển khai editor Angular, P27 preview, P28 version/publish, P29 reusable/global blocks, P30 template và P31 public routing. Foundation không tự nhận Blade view/class, không `eval` và không lưu mã thực thi trong database.
 
 ## PageDocument schema v1
 
@@ -43,13 +43,21 @@ Mỗi `BlockDefinition` khai báo đầy đủ:
 - data dependencies, permission và cache tags.
 - renderer class cố định trong code, sanitizer, migration tuần tự và test fixture.
 
-API chỉ trả metadata an toàn; không trả renderer/sanitizer class, namespace, Blade view hoặc path nội bộ. Registry hiện có `foundation.placeholder` và 7 block P22: `layout.section`, `layout.container`, `layout.stack`, `layout.grid`, `layout.columns`, `layout.spacer`, `layout.divider`. Content/media/business/form block thuộc P23–P25.
+API chỉ trả metadata an toàn; không trả renderer/sanitizer class, namespace, Blade view hoặc path nội bộ. Registry hiện có foundation placeholder, 7 layout block P22 và 15 content/media block P23. Business/form block thuộc P24–P25.
 
 ## Renderer và layout contract P22
 
 `PageDocumentRenderer` validate toàn document trước khi render đệ quy. Mỗi block type chỉ resolve renderer class và Blade view cố định từ server registry. HTML con được tạo bởi cùng renderer rồi chuyển qua `HtmlString`; props người dùng vẫn được Blade escape.
 
 Layout style được chuyển thành class cố định qua `LayoutClassResolver`. Spacing, alignment, direction, column count, background, visibility và column preset đều dùng allowlist/design token; document không thể đưa raw CSS grid, selector hoặc script vào renderer. `Section` render semantic `<section>`, `Divider` render `<hr>`, các wrapper còn lại chỉ tạo một phần tử cần thiết. Catalog đầy đủ nằm tại `docs/PAGE_BUILDER_BLOCK_CATALOG.md`.
+
+## Content/media contract P23
+
+Rich text được validate schema, từ chối executable payload rồi sanitize server trước khi lưu. Link field chỉ nhận internal path/fragment hoặc protocol `http`, `https`, `mailto`, `tel`; `_blank` luôn render `noopener noreferrer`. Heading mặc định H2 và toàn document chỉ cho tối đa một H1.
+
+Mọi image reference dùng Media public ID. `PageBuilderMediaResolver` gom toàn bộ reference rồi eager-load media và variants theo batch cố định; chỉ hình public/ready được chấp nhận. Blade dùng `<picture>`, responsive AVIF/WebP source, intrinsic width/height, lazy loading và alt/decorative contract. `PageBuilderMediaUsageSynchronizer` ghi usage theo `page_version` khi lưu draft; usage tiếp tục gắn với version khi P28 publish version đó.
+
+Video chỉ dùng `youtube-nocookie.com` hoặc Vimeo DNT URL do server tạo. FAQ chỉ sinh JSON-LD qua `StructuredDataBuilder` khi người biên tập đánh dấu content đã xác minh.
 
 ## Validation và migration
 

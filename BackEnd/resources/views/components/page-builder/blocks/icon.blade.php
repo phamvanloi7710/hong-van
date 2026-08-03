@@ -1,0 +1,1 @@
+<span class="{{ implode(' ', $classes) }} pb-icon pb-icon--{{ $props['tone'] }}" data-block-id="{{ $blockId }}" @if ($props['decorative']) aria-hidden="true" @else role="img" aria-label="{{ $props['label'] }}" @endif><i class="{{ $iconClass }}" aria-hidden="true"></i></span>

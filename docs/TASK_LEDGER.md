@@ -53,7 +53,12 @@
   - [x] Responsive design token allowlist; chặn raw CSS/grid tùy ý và background media/gradient ngoài contract
   - [x] Semantic Blade renderer, escaping, catalog docs và preview fixture dùng chung CSS public
   - [x] P22 5 test/66 assertions, PageDocument 3 test/6 assertions, full backend 189 test/1500 assertions, PHPStan, Pint, Vite build/budget và `hongvan.local` runtime đạt
-- [ ] P23 Content/media blocks
+- [x] P23 Content/media blocks
+  - [x] 15 block Heading, RichText, Button, Icon, List, Quote, Table, Badge, Card, Image, ImageText, Gallery, VideoEmbed, LogoCloud và FAQ
+  - [x] Server sanitizer chặn XSS/event/unsafe URL, tối đa một H1, link target/rel an toàn và FAQ JSON-LD chỉ khi verified
+  - [x] Public-ready Media batch resolver, responsive picture variants, alt/decorative, intrinsic dimensions, lazy loading và privacy-friendly video
+  - [x] Media usage đồng bộ theo `page_version` khi lưu draft; query count cố định, không N+1 theo số media reference
+  - [x] ContentBlock 4 test/15 assertions, MediaBlock 4 test/18 assertions, Page Builder 21 test/137 assertions, full backend 197 test/1533 assertions, Pint/PHPStan/build/runtime đạt
 - [ ] P24 Dynamic business blocks
 - [ ] P25 Form blocks
 - [ ] P26 Angular Page Builder editor

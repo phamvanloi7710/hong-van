@@ -20,5 +20,5 @@ return [
         'preview' => ['width' => 1280, 'height' => 1280],
     ],
     'variant_formats' => ['webp', 'avif'],
-    'usage_owner_types' => ['product', 'page', 'post', 'settings', 'seo_meta', 'crop_category', 'crop', 'crop_stage', 'crop_solution', 'service', 'vehicle', 'warehouse', 'gallery_item', 'partner', 'certification', 'project'],
+    'usage_owner_types' => ['product', 'page', 'page_version', 'post', 'settings', 'seo_meta', 'crop_category', 'crop', 'crop_stage', 'crop_solution', 'service', 'vehicle', 'warehouse', 'gallery_item', 'partner', 'certification', 'project'],
 ];

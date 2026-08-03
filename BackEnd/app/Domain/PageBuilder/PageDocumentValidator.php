@@ -8,7 +8,11 @@ use Illuminate\Validation\ValidationException;
 
 final readonly class PageDocumentValidator
 {
-    public function __construct(private BlockRegistry $registry, private Container $container) {}
+    public function __construct(
+        private BlockRegistry $registry,
+        private Container $container,
+        private PageBuilderMediaResolver $mediaResolver,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $document
@@ -47,12 +51,14 @@ final readonly class PageDocumentValidator
             $sanitized[] = $this->validateBlock($block, "document.blocks.{$index}", null, 1, $count, $ids, $dependencies, $dependencyPaths, $errors);
         }
         $this->validateDependencyGraph($ids, $dependencies, $dependencyPaths, $errors);
+        $this->validateHeadingHierarchy($sanitized, $errors);
 
         if ($errors !== []) {
             throw ValidationException::withMessages($errors);
         }
 
         $document['blocks'] = $sanitized;
+        $this->mediaResolver->resolve($document);
 
         return $document;
     }
@@ -226,8 +232,43 @@ final readonly class PageDocumentValidator
         if (is_string($value) && isset($schema['maxLength']) && mb_strlen($value) > (int) $schema['maxLength']) {
             $errors[$path][] = $this->message('max_length');
         }
+        if (is_string($value) && isset($schema['minLength']) && mb_strlen($value) < (int) $schema['minLength']) {
+            $errors[$path][] = $this->message('min_length');
+        }
         if (is_string($value) && is_string($schema['pattern'] ?? null) && preg_match('~'.$schema['pattern'].'~D', $value) !== 1) {
             $errors[$path][] = $this->message('pattern');
+        }
+        if ($type === 'array' && is_array($value)) {
+            if (isset($schema['minItems']) && count($value) < (int) $schema['minItems']) {
+                $errors[$path][] = $this->message('items_min');
+            }
+            if (isset($schema['maxItems']) && count($value) > (int) $schema['maxItems']) {
+                $errors[$path][] = $this->message('items_max');
+            }
+            if (is_array($schema['items'] ?? null)) {
+                foreach ($value as $index => $item) {
+                    $this->validateSchema($item, $schema['items'], "{$path}.{$index}", $errors);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param  list<array<string, mixed>>  $blocks
+     * @param  array<string, list<string>>  $errors
+     */
+    private function validateHeadingHierarchy(array $blocks, array &$errors, string $path = 'document.blocks', bool &$hasH1 = false): void
+    {
+        foreach ($blocks as $index => $block) {
+            $blockPath = "{$path}.{$index}";
+            if (($block['type'] ?? null) === 'content.heading' && data_get($block, 'props.level') === 1) {
+                if ($hasH1) {
+                    $errors["{$blockPath}.props.level"][] = $this->message('multiple_h1');
+                }
+                $hasH1 = true;
+            }
+            $children = is_array($block['children'] ?? null) ? $block['children'] : [];
+            $this->validateHeadingHierarchy($children, $errors, "{$blockPath}.children", $hasH1);
         }
     }
 

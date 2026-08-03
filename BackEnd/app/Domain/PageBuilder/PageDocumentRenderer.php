@@ -10,6 +10,7 @@ final readonly class PageDocumentRenderer
     public function __construct(
         private BlockRegistry $registry,
         private PageDocumentValidator $validator,
+        private PageBuilderMediaResolver $mediaResolver,
         private Container $container,
     ) {}
 
@@ -17,12 +18,14 @@ final readonly class PageDocumentRenderer
     public function render(array $document): string
     {
         $validated = $this->validator->validate($document);
+        $media = $this->mediaResolver->resolve($validated);
         $blocks = is_array($validated['blocks'] ?? null) ? $validated['blocks'] : [];
 
-        return implode('', array_map(fn (mixed $block): string => $this->renderBlock($block), $blocks));
+        return implode('', array_map(fn (mixed $block): string => $this->renderBlock($block, $media), $blocks));
     }
 
-    private function renderBlock(mixed $value): string
+    /** @param array<string, array<string, mixed>> $media */
+    private function renderBlock(mixed $value, array $media): string
     {
         if (! is_array($value) || ! is_string($value['type'] ?? null)) {
             return '';
@@ -33,7 +36,8 @@ final readonly class PageDocumentRenderer
             throw new \LogicException("Invalid renderer for Page Builder block [{$definition->type}].");
         }
         $children = is_array($value['children'] ?? null) ? $value['children'] : [];
-        $childrenHtml = implode('', array_map(fn (mixed $child): string => $this->renderBlock($child), $children));
+        $childrenHtml = implode('', array_map(fn (mixed $child): string => $this->renderBlock($child, $media), $children));
+        $value['_mediaMap'] = $media;
 
         return $renderer->render($value, $childrenHtml);
     }

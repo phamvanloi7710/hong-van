@@ -5,6 +5,7 @@ namespace Tests\Unit\PageBuilder;
 use App\Domain\PageBuilder\BlockDefinition;
 use App\Domain\PageBuilder\BlockRegistry;
 use App\Domain\PageBuilder\Contracts\BlockVersionMigration;
+use App\Domain\PageBuilder\PageBuilderMediaResolver;
 use App\Domain\PageBuilder\PageDocumentMigrator;
 use App\Domain\PageBuilder\PageDocumentSchema;
 use App\Domain\PageBuilder\PageDocumentValidator;
@@ -36,7 +37,7 @@ final class PageDocumentTest extends TestCase
     public function test_binding_cycle_detection_reports_the_source_path(): void
     {
         $registry = new BlockRegistry([$this->nodeDefinition(1)]);
-        $validator = new PageDocumentValidator($registry, app());
+        $validator = new PageDocumentValidator($registry, app(), app(PageBuilderMediaResolver::class));
         $document = PageDocumentSchema::emptyDocument();
         $document['blocks'] = [
             $this->node('node-a-0001', 'node-b-0002'),
@@ -49,7 +50,7 @@ final class PageDocumentTest extends TestCase
     public function test_block_versions_migrate_sequentially_before_validation(): void
     {
         $registry = new BlockRegistry([$this->nodeDefinition(2, [TestNodeV1ToV2::class])]);
-        $validator = new PageDocumentValidator($registry, app());
+        $validator = new PageDocumentValidator($registry, app(), app(PageBuilderMediaResolver::class));
         $migrator = new PageDocumentMigrator($registry, $validator, app());
         $document = PageDocumentSchema::emptyDocument();
         $block = $this->node('node-migrate-01', null);

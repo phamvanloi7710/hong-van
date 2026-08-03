@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 final readonly class PageManager
 {
-    public function __construct(private PageDocumentValidator $validator, private AuditTrail $audit) {}
+    public function __construct(
+        private PageDocumentValidator $validator,
+        private PageBuilderMediaUsageSynchronizer $mediaUsage,
+        private AuditTrail $audit,
+    ) {}
 
     /** @param array<string, mixed> $data */
     public function saveMetadata(User $actor, ?Page $page, array $data): Page
@@ -75,6 +79,7 @@ final readonly class PageManager
                 $draft->update(['schema_version' => PageDocumentSchema::VERSION, 'document_json' => $validated, 'checksum' => $checksum]);
                 $lockedPage->update(['updated_by' => $actor->getKey()]);
             }
+            $this->mediaUsage->sync($draft, $validated);
 
             return $draft->refresh();
         });
