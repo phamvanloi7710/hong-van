@@ -3,12 +3,12 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P49
-last_completed_prompt: 45
-status: PARTIAL
+current_prompt: P50
+last_completed_prompt: 50
+status: DONE
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
-frontend_template_gate: MISSING
+frontend_template_gate: OWNER_EDIT_IN_PROGRESS_FINGERPRINT_CHANGED
 stayhub_media_gate: READY_PORTED_P17
 backend_bootstrapped: true
 admin_bootstrapped: true
@@ -20,8 +20,8 @@ local_database: hongvan_platform
 local_database_status: PASSED_WAMP_MYSQL_9_1_0_FRESH_SEEDED_COMMENTED
 local_domain: hongvan.local
 local_domain_status: CONFIGURED_WAMP_BACKEND_PUBLIC
-frontend_template_reminder: REQUIRED_BEFORE_P19
-frontend_delivery_order: LAST_AFTER_USER_PROVIDES_TEMPLATE
+frontend_template_reminder: ACKNOWLEDGED_PREPARE_AFTER_P50
+frontend_delivery_order: NEXT_AFTER_P50_OWNER_DIRECTIVE
 latest_prerequisite_check: passed_php_8_5_9_node_24_15_0
 latest_readonly_source_check: passed_powershell_and_git_bash
 latest_laravel_13_patch: 13.23.0
@@ -169,10 +169,16 @@ latest_p48_architecture: passed_13_tests_16_assertions_prefix_comments_controlle
 latest_p48_operations: passed_media_queue_and_post_scheduler_idempotency_fresh_rollback_remigrate_no_pending_migration_route_config_cache_217_routes
 latest_p48_quality: passed_pint_larastan_level_6_composer_audit_no_advisories_prefix_checker_122_files
 latest_admin_smoke: passed_hongvan_local_root_deep_link_asset_cache
+latest_p50_ci: passed_gitlab_pipeline_yaml_parser_php85_mysql84_redis74_node24_lockfile_jobs_and_optional_e2e
+latest_p50_scripts: passed_powershell_bash_syntax_backend_admin_smoke_and_cross_platform_artifact_helpers
+latest_p50_backend: passed_composer_audit_prefix_pint_larastan_164_tests_1266_assertions
+latest_p50_admin: passed_production_audit_lint_26_files_51_tests_build_sync_122_files_playwright_14_tests
+latest_p50_artifact: passed_public_admin_build_125_sha256_checksums_windows_and_git_bash
+latest_p50_smoke: passed_hongvan_local_health_public_ping_admin_200_and_unauth_admin_api_401
 open_blockers:
   - Admin template is missing package-lock.json, public/ assets and a root license file.
   - npm audit reports three moderate and two high development-tool findings; no automatic audit fix was applied.
-  - Public frontend template source is missing at FrontEndTemplate/.
+  - FrontEndTemplate fingerprint differs from the previous read-only baseline across 558 files because the owner is developing it; P50 did not modify or re-baseline this source and frontend preparation must re-audit it first.
   - P33 public Blade catalog, quote CTA, SEO metadata and public E2E remain deferred until P31 and the frontend template are available.
   - P34 public SSR/SEO/internal links remain deferred until P31 and the frontend template are available.
   - P34 Page Builder block registration remains deferred until the P21-P31 foundation; the domain data source contract is ready.
@@ -196,8 +202,9 @@ open_blockers:
   - P47 demo page templates/documents remain deferred until the versioned Page Builder registry exists in P18-P31 and the final frontend template is supplied; no invalid JSON document was seeded.
   - P48 Page Builder publish/version/preview behavioral coverage remains deferred until P21-P31; only the static arbitrary-renderer architecture guard can run against the current placeholder domain.
   - P49 Page Builder preview/publish/rollback, canvas snapshots and public desktop/tablet/mobile QA remain deferred until P21-P31 and the final frontend template; current Admin workflows pass 14 Playwright tests.
-next_prompt: 50_BUILD_SCRIPTS_AND_CI_PIPELINES
-next_prompt_gate: ADMIN_ALLOWED_PUBLIC_FRONTEND_REMAINS_LAST
+next_prompt: FRONTEND_PREPARATION_OWNER_OVERRIDE
+standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
+next_prompt_gate: REAUDIT_CURRENT_FRONTEND_TEMPLATE_BEFORE_P18_P19
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

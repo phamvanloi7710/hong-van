@@ -116,7 +116,11 @@
   - [x] P49 Critical admin workflows: login/logout, RBAC, per-user theme, product CRUD + Media Picker, lead status/note, SEO edit, media lifecycle và accessibility smoke
   - [x] P49 Visual/runtime: admin shell và Media Manager snapshots review; live hongvan.local dashboard/products dùng bundle mới, đúng `/admin/` asset path và zero console errors
   - [ ] P49 Page Builder/public: preview/publish/rollback, canvas và public desktop/tablet/mobile deferred vì P21-P31 cùng final frontend template chưa tồn tại
-- [ ] P50 Build/CI
+- [x] P50 Build/CI
+  - [x] PowerShell/Bash prerequisites, backend QA, Admin QA, build/sync, smoke và aggregate verify scripts
+  - [x] GitLab CI: security, PHP 8.5 + MySQL 8.4 + Redis, Node 24, migration/prefix/Pint/Larastan/test/build/audit và optional E2E
+  - [x] Public/Admin artifact không commit, 125 SHA-256 checksums xác minh chéo Windows/Git Bash
+  - [x] Lockfile cache, read-only source tracked-file guard, branch protection và vận hành local được tài liệu hóa
 - [ ] P51 Docker/deployment
 - [ ] P52 Backup/monitoring
 - [ ] P53 Security audit

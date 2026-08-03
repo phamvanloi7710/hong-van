@@ -1,0 +1,189 @@
+stages:
+  - security
+  - quality
+  - e2e
+  - artifact
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+default:
+  interruptible: true
+
+variables:
+  PHP_VERSION: '8.5'
+  NODE_VERSION: '24.15.0'
+  NPM_CONFIG_CACHE: '$CI_PROJECT_DIR/.npm'
+
+.php_backend:
+  image: 'php:8.5-cli-bookworm'
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y --no-install-recommends curl git unzip libfreetype6-dev libicu-dev libjpeg62-turbo-dev libpng-dev libzip-dev
+    - docker-php-ext-configure gd --with-freetype --with-jpeg
+    - docker-php-ext-install -j"$(nproc)" bcmath gd intl pdo_mysql zip
+    - pecl install redis
+    - docker-php-ext-enable redis
+    - curl --silent --show-error --fail --location https://getcomposer.org/installer --output /tmp/composer-setup.php
+    - curl --silent --show-error --fail https://composer.github.io/installer.sig --output /tmp/composer.sig
+    - test "$(php -r "echo hash_file('sha384', '/tmp/composer-setup.php');")" = "$(cat /tmp/composer.sig)"
+    - php /tmp/composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
+    - rm -f /tmp/composer-setup.php /tmp/composer.sig
+    - php --version
+    - composer --version
+
+secret_and_source_policy:
+  stage: security
+  image:
+    name: 'zricethezav/gitleaks:v8.28.0'
+    entrypoint: ['']
+  variables:
+    GIT_DEPTH: '0'
+  script:
+    - gitleaks git --redact --no-banner .
+    - |
+      unexpected="$(git ls-files Template FrontEndTemplate SourceIntegrations \
+        | grep -Ev '(^|/)(AGENTS\.md|README_PLACE_[A-Z_]+\.md)$' || true)"
+      if [ -n "${unexpected}" ]; then
+        printf 'Reference source files must not be committed:\n%s\n' "${unexpected}" >&2
+        exit 1
+      fi
+
+backend_qa:
+  extends: .php_backend
+  stage: quality
+  services:
+    - name: 'mysql:8.4'
+      alias: mysql
+      variables:
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        MYSQL_DATABASE: hongvan_ci
+    - name: 'redis:7.4-alpine'
+      alias: redis
+  variables:
+    APP_ENV: ci
+    APP_KEY: 'base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
+    APP_URL: 'http://127.0.0.1:8000'
+    DB_CONNECTION: mysql
+    DB_HOST: mysql
+    DB_PORT: '3306'
+    DB_DATABASE: hongvan_ci
+    DB_USERNAME: root
+    DB_PASSWORD: ''
+    DB_CHARSET: utf8mb4
+    DB_COLLATION: utf8mb4_0900_ai_ci
+    DB_ENGINE: InnoDB
+    CACHE_STORE: redis
+    REDIS_HOST: redis
+    REDIS_PORT: '6379'
+    QUEUE_CONNECTION: sync
+    SESSION_DRIVER: array
+    MAIL_MAILER: array
+    COMPOSER_CACHE_DIR: '$CI_PROJECT_DIR/.composer-cache'
+  cache:
+    key:
+      files:
+        - BackEnd/composer.lock
+      prefix: 'composer-$PHP_VERSION'
+    paths:
+      - .composer-cache/files/
+    policy: pull-push
+  script:
+    - cd BackEnd
+    - composer validate --strict --no-check-publish
+    - composer audit --locked
+    - composer install --no-interaction --prefer-dist --no-progress
+    - php artisan migrate --force
+    - php ../scripts/check-table-prefix.php
+    - php vendor/bin/pint --test
+    - php vendor/bin/phpstan analyse --memory-limit=1G
+    - php artisan test
+
+admin_qa:
+  stage: quality
+  image: 'node:24.15.0-bookworm'
+  cache:
+    key:
+      files:
+        - Admin/package-lock.json
+      prefix: 'admin-node-$NODE_VERSION'
+    paths:
+      - .npm/
+    policy: pull-push
+  script:
+    - cd Admin
+    - npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline
+    - npm audit --omit=dev --audit-level=high
+    - npm audit --audit-level=critical
+    - npm run lint
+    - npm test -- --watch=false
+    - npm run build:laravel
+
+admin_e2e:
+  stage: e2e
+  image: 'node:24.15.0-bookworm'
+  needs:
+    - admin_qa
+  rules:
+    - if: '$RUN_E2E == "true"'
+    - when: never
+  cache:
+    key:
+      files:
+        - Admin/package-lock.json
+      prefix: 'admin-node-$NODE_VERSION'
+    paths:
+      - .npm/
+    policy: pull
+  script:
+    - cd Admin
+    - npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline
+    - npm run build:laravel
+    - npx playwright install --with-deps chrome
+    - cd ..
+    - node scripts/serve-spa.mjs BackEnd/public/admin/browser 8000 /admin/ >/tmp/hongvan-admin-server.log 2>&1 &
+    - |
+      for attempt in $(seq 1 30); do
+        if node -e "fetch('http://127.0.0.1:8000/admin/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"; then
+          break
+        fi
+        if [ "$attempt" -eq 30 ]; then
+          cat /tmp/hongvan-admin-server.log
+          exit 1
+        fi
+        sleep 1
+      done
+    - cd Admin
+    - PLAYWRIGHT_BASE_URL="http://127.0.0.1:8000/admin/" npx playwright test
+
+web_asset_artifact:
+  stage: artifact
+  image: 'node:24.15.0-bookworm'
+  needs:
+    - secret_and_source_policy
+    - backend_qa
+    - admin_qa
+  cache:
+    key:
+      files:
+        - Admin/package-lock.json
+        - BackEnd/package-lock.json
+      prefix: 'web-assets-node-$NODE_VERSION'
+    paths:
+      - .npm/
+    policy: pull-push
+  script:
+    - cd BackEnd && npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline && cd ..
+    - cd Admin && npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline && cd ..
+    - bash scripts/create-build-artifact.sh --skip-install
+    - cd .tmp/artifacts/hongvan-web-assets
+    - sha256sum --check SHA256SUMS.txt
+  artifacts:
+    name: 'hongvan-web-assets-$CI_COMMIT_SHA'
+    when: on_success
+    expire_in: 14 days
+    paths:
+      - .tmp/artifacts/hongvan-web-assets/
