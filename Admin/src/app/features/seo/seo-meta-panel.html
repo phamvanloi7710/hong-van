@@ -1,0 +1,35 @@
+@if (loading()) {
+  <div class="panel-state"><mat-spinner diameter="42"/><span>{{ text('loading') }}</span></div>
+} @else if (error()) {
+  <mat-card class="panel-state error"><mat-icon>error_outline</mat-icon><span>{{ error() }}</span></mat-card>
+} @else {
+  <form class="seo-form" [formGroup]="form" (ngSubmit)="save()">
+    <div class="panel-heading"><div><h3>{{ entityLabel() }}</h3><p>{{ text('draftWarning') }}</p></div><button mat-flat-button type="submit" [disabled]="form.invalid || saving() || !authStore.hasPermission('seo.update')"><mat-icon>save</mat-icon>{{ text('save') }}</button></div>
+    <mat-tab-group animationDuration="180ms">
+      <mat-tab [label]="text('basic')">
+        <div class="tab-content fields">
+          <mat-form-field appearance="outline"><mat-label>{{ text('metaTitle') }}</mat-label><input matInput maxlength="255" formControlName="meta_title"><mat-hint>{{ text('titleGuide') }} · {{ form.controls.meta_title.value.length }}/60</mat-hint></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ text('metaDescription') }}</mat-label><textarea matInput rows="4" maxlength="500" formControlName="meta_description"></textarea><mat-hint>{{ text('descriptionGuide') }} · {{ form.controls.meta_description.value.length }}/160</mat-hint></mat-form-field>
+          <mat-card class="preview serp"><span class="preview-label">{{ text('searchResult') }}</span><a>{{ previewTitle() }}</a><small>{{ form.controls.canonical_url.value || 'https://hongvan.local/…' }}</small><p>{{ previewDescription() }}</p></mat-card>
+        </div>
+      </mat-tab>
+      <mat-tab [label]="text('social')">
+        <div class="tab-content fields">
+          <div class="two-columns"><mat-form-field appearance="outline"><mat-label>{{ text('ogTitle') }}</mat-label><input matInput maxlength="255" formControlName="og_title"></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('ogType') }}</mat-label><mat-select formControlName="og_type"><mat-option value="website">{{ text('website') }}</mat-option><mat-option value="article">{{ text('article') }}</mat-option><mat-option value="product">{{ text('product') }}</mat-option></mat-select></mat-form-field></div>
+          <mat-form-field appearance="outline"><mat-label>{{ text('ogDescription') }}</mat-label><textarea matInput rows="3" maxlength="500" formControlName="og_description"></textarea></mat-form-field>
+          <div class="image-field"><div>@if (image(); as selectedImage) { <img [src]="selectedImage.content_url" [alt]="selectedImage.alt_text || selectedImage.original_filename"><div><strong>{{ selectedImage.original_filename }}</strong><small>{{ selectedImage.width || '—' }} × {{ selectedImage.height || '—' }}</small></div> } @else { <mat-icon>image</mat-icon><span>{{ text('imageHint') }}</span> }</div><span><button mat-stroked-button type="button" (click)="chooseImage()"><mat-icon>perm_media</mat-icon>{{ text('chooseImage') }}</button>@if (image()) { <button mat-button type="button" (click)="removeImage()">{{ text('removeImage') }}</button> }</span></div>
+          <div class="two-columns"><mat-form-field appearance="outline"><mat-label>{{ text('twitterTitle') }}</mat-label><input matInput maxlength="255" formControlName="twitter_title"></mat-form-field><mat-form-field appearance="outline"><mat-label>{{ text('twitterCard') }}</mat-label><mat-select formControlName="twitter_card"><mat-option value="summary">{{ text('summary') }}</mat-option><mat-option value="summary_large_image">{{ text('summary_large_image') }}</mat-option></mat-select></mat-form-field></div>
+          <mat-form-field appearance="outline"><mat-label>{{ text('twitterDescription') }}</mat-label><textarea matInput rows="3" maxlength="500" formControlName="twitter_description"></textarea></mat-form-field>
+          <mat-card class="preview social">@if (image(); as selectedImage) { <img [src]="selectedImage.content_url" [alt]="selectedImage.alt_text || ''"> }<div><span class="preview-label">{{ text('socialPreview') }}</span><strong>{{ form.controls.og_title.value || previewTitle() }}</strong><p>{{ form.controls.og_description.value || previewDescription() }}</p></div></mat-card>
+        </div>
+      </mat-tab>
+      <mat-tab [label]="text('advanced')">
+        <div class="tab-content fields">
+          <mat-form-field appearance="outline"><mat-label>{{ text('canonical') }}</mat-label><input matInput formControlName="canonical_url"><mat-hint>{{ text('canonicalHint') }}</mat-hint>@if (form.controls.canonical_url.hasError('httpUrl')) { <mat-error>{{ text('invalidCanonical') }}</mat-error> }</mat-form-field>
+          <div class="robots"><mat-checkbox formControlName="robots_index">{{ text('index') }}</mat-checkbox><mat-checkbox formControlName="robots_follow">{{ text('follow') }}</mat-checkbox></div>
+          <mat-form-field appearance="outline"><mat-label>{{ text('focusKeywords') }}</mat-label><input matInput maxlength="800" formControlName="focus_keywords"><mat-hint>{{ text('focusHint') }}</mat-hint></mat-form-field>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </form>
+}

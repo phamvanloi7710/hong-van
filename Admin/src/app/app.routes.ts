@@ -140,8 +140,9 @@ export const routes: Routes = [
       },
       {
         path: 'seo',
-        loadComponent: loadModulePlaceholder,
-        data: placeholderData('seo'),
+        canActivate: [permissionGuard('seo.view')],
+        loadComponent: () => import('./features/seo/seo-page').then((page) => page.SeoPage),
+        data: { breadcrumb: 'menu.seo' },
       },
       {
         path: 'identity',

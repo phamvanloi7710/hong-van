@@ -76,6 +76,9 @@
   - [x] P41 Discovery/operations: explicit-taxonomy related content, opt-in privacy-reduced analytics, automatic index health command and FULLTEXT EXPLAIN baseline
   - [ ] P41 Public/Page Builder: Blade SSR search results/filter UI and search block registration (deferred until P21-P31 and frontend template)
 - [ ] P42 SEO metadata
+  - [x] P42 Backend/API: typed locale SEO records, deterministic fallback resolver, safe canonical override, robots policy, media variants/usage, public media delivery and escaped single-render Blade head component
+  - [x] P42 Admin: permission-gated Annular SEO workspace, entity/locale selection, shared metadata panel, character guidance, SERP/social preview, Media Picker and vi/en/zh
+  - [ ] P42 Public integration: bind the resolver/component to final public Blade routes and page-level/Page Builder metadata (deferred until P18-P31 and the frontend template)
 - [ ] P43 Sitemap/schema/redirect
 - [ ] P44 Analytics/consent
 - [ ] P45 Dashboard/reports/notifications

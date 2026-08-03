@@ -25,6 +25,10 @@ final class SecurityHeaders
         $response->headers->set('Referrer-Policy', (string) config('security.headers.referrer_policy', 'strict-origin-when-cross-origin'));
         $response->headers->set('X-Frame-Options', $isPreview ? 'SAMEORIGIN' : 'DENY');
 
+        if ($isPreview || $request->is('admin*') || $request->is('api/admin/*')) {
+            $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
+        }
+
         if ((string) config('app.env') === 'production' && $request->isSecure()) {
             $maxAge = max(0, (int) config('security.headers.hsts_max_age', 31536000));
             $response->headers->set('Strict-Transport-Security', "max-age={$maxAge}; includeSubDomains");

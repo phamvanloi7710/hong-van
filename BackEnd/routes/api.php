@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Leads\PublicContactController;
 use App\Http\Controllers\Api\V1\Leads\PublicQuoteController;
+use App\Http\Controllers\Api\V1\Media\PublicMediaContentController;
 use App\Http\Controllers\Api\V1\Search\PublicRelatedContentController;
 use App\Http\Controllers\Api\V1\Search\PublicSearchController;
 use App\Http\Controllers\Api\V1\SystemPingController;
@@ -18,6 +19,7 @@ Route::prefix('public/v1')
             ->whereIn('type', config('search.types', []))
             ->whereUlid('publicId')
             ->name('related.index');
+        Route::get('media/{media:public_id}/content', PublicMediaContentController::class)->name('media.content');
         Route::post('contact-requests', PublicContactController::class)->middleware('throttle:public.forms')->name('contact-requests.store');
         Route::post('quote-requests', PublicQuoteController::class)->middleware('throttle:public.forms')->name('quote-requests.store');
         Route::post('transport-requests', PublicTransportRequestController::class)->middleware('throttle:public.forms')->name('transport-requests.store');

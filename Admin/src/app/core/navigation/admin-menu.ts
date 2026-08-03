@@ -114,6 +114,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'travel_explore',
         iconColor: '#039be5',
         route: '/seo',
+        permission: 'seo.view',
       },
     ],
   },

@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\V1\Products\ProductAttributeController;
 use App\Http\Controllers\Api\V1\Products\ProductCategoryController;
 use App\Http\Controllers\Api\V1\Products\ProductController;
 use App\Http\Controllers\Api\V1\Products\ProductTagController;
+use App\Http\Controllers\Api\V1\Seo\SeoMetaController;
 use App\Http\Controllers\Api\V1\Services\ServiceCategoryController;
 use App\Http\Controllers\Api\V1\Services\ServiceController;
 use App\Http\Controllers\Api\V1\Settings\CompanyDirectoryController;
@@ -251,6 +252,12 @@ Route::prefix('admin/v1')
                 Route::post('{kind}/{publicId}/archive', [ShowcaseController::class, 'archive'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.update')->name('archive');
                 Route::delete('{kind}/{publicId}', [ShowcaseController::class, 'destroy'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.delete')->name('destroy');
                 Route::post('{kind}/{publicId}/restore', [ShowcaseController::class, 'restore'])->whereIn('kind', ['galleries', 'gallery-items', 'partners', 'certifications', 'projects'])->middleware('permission:showcase.restore')->name('restore');
+            });
+
+            Route::prefix('seo-meta')->name('seo-meta.')->group(function (): void {
+                Route::get('entities', [SeoMetaController::class, 'entities'])->middleware('permission:seo.view')->name('entities');
+                Route::get('{type}/{publicId}', [SeoMetaController::class, 'show'])->middleware('permission:seo.view')->name('show');
+                Route::put('{type}/{publicId}', [SeoMetaController::class, 'update'])->middleware('permission:seo.update')->name('update');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

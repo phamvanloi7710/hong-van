@@ -44,6 +44,7 @@ final class PermissionRegistry
             ...self::module('pages', 'trang', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
             ...self::module('posts', 'bài viết', ['view', 'create', 'update', 'delete', 'restore', 'publish', 'export']),
             ...self::module('showcase', 'trưng bày doanh nghiệp', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
+            ...self::module('seo', 'SEO', ['view', 'update']),
             ...self::module('media', 'media', ['view', 'create', 'update', 'delete', 'restore']),
         ];
     }
