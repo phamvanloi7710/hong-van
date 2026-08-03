@@ -54,12 +54,13 @@
 - `git diff --check`: PASS.
 - GitLab pipeline đầu tiên `#2726801250` xác nhận YAML hợp lệ nhưng Gitleaks chặn một fake Stripe key trong tài liệu đào tạo cũ; ignore được khóa theo fingerprint lịch sử duy nhất và full-history scan local được chạy lại trước pipeline kế tiếp.
 - GitLab pipeline thứ hai `#2726814009` pass security/Admin nhưng phát hiện container backend thiếu GD WebP/AVIF và dùng `APP_ENV=ci` làm auth tests nhận 419; job được sửa sang `APP_ENV=testing`, bật encrypted session và compile đủ image codecs trước lần chạy kế tiếp.
+- GitLab pipeline cuối `#2726831966` tại commit `2a51b87`: PASS trong 6 phút 12 giây; `secret_and_source_policy`, `admin_qa`, `backend_qa` và `web_asset_artifact` đều xanh.
 
 ## Risks
 
 - `npm audit` đầy đủ còn 3 moderate và 2 high trong development toolchain; production audit không có vulnerability và critical gate pass. Không chạy auto-fix/breaking downgrade.
 - PHP CI job build extension trên official PHP image nên chậm hơn custom prebuilt image; có thể tối ưu tại P51 mà không đổi quality gate.
-- Pipeline thực tế chỉ xuất hiện sau commit/push; YAML độc lập đã được parse và toàn bộ command tương ứng đã chạy local.
+- GitLab SaaS pipeline đã được xác minh end-to-end từ checkout sạch; optional E2E không bật mặc định vì local 14-test Playwright suite đã pass và job chỉ chạy khi `RUN_E2E=true`.
 
 ## Deferred / owner-controlled source
 
