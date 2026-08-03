@@ -77,6 +77,7 @@ final readonly class BlockDefinition
             'maxChildren' => $this->maxChildren,
             'dataDependencies' => $this->dataDependencies,
             'permissions' => $this->permissions,
+            'cacheTags' => $this->cacheTags,
         ];
     }
 }

@@ -20,12 +20,22 @@ final class PageBuilderCacheKeys
         return $tags;
     }
 
+    /**
+     * @param  list<string>  $baseTags
+     * @param  list<string>  $dataSourceTags
+     * @return list<string>
+     */
+    public static function withDataSources(array $baseTags, array $dataSourceTags): array
+    {
+        return array_values(array_unique([...$baseTags, ...array_filter($dataSourceTags, static fn (string $tag): bool => str_starts_with($tag, 'data:'))]));
+    }
+
     /** @return array<string, mixed> */
     public static function metadata(): array
     {
         return [
             'publishedKey' => 'page-builder:published:{pagePublicId}:{locale}:{pageVersionPublicId}:{themeVersionPublicId|theme-none}',
-            'tags' => ['page-builder', 'page:{pagePublicId}', 'page-version:{pageVersionPublicId}', 'theme-version:{themeVersionPublicId}'],
+            'tags' => ['page-builder', 'page:{pagePublicId}', 'page-version:{pageVersionPublicId}', 'theme-version:{themeVersionPublicId}', 'data:{sourceKey}'],
         ];
     }
 }

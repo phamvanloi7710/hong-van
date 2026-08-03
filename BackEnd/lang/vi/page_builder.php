@@ -4,6 +4,8 @@ return [
     'created' => 'Đã tạo trang.',
     'updated' => 'Đã cập nhật thông tin trang.',
     'draft_saved' => 'Đã lưu bản nháp Page Builder.',
+    'preview' => ['empty' => 'Không có dữ liệu đã xuất bản cho block này.', 'sample_title' => 'Dữ liệu mẫu xem trước', 'sample_summary' => 'Dữ liệu mẫu chỉ hiển thị trong chế độ xem trước Page Builder.'],
+    'stats' => ['products' => 'Sản phẩm', 'partners' => 'Đối tác', 'certifications' => 'Chứng nhận', 'projects' => 'Dự án', 'sample' => 'Xem trước'],
     'slug_taken' => 'Slug này đã được sử dụng trong ngôn ngữ đã chọn.',
     'validation' => [
         'payload_too_large' => 'Document vượt quá dung lượng cho phép.',
@@ -49,5 +51,8 @@ return [
         'unknown_reference' => 'Binding tham chiếu block không tồn tại.',
         'cycle' => 'Binding tạo vòng tham chiếu giữa các block.',
         'migration_missing' => 'Không có migration tuần tự cho phiên bản block này.',
+        'minimum' => 'Giá trị thấp hơn mức tối thiểu cho phép.', 'maximum' => 'Giá trị vượt mức tối đa cho phép.',
+        'unknown_data_source' => 'Nguồn dữ liệu không nằm trong allowlist.', 'unknown_filter' => 'Bộ lọc không được phép cho nguồn dữ liệu này.',
+        'unknown_sort' => 'Cách sắp xếp không được phép.', 'unknown_preset' => 'Preset không được phép.', 'limit' => 'Giới hạn dữ liệu phải từ 1 đến 24.',
     ],
 ];

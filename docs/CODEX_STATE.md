@@ -3,8 +3,8 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P23
-last_completed_prompt: 23
+current_prompt: P24
+last_completed_prompt: 24
 status: DONE
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
@@ -50,6 +50,11 @@ latest_page_builder_media_usage: passed_page_version_usage_sync_on_draft_save_wi
 latest_page_builder_content_media_test: passed_content_block_4_tests_15_assertions_media_block_4_tests_18_assertions_page_builder_21_tests_137_assertions_full_backend_197_tests_1533_assertions
 latest_page_builder_content_media_build: passed_vite_7_3_6_main_css_324_34_kb_page_builder_css_19_75_kb_js_161_68_kb_performance_budget
 latest_page_builder_content_media_runtime: passed_hongvan_local_home_200_page_builder_css_200_gallery_video_classes_manifest_link_and_registry_auth_guard_401
+latest_page_builder_dynamic_blocks: passed_p24_15_business_blocks_12_allowlisted_data_sources_published_only_locale_aware_empty_safe_and_preview_sample_only
+latest_page_builder_dynamic_security: passed_no_raw_sql_or_column_unknown_filter_sort_preset_rejected_limit_1_24_and_server_owned_renderer_mapping
+latest_page_builder_dynamic_cache: passed_data_source_dependency_tags_and_duplicate_binding_request_memoization_without_n_plus_one
+latest_page_builder_dynamic_test: passed_dynamic_block_5_tests_32_assertions_page_builder_26_tests_169_assertions_full_backend_202_tests_1565_assertions_pint_phpstan_page_builder_scope
+latest_page_builder_dynamic_build: passed_vite_7_3_6_page_builder_css_20_71_kb_3_18_gzip_performance_budget
 latest_public_asset_cache: configured_hashed_vite_assets_and_apache_immutable_header_wamp_restart_pending
 latest_frontend_template_inventory: passed_p19_wordpress_clone_558_files_45852960_bytes_tree_c8afab99d6faf61d181abfe7923eec196604d4c9_read_only
 latest_prerequisite_check: passed_php_8_5_9_node_24_15_0
@@ -72,7 +77,7 @@ latest_rbac_test: passed_permission_filter_8_tests_35_assertions
 latest_rbac_runtime: passed_hongvan_local_identity_crud_ui_refresh_permission_guard_and_hidden_menu
 latest_super_admin_bootstrap: passed_local_environment_account_login_with_90_permissions
 latest_admin_asset_mime: passed_explicit_javascript_css_font_and_image_content_types
-latest_backend_test: passed_phpunit_197_tests_1533_assertions_mysql
+latest_backend_test: passed_phpunit_202_tests_1565_assertions_mysql
 latest_backend_format: passed_pint
 latest_backend_static_analysis: passed_larastan_level_6_464_files
 latest_backend_build: passed_vite_7_3_6
@@ -212,18 +217,12 @@ open_blockers:
   - P19 re-audited and ported the current 558-file FrontEndTemplate without modifying it; real Media assets remain pending owner-approved content because the clone contains another brand and no sufficient standalone license.
   - P33 public Blade catalog, quote CTA, SEO metadata and public E2E remain deferred until P31 business-data routing is available; P19 presentation contracts are ready.
   - P34 public SSR/SEO/internal links remain deferred until P21-P31 binding; P19 presentation contracts are ready.
-  - P34 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and domain data source contract are ready.
   - P35 public Blade listing/detail, SEO and contact/quote form routes remain deferred until P31; P19 listing/detail/contact presentation contracts are ready.
-  - P35 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and allowlisted service data source contract are ready.
   - P36 public SSR capability pages/sections remain deferred until P31; P19 service presentation contracts are ready.
-  - P36 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and allowlisted transportation data source contract are ready.
   - P37 public SSR warehouse listing/detail and privacy-aware map rendering remain deferred until P31; P19 presentation contracts are ready.
-  - P37 Page Builder block registration remains deferred until P24 dynamic business blocks; the P21 registry foundation and allowlisted warehouse data source contract are ready.
   - P38 public Page Builder form-block wiring remains deferred until P25/P21-P31; the public intake endpoints and P19 contact layout are ready.
   - P39 public SSR listing/category/tag/detail/pagination/related/RSS remains deferred until P31; P19 listing/content presentation contracts are ready.
-  - P39 Page Builder post-list block registration remains deferred until P21-P31; the published-only data source contract is ready.
   - P40 public gallery/partner/certification/project SSR pages remain deferred until P31; P19 presentation contracts are ready.
-  - P40 Page Builder showcase block registration remains deferred until P21-P31; the published-only data source contract is ready.
   - P41 public Blade SSR search/filter UI remains deferred until P31; the public API, direct domain query and P19 presentation system are ready.
   - P41 Page Builder search block registration remains deferred until P21-P31.
   - P42 public route/head integration and page-level/Page Builder metadata remain deferred until P21-P31; resolver, escaped component and P19 Blade layout contracts are ready.
@@ -233,9 +232,9 @@ open_blockers:
   - P47 demo page templates/documents remain deferred until P22-P25 block catalogs and P30 templates exist; the P21 versioned registry now validates documents.
   - P48 Page Builder publish/preview behavioral coverage remains deferred until P27-P28; P21 now covers schema, injection, migration and published-version immutability.
   - P49 Page Builder preview/publish/rollback and canvas snapshots remain deferred until P21-P31; P19 public desktop/tablet/mobile UAT passed and current Admin workflows pass 14 Playwright tests.
-next_prompt: 24_DYNAMIC_BUSINESS_BLOCKS
+next_prompt: 25_FORM_BLOCKS
 standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
-next_prompt_gate: READY_P23_DONE_STOPPED_BEFORE_P24
+next_prompt_gate: READY_P24_DONE_STOPPED_BEFORE_P25
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

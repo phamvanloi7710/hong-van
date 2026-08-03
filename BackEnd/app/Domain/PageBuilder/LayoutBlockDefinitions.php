@@ -26,6 +26,10 @@ final class LayoutBlockDefinitions
         'content.heading', 'content.rich-text', 'content.button', 'content.icon', 'content.list', 'content.quote',
         'content.table', 'content.badge', 'content.card', 'media.image', 'media.image-text', 'media.gallery',
         'media.video-embed', 'media.logo-cloud', 'content.faq',
+        'business.hero', 'business.product-grid', 'business.category-grid', 'business.crop-grid',
+        'business.service-grid', 'business.fleet', 'business.route-list', 'business.warehouse-cards',
+        'business.stats', 'business.partner-logos', 'business.certificate-list', 'business.project-list',
+        'business.post-list', 'business.cta', 'business.breadcrumb',
     ];
 
     /** @return list<BlockDefinition> */

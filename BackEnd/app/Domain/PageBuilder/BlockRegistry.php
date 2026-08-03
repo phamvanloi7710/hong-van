@@ -14,7 +14,7 @@ final class BlockRegistry
     /** @param list<BlockDefinition>|null $definitions */
     public function __construct(?array $definitions = null)
     {
-        foreach ($definitions ?? [$this->foundationPlaceholder(), ...LayoutBlockDefinitions::definitions(), ...ContentMediaBlockDefinitions::definitions()] as $definition) {
+        foreach ($definitions ?? [$this->foundationPlaceholder(), ...LayoutBlockDefinitions::definitions(), ...ContentMediaBlockDefinitions::definitions(), ...DynamicBusinessBlockDefinitions::definitions()] as $definition) {
             $this->register($definition);
         }
     }

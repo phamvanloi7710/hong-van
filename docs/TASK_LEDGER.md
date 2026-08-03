@@ -59,7 +59,12 @@
   - [x] Public-ready Media batch resolver, responsive picture variants, alt/decorative, intrinsic dimensions, lazy loading và privacy-friendly video
   - [x] Media usage đồng bộ theo `page_version` khi lưu draft; query count cố định, không N+1 theo số media reference
   - [x] ContentBlock 4 test/15 assertions, MediaBlock 4 test/18 assertions, Page Builder 21 test/137 assertions, full backend 197 test/1533 assertions, Pint/PHPStan/build/runtime đạt
-- [ ] P24 Dynamic business blocks
+- [x] P24 Dynamic business blocks
+  - [x] 12 `DataSourceRegistry` nguồn nghiệp vụ cố định; filter/sort/limit/preset theo allowlist, tối đa 24 và không nhận raw SQL/tên cột
+  - [x] 15 block Hero, Product/Category/Crop/Service grid, Fleet, Route, Warehouse, Stats, Partner, Certificate, Project, Post, CTA và Breadcrumb
+  - [x] Query tách khỏi Blade, published-only, locale fallback, empty state an toàn và sample data chỉ trong preview context
+  - [x] Cache dependency tag theo data source và memo hóa binding trùng để không tăng query
+  - [x] DynamicBlock 5 test/32 assertions, Page Builder 26 test/169 assertions, full backend 202 test/1565 assertions, Pint, PHPStan và Vite build/budget đạt
 - [ ] P25 Form blocks
 - [ ] P26 Angular Page Builder editor
 - [ ] P27 Blade iframe preview

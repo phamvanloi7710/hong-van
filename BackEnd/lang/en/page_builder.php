@@ -4,6 +4,8 @@ return [
     'created' => 'Page created.',
     'updated' => 'Page metadata updated.',
     'draft_saved' => 'Page Builder draft saved.',
+    'preview' => ['empty' => 'No published data is available for this block.', 'sample_title' => 'Preview sample item', 'sample_summary' => 'Sample data is shown only inside Page Builder preview.'],
+    'stats' => ['products' => 'Products', 'partners' => 'Partners', 'certifications' => 'Certifications', 'projects' => 'Projects', 'sample' => 'Preview'],
     'slug_taken' => 'This slug is already used for the selected locale.',
     'validation' => [
         'payload_too_large' => 'The document exceeds the allowed payload size.', 'schema_version' => 'The PageDocument version is not supported.',
@@ -23,5 +25,8 @@ return [
         'table_columns' => 'Every table row must have the same number of cells as the header.', 'media_unavailable' => 'The selected media is not a ready public image.',
         'executable_payload' => 'Blade, PHP, JavaScript, and event handlers are not allowed.', 'unknown_reference' => 'The binding references a missing block.',
         'cycle' => 'The bindings create a block reference cycle.', 'migration_missing' => 'A sequential migration is missing for this block version.',
+        'minimum' => 'The value is below the allowed minimum.', 'maximum' => 'The value exceeds the allowed maximum.',
+        'unknown_data_source' => 'The data source is not allowlisted.', 'unknown_filter' => 'The filter is not allowlisted for this data source.',
+        'unknown_sort' => 'The sort option is not allowlisted.', 'unknown_preset' => 'The preset is not allowlisted.', 'limit' => 'The data limit must be between 1 and 24.',
     ],
 ];

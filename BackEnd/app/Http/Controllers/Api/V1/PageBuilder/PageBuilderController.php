@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\PageBuilder;
 
 use App\Domain\PageBuilder\BlockRegistry;
+use App\Domain\PageBuilder\DataSourceRegistry;
 use App\Domain\PageBuilder\PageBuilderCacheKeys;
 use App\Domain\PageBuilder\PageDocumentSchema;
 use App\Domain\PageBuilder\PageManager;
@@ -21,13 +22,14 @@ use Illuminate\Support\Facades\Gate;
 
 final class PageBuilderController extends Controller
 {
-    public function registry(BlockRegistry $registry, ApiResponse $response): JsonResponse
+    public function registry(BlockRegistry $registry, DataSourceRegistry $dataSources, ApiResponse $response): JsonResponse
     {
         Gate::authorize('viewAny', Page::class);
 
         return $response->success([
             'document' => PageDocumentSchema::metadata(),
             'blocks' => $registry->metadata(),
+            'dataSources' => $dataSources->metadata(),
             'cache' => PageBuilderCacheKeys::metadata(),
         ]);
     }

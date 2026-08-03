@@ -4,6 +4,8 @@ return [
     'created' => '页面已创建。',
     'updated' => '页面元数据已更新。',
     'draft_saved' => 'Page Builder 草稿已保存。',
+    'preview' => ['empty' => '此区块暂无已发布数据。', 'sample_title' => '预览示例项', 'sample_summary' => '示例数据仅在 Page Builder 预览中显示。'],
+    'stats' => ['products' => '产品', 'partners' => '合作伙伴', 'certifications' => '认证', 'projects' => '项目', 'sample' => '预览'],
     'slug_taken' => '该语言的 slug 已被使用。',
     'validation' => [
         'payload_too_large' => '文档超过允许的大小。', 'schema_version' => '不支持此 PageDocument 版本。',
@@ -23,5 +25,8 @@ return [
         'table_columns' => '表格每一行的单元格数量必须与表头一致。', 'media_unavailable' => '所选媒体不是可用的公开图片。',
         'executable_payload' => '不允许 Blade、PHP、JavaScript 或事件处理器。', 'unknown_reference' => 'Binding 引用了不存在的 Block。',
         'cycle' => 'Binding 在 Block 之间形成循环引用。', 'migration_missing' => '该 Block 版本缺少连续迁移。',
+        'minimum' => '该值低于允许的最小值。', 'maximum' => '该值超过允许的最大值。',
+        'unknown_data_source' => '数据源不在允许列表中。', 'unknown_filter' => '此数据源不允许该筛选条件。',
+        'unknown_sort' => '排序方式不在允许列表中。', 'unknown_preset' => '预设不在允许列表中。', 'limit' => '数据条数必须为 1 到 24。',
     ],
 ];

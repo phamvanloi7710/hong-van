@@ -238,6 +238,12 @@ final readonly class PageDocumentValidator
         if (is_string($value) && is_string($schema['pattern'] ?? null) && preg_match('~'.$schema['pattern'].'~D', $value) !== 1) {
             $errors[$path][] = $this->message('pattern');
         }
+        if ((is_int($value) || is_float($value)) && isset($schema['minimum']) && $value < (float) $schema['minimum']) {
+            $errors[$path][] = $this->message('minimum');
+        }
+        if ((is_int($value) || is_float($value)) && isset($schema['maximum']) && $value > (float) $schema['maximum']) {
+            $errors[$path][] = $this->message('maximum');
+        }
         if ($type === 'array' && is_array($value)) {
             if (isset($schema['minItems']) && count($value) < (int) $schema['minItems']) {
                 $errors[$path][] = $this->message('items_min');
