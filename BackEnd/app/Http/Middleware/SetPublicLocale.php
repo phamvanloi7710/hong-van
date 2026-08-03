@@ -24,7 +24,9 @@ final readonly class SetPublicLocale
         }
 
         if (is_string($requested) && $locale === $this->locales->defaultLocale()) {
-            return redirect()->route('public.home');
+            $canonicalRoute = $request->route('canonical_route');
+
+            return redirect()->route(is_string($canonicalRoute) ? $canonicalRoute : 'public.home');
         }
 
         $locale ??= $this->locales->defaultLocale();

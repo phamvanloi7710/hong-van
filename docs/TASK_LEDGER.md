@@ -22,7 +22,11 @@
 - [x] P17 StayHub media clone
 - [x] P17 follow-up: repair favorite menu width/right-aligned colored icons, main-menu icon palette, localized language labels and route-aware admin headers
 - [x] P17 follow-up: make all 15 admin leaf menus clickable with localized placeholder routes for pending modules
-- [ ] P18 Blade frontend foundation
+- [x] P18 Blade frontend foundation
+  - [x] SSR Blade public shell, semantic header/main/footer, skip link, responsive/focus baseline and Vite hashed entries
+  - [x] Central design tokens and reusable button/link/Media image/heading/container/breadcrumb/alert/form components
+  - [x] Settings-backed home, vi/en/zh routes, legal placeholders, 404/500 views and canonical default-locale redirects
+  - [x] WordPress clone inventory and normalized Laravel/Vite port contract; WooCommerce/cart/checkout/payment/account/wishlist excluded
 - [ ] P19 Frontend template clone
 - [ ] P20 Public theme studio
 - [ ] P21 Page Builder schema/registry
@@ -128,4 +132,4 @@
 - [ ] P55 Production cutover
 - [ ] P56 Final handover
 
-> Quyết định của chủ dự án: web frontend public thực hiện cuối cùng sau khi có template; phải nhắc lại trước khi bắt đầu phần này.
+> Quyết định của chủ dự án: web frontend public thực hiện cuối cùng sau khi có template. Template clone WordPress đã được cung cấp, lời nhắc đã gửi và giai đoạn frontend bắt đầu từ P18 ngày 2026-08-03.

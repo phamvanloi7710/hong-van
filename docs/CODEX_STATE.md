@@ -3,12 +3,12 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P50
-last_completed_prompt: 50
+current_prompt: P18
+last_completed_prompt: 18
 status: DONE
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
-frontend_template_gate: OWNER_EDIT_IN_PROGRESS_FINGERPRINT_CHANGED
+frontend_template_gate: READY_WORDPRESS_CLONE_REAUDITED_READ_ONLY
 stayhub_media_gate: READY_PORTED_P17
 backend_bootstrapped: true
 admin_bootstrapped: true
@@ -20,8 +20,14 @@ local_database: hongvan_platform
 local_database_status: PASSED_WAMP_MYSQL_9_1_0_FRESH_SEEDED_COMMENTED
 local_domain: hongvan.local
 local_domain_status: CONFIGURED_WAMP_BACKEND_PUBLIC
-frontend_template_reminder: ACKNOWLEDGED_PREPARE_AFTER_P50
-frontend_delivery_order: NEXT_AFTER_P50_OWNER_DIRECTIVE
+frontend_template_reminder: DELIVERED_BEFORE_P18
+frontend_delivery_order: FRONTEND_FINAL_STAGE_IN_PROGRESS_BY_OWNER_DIRECTIVE
+latest_public_frontend_foundation: passed_p18_blade_ssr_vite_tokens_components_settings_legal_errors_vi_en_zh
+latest_public_frontend_test: passed_public_and_locale_15_tests_117_assertions
+latest_public_frontend_build: passed_vite_7_3_6_css_7_64_kb_js_0_06_kb_budget
+latest_public_frontend_runtime: passed_hongvan_local_vi_en_zh_mobile_390_no_overflow_zero_console_errors
+latest_public_asset_cache: configured_hashed_vite_assets_and_apache_immutable_header_wamp_restart_pending
+latest_frontend_template_inventory: passed_wordpress_clone_558_files_45852960_bytes_read_only_no_ecommerce
 latest_prerequisite_check: passed_php_8_5_9_node_24_15_0
 latest_readonly_source_check: passed_powershell_and_git_bash
 latest_laravel_13_patch: 13.23.0
@@ -42,7 +48,7 @@ latest_rbac_test: passed_permission_filter_8_tests_35_assertions
 latest_rbac_runtime: passed_hongvan_local_identity_crud_ui_refresh_permission_guard_and_hidden_menu
 latest_super_admin_bootstrap: passed_local_environment_account_login_with_90_permissions
 latest_admin_asset_mime: passed_explicit_javascript_css_font_and_image_content_types
-latest_backend_test: passed_phpunit_164_tests_1266_assertions_mysql
+latest_backend_test: passed_phpunit_170_tests_1328_assertions_mysql
 latest_backend_format: passed_pint
 latest_backend_static_analysis: passed_larastan_level_6
 latest_backend_build: passed_vite_7_3_6
@@ -203,9 +209,9 @@ open_blockers:
   - P47 demo page templates/documents remain deferred until the versioned Page Builder registry exists in P18-P31 and the final frontend template is supplied; no invalid JSON document was seeded.
   - P48 Page Builder publish/version/preview behavioral coverage remains deferred until P21-P31; only the static arbitrary-renderer architecture guard can run against the current placeholder domain.
   - P49 Page Builder preview/publish/rollback, canvas snapshots and public desktop/tablet/mobile QA remain deferred until P21-P31 and the final frontend template; current Admin workflows pass 14 Playwright tests.
-next_prompt: FRONTEND_PREPARATION_OWNER_OVERRIDE
+next_prompt: 19_PORT_PUBLIC_FRONTEND_TEMPLATE
 standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
-next_prompt_gate: REAUDIT_CURRENT_FRONTEND_TEMPLATE_BEFORE_P18_P19
+next_prompt_gate: READY_REAUDIT_CURRENT_FRONTEND_TEMPLATE_BEFORE_P19
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

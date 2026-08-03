@@ -2,10 +2,11 @@
 
 Individual ADR files are the source of truth. P02 reviewed `ARCHITECTURE.md`, `DATABASE_BLUEPRINT.md`, `PAGE_BUILDER_CONTRACT.md`, `API_CONVENTIONS.md` and `SECURITY_BASELINE.md`; no conflicting accepted architecture was found.
 
-Delivery order decision: all public frontend/template work is postponed until the final project stage, after the owner supplies a complete frontend template. Admin and backend prompts may continue without modifying `FrontEndTemplate/` or public Blade.
+Delivery order decision: public frontend/template work was postponed until the owner supplied the template. The owner supplied a WordPress-cloned source on 2026-08-03 and explicitly started the final frontend stage at P18; `FrontEndTemplate/` remains read-only.
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-023](adr/ADR-023-normalize-wordpress-clone-into-laravel-vite.md) | Chuẩn hóa WordPress clone thành Blade/Vite, loại runtime WordPress và toàn bộ e-commerce | Accepted | 2026-08-03 |
 | [ADR-022](adr/ADR-022-gitlab-reproducible-ci.md) | GitLab CI reproducible theo lockfile, có security gate và artifact checksum | Accepted | 2026-08-03 |
 | [ADR-021](adr/ADR-021-permission-scoped-dashboard-and-private-reports.md) | Permission-scoped dashboard, assigned-lead visibility, safe notifications and private queued reports | Accepted | 2026-08-03 |
 | [ADR-020](adr/ADR-020-consent-gated-approved-analytics.md) | First-party versioned consent with code-allowlisted analytics providers and conditional CSP | Accepted | 2026-08-03 |
