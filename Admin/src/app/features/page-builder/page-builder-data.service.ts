@@ -1,10 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, shareReplay, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { ApiEnvelope } from '../../core/auth/auth.models';
-import { PageBuilderDocument, PageBuilderRegistry, PageRecord } from './page-builder.models';
+import {
+  PageBuilderDocument,
+  PageBuilderRegistry,
+  PagePreviewSession,
+  PageRecord,
+} from './page-builder.models';
 
 @Injectable({ providedIn: 'root' })
 export class PageBuilderDataService {
@@ -48,6 +53,34 @@ export class PageBuilderDataService {
       .put<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/draft`, { document })
       .pipe(map((response) => response.data));
   }
+
+  createPreview(publicId: string, document: PageBuilderDocument, locale: string): Observable<PagePreviewSession> {
+    return this.http
+      .post<ApiEnvelope<PagePreviewSession>>(`${this.baseUrl}/pages/${publicId}/preview-sessions`, { document, locale })
+      .pipe(map((response) => response.data));
+  }
+
+  updatePreview(session: PagePreviewSession, document: PageBuilderDocument): Observable<PagePreviewSession> {
+    return this.http
+      .put<ApiEnvelope<PagePreviewSession>>(`${this.baseUrl}/preview-sessions/${session.public_id}`, { document }, { headers: previewHeaders(session.token) })
+      .pipe(map((response) => response.data));
+  }
+
+  refreshPreview(session: PagePreviewSession): Observable<PagePreviewSession> {
+    return this.http
+      .post<ApiEnvelope<PagePreviewSession>>(`${this.baseUrl}/preview-sessions/${session.public_id}/refresh`, {}, { headers: previewHeaders(session.token) })
+      .pipe(map((response) => response.data));
+  }
+
+  closePreview(session: PagePreviewSession): Observable<void> {
+    return this.http
+      .delete<ApiEnvelope<null>>(`${this.baseUrl}/preview-sessions/${session.public_id}`, { headers: previewHeaders(session.token) })
+      .pipe(map(() => undefined));
+  }
+}
+
+function previewHeaders(token: string): HttpHeaders {
+  return new HttpHeaders({ 'X-Preview-Token': token });
 }
 
 export function registryVersion(registry: PageBuilderRegistry): string {

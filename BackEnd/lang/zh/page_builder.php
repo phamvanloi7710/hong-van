@@ -4,6 +4,12 @@ return [
     'created' => '页面已创建。',
     'updated' => '页面元数据已更新。',
     'draft_saved' => 'Page Builder 草稿已保存。',
+    'preview_session' => [
+        'created' => 'Page Builder 预览会话已开启。',
+        'updated' => 'Page Builder 预览已更新。',
+        'refreshed' => 'Page Builder 预览会话已续期。',
+        'closed' => 'Page Builder 预览会话已关闭。',
+    ],
     'preview' => ['empty' => '此区块暂无已发布数据。', 'sample_title' => '预览示例项', 'sample_summary' => '示例数据仅在 Page Builder 预览中显示。'],
     'stats' => ['products' => '产品', 'partners' => '合作伙伴', 'certifications' => '认证', 'projects' => '项目', 'sample' => '预览'],
     'slug_taken' => '该语言的 slug 已被使用。',

@@ -6,6 +6,7 @@ Delivery order decision: public frontend/template work was postponed until the o
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-027](adr/ADR-027-secure-cache-backed-page-builder-preview.md) | Preview Page Builder dùng cache TTL, URL ký owner-scoped và giao thức iframe được xác thực chặt | Accepted | 2026-08-03 |
 | [ADR-026](adr/ADR-026-server-driven-angular-page-builder-editor.md) | Angular editor dùng server registry, document immutable và giữ Blade iframe làm ranh giới preview | Accepted | 2026-08-03 |
 | [ADR-025](adr/ADR-025-versioned-allowlisted-page-builder-forms.md) | Form Page Builder versioned, field/action allowlist và product context ký có thời hạn | Accepted | 2026-08-03 |
 | [ADR-024](adr/ADR-024-versioned-allowlisted-public-theme.md) | Public theme versioned, token allowlist và server CSS compiler dùng chung cho preview/published | Accepted | 2026-08-03 |

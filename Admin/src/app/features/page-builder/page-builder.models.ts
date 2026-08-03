@@ -120,6 +120,24 @@ export interface PageRecord {
   readonly updated_at: string | null;
 }
 
+export interface PagePreviewSession {
+  readonly public_id: string;
+  readonly token: string;
+  readonly url: string;
+  readonly expires_at: string;
+  readonly ttl_seconds: number;
+  readonly revision: number;
+  readonly message_schema_version: number;
+}
+
+export interface PagePreviewMessage {
+  readonly channel: 'hongvan.page-builder.preview';
+  readonly schemaVersion: number;
+  readonly type: 'preview.ready' | 'preview.block-selected';
+  readonly token: string;
+  readonly blockId?: string | null;
+}
+
 export interface PageBuilderDragPayload {
   readonly kind: 'palette' | 'block';
   readonly definitionType?: string;

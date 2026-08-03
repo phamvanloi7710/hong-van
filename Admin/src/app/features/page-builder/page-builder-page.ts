@@ -11,12 +11,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   HostListener,
+  ViewChild,
   computed,
   inject,
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -78,6 +81,8 @@ import {
   PageBuilderRegistry,
   PageBuilderSchema,
   PageBuilderSchemaEntry,
+  PagePreviewMessage,
+  PagePreviewSession,
   PageRecord,
   emptyPageBuilderDocument,
 } from './page-builder.models';
@@ -115,12 +120,17 @@ type InspectorScope = 'props' | 'style';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageBuilderPage implements PageBuilderPendingChanges {
+  @ViewChild('previewFrame') private previewFrame?: ElementRef<HTMLIFrameElement>;
+
   private readonly data = inject(PageBuilderDataService);
   private readonly authStore = inject(AuthStore);
   private readonly i18n = inject(I18nService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly sanitizer = inject(DomSanitizer);
   private readonly autosaveChanges = new Subject<AutosaveRequest>();
+  private readonly previewChanges = new Subject<PageBuilderDocument>();
+  private previewRefreshTimer: number | null = null;
 
   readonly devices: readonly PageBuilderDevice[] = ['desktop', 'tablet', 'mobile'];
   readonly history = new PageBuilderHistory(emptyPageBuilderDocument(1));
@@ -136,6 +146,10 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   readonly loadError = signal<string | null>(null);
   readonly saveError = signal<string | null>(null);
   readonly operationError = signal<string | null>(null);
+  readonly previewSession = signal<PagePreviewSession | null>(null);
+  readonly previewUrl = signal<SafeResourceUrl | null>(null);
+  readonly previewStatus = signal<'idle' | 'connecting' | 'loading' | 'ready' | 'updating' | 'error'>('idle');
+  readonly previewError = signal<string | null>(null);
 
   readonly canEdit = computed(() => this.authStore.hasPermission('pages.update'));
   readonly canPublish = computed(() => this.authStore.hasPermission('pages.publish'));
@@ -206,6 +220,15 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+    this.previewChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged((previous, current) => fingerprint(previous) === fingerprint(current)),
+        switchMap((document) => this.pushPreview(document)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+    this.destroyRef.onDestroy(() => this.closePreviewSession());
     this.load();
   }
 
@@ -273,15 +296,55 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     this.saveError.set(null);
     const schemaVersion = this.registry()?.document.schemaVersion ?? 1;
     this.history.reset(page?.draft?.document ?? emptyPageBuilderDocument(schemaVersion));
+    this.startPreview(page);
   }
 
   selectBlock(blockId: string): void {
     this.selectedBlockId.set(blockId);
     this.operationError.set(null);
+    this.postPreviewMessage('preview.scroll-to-block', blockId);
   }
 
   setDevice(device: PageBuilderDevice): void {
     this.activeDevice.set(device);
+  }
+
+  retryPreview(): void {
+    this.startPreview(this.currentPage());
+  }
+
+  refreshPreview(): void {
+    const session = this.previewSession();
+    if (session === null) {
+      this.retryPreview();
+      return;
+    }
+    this.data.refreshPreview(session)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (refreshed) => {
+          this.previewSession.set(refreshed);
+          this.previewError.set(null);
+          this.schedulePreviewRefresh(refreshed);
+          this.postPreviewMessage('preview.refresh');
+        },
+        error: (error: unknown) => this.handlePreviewError(error, true),
+      });
+  }
+
+  previewStatusText(): string {
+    return this.text({
+      idle: 'canvasHint',
+      connecting: 'previewConnecting',
+      loading: 'previewLoading',
+      ready: 'previewReady',
+      updating: 'previewUpdating',
+      error: 'previewError',
+    }[this.previewStatus()] as PageBuilderTranslationKey);
+  }
+
+  onPreviewFrameLoad(): void {
+    if (this.previewSession() !== null) this.previewStatus.set('loading');
   }
 
   setPaletteSearch(value: string): void {
@@ -535,6 +598,26 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     }
   }
 
+  @HostListener('window:message', ['$event'])
+  previewMessage(event: MessageEvent<unknown>): void {
+    const frame = this.previewFrame?.nativeElement;
+    const session = this.previewSession();
+    if (frame === undefined || session === null || event.origin !== window.location.origin || event.source !== frame.contentWindow) return;
+    if (!isPreviewMessage(event.data, session)) return;
+    if (event.data.type === 'preview.ready') {
+      this.previewStatus.set('ready');
+      this.previewError.set(null);
+      const selected = this.selectedBlockId();
+      if (selected !== null) this.postPreviewMessage('preview.scroll-to-block', selected);
+      return;
+    }
+    const blockId = event.data.blockId;
+    if (event.data.type === 'preview.block-selected' && typeof blockId === 'string' && findBlock(this.history.current(), blockId) !== null) {
+      this.selectedBlockId.set(blockId);
+      this.operationError.set(null);
+    }
+  }
+
   private applyMutation(result: DocumentMutationResult): void {
     if (!result.ok) {
       this.operationError.set(this.failureText(result.reason));
@@ -549,7 +632,107 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   private queueAutosave(): void {
     const page = this.currentPage();
     if (page === null || !this.canEdit()) return;
-    this.autosaveChanges.next({ pageId: page.public_id, document: this.history.current() });
+    const document = this.history.current();
+    this.autosaveChanges.next({ pageId: page.public_id, document });
+    this.previewChanges.next(document);
+  }
+
+  private startPreview(page: PageRecord | null): void {
+    this.closePreviewSession();
+    if (page === null) return;
+    this.previewStatus.set('connecting');
+    this.previewError.set(null);
+    const pageId = page.public_id;
+    this.data.createPreview(pageId, this.history.current(), this.i18n.locale())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (session) => {
+          if (this.currentPage()?.public_id !== pageId) {
+            this.data.closePreview(session).subscribe();
+            return;
+          }
+          if (!this.acceptPreviewUrl(session)) return;
+          this.previewSession.set(session);
+          this.previewStatus.set('loading');
+          this.schedulePreviewRefresh(session);
+        },
+        error: (error: unknown) => this.handlePreviewError(error, false),
+      });
+  }
+
+  private pushPreview(document: PageBuilderDocument): Observable<PagePreviewSession | null> {
+    const session = this.previewSession();
+    if (session === null) return of(null);
+    this.previewStatus.set('updating');
+    this.previewError.set(null);
+    return this.data.updatePreview(session, document).pipe(
+      tap((updated) => {
+        this.previewSession.set(updated);
+        this.schedulePreviewRefresh(updated);
+        this.postPreviewMessage('preview.refresh');
+      }),
+      catchError((error: unknown) => {
+        this.handlePreviewError(error, true);
+        return of(null);
+      }),
+    );
+  }
+
+  private acceptPreviewUrl(session: PagePreviewSession): boolean {
+    try {
+      const url = new URL(session.url, window.location.origin);
+      const valid = url.origin === window.location.origin
+        && url.pathname === `/preview/page-builder/${session.token}`;
+      if (!valid) throw new Error('Invalid preview URL');
+      this.previewUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(url.toString()));
+      return true;
+    } catch {
+      this.previewStatus.set('error');
+      this.previewError.set(this.text('previewError'));
+      this.previewSession.set(null);
+      this.previewUrl.set(null);
+      return false;
+    }
+  }
+
+  private handlePreviewError(error: unknown, reconnectOnExpiry: boolean): void {
+    if (reconnectOnExpiry && error instanceof HttpErrorResponse && [404, 410].includes(error.status)) {
+      this.startPreview(this.currentPage());
+      return;
+    }
+    this.previewStatus.set('error');
+    this.previewError.set(previewErrorMessage(error, this.text('previewError'), this.text('previewValidationError')));
+  }
+
+  private schedulePreviewRefresh(session: PagePreviewSession): void {
+    if (this.previewRefreshTimer !== null) window.clearTimeout(this.previewRefreshTimer);
+    const delay = Math.max(15_000, Math.floor(session.ttl_seconds * 600));
+    this.previewRefreshTimer = window.setTimeout(() => this.refreshPreview(), delay);
+  }
+
+  private closePreviewSession(): void {
+    if (this.previewRefreshTimer !== null) {
+      window.clearTimeout(this.previewRefreshTimer);
+      this.previewRefreshTimer = null;
+    }
+    const session = this.previewSession();
+    this.previewSession.set(null);
+    this.previewUrl.set(null);
+    this.previewStatus.set('idle');
+    if (session !== null) this.data.closePreview(session).subscribe({ error: () => undefined });
+  }
+
+  private postPreviewMessage(type: 'preview.refresh' | 'preview.scroll-to-block', blockId?: string): void {
+    const session = this.previewSession();
+    const target = this.previewFrame?.nativeElement.contentWindow;
+    if (session === null || target === null || target === undefined) return;
+    target.postMessage({
+      channel: 'hongvan.page-builder.preview',
+      schemaVersion: session.message_schema_version,
+      type,
+      token: session.token,
+      ...(blockId === undefined ? {} : { blockId }),
+    }, window.location.origin);
   }
 
   private persistDraft(request: AutosaveRequest, notify: boolean): Observable<PageRecord | null> {
@@ -602,4 +785,23 @@ function isEditableTarget(target: EventTarget | null): boolean {
     || target instanceof HTMLTextAreaElement
     || target instanceof HTMLSelectElement
     || (target instanceof HTMLElement && target.isContentEditable);
+}
+
+function isPreviewMessage(value: unknown, session: PagePreviewSession): value is PagePreviewMessage {
+  if (typeof value !== 'object' || value === null) return false;
+  const message = value as Readonly<Record<string, unknown>>;
+  return message['channel'] === 'hongvan.page-builder.preview'
+    && message['schemaVersion'] === session.message_schema_version
+    && message['token'] === session.token
+    && (message['type'] === 'preview.ready' || message['type'] === 'preview.block-selected');
+}
+
+function previewErrorMessage(error: unknown, fallback: string, validationPrefix: string): string {
+  if (!(error instanceof HttpErrorResponse)) return fallback;
+  const payload = error.error;
+  if (typeof payload !== 'object' || payload === null) return authErrorMessage(error, fallback);
+  const errors = (payload as Readonly<Record<string, unknown>>)['errors'];
+  if (typeof errors !== 'object' || errors === null) return authErrorMessage(error, fallback);
+  const path = Object.keys(errors)[0];
+  return path === undefined ? authErrorMessage(error, fallback) : `${validationPrefix}: ${path}`;
 }

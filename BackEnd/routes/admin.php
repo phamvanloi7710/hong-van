@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\V1\Media\MediaContentController;
 use App\Http\Controllers\Api\V1\Media\MediaController;
 use App\Http\Controllers\Api\V1\Media\MediaFolderController;
 use App\Http\Controllers\Api\V1\PageBuilder\PageBuilderController;
+use App\Http\Controllers\Api\V1\PageBuilder\PreviewSessionController;
 use App\Http\Controllers\Api\V1\Posts\PostController;
 use App\Http\Controllers\Api\V1\Posts\PostTaxonomyController;
 use App\Http\Controllers\Api\V1\Products\BrandController;
@@ -305,6 +306,10 @@ Route::prefix('admin/v1')
                 Route::get('pages/{page:public_id}', [PageBuilderController::class, 'show'])->middleware('permission:pages.view')->name('pages.show');
                 Route::put('pages/{page:public_id}', [PageBuilderController::class, 'update'])->middleware('permission:pages.update')->name('pages.update');
                 Route::put('pages/{page:public_id}/draft', [PageBuilderController::class, 'saveDraft'])->middleware('permission:pages.update')->name('pages.draft.update');
+                Route::post('pages/{page:public_id}/preview-sessions', [PreviewSessionController::class, 'store'])->middleware(['permission:pages.view', 'throttle:preview.sessions'])->name('preview-sessions.store');
+                Route::put('preview-sessions/{pagePreviewSession:public_id}', [PreviewSessionController::class, 'update'])->middleware(['permission:pages.update', 'throttle:preview.sessions'])->name('preview-sessions.update');
+                Route::post('preview-sessions/{pagePreviewSession:public_id}/refresh', [PreviewSessionController::class, 'refresh'])->middleware(['permission:pages.view', 'throttle:preview.sessions'])->name('preview-sessions.refresh');
+                Route::delete('preview-sessions/{pagePreviewSession:public_id}', [PreviewSessionController::class, 'destroy'])->middleware('permission:pages.view')->name('preview-sessions.destroy');
             });
 
             Route::prefix('media')->name('media.')->group(function (): void {

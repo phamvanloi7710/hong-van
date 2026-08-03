@@ -3,8 +3,8 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P26
-last_completed_prompt: 26
+current_prompt: P27
+last_completed_prompt: 27
 status: DONE
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
@@ -68,6 +68,12 @@ latest_page_builder_editor_i18n: passed_vi_en_zh_editor_catalog_registry_labels_
 latest_page_builder_editor_test: passed_angular_lint_30_test_files_60_tests
 latest_page_builder_editor_build: passed_angular_production_initial_120_99_kb_estimated_26_40_kb_page_builder_lazy_111_61_kb_and_123_file_laravel_sync
 latest_page_builder_editor_runtime: passed_hongvan_local_authenticated_page_builder_live_registry_three_columns_iframe_boundary_and_zero_console_warnings_errors
+latest_page_builder_preview: passed_p27_owner_scoped_signed_expiring_session_same_blade_renderer_public_css_and_safe_selection_overlay
+latest_page_builder_preview_storage: passed_redis_default_ttl_document_cache_without_page_version_write_local_wamp_file_cache_fallback_only
+latest_page_builder_preview_security: passed_exact_origin_iframe_source_token_schema_message_allowlist_noindex_csp_xss_validation_and_expiry
+latest_page_builder_preview_test: passed_backend_4_tests_38_assertions_full_backend_215_tests_1956_assertions_admin_30_files_61_tests_playwright_preview_1_test_phpstan_523_files
+latest_page_builder_preview_build: passed_angular_production_initial_120_99_kb_estimated_26_43_kb_page_builder_lazy_118_68_kb_and_123_file_laravel_sync
+latest_page_builder_preview_runtime: passed_hongvan_local_authenticated_page_builder_new_bundle_blade_preview_status_empty_state_zero_console_warnings_errors
 latest_public_asset_cache: configured_hashed_vite_assets_and_apache_immutable_header_wamp_restart_pending
 latest_frontend_template_inventory: passed_p19_wordpress_clone_558_files_45852960_bytes_tree_c8afab99d6faf61d181abfe7923eec196604d4c9_read_only
 latest_prerequisite_check: passed_php_8_5_9_node_24_15_0
@@ -242,11 +248,12 @@ open_blockers:
   - P44 public consent banner/preferences, browser event wiring and frontend E2E remain deferred until its assigned public binding; API, provider registry, CSP, Admin configuration and P19 layout are ready.
   - P46 Page Builder accessibility, Lighthouse/Core Web Vitals and axe remain deferred until P21-P31; P19 responsive desktop/tablet/mobile UAT passed and no Lighthouse score was fabricated.
   - P47 demo page templates/documents remain deferred until P29-P30 templates/global regions exist; P22-P25 block catalogs are now complete.
-  - P48 Page Builder publish/preview behavioral coverage remains deferred until P27-P28; P21 now covers schema, injection, migration and published-version immutability.
-  - P49 Page Builder preview/publish/rollback and canvas snapshots remain deferred until P21-P31; P19 public desktop/tablet/mobile UAT passed and current Admin workflows pass 14 Playwright tests.
-next_prompt: 27_BLADE_IFRAME_PREVIEW
+  - Local WAMP does not provide the PHP Redis extension or a Redis service; P27 uses the ignored local `PAGE_BUILDER_PREVIEW_CACHE_STORE=file` fallback, while committed production configuration remains Redis-first.
+  - P48 Page Builder preview behavioral coverage is complete at P27; publish/version/rollback coverage remains deferred until P28.
+  - P49 Page Builder iframe preview parity, selection bridge and responsive canvas E2E are complete at P27; publish/rollback and final Page Builder snapshots remain deferred until P28-P31.
+next_prompt: 28_PAGE_VERSIONING_AUTOSAVE_PUBLISH_SCHEDULE_ROLLBACK
 standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
-next_prompt_gate: READY_P26_DONE_STOPPED_BEFORE_P27
+next_prompt_gate: READY_P27_DONE_STOPPED_BEFORE_P28
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

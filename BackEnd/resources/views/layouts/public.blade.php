@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="color-scheme" content="light">
         <meta name="theme-color" content="#63b82e">
-        @if ($isThemePreview ?? false)
+        @if (($isThemePreview ?? false) || ($isPageBuilderPreview ?? false))
             <meta name="robots" content="noindex, nofollow">
         @endif
         <title>{{ $metaTitle ?? config('app.name') }}</title>
@@ -32,7 +32,7 @@
         <style data-public-theme-version="{{ $publicThemeVersion ?? 'config-default' }}">{!! $publicThemeCss ?? '' !!}</style>
         @stack('head')
     </head>
-    <body class="public-page public-page--{{ $currentPage ?? 'default' }}">
+    <body class="public-page public-page--{{ $currentPage ?? 'default' }}{{ ($isPageBuilderPreview ?? false) && ($hideHeader ?? false) ? ' page-builder-preview--hide-header' : '' }}{{ ($isPageBuilderPreview ?? false) && ($hideFooter ?? false) ? ' page-builder-preview--hide-footer' : '' }}">
         <a class="skip-link" href="#main-content">{{ __('public.skip_to_content') }}</a>
 
         <header class="site-header" data-site-header>

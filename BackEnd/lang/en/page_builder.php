@@ -4,6 +4,12 @@ return [
     'created' => 'Page created.',
     'updated' => 'Page metadata updated.',
     'draft_saved' => 'Page Builder draft saved.',
+    'preview_session' => [
+        'created' => 'Page Builder preview session opened.',
+        'updated' => 'Page Builder preview updated.',
+        'refreshed' => 'Page Builder preview session refreshed.',
+        'closed' => 'Page Builder preview session closed.',
+    ],
     'preview' => ['empty' => 'No published data is available for this block.', 'sample_title' => 'Preview sample item', 'sample_summary' => 'Sample data is shown only inside Page Builder preview.'],
     'stats' => ['products' => 'Products', 'partners' => 'Partners', 'certifications' => 'Certifications', 'projects' => 'Projects', 'sample' => 'Preview'],
     'slug_taken' => 'This slug is already used for the selected locale.',

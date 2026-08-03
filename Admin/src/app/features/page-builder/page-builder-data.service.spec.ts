@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { ApiEnvelope } from '../../core/auth/auth.models';
 import { PageBuilderDataService, registryVersion } from './page-builder-data.service';
-import { PageBuilderRegistry, PageRecord, emptyPageBuilderDocument } from './page-builder.models';
+import { PageBuilderRegistry, PagePreviewSession, PageRecord, emptyPageBuilderDocument } from './page-builder.models';
 
 describe('PageBuilderDataService', () => {
   beforeEach(() =>
@@ -41,6 +41,37 @@ describe('PageBuilderDataService', () => {
     expect(request.request.method).toBe('PUT');
     expect(request.request.body).toEqual({ document });
     request.flush(envelope(page));
+    http.verify();
+  });
+
+  it('keeps preview create update refresh and close token-scoped', () => {
+    const service = TestBed.inject(PageBuilderDataService);
+    const http = TestBed.inject(HttpTestingController);
+    const document = emptyPageBuilderDocument(1);
+    const session = previewFixture();
+
+    service.createPreview('01JPAGE', document, 'vi').subscribe();
+    const create = http.expectOne('/api/admin/v1/page-builder/pages/01JPAGE/preview-sessions');
+    expect(create.request.method).toBe('POST');
+    expect(create.request.body).toEqual({ document, locale: 'vi' });
+    create.flush(envelope(session));
+
+    service.updatePreview(session, document).subscribe();
+    const update = http.expectOne(`/api/admin/v1/page-builder/preview-sessions/${session.public_id}`);
+    expect(update.request.method).toBe('PUT');
+    expect(update.request.headers.get('X-Preview-Token')).toBe(session.token);
+    update.flush(envelope({ ...session, revision: 2 }));
+
+    service.refreshPreview(session).subscribe();
+    const refresh = http.expectOne(`/api/admin/v1/page-builder/preview-sessions/${session.public_id}/refresh`);
+    expect(refresh.request.headers.get('X-Preview-Token')).toBe(session.token);
+    refresh.flush(envelope(session));
+
+    service.closePreview(session).subscribe();
+    const close = http.expectOne(`/api/admin/v1/page-builder/preview-sessions/${session.public_id}`);
+    expect(close.request.method).toBe('DELETE');
+    expect(close.request.headers.get('X-Preview-Token')).toBe(session.token);
+    close.flush(envelope(null));
     http.verify();
   });
 });
@@ -102,5 +133,17 @@ function pageFixture(document: ReturnType<typeof emptyPageBuilderDocument>): Pag
     published: null,
     created_at: null,
     updated_at: null,
+  };
+}
+
+function previewFixture(): PagePreviewSession {
+  return {
+    public_id: '01JPREVIEW0000000000000000',
+    token: 't'.repeat(64),
+    url: 'http://hongvan.local/preview/page-builder/token?expires=1&signature=test',
+    expires_at: '2026-08-03T12:00:00.000Z',
+    ttl_seconds: 300,
+    revision: 1,
+    message_schema_version: 1,
   };
 }

@@ -78,7 +78,11 @@
   - [x] Undo/redo có giới hạn, dirty guard, autosave debounce, lưu thủ công và giữ bản nháp khi API báo conflict `409`
   - [x] Angular lint đạt; 30 test file/60 test đạt; production build 120.99 kB initial và đồng bộ 123 file sang Laravel
   - [x] UAT authenticated `hongvan.local/admin/page-builder`: registry live, layout ba cột, iframe boundary, nhãn accessible và console không warning/error
-- [ ] P27 Blade iframe preview
+- [x] P27 Blade iframe preview
+  - [x] Preview session owner-scoped có create/update/refresh/close, token băm, URL ký có hạn và document tạm lưu cache TTL; không tạo page version theo từng lần gõ
+  - [x] Iframe dùng đúng Blade renderer/CSS public, `noindex`, CSP `frame-ancestors 'self'`, overlay chọn block an toàn và không cho điều hướng/gửi form trong preview
+  - [x] Angular debounce update, heartbeat/reconnect và `postMessage` kiểm tra chính xác origin, iframe source, token, schema version cùng message allowlist
+  - [x] Backend 4 test/38 assertions, full backend 215 test/1956 assertions, Angular 30 file/61 test, Playwright preview 1 test, PHPStan/Pint/lint/build và UAT `hongvan.local` đạt
 - [ ] P28 Versioning/publishing
 - [ ] P29 Templates/import/export/locks
 - [ ] P30 Menus/global regions

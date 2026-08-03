@@ -116,14 +116,21 @@
           }
         </nav>
         <div class="iframe-shell">
-          <div class="iframe-toolbar"><span></span><span></span><span></span><strong>{{ text('canvasHost') }}</strong></div>
-          <iframe src="about:blank" sandbox="" [title]="text('canvasHost')"></iframe>
-          <div class="canvas-placeholder">
-            <mat-icon>web_asset</mat-icon>
-            <h3>{{ text('canvas') }} — {{ text(activeDevice()) }}</h3>
-            <p>{{ text('canvasHint') }}</p>
-            <small>{{ text('previewPlanned') }}</small>
+          <div class="iframe-toolbar">
+            <span></span><span></span><span></span><strong>{{ previewStatusText() }}</strong>
+            <button mat-icon-button type="button" [attr.aria-label]="text('previewRefresh')" [matTooltip]="text('previewRefresh')" [disabled]="!currentPage() || previewStatus() === 'connecting'" (click)="refreshPreview()"><mat-icon>refresh</mat-icon></button>
           </div>
+          @if (previewUrl(); as url) {
+            <iframe #previewFrame [src]="url" sandbox="allow-scripts allow-same-origin" [title]="text('canvasHost')" (load)="onPreviewFrameLoad()"></iframe>
+          } @else {
+            <iframe src="about:blank" sandbox="allow-scripts" [title]="text('canvasHost')"></iframe>
+            <div class="canvas-placeholder">
+              <mat-icon>{{ previewStatus() === 'error' ? 'cloud_off' : 'web_asset' }}</mat-icon>
+              <h3>{{ text('canvas') }} — {{ text(activeDevice()) }}</h3>
+              <p>{{ previewError() ?? (currentPage() ? previewStatusText() : text('emptyPages')) }}</p>
+              <small>{{ text('canvasHint') }}</small>
+            </div>
+          }
         </div>
       </main>
 

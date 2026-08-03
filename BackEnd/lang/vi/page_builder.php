@@ -4,6 +4,12 @@ return [
     'created' => 'Đã tạo trang.',
     'updated' => 'Đã cập nhật thông tin trang.',
     'draft_saved' => 'Đã lưu bản nháp Page Builder.',
+    'preview_session' => [
+        'created' => 'Đã mở phiên xem trước Page Builder.',
+        'updated' => 'Đã cập nhật bản xem trước Page Builder.',
+        'refreshed' => 'Đã gia hạn phiên xem trước Page Builder.',
+        'closed' => 'Đã đóng phiên xem trước Page Builder.',
+    ],
     'preview' => ['empty' => 'Không có dữ liệu đã xuất bản cho block này.', 'sample_title' => 'Dữ liệu mẫu xem trước', 'sample_summary' => 'Dữ liệu mẫu chỉ hiển thị trong chế độ xem trước Page Builder.'],
     'stats' => ['products' => 'Sản phẩm', 'partners' => 'Đối tác', 'certifications' => 'Chứng nhận', 'projects' => 'Dự án', 'sample' => 'Xem trước'],
     'slug_taken' => 'Slug này đã được sử dụng trong ngôn ngữ đã chọn.',
