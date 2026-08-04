@@ -19,10 +19,16 @@
         <mat-icon>save</mat-icon>{{ text('save') }}
       </button>
       @if (canPublish()) {
+        <button mat-stroked-button type="button" (click)="schedulePublish()" [disabled]="!currentPage() || history.dirty() || saving()">
+          <mat-icon>schedule</mat-icon>{{ text('schedule') }}
+        </button>
         <button mat-flat-button class="publish" type="button" (click)="publish()" [disabled]="!currentPage() || history.dirty()">
           <mat-icon>publish</mat-icon>{{ text('publish') }}
         </button>
       }
+      <button mat-stroked-button type="button" (click)="toggleVersions()" [disabled]="!currentPage()">
+        <mat-icon>history</mat-icon>{{ text('versionHistory') }}
+      </button>
     </div>
   </header>
 
@@ -68,6 +74,19 @@
     }
     @if (operationError()) {
       <div class="inline-error" role="alert"><mat-icon>account_tree</mat-icon>{{ operationError() }}</div>
+    }
+    @if (historyOpen()) {
+      <mat-card class="version-history">
+        <h3>{{ text('versionHistory') }}</h3>
+        @for (version of versions(); track version.public_id) {
+          <div class="version-row">
+            <span><strong>v{{ version.version_number }}</strong> · {{ version.status }} · {{ version.author?.name ?? '—' }}</span>
+            <small>{{ version.note || version.created_at || '—' }}</small>
+            <button mat-button type="button" (click)="previewVersion(version)"><mat-icon>visibility</mat-icon>{{ text('previewVersion') }}</button>
+            @if (canPublish()) { <button mat-button type="button" (click)="rollbackVersion(version)"><mat-icon>restore</mat-icon>{{ text('rollback') }}</button> }
+          </div>
+        } @empty { <p>{{ text('noVersions') }}</p> }
+      </mat-card>
     }
     @if (pages().length === 0) {
       <div class="empty-page-notice" role="status"><mat-icon>info</mat-icon>{{ text('emptyPages') }}</div>

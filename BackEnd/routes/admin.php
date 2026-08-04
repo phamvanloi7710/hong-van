@@ -306,6 +306,11 @@ Route::prefix('admin/v1')
                 Route::get('pages/{page:public_id}', [PageBuilderController::class, 'show'])->middleware('permission:pages.view')->name('pages.show');
                 Route::put('pages/{page:public_id}', [PageBuilderController::class, 'update'])->middleware('permission:pages.update')->name('pages.update');
                 Route::put('pages/{page:public_id}/draft', [PageBuilderController::class, 'saveDraft'])->middleware('permission:pages.update')->name('pages.draft.update');
+                Route::get('pages/{page:public_id}/versions', [PageBuilderController::class, 'versions'])->middleware('permission:pages.view')->name('pages.versions');
+                Route::post('pages/{page:public_id}/versions', [PageBuilderController::class, 'saveVersion'])->middleware('permission:pages.update')->name('pages.versions.store');
+                Route::post('pages/{page:public_id}/publish', [PageBuilderController::class, 'publish'])->middleware('permission:pages.publish')->name('pages.publish');
+                Route::post('pages/{page:public_id}/schedule', [PageBuilderController::class, 'schedule'])->middleware('permission:pages.publish')->name('pages.schedule');
+                Route::post('pages/{page:public_id}/versions/{pageVersion:public_id}/rollback', [PageBuilderController::class, 'rollback'])->middleware('permission:pages.publish')->name('pages.rollback');
                 Route::post('pages/{page:public_id}/preview-sessions', [PreviewSessionController::class, 'store'])->middleware(['permission:pages.view', 'throttle:preview.sessions'])->name('preview-sessions.store');
                 Route::put('preview-sessions/{pagePreviewSession:public_id}', [PreviewSessionController::class, 'update'])->middleware(['permission:pages.update', 'throttle:preview.sessions'])->name('preview-sessions.update');
                 Route::post('preview-sessions/{pagePreviewSession:public_id}/refresh', [PreviewSessionController::class, 'refresh'])->middleware(['permission:pages.view', 'throttle:preview.sessions'])->name('preview-sessions.refresh');

@@ -34,12 +34,12 @@ describe('PageBuilderDataService', () => {
     const document = emptyPageBuilderDocument(1);
     const page = pageFixture(document);
 
-    service.saveDraft(page.public_id, document).subscribe((saved) =>
+    service.saveDraft(page.public_id, document, page.draft?.checksum ?? null, page.draft?.public_id ?? null).subscribe((saved) =>
       expect(saved.draft?.document).toEqual(document),
     );
     const request = http.expectOne(`/api/admin/v1/page-builder/pages/${page.public_id}/draft`);
     expect(request.request.method).toBe('PUT');
-    expect(request.request.body).toEqual({ document });
+    expect(request.request.body).toEqual({ document, expected_checksum: page.draft?.checksum, expected_version_id: page.draft?.public_id });
     request.flush(envelope(page));
     http.verify();
   });

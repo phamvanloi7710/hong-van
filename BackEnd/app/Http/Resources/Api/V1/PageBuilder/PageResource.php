@@ -43,6 +43,7 @@ final class PageResource extends JsonResource
             'status' => $version->status,
             'schema_version' => $version->schema_version,
             'checksum' => $version->checksum,
+            'note' => $version->note,
             'published_at' => $this->isoDate($version->getAttribute('published_at')),
             'updated_at' => $version->updated_at?->utc()->toISOString(),
         ];

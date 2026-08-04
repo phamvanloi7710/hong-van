@@ -9,6 +9,8 @@ import {
   PageBuilderRegistry,
   PagePreviewSession,
   PageRecord,
+  PageVersionRecord,
+  PagePublishScheduleRecord,
 } from './page-builder.models';
 
 @Injectable({ providedIn: 'root' })
@@ -48,10 +50,30 @@ export class PageBuilderDataService {
       .pipe(map((response) => response.data));
   }
 
-  saveDraft(publicId: string, document: PageBuilderDocument): Observable<PageRecord> {
+  saveDraft(publicId: string, document: PageBuilderDocument, expectedChecksum: string | null, expectedVersionId: string | null): Observable<PageRecord> {
     return this.http
-      .put<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/draft`, { document })
+      .put<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/draft`, { document, expected_checksum: expectedChecksum, expected_version_id: expectedVersionId })
       .pipe(map((response) => response.data));
+  }
+
+  versions(publicId: string): Observable<readonly PageVersionRecord[]> {
+    return this.http.get<ApiEnvelope<readonly PageVersionRecord[]>>(`${this.baseUrl}/pages/${publicId}/versions`).pipe(map((response) => response.data));
+  }
+
+  saveVersion(publicId: string, expectedChecksum: string, expectedVersionId: string, note: string | null): Observable<PageRecord> {
+    return this.http.post<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/versions`, { expected_checksum: expectedChecksum, expected_version_id: expectedVersionId, note }).pipe(map((response) => response.data));
+  }
+
+  publish(publicId: string, expectedChecksum: string, expectedVersionId: string, note: string | null): Observable<PageRecord> {
+    return this.http.post<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/publish`, { expected_checksum: expectedChecksum, expected_version_id: expectedVersionId, note }).pipe(map((response) => response.data));
+  }
+
+  schedule(publicId: string, expectedChecksum: string, expectedVersionId: string, scheduledAt: string, timezone: string, note: string | null): Observable<PagePublishScheduleRecord> {
+    return this.http.post<ApiEnvelope<PagePublishScheduleRecord>>(`${this.baseUrl}/pages/${publicId}/schedule`, { expected_checksum: expectedChecksum, expected_version_id: expectedVersionId, scheduled_at: scheduledAt, timezone, note }).pipe(map((response) => response.data));
+  }
+
+  rollback(publicId: string, versionId: string, note: string | null): Observable<PageRecord> {
+    return this.http.post<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/versions/${versionId}/rollback`, { note }).pipe(map((response) => response.data));
   }
 
   createPreview(publicId: string, document: PageBuilderDocument, locale: string): Observable<PagePreviewSession> {

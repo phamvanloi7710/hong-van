@@ -85,7 +85,12 @@
   - [x] Backend 4 test/38 assertions, full backend 215 test/1956 assertions, Angular 30 file/61 test, Playwright preview 1 test, PHPStan/Pint/lint/build và UAT `hongvan.local` đạt
   - [x] Seeder demo idempotent tạo 6 page `vi/en/zh`; Chrome UAT xác nhận cả 6 iframe render 2 block, handshake ready ổn định và không có warning/error
   - [x] Chrome UAT kéo block từ palette vào document thành công trên HTTP `hongvan.local`; ID fallback, autosave chuỗi rỗng hợp lệ và Blade preview đã được kiểm tra
-- [ ] P28 Versioning/publishing
+- [x] P28 Versioning/publishing
+  - [x] Autosave giữ mutable draft; Save tạo milestone bất biến có author/note/checksum/schema và optimistic lock bằng version ID + checksum
+  - [x] Publish now, schedule UTC và rollback đều clone version mới trong transaction, audit, sitemap/cache invalidation; scheduler idempotent chạy mỗi phút
+  - [x] Admin có lịch sử metadata/document, preview version, publish confirmation, schedule và rollback theo quyền trong `vi/en/zh`
+  - [x] Fix iframe 403 dưới WAMP bằng relative signed URL; Chrome xác nhận Blade preview sẵn sàng và không có warning/error
+  - [x] PagePublishing 3 test/12 assertions, Angular 30 file/62 test, lint/build và sync 123 file đạt
 - [ ] P29 Templates/import/export/locks
 - [ ] P30 Menus/global regions
 - [ ] P31 Public routing/core pages

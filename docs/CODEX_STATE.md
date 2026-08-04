@@ -3,8 +3,8 @@
 ```yaml
 project: HongVan Website Platform
 company: Công Ty TNHH DV VT Hồng Vân
-current_prompt: P27
-last_completed_prompt: 27
+current_prompt: P29
+last_completed_prompt: 28
 status: DONE
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
@@ -77,6 +77,11 @@ latest_page_builder_preview_runtime: passed_hongvan_local_authenticated_page_bui
 latest_page_builder_demo_data: passed_6_idempotent_vi_en_zh_draft_pages_18_translations_6_versions_12_valid_placeholder_blocks_local_mysql
 latest_page_builder_preview_chrome: passed_all_6_pages_same_blade_iframe_ready_handshake_block_rendering_and_zero_console_warnings_errors
 latest_page_builder_drag_drop: passed_http_custom_domain_uuid_fallback_palette_to_tree_drag_autosave_empty_string_defaults_and_live_blade_preview
+latest_page_builder_publishing: passed_p28_mutable_draft_immutable_milestones_publish_schedule_rollback_author_note_checksum_schema_audit_cache_sitemap
+latest_page_builder_concurrency: passed_version_id_and_checksum_optimistic_lock_409_stale_session
+latest_page_builder_scheduler: passed_utc_due_processing_idempotent_without_overlap
+latest_page_builder_publishing_test: passed_3_tests_12_assertions_admin_30_files_62_tests_lint_build_sync_123_files
+latest_page_builder_preview_signature: fixed_wamp_403_with_relative_signed_url_and_chrome_live_blade_ready_zero_console_errors
 latest_public_asset_cache: configured_hashed_vite_assets_and_apache_immutable_header_wamp_restart_pending
 latest_frontend_template_inventory: passed_p19_wordpress_clone_558_files_45852960_bytes_tree_c8afab99d6faf61d181abfe7923eec196604d4c9_read_only
 latest_prerequisite_check: passed_php_8_5_9_node_24_15_0
@@ -252,11 +257,10 @@ open_blockers:
   - P46 Page Builder accessibility, Lighthouse/Core Web Vitals and axe remain deferred until P21-P31; P19 responsive desktop/tablet/mobile UAT passed and no Lighthouse score was fabricated.
   - P47 demo page templates/documents remain deferred until P29-P30 templates/global regions exist; P22-P25 block catalogs are now complete.
   - Local WAMP does not provide the PHP Redis extension or a Redis service; P27 uses the ignored local `PAGE_BUILDER_PREVIEW_CACHE_STORE=file` fallback, while committed production configuration remains Redis-first.
-  - P48 Page Builder preview behavioral coverage is complete at P27; publish/version/rollback coverage remains deferred until P28.
-  - P49 Page Builder iframe preview parity, selection bridge and responsive canvas E2E are complete at P27; publish/rollback and final Page Builder snapshots remain deferred until P28-P31.
-next_prompt: 28_PAGE_VERSIONING_AUTOSAVE_PUBLISH_SCHEDULE_ROLLBACK
+  - P49 final Page Builder template/global-region snapshots remain deferred until P29-P31.
+next_prompt: 29_PAGE_TEMPLATES_IMPORT_EXPORT_AND_LOCKING
 standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
-next_prompt_gate: READY_P27_DONE_STOPPED_BEFORE_P28
+next_prompt_gate: READY_P28_DONE_STOPPED_BEFORE_P29
 ```
 
 Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.

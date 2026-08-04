@@ -9,7 +9,7 @@ Route::prefix('preview')
     ->group(function (): void {
         Route::get('page-builder/{token}', PageBuilderPreviewController::class)
             ->where('token', '[A-Za-z0-9]{64}')
-            ->middleware(['signed', 'auth'])
+            ->middleware(['signed:relative', 'auth'])
             ->name('page-builder');
         Route::get('theme/{theme:public_id}/{version:public_id}', ThemePreviewController::class)
             ->middleware('signed')

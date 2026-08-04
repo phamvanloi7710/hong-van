@@ -29,4 +29,9 @@ final readonly class PagePolicy
     {
         return $this->permissions->allows($actor, 'pages.update');
     }
+
+    public function publish(User $actor, Page $page): bool
+    {
+        return $this->permissions->allows($actor, 'pages.publish');
+    }
 }

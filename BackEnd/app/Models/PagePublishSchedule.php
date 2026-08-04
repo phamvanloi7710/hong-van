@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasPublicId;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property CarbonImmutable $scheduled_at
+ * @property CarbonImmutable|null $processed_at
+ */
 #[Fillable(['page_id', 'page_version_id', 'action', 'status', 'scheduled_at', 'processed_at', 'failure_message', 'created_by'])]
 final class PagePublishSchedule extends Model
 {

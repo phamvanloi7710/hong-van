@@ -3,6 +3,7 @@
 namespace App\Domain\PageBuilder;
 
 use App\Domain\Audit\AuditTrail;
+use App\Exceptions\ConflictException;
 use App\Models\Page;
 use App\Models\PageVersion;
 use App\Models\User;
@@ -57,13 +58,16 @@ final readonly class PageManager
     }
 
     /** @param array<string, mixed> $document */
-    public function saveDraft(User $actor, Page $page, array $document): PageVersion
+    public function saveDraft(User $actor, Page $page, array $document, ?string $expectedChecksum = null, ?string $expectedVersionId = null): PageVersion
     {
         $validated = $this->validator->validate($document);
         $checksum = $this->validator->checksum($validated);
-        $version = DB::transaction(function () use ($actor, $page, $validated, $checksum): PageVersion {
+        $version = DB::transaction(function () use ($actor, $page, $validated, $checksum, $expectedChecksum, $expectedVersionId): PageVersion {
             $lockedPage = Page::query()->lockForUpdate()->findOrFail($page->getKey());
             $draft = $lockedPage->draftVersion()->lockForUpdate()->first();
+            if ($draft instanceof PageVersion && (($expectedChecksum !== null && ! hash_equals($draft->checksum, $expectedChecksum)) || ($expectedVersionId !== null && $draft->public_id !== $expectedVersionId))) {
+                throw new ConflictException('The Page Builder draft was changed by another session.');
+            }
             if (! $draft instanceof PageVersion || $draft->status !== 'draft') {
                 $draft = $lockedPage->versions()->create([
                     'version_number' => ((int) $lockedPage->versions()->max('version_number')) + 1,

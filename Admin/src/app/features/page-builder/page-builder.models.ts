@@ -99,12 +99,21 @@ export interface PageTranslationRecord {
 export interface PageVersionRecord {
   readonly public_id: string;
   readonly version_number: number;
-  readonly status: 'draft' | 'published' | 'scheduled' | 'archived';
+  readonly status: 'draft' | 'saved' | 'published' | 'scheduled' | 'archived';
   readonly schema_version: number;
   readonly checksum: string;
+  readonly note?: string | null;
+  readonly author?: { readonly public_id: string; readonly name: string } | null;
   readonly document?: PageBuilderDocument;
   readonly published_at: string | null;
   readonly updated_at: string | null;
+  readonly created_at?: string | null;
+}
+
+export interface PagePublishScheduleRecord {
+  readonly public_id: string;
+  readonly status: string;
+  readonly scheduled_at: string;
 }
 
 export interface PageRecord {

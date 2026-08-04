@@ -136,7 +136,8 @@ final readonly class PagePreviewSessionManager
         return [
             'public_id' => $session->public_id,
             'token' => $token,
-            'url' => URL::temporarySignedRoute('preview.page-builder', $expiresAt, ['token' => $token]),
+            // Relative signatures remain valid when WAMP terminates or rewrites the origin.
+            'url' => URL::temporarySignedRoute('preview.page-builder', $expiresAt, ['token' => $token], absolute: false),
             'expires_at' => $expiresAt->utc()->toISOString(),
             'ttl_seconds' => max(0, now('UTC')->diffInSeconds($expiresAt, false)),
             'revision' => $revision,

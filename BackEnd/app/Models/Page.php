@@ -41,6 +41,12 @@ final class Page extends TranslatableModel
         return $this->hasMany(PageVersion::class);
     }
 
+    /** @return HasMany<PagePublishSchedule, $this> */
+    public function publishSchedules(): HasMany
+    {
+        return $this->hasMany(PagePublishSchedule::class);
+    }
+
     /** @return BelongsTo<PageVersion, $this> */
     public function draftVersion(): BelongsTo
     {

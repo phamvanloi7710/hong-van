@@ -84,6 +84,7 @@ import {
   PagePreviewMessage,
   PagePreviewSession,
   PageRecord,
+  PageVersionRecord,
   emptyPageBuilderDocument,
 } from './page-builder.models';
 import { PageBuilderPendingChanges } from './page-builder-route.guard';
@@ -150,6 +151,8 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   readonly previewUrl = signal<SafeResourceUrl | null>(null);
   readonly previewStatus = signal<'idle' | 'connecting' | 'loading' | 'ready' | 'updating' | 'error'>('idle');
   readonly previewError = signal<string | null>(null);
+  readonly versions = signal<readonly PageVersionRecord[]>([]);
+  readonly historyOpen = signal(false);
 
   readonly canEdit = computed(() => this.authStore.hasPermission('pages.update'));
   readonly canPublish = computed(() => this.authStore.hasPermission('pages.publish'));
@@ -297,6 +300,7 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     const schemaVersion = this.registry()?.document.schemaVersion ?? 1;
     this.history.reset(page?.draft?.document ?? emptyPageBuilderDocument(schemaVersion));
     this.startPreview(page);
+    if (page !== null) this.loadVersions(page.public_id);
   }
 
   selectBlock(blockId: string): void {
@@ -479,12 +483,56 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     if (page === null || !this.canEdit() || !this.history.dirty()) return;
     this.persistDraft({ pageId: page.public_id, document: this.history.current() }, true)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+      .subscribe((saved) => {
+        const checksum = saved?.draft?.checksum;
+        if (saved === null || checksum === undefined) return;
+        const note = window.prompt(this.text('versionNote'), '')?.trim() || null;
+        this.data.saveVersion(saved.public_id, checksum, saved.draft!.public_id, note).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+          next: (updated) => { this.replacePage(updated); this.history.reset(updated.draft?.document ?? this.history.current()); this.loadVersions(updated.public_id); this.snackBar.open(this.text('versionSaved'), undefined, { duration: 2500 }); },
+          error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('saveError'))),
+        });
+      });
   }
 
   publish(): void {
-    if (!this.canPublish()) return;
-    this.snackBar.open(this.text('publishPlanned'), undefined, { duration: 3500 });
+    const page = this.currentPage();
+    const checksum = page?.draft?.checksum;
+    if (!this.canPublish() || page === null || checksum === undefined || !window.confirm(this.text('publishConfirm'))) return;
+    const note = window.prompt(this.text('versionNote'), '')?.trim() || null;
+    this.saving.set(true);
+    this.data.publish(page.public_id, checksum, page.draft!.public_id, note).pipe(finalize(() => this.saving.set(false)), takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (updated) => { this.replacePage(updated); this.history.reset(updated.draft?.document ?? this.history.current()); this.loadVersions(updated.public_id); this.snackBar.open(this.text('publishedNotice'), undefined, { duration: 3000 }); },
+      error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('publishError'))),
+    });
+  }
+
+  schedulePublish(): void {
+    const page = this.currentPage(); const checksum = page?.draft?.checksum;
+    if (!this.canPublish() || page === null || checksum === undefined) return;
+    const local = window.prompt(this.text('schedulePrompt'), '');
+    if (!local) return;
+    const date = new Date(local);
+    if (Number.isNaN(date.getTime())) { this.saveError.set(this.text('scheduleInvalid')); return; }
+    this.data.schedule(page.public_id, checksum, page.draft!.public_id, date.toISOString(), Intl.DateTimeFormat().resolvedOptions().timeZone, null).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => { this.load(); this.snackBar.open(this.text('scheduledNotice'), undefined, { duration: 3000 }); },
+      error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('publishError'))),
+    });
+  }
+
+  toggleVersions(): void { this.historyOpen.update((open) => !open); }
+
+  previewVersion(version: PageVersionRecord): void {
+    const page = this.currentPage(); if (page === null || version.document === undefined) return;
+    this.closePreviewSession();
+    this.data.createPreview(page.public_id, version.document, this.i18n.locale()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ next: (session) => this.applyPreviewSession(session), error: (error: unknown) => this.previewError.set(authErrorMessage(error, this.text('previewError'))) });
+  }
+
+  rollbackVersion(version: PageVersionRecord): void {
+    const page = this.currentPage(); if (page === null || !this.canPublish() || !window.confirm(this.text('rollbackConfirm', { version: version.version_number }))) return;
+    this.data.rollback(page.public_id, version.public_id, null).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (updated) => { this.replacePage(updated); this.history.reset(updated.draft?.document ?? this.history.current()); this.loadVersions(updated.public_id); this.snackBar.open(this.text('rollbackNotice'), undefined, { duration: 3000 }); },
+      error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('publishError'))),
+    });
   }
 
   propertyEntries(): readonly PageBuilderSchemaEntry[] {
@@ -740,7 +788,7 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   private persistDraft(request: AutosaveRequest, notify: boolean): Observable<PageRecord | null> {
     this.saving.set(true);
     this.saveError.set(null);
-    return this.data.saveDraft(request.pageId, request.document).pipe(
+    return this.data.saveDraft(request.pageId, request.document, this.currentPage()?.draft?.checksum ?? null, this.currentPage()?.draft?.public_id ?? null).pipe(
       tap((page) => {
         this.replacePage(page);
         this.history.markSaved(request.document);
@@ -764,6 +812,17 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
       pages.map((candidate) => (candidate.public_id === page.public_id ? page : candidate)),
     );
     if (this.currentPage()?.public_id === page.public_id) this.currentPage.set(page);
+  }
+
+  private loadVersions(publicId: string): void {
+    this.data.versions(publicId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ next: (versions) => this.versions.set(versions), error: () => this.versions.set([]) });
+  }
+
+  private applyPreviewSession(session: PagePreviewSession): void {
+    this.previewSession.set(session);
+    this.previewStatus.set('loading');
+    this.acceptPreviewUrl(session);
+    this.schedulePreviewRefresh(session);
   }
 
   private ensureSelectionExists(): void {
