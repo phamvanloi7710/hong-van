@@ -3,6 +3,7 @@ import {
   deleteBlock,
   duplicateBlock,
   findBlock,
+  findPlacementParent,
   flattenBlocks,
   moveBlock,
   updateBlockDeviceStyle,
@@ -72,6 +73,14 @@ describe('Page Builder immutable document operations', () => {
 
     const cycle = moveBlock(text.document, registry, section.blockId, container.blockId, 0);
     expect(cycle).toEqual({ ok: false, reason: 'inside-descendant' });
+  });
+
+  it('finds the nearest compatible container for palette clicks', () => {
+    const { registry, document, containerId, firstTextId } = nestedDocument();
+
+    expect(findPlacementParent(document, registry, 'content.text', firstTextId)).toBe(containerId);
+    expect(findPlacementParent(document, registry, 'content.text', null)).toBe(containerId);
+    expect(findPlacementParent(document, registry, 'layout.section', firstTextId)).toBeNull();
   });
 
   it('reorders nested blocks and enforces parent minimum children', () => {

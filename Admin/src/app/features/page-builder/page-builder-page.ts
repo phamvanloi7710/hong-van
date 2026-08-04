@@ -57,6 +57,7 @@ import {
   deleteBlock,
   duplicateBlock,
   findBlock,
+  findPlacementParent,
   flattenBlocks,
   moveBlock,
   updateBlockDeviceStyle,
@@ -385,11 +386,16 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   addFromPalette(definition: PageBuilderBlockDefinition): void {
     const registry = this.registry();
     if (registry === null || !this.canEdit()) return;
-    const selectedParent = this.selectedBlockId();
-    const parentId = selectedParent !== null
-      && canPlaceBlock(this.history.current(), registry, definition.type, selectedParent)
-      ? selectedParent
-      : null;
+    const parentId = findPlacementParent(
+      this.history.current(),
+      registry,
+      definition.type,
+      this.selectedBlockId(),
+    );
+    if (parentId === undefined) {
+      this.operationError.set(this.text('noCompatibleContainer'));
+      return;
+    }
     this.applyMutation(
       addBlock(
         this.history.current(),

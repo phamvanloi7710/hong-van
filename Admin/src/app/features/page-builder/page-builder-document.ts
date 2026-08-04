@@ -204,6 +204,30 @@ export function canPlaceBlock(
     && existingChildren < parentDefinition.maxChildren;
 }
 
+/**
+ * Resolve the most intuitive valid parent for a palette click: selected block,
+ * its nearest ancestor, root, then an existing compatible container.
+ */
+export function findPlacementParent(
+  document: PageBuilderDocument,
+  registry: PageBuilderRegistry,
+  blockType: string,
+  selectedBlockId: string | null,
+): string | null | undefined {
+  if (selectedBlockId !== null) {
+    const candidates = [...blockBreadcrumbs(document, selectedBlockId)].reverse();
+    const selectedParent = candidates.find((block) =>
+      canPlaceBlock(document, registry, blockType, block.id),
+    );
+    if (selectedParent !== undefined) return selectedParent.id;
+  }
+  if (canPlaceBlock(document, registry, blockType, null)) return null;
+
+  return [...flattenBlocks(document)].reverse().find((block) =>
+    canPlaceBlock(document, registry, blockType, block.id),
+  )?.id;
+}
+
 function insertBlock(
   document: PageBuilderDocument,
   registry: PageBuilderRegistry,
