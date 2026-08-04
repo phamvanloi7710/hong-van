@@ -46,7 +46,7 @@ final readonly class PagePublishingManager
             [$lockedPage, $draft] = $this->lockedDraft($page, $expectedChecksum, $expectedVersionId);
             $this->assertPublishable($lockedPage, $draft);
             $published = $this->cloneVersion($lockedPage, $draft, 'saved', $actor, $note);
-            $published->forceFill(['published_by' => $actor->getKey(), 'published_at' => now()])->save();
+            $published->forceFill(['status' => 'published', 'published_by' => $actor->getKey(), 'published_at' => now()])->save();
             $nextDraft = $this->cloneVersion($lockedPage, $published, 'draft', $actor, null);
             $lockedPage->update([
                 'status' => 'published', 'published_version_id' => $published->getKey(),
@@ -89,7 +89,7 @@ final readonly class PagePublishingManager
             $source = PageVersion::query()->whereKey($source->getKey())->lockForUpdate()->firstOrFail();
             $this->assertPublishable($lockedPage, $source);
             $published = $this->cloneVersion($lockedPage, $source, 'saved', $actor, $note ?? 'Rollback v'.$source->version_number);
-            $published->forceFill(['published_by' => $actor->getKey(), 'published_at' => now()])->save();
+            $published->forceFill(['status' => 'published', 'published_by' => $actor->getKey(), 'published_at' => now()])->save();
             $nextDraft = $this->cloneVersion($lockedPage, $published, 'draft', $actor, null);
             $lockedPage->update(['status' => 'published', 'published_version_id' => $published->getKey(), 'draft_version_id' => $nextDraft->getKey(), 'updated_by' => $actor->getKey()]);
             $this->mediaUsage->sync($published, $published->document_json);

@@ -92,10 +92,11 @@
   - [x] Fix iframe 403 dưới WAMP bằng relative signed URL; Chrome xác nhận Blade preview sẵn sàng và không có warning/error
   - [x] Palette click tự tìm container hợp lệ gần nhất thay vì rơi về root và báo `invalid-parent`; thông báo fallback nêu rõ cần thêm/chọn container
   - [x] Ẩn vùng metadata kỹ thuật dài (page/block count/registry/autosave) khỏi toolbar editor; giữ bộ chọn Page và thiết bị responsive
+  - [x] Sửa publish/rollback để version đích mang đúng status `published`; dữ liệu local pointer cũ đã được đồng bộ
   - [x] PagePublishing 3 test/12 assertions, Angular 30 file/62 test, lint/build và sync 123 file đạt
 - [ ] P29 Templates/import/export/locks
 - [ ] P30 Menus/global regions
-- [ ] P31 Public routing/core pages
+- [ ] P31 Public routing/core pages (Page Builder đã publish hiện chưa có URL public cho tới khi prompt này được thực hiện)
 - [x] P32 Product domain (completed out of sequence for the Admin track; public frontend remains postponed)
 - [ ] P33 Product admin/public
   - [x] P33 Admin/API: product and taxonomy CRUD, media, pricing, filters, bulk actions, permissions, audit and vi/en/zh

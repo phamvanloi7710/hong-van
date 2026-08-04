@@ -36,6 +36,7 @@ final class PagePublishingTest extends TestCase
             ->assertConflict();
 
         $published = $page->refresh()->publishedVersion;
+        $this->assertSame('published', $published->status);
         $this->assertSame('First release', $published->note);
         $this->assertNotSame($published->getKey(), $page->draft_version_id);
         $this->expectException(\LogicException::class);
@@ -55,6 +56,7 @@ final class PagePublishingTest extends TestCase
         $rolledBack = $manager->rollback($actor, $page, $source, 'Rollback check');
 
         $this->assertNotSame($source->getKey(), $rolledBack->getKey());
+        $this->assertSame('published', $rolledBack->status);
         $this->assertSame($source->checksum, $rolledBack->checksum);
         $this->assertSame(1, PagePublishSchedule::query()->where('status', 'completed')->count());
     }
