@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['key', 'name', 'description', 'is_system', 'is_active', 'published_version_id', 'created_by', 'updated_by'])]
+#[Fillable(['key', 'name', 'description', 'page_template_category_id', 'is_system', 'is_active', 'published_version_id', 'created_by', 'updated_by'])]
 final class PageTemplate extends Model
 {
     use HasPublicId;
@@ -25,6 +25,12 @@ final class PageTemplate extends Model
     public function publishedVersion(): BelongsTo
     {
         return $this->belongsTo(PageTemplateVersion::class, 'published_version_id');
+    }
+
+    /** @return BelongsTo<PageTemplateCategory, $this> */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(PageTemplateCategory::class, 'page_template_category_id');
     }
 
     protected function casts(): array

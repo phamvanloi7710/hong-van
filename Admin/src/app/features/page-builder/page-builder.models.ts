@@ -129,6 +129,27 @@ export interface PageRecord {
   readonly updated_at: string | null;
 }
 
+export interface PageTemplateRecord {
+  readonly public_id: string;
+  readonly key: string;
+  readonly name: string;
+  readonly description: string | null;
+  readonly category: { readonly public_id: string; readonly key: string; readonly name: string } | null;
+  readonly version: { readonly public_id: string; readonly version_number: number; readonly checksum: string } | null;
+}
+
+export interface PageLockRecord {
+  readonly public_id: string;
+  readonly owner: { readonly public_id: string; readonly name: string } | null;
+  readonly expires_at: string;
+  readonly ttl_seconds: number;
+}
+
+export interface PageLockSession {
+  readonly lock: PageLockRecord;
+  readonly token: string;
+}
+
 export interface PagePreviewSession {
   readonly public_id: string;
   readonly token: string;

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use LogicException;
 
+/** @property array<string, mixed> $document_json */
 #[Fillable(['page_template_id', 'version_number', 'status', 'schema_version', 'document_json', 'checksum', 'parent_version_id', 'created_by', 'published_at'])]
 final class PageTemplateVersion extends Model
 {

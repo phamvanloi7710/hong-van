@@ -5,6 +5,7 @@ Individual ADR files are the source of truth. P02 reviewed `ARCHITECTURE.md`, `D
 Delivery order decision: public frontend/template work was postponed until the owner supplied the template. The owner supplied a WordPress-cloned source on 2026-08-03 and explicitly started the final frontend stage at P18; `FrontEndTemplate/` remains read-only.
 
 | ADR | Decision | Status | Date |
+| [ADR-028](adr/ADR-028-versioned-page-template-import-and-edit-locks.md) | Versioned template, safe import/export and expiring Page Builder edit lock | Accepted | 2026-08-04 |
 |---|---|---|---|
 | [ADR-027](adr/ADR-027-secure-cache-backed-page-builder-preview.md) | Preview Page Builder dùng cache TTL, URL ký owner-scoped và giao thức iframe được xác thực chặt | Accepted | 2026-08-03 |
 | [ADR-026](adr/ADR-026-server-driven-angular-page-builder-editor.md) | Angular editor dùng server registry, document immutable và giữ Blade iframe làm ranh giới preview | Accepted | 2026-08-03 |

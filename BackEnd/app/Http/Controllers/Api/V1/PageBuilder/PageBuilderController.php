@@ -7,6 +7,7 @@ use App\Domain\PageBuilder\DataSourceRegistry;
 use App\Domain\PageBuilder\FormRegistry;
 use App\Domain\PageBuilder\PageBuilderCacheKeys;
 use App\Domain\PageBuilder\PageDocumentSchema;
+use App\Domain\PageBuilder\PageLockManager;
 use App\Domain\PageBuilder\PageManager;
 use App\Domain\PageBuilder\PagePublishingManager;
 use App\Domain\PageBuilder\PageQuery;
@@ -74,9 +75,10 @@ final class PageBuilderController extends Controller
         return $response->success(PageResource::make($page)->resolve($request), __('page_builder.updated'));
     }
 
-    public function saveDraft(SavePageDraftRequest $request, Page $page, PageManager $manager, ApiResponse $response): JsonResponse
+    public function saveDraft(SavePageDraftRequest $request, Page $page, PageManager $manager, PageLockManager $locks, ApiResponse $response): JsonResponse
     {
         Gate::authorize('update', $page);
+        $locks->assertCanEdit($this->actor($request), $page, $request->validated('lock_token'));
         $manager->saveDraft(
             $this->actor($request),
             $page,

@@ -34,4 +34,19 @@ final readonly class PagePolicy
     {
         return $this->permissions->allows($actor, 'pages.publish');
     }
+
+    public function export(User $actor, Page $page): bool
+    {
+        return $this->permissions->allows($actor, 'pages.export');
+    }
+
+    public function import(User $actor): bool
+    {
+        return $this->permissions->allows($actor, 'pages.import');
+    }
+
+    public function forceUnlock(User $actor, Page $page): bool
+    {
+        return $this->permissions->allows($actor, 'pages.force_unlock');
+    }
 }

@@ -16,6 +16,8 @@ final class PermissionRegistry
         'restore',
         'publish',
         'export',
+        'import',
+        'force_unlock',
         'manage_settings',
     ];
 
@@ -43,7 +45,7 @@ final class PermissionRegistry
             ...self::module('warehouse_requests', 'yêu cầu thuê kho', ['view', 'update', 'export']),
             ...self::module('leads', 'lead', ['view', 'update', 'export']),
             self::permission('leads', 'view_all', 'Xem táº¥t cáº£ lead'),
-            ...self::module('pages', 'trang', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
+            ...self::module('pages', 'trang', ['view', 'create', 'update', 'delete', 'restore', 'publish', 'export', 'import', 'force_unlock']),
             ...self::module('posts', 'bài viết', ['view', 'create', 'update', 'delete', 'restore', 'publish', 'export']),
             ...self::module('showcase', 'trưng bày doanh nghiệp', ['view', 'create', 'update', 'delete', 'restore', 'publish']),
             ...self::module('seo', 'SEO', ['view', 'update']),
@@ -78,6 +80,8 @@ final class PermissionRegistry
             'restore' => 'Khôi phục',
             'publish' => 'Xuất bản',
             'export' => 'Xuất dữ liệu',
+            'import' => 'Import data',
+            'force_unlock' => 'Force unlock',
             'manage_settings' => 'Quản lý cài đặt',
         ];
 

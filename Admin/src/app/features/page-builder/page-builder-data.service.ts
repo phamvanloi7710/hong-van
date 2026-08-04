@@ -8,7 +8,10 @@ import {
   PageBuilderDocument,
   PageBuilderRegistry,
   PagePreviewSession,
+  PageLockRecord,
+  PageLockSession,
   PageRecord,
+  PageTemplateRecord,
   PageVersionRecord,
   PagePublishScheduleRecord,
 } from './page-builder.models';
@@ -50,9 +53,9 @@ export class PageBuilderDataService {
       .pipe(map((response) => response.data));
   }
 
-  saveDraft(publicId: string, document: PageBuilderDocument, expectedChecksum: string | null, expectedVersionId: string | null): Observable<PageRecord> {
+  saveDraft(publicId: string, document: PageBuilderDocument, expectedChecksum: string | null, expectedVersionId: string | null, lockToken: string | null = null): Observable<PageRecord> {
     return this.http
-      .put<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/draft`, { document, expected_checksum: expectedChecksum, expected_version_id: expectedVersionId })
+      .put<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/draft`, { document, expected_checksum: expectedChecksum, expected_version_id: expectedVersionId, ...(lockToken === null ? {} : { lock_token: lockToken }) })
       .pipe(map((response) => response.data));
   }
 
@@ -74,6 +77,38 @@ export class PageBuilderDataService {
 
   rollback(publicId: string, versionId: string, note: string | null): Observable<PageRecord> {
     return this.http.post<ApiEnvelope<PageRecord>>(`${this.baseUrl}/pages/${publicId}/versions/${versionId}/rollback`, { note }).pipe(map((response) => response.data));
+  }
+
+  templates(): Observable<readonly PageTemplateRecord[]> {
+    return this.http.get<ApiEnvelope<readonly PageTemplateRecord[]>>(`${this.baseUrl}/templates`).pipe(map((response) => response.data));
+  }
+
+  saveAsTemplate(publicId: string, key: string, name: string, categoryKey: string | null): Observable<PageTemplateRecord> {
+    return this.http.post<ApiEnvelope<PageTemplateRecord>>(`${this.baseUrl}/pages/${publicId}/templates`, { key, name, category_key: categoryKey }).pipe(map((response) => response.data));
+  }
+
+  exportPage(publicId: string): Observable<unknown> {
+    return this.http.get<unknown>(`${this.baseUrl}/pages/${publicId}/export`);
+  }
+
+  validateImport(payload: unknown): Observable<{ readonly valid: boolean; readonly migrated_schema_version: number; readonly media_references: readonly string[]; readonly missing_media: readonly string[] }> {
+    return this.http.post<ApiEnvelope<{ readonly valid: boolean; readonly migrated_schema_version: number; readonly media_references: readonly string[]; readonly missing_media: readonly string[] }>>(`${this.baseUrl}/imports/validate`, { payload }).pipe(map((response) => response.data));
+  }
+
+  acquireLock(publicId: string): Observable<PageLockSession> {
+    return this.http.post<ApiEnvelope<PageLockSession>>(`${this.baseUrl}/pages/${publicId}/lock`, {}).pipe(map((response) => response.data));
+  }
+
+  heartbeatLock(publicId: string, token: string): Observable<PageLockRecord> {
+    return this.http.put<ApiEnvelope<PageLockRecord>>(`${this.baseUrl}/pages/${publicId}/lock`, { token }).pipe(map((response) => response.data));
+  }
+
+  releaseLock(publicId: string, token: string): Observable<void> {
+    return this.http.delete<ApiEnvelope<null>>(`${this.baseUrl}/pages/${publicId}/lock`, { body: { token } }).pipe(map(() => undefined));
+  }
+
+  forceReleaseLock(publicId: string): Observable<void> {
+    return this.http.delete<ApiEnvelope<null>>(`${this.baseUrl}/pages/${publicId}/lock/force`).pipe(map(() => undefined));
   }
 
   createPreview(publicId: string, document: PageBuilderDocument, locale: string): Observable<PagePreviewSession> {

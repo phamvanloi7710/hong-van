@@ -29,6 +29,15 @@
       <button mat-stroked-button type="button" (click)="toggleVersions()" [disabled]="!currentPage()">
         <mat-icon>history</mat-icon>{{ text('versionHistory') }}
       </button>
+      @if (canEdit()) {
+        <button mat-stroked-button type="button" (click)="saveCurrentAsTemplate()" [disabled]="!currentPage()"><mat-icon>bookmark_add</mat-icon>{{ text('saveTemplate') }}</button>
+      }
+      @if (canExport()) {
+        <button mat-stroked-button type="button" (click)="downloadExport()" [disabled]="!currentPage()"><mat-icon>download</mat-icon>{{ text('export') }}</button>
+      }
+      @if (canImport()) {
+        <label class="import-button" mat-stroked-button><mat-icon>upload_file</mat-icon>{{ text('validateImport') }}<input type="file" accept="application/json" (change)="validateImport($event)"></label>
+      }
     </div>
   </header>
 
@@ -59,6 +68,12 @@
     @if (!canEdit()) {
       <div class="readonly-notice" role="status"><mat-icon>lock</mat-icon>{{ text('readonly') }}</div>
     }
+    @if (editLock(); as session) {
+      <div class="readonly-notice lock-notice" role="status"><mat-icon>lock_clock</mat-icon>{{ text('lockOwned', { name: session.lock.owner?.name ?? '' }) }}</div>
+    } @else if (currentPage() && canEdit()) {
+      <div class="inline-error" role="status"><mat-icon>lock</mat-icon>{{ text('lockUnavailable') }} @if (canForceUnlock()) { <button mat-button type="button" (click)="forceUnlock()">{{ text('forceUnlock') }}</button> }</div>
+    }
+    @if (importReport()) { <div class="readonly-notice" role="status"><mat-icon>fact_check</mat-icon>{{ importReport() }}</div> }
     @if (saveError()) {
       <div class="inline-error" role="alert"><mat-icon>sync_problem</mat-icon>{{ saveError() }}</div>
     }
@@ -109,6 +124,13 @@
               </div>
             }
           </div>
+        </mat-card>
+
+        <mat-card class="panel template-panel">
+          <div class="panel-title"><mat-icon>bookmarks</mat-icon><h3>{{ text('templateLibrary') }}</h3></div>
+          @for (template of templates(); track template.public_id) {
+            <div class="template-row"><strong>{{ template.name }}</strong><small>{{ template.category?.name ?? template.key }}</small></div>
+          } @empty { <p class="muted">{{ text('noTemplates') }}</p> }
         </mat-card>
 
         <mat-card class="panel layers-panel">

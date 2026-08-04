@@ -84,7 +84,9 @@ import {
   PageBuilderSchemaEntry,
   PagePreviewMessage,
   PagePreviewSession,
+  PageLockSession,
   PageRecord,
+  PageTemplateRecord,
   PageVersionRecord,
   emptyPageBuilderDocument,
 } from './page-builder.models';
@@ -133,6 +135,7 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   private readonly autosaveChanges = new Subject<AutosaveRequest>();
   private readonly previewChanges = new Subject<PageBuilderDocument>();
   private previewRefreshTimer: number | null = null;
+  private lockHeartbeatTimer: number | null = null;
 
   readonly devices: readonly PageBuilderDevice[] = ['desktop', 'tablet', 'mobile'];
   readonly history = new PageBuilderHistory(emptyPageBuilderDocument(1));
@@ -154,9 +157,15 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   readonly previewError = signal<string | null>(null);
   readonly versions = signal<readonly PageVersionRecord[]>([]);
   readonly historyOpen = signal(false);
+  readonly templates = signal<readonly PageTemplateRecord[]>([]);
+  readonly editLock = signal<PageLockSession | null>(null);
+  readonly importReport = signal<string | null>(null);
 
   readonly canEdit = computed(() => this.authStore.hasPermission('pages.update'));
   readonly canPublish = computed(() => this.authStore.hasPermission('pages.publish'));
+  readonly canExport = computed(() => this.authStore.hasPermission('pages.export'));
+  readonly canImport = computed(() => this.authStore.hasPermission('pages.import'));
+  readonly canForceUnlock = computed(() => this.authStore.hasPermission('pages.force_unlock'));
   readonly definitions = computed(() => this.registry()?.blocks ?? []);
   readonly categories = computed(() =>
     [...new Set(this.definitions().map((definition) => definition.category))].sort(),
@@ -232,7 +241,7 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
-    this.destroyRef.onDestroy(() => this.closePreviewSession());
+    this.destroyRef.onDestroy(() => { this.closePreviewSession(); this.releaseEditLock(); });
     this.load();
   }
 
@@ -273,15 +282,16 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     if (this.history.dirty() && !window.confirm(this.text('navigationConfirm'))) return;
     this.loading.set(true);
     this.loadError.set(null);
-    forkJoin({ registry: this.data.registry(), pages: this.data.pages() })
+    forkJoin({ registry: this.data.registry(), pages: this.data.pages(), templates: this.data.templates() })
       .pipe(
         finalize(() => this.loading.set(false)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        next: ({ registry, pages }) => {
+        next: ({ registry, pages, templates }) => {
           this.registry.set(registry);
           this.pages.set(pages);
+          this.templates.set(templates);
           const currentId = this.currentPage()?.public_id;
           this.selectPage(currentId ?? pages[0]?.public_id ?? null, true);
         },
@@ -295,12 +305,14 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     const page = publicId === null
       ? null
       : this.pages().find((candidate) => candidate.public_id === publicId) ?? null;
+    this.releaseEditLock();
     this.currentPage.set(page);
     this.selectedBlockId.set(null);
     this.saveError.set(null);
     const schemaVersion = this.registry()?.document.schemaVersion ?? 1;
     this.history.reset(page?.draft?.document ?? emptyPageBuilderDocument(schemaVersion));
     this.startPreview(page);
+    if (page !== null && this.canEdit()) this.acquireEditLock(page);
     if (page !== null) this.loadVersions(page.public_id);
   }
 
@@ -526,6 +538,49 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   }
 
   toggleVersions(): void { this.historyOpen.update((open) => !open); }
+
+  saveCurrentAsTemplate(): void {
+    const page = this.currentPage();
+    if (page === null || !this.canEdit()) return;
+    const key = window.prompt(this.text('templateKeyPrompt'), `${page.code}-template`)?.trim();
+    if (!key) return;
+    const name = window.prompt(this.text('templateNamePrompt'), this.pageTitle(page))?.trim();
+    if (!name) return;
+    const category = window.prompt(this.text('templateCategoryPrompt'), '')?.trim() || null;
+    this.data.saveAsTemplate(page.public_id, key, name, category).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (template) => { this.templates.update((items) => [...items, template]); this.snackBar.open(this.text('templateSaved'), undefined, { duration: 2500 }); },
+      error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('templateError'))),
+    });
+  }
+
+  downloadExport(): void {
+    const page = this.currentPage();
+    if (page === null || !this.canExport()) return;
+    this.data.exportPage(page.public_id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (payload) => {
+        const href = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }));
+        const link = document.createElement('a'); link.href = href; link.download = `${page.code}.page-builder.json`; link.click(); URL.revokeObjectURL(href);
+        this.snackBar.open(this.text('exportReady'), undefined, { duration: 2500 });
+      },
+      error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('exportError'))),
+    });
+  }
+
+  validateImport(event: Event): void {
+    const file = event.target instanceof HTMLInputElement ? event.target.files?.item(0) : null;
+    if (file === null || !this.canImport()) return;
+    const importFile = file!;
+    importFile.text().then((content) => JSON.parse(content) as unknown).then((payload) => this.data.validateImport(payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (report) => { this.importReport.set(this.text('importValidReport', { count: report.media_references.length })); this.snackBar.open(this.text('importValid'), undefined, { duration: 3000 }); },
+      error: (error: unknown) => { this.importReport.set(authErrorMessage(error, this.text('importError'))); },
+    })).catch(() => this.importReport.set(this.text('importError')));
+  }
+
+  forceUnlock(): void {
+    const page = this.currentPage();
+    if (page === null || !this.canForceUnlock() || !window.confirm(this.text('forceUnlockConfirm'))) return;
+    this.data.forceReleaseLock(page.public_id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({ next: () => this.acquireEditLock(page), error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('lockError'))) });
+  }
 
   previewVersion(version: PageVersionRecord): void {
     const page = this.currentPage(); if (page === null || version.document === undefined) return;
@@ -794,7 +849,7 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
   private persistDraft(request: AutosaveRequest, notify: boolean): Observable<PageRecord | null> {
     this.saving.set(true);
     this.saveError.set(null);
-    return this.data.saveDraft(request.pageId, request.document, this.currentPage()?.draft?.checksum ?? null, this.currentPage()?.draft?.public_id ?? null).pipe(
+    return this.data.saveDraft(request.pageId, request.document, this.currentPage()?.draft?.checksum ?? null, this.currentPage()?.draft?.public_id ?? null, this.editLock()?.token ?? null).pipe(
       tap((page) => {
         this.replacePage(page);
         this.history.markSaved(request.document);
@@ -836,6 +891,31 @@ export class PageBuilderPage implements PageBuilderPendingChanges {
     if (selected !== null && findBlock(this.history.current(), selected) === null) {
       this.selectedBlockId.set(null);
     }
+  }
+
+  private acquireEditLock(page: PageRecord): void {
+    this.data.acquireLock(page.public_id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (session) => { if (this.currentPage()?.public_id === page.public_id) { this.editLock.set(session); this.scheduleLockHeartbeat(session); } },
+      error: (error: unknown) => this.saveError.set(authErrorMessage(error, this.text('lockError'))),
+    });
+  }
+
+  private scheduleLockHeartbeat(session: PageLockSession): void {
+    if (this.lockHeartbeatTimer !== null) window.clearTimeout(this.lockHeartbeatTimer);
+    this.lockHeartbeatTimer = window.setTimeout(() => {
+      const page = this.currentPage();
+      if (page === null || this.editLock()?.token !== session.token) return;
+      this.data.heartbeatLock(page.public_id, session.token).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: (lock) => { this.editLock.set({ lock, token: session.token }); this.scheduleLockHeartbeat({ lock, token: session.token }); },
+        error: () => { this.editLock.set(null); this.saveError.set(this.text('lockError')); },
+      });
+    }, Math.max(15_000, Math.floor(session.lock.ttl_seconds * 600)));
+  }
+
+  private releaseEditLock(): void {
+    if (this.lockHeartbeatTimer !== null) { window.clearTimeout(this.lockHeartbeatTimer); this.lockHeartbeatTimer = null; }
+    const session = this.editLock(); const page = this.currentPage(); this.editLock.set(null);
+    if (session !== null && page !== null) this.data.releaseLock(page.public_id, session.token).subscribe({ error: () => undefined });
   }
 }
 

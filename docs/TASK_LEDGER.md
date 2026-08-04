@@ -94,7 +94,11 @@
   - [x] Ẩn vùng metadata kỹ thuật dài (page/block count/registry/autosave) khỏi toolbar editor; giữ bộ chọn Page và thiết bị responsive
   - [x] Sửa publish/rollback để version đích mang đúng status `published`; dữ liệu local pointer cũ đã được đồng bộ
   - [x] PagePublishing 3 test/12 assertions, Angular 30 file/62 test, lint/build và sync 123 file đạt
-- [ ] P29 Templates/import/export/locks
+- [x] P29 Templates/import/export/locks
+  - [x] Versioned template library and categories; save from page, create from template, duplicate with fresh block IDs and draft lifecycle
+  - [x] Schema-migrated JSON export/import validation with manifest, block versions, public media IDs/mapping, size/schema guards and audit
+  - [x] TTL edit locks, heartbeat, owner token validation, crash recovery and permission-restricted force unlock
+  - [x] Admin template library, export/download, import validation report and edit-lock banner; vi/en/zh
 - [ ] P30 Menus/global regions
 - [ ] P31 Public routing/core pages (Page Builder đã publish hiện chưa có URL public cho tới khi prompt này được thực hiện)
 - [x] P32 Product domain (completed out of sequence for the Admin track; public frontend remains postponed)

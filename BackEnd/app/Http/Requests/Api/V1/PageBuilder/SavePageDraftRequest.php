@@ -13,6 +13,7 @@ final class SavePageDraftRequest extends FormRequest
             'document' => ['required', 'array'],
             'expected_checksum' => ['nullable', 'string', 'size:64'],
             'expected_version_id' => ['nullable', 'string', 'size:26'],
+            'lock_token' => ['nullable', 'string', 'size:64'],
         ];
     }
 }
