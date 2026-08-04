@@ -91,6 +91,7 @@
   - [x] Admin có lịch sử metadata/document, preview version, publish confirmation, schedule và rollback theo quyền trong `vi/en/zh`
   - [x] Fix iframe 403 dưới WAMP bằng relative signed URL; Chrome xác nhận Blade preview sẵn sàng và không có warning/error
   - [x] Palette click tự tìm container hợp lệ gần nhất thay vì rơi về root và báo `invalid-parent`; thông báo fallback nêu rõ cần thêm/chọn container
+  - [x] Ẩn vùng metadata kỹ thuật dài (page/block count/registry/autosave) khỏi toolbar editor; giữ bộ chọn Page và thiết bị responsive
   - [x] PagePublishing 3 test/12 assertions, Angular 30 file/62 test, lint/build và sync 123 file đạt
 - [ ] P29 Templates/import/export/locks
 - [ ] P30 Menus/global regions

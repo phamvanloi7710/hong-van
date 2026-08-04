@@ -47,16 +47,6 @@
         </mat-select>
       </mat-form-field>
 
-      <div class="document-status" aria-live="polite">
-        <strong>{{ currentPageTitle() }}</strong>
-        <span>{{ text('blockCount', { count: blockCount() }) }}</span>
-        <span>{{ text('registryVersion', { version: registryVersion() }) }}</span>
-        <span class="save-state" [class.dirty]="history.dirty()">
-          <mat-icon>{{ saving() ? 'sync' : history.dirty() ? 'edit' : 'check_circle' }}</mat-icon>
-          {{ saving() ? text('saving') : history.dirty() ? text('unsaved') : text('saved') }}
-        </span>
-      </div>
-
       <div class="devices" role="group" [attr.aria-label]="text('responsiveStyle')">
         @for (device of devices; track device) {
           <button mat-icon-button type="button" [class.active]="activeDevice() === device" [attr.aria-label]="text(device)" [attr.aria-pressed]="activeDevice() === device" [matTooltip]="text(device)" (click)="setDevice(device)">
