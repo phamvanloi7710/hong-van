@@ -1,0 +1,91 @@
+# T172 — Ổn định Angular Transportation
+
+
+## Metadata
+
+- **Giai đoạn:** J — Crop Solutions, Services, Transportation và Warehouses
+- **Bao phủ prompt gốc:** `P36`
+- **Phụ thuộc:** `T171`
+- **File queue:** `tasks/T172_STABILIZE_TRANSPORT_ADMIN_UI.md`
+- **Chế độ:** Audit → Implement nếu thiếu/sai → Verify → Test → Commit → Push → Stop
+
+## Kết quả cần đạt
+
+Ổn định Angular Transportation phải được đối chiếu với source ở HEAD hiện tại. Giữ nguyên phần đã đúng, sửa phần thiếu/sai bằng thay đổi nhỏ nhất, có test và bằng chứng runtime phù hợp.
+
+## Đọc bắt buộc trước khi làm
+
+1. `AGENTS.md` ở root và AGENTS gần nhất của file sẽ sửa.
+2. `prompts/hongvan-master-v2/00_SHARED_RULES.md`.
+3. `prompts/hongvan-master-v2/state/STATE.json`.
+4. `docs/CODEX_STATE.md`, `docs/TASK_LEDGER.md`, `docs/DECISIONS.md` khi liên quan.
+5. Các đường dẫn trọng tâm:
+
+- `BackEnd/app/Domain/Transportation/`
+- `BackEnd/app/Models/`
+- `BackEnd/app/Http/Controllers/Api/V1/Transportation/`
+- `Admin/src/app/features/transportation/`
+- `BackEnd/resources/views/`
+
+Nếu path không tồn tại hoặc đã đổi tên, tìm theo symbol rồi dùng file thật. Không tạo file song song chỉ vì đoán path.
+
+## Khám phá có mục tiêu
+
+Ưu tiên:
+
+```powershell
+rg -n "vehicle|fleet|transport_routes|service_area|request|LeadIntake" BackEnd Admin docs scripts docker 2>$null
+```
+
+Sau đó đọc đầy đủ các hàm/class/route/model trực tiếp liên quan. Không đổ toàn repository.
+
+## Công việc cụ thể
+
+1. Four tabs/dialogs/media/status/featured.
+2. typed forms/i18n/responsive.
+
+Ngoài các điểm trên:
+
+- Lập root cause ngắn nếu implementation hiện tại sai.
+- Giữ backward compatibility hợp lý với module đã chạy sau task gốc.
+- Bổ sung hoặc sửa test để chứng minh contract, không chỉ kiểm tra HTTP 200.
+- Cập nhật tài liệu/ADR chỉ khi contract hoặc vận hành thay đổi.
+
+## Điều kiện nghiệm thu
+
+- Phạm vi chỉ là giới thiệu năng lực và tiếp nhận yêu cầu, không GPS/dispatch/tự tính giá.
+- Public form có consent, honeypot, rate limit, idempotency và lead mapping.
+- Chỉ dữ liệu published/featured hợp lệ được hiển thị public.
+- Hoàn thành đúng trọng tâm: Four tabs/dialogs/media/status/featured.
+- Hoàn thành đúng trọng tâm: typed forms/i18n/responsive.
+
+## Test và lệnh tối thiểu
+
+Chạy lệnh phù hợp với source/môi trường thực tế, tối thiểu:
+
+```text
+cd BackEnd; php artisan test --filter=Transportation
+cd Admin; npm test -- --run transportation
+cd Admin; npm run build:laravel
+```
+
+Nếu một lệnh không thể chạy vì environment, không được tuyên bố pass. Ghi command, lỗi, blocker và trạng thái `BLOCKED`/`FAILED` đúng thực tế.
+
+## State, Git và báo cáo cuối
+
+1. Cập nhật task `T172` trong `state/STATE.json` thành `DONE`, `VERIFIED`, `FAILED` hoặc `BLOCKED*`.
+2. Ghi summary ngắn vào `docs/hongvan-master-v2/EXECUTION_LOG.md`.
+3. Cập nhật `docs/CODEX_STATE.md`/`docs/TASK_LEDGER.md` theo policy project.
+4. Chạy `git status`, `git diff --check`, `git diff --stat`.
+5. Commit có `T172` trong message và chỉ stage file thuộc task.
+6. Push `main` lên `origin/main` khi gate pass.
+7. Xác nhận local HEAD bằng remote HEAD.
+8. Báo:
+   - trạng thái;
+   - root cause/evidence;
+   - file thay đổi;
+   - API/DB/UI thay đổi;
+   - commands và kết quả;
+   - rủi ro/blocker;
+   - commit SHA và remote SHA.
+9. **Dừng lại. Không chạy task kế tiếp.**

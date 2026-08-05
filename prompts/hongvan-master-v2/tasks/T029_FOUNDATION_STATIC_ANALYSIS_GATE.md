@@ -1,0 +1,94 @@
+# T029 — Thiết lập cổng Pint, PHPStan, ESLint và TypeScript
+
+
+## Metadata
+
+- **Giai đoạn:** B — Nền tảng Laravel, Angular, Database và API
+- **Bao phủ prompt gốc:** `P04,P05,P48,P49`
+- **Phụ thuộc:** `T028`
+- **File queue:** `tasks/T029_FOUNDATION_STATIC_ANALYSIS_GATE.md`
+- **Chế độ:** Audit → Implement nếu thiếu/sai → Verify → Test → Commit → Push → Stop
+
+## Kết quả cần đạt
+
+Thiết lập cổng Pint, PHPStan, ESLint và TypeScript phải được đối chiếu với source ở HEAD hiện tại. Giữ nguyên phần đã đúng, sửa phần thiếu/sai bằng thay đổi nhỏ nhất, có test và bằng chứng runtime phù hợp.
+
+## Đọc bắt buộc trước khi làm
+
+1. `AGENTS.md` ở root và AGENTS gần nhất của file sẽ sửa.
+2. `prompts/hongvan-master-v2/00_SHARED_RULES.md`.
+3. `prompts/hongvan-master-v2/state/STATE.json`.
+4. `docs/CODEX_STATE.md`, `docs/TASK_LEDGER.md`, `docs/DECISIONS.md` khi liên quan.
+5. Các đường dẫn trọng tâm:
+
+- `BackEnd/`
+- `Admin/`
+- `docker/`
+- `scripts/`
+- `docs/ARCHITECTURE.md`
+- `docs/API_CONVENTIONS.md`
+
+Nếu path không tồn tại hoặc đã đổi tên, tìm theo symbol rồi dùng file thật. Không tạo file song song chỉ vì đoán path.
+
+## Khám phá có mục tiêu
+
+Ưu tiên:
+
+```powershell
+rg -n "Application::configure|bootstrapApplication|ApiResponse|RequestId|RateLimiter|SecurityHeaders" BackEnd Admin docs scripts docker 2>$null
+```
+
+Sau đó đọc đầy đủ các hàm/class/route/model trực tiếp liên quan. Không đổ toàn repository.
+
+## Công việc cụ thể
+
+1. Chạy baseline hiện tại.
+2. không thêm ignore rộng để che lỗi.
+3. ghi debt còn lại theo file/symbol.
+
+Ngoài các điểm trên:
+
+- Lập root cause ngắn nếu implementation hiện tại sai.
+- Giữ backward compatibility hợp lý với module đã chạy sau task gốc.
+- Bổ sung hoặc sửa test để chứng minh contract, không chỉ kiểm tra HTTP 200.
+- Cập nhật tài liệu/ADR chỉ khi contract hoặc vận hành thay đổi.
+
+## Điều kiện nghiệm thu
+
+- Laravel, Angular và monorepo giữ đúng baseline major hiện tại; không tự nâng major.
+- API không rò stack trace, internal path hoặc secret.
+- Các thay đổi có test đúng phạm vi và không phá build tích hợp.
+- Hoàn thành đúng trọng tâm: Chạy baseline hiện tại.
+- Hoàn thành đúng trọng tâm: không thêm ignore rộng để che lỗi.
+- Hoàn thành đúng trọng tâm: ghi debt còn lại theo file/symbol.
+
+## Test và lệnh tối thiểu
+
+Chạy lệnh phù hợp với source/môi trường thực tế, tối thiểu:
+
+```text
+cd BackEnd; php artisan test --filter=Architecture
+cd BackEnd; vendor\bin\pint --test
+cd Admin; npm run lint
+```
+
+Nếu một lệnh không thể chạy vì environment, không được tuyên bố pass. Ghi command, lỗi, blocker và trạng thái `BLOCKED`/`FAILED` đúng thực tế.
+
+## State, Git và báo cáo cuối
+
+1. Cập nhật task `T029` trong `state/STATE.json` thành `DONE`, `VERIFIED`, `FAILED` hoặc `BLOCKED*`.
+2. Ghi summary ngắn vào `docs/hongvan-master-v2/EXECUTION_LOG.md`.
+3. Cập nhật `docs/CODEX_STATE.md`/`docs/TASK_LEDGER.md` theo policy project.
+4. Chạy `git status`, `git diff --check`, `git diff --stat`.
+5. Commit có `T029` trong message và chỉ stage file thuộc task.
+6. Push `main` lên `origin/main` khi gate pass.
+7. Xác nhận local HEAD bằng remote HEAD.
+8. Báo:
+   - trạng thái;
+   - root cause/evidence;
+   - file thay đổi;
+   - API/DB/UI thay đổi;
+   - commands và kết quả;
+   - rủi ro/blocker;
+   - commit SHA và remote SHA.
+9. **Dừng lại. Không chạy task kế tiếp.**

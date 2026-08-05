@@ -1,0 +1,2888 @@
+{
+  "pack": "hongvan-master-v2",
+  "version": "2.0.0",
+  "created_at": "2026-08-05T00:00:00+07:00",
+  "source_snapshot_reference": "phamvanloi7710/hong-van@6b53a5530d0fdbe82d920bf635fc3e705fed7b91",
+  "note": "T001 must reconcile the actual current HEAD before any implementation task.",
+  "task_count": 240,
+  "tasks": [
+    {
+      "id": "T001",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Đối chiếu HEAD hiện tại và trạng thái dự án",
+      "file": "tasks/T001_RECONCILE_CURRENT_HEAD_AND_STATE.md",
+      "depends_on": [],
+      "covers": "P00",
+      "status": "PENDING"
+    },
+    {
+      "id": "T002",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Kiểm kê cấu trúc repository và source boundaries",
+      "file": "tasks/T002_INVENTORY_REPOSITORY_STRUCTURE.md",
+      "depends_on": [
+        "T001"
+      ],
+      "covers": "P00,P01",
+      "status": "PENDING"
+    },
+    {
+      "id": "T003",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Kiểm tra hệ thống AGENTS.md và phạm vi quy tắc",
+      "file": "tasks/T003_VERIFY_AGENTS_RULE_HIERARCHY.md",
+      "depends_on": [
+        "T002"
+      ],
+      "covers": "P00,P03",
+      "status": "PENDING"
+    },
+    {
+      "id": "T004",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Đóng dấu và bảo vệ source tham chiếu chỉ đọc",
+      "file": "tasks/T004_FINGERPRINT_READONLY_SOURCES.md",
+      "depends_on": [
+        "T003"
+      ],
+      "covers": "P01,P03",
+      "status": "PENDING"
+    },
+    {
+      "id": "T005",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Đối chiếu prompt gốc, commit và task ledger",
+      "file": "tasks/T005_RECONCILE_PROMPTS_LEDGER.md",
+      "depends_on": [
+        "T004"
+      ],
+      "covers": "P00-P56",
+      "status": "PENDING"
+    },
+    {
+      "id": "T006",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Rà kiến trúc tổng thể và ADR",
+      "file": "tasks/T006_REVIEW_ARCHITECTURE_AND_ADRS.md",
+      "depends_on": [
+        "T005"
+      ],
+      "covers": "P02",
+      "status": "PENDING"
+    },
+    {
+      "id": "T007",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Xác minh baseline PHP Laravel Angular Node MySQL Redis",
+      "file": "tasks/T007_VERIFY_TECHNOLOGY_BASELINE.md",
+      "depends_on": [
+        "T006"
+      ],
+      "covers": "P02,P04,P05",
+      "status": "PENDING"
+    },
+    {
+      "id": "T008",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Rà soát hợp đồng biến môi trường",
+      "file": "tasks/T008_AUDIT_ENVIRONMENT_CONTRACTS.md",
+      "depends_on": [
+        "T007"
+      ],
+      "covers": "P03,P04",
+      "status": "PENDING"
+    },
+    {
+      "id": "T009",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Rà Git hygiene, file ignore và lịch sử secret",
+      "file": "tasks/T009_AUDIT_GIT_HYGIENE_AND_SECRETS.md",
+      "depends_on": [
+        "T008"
+      ],
+      "covers": "P03,P50",
+      "status": "PENDING"
+    },
+    {
+      "id": "T010",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Xác minh runtime WAMP và domain hongvan.local",
+      "file": "tasks/T010_VERIFY_LOCAL_WAMP_RUNTIME.md",
+      "depends_on": [
+        "T009"
+      ],
+      "covers": "P04-P07",
+      "status": "PENDING"
+    },
+    {
+      "id": "T011",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Chuẩn hóa danh mục lệnh test, lint, build và E2E",
+      "file": "tasks/T011_INVENTORY_TEST_AND_BUILD_COMMANDS.md",
+      "depends_on": [
+        "T010"
+      ],
+      "covers": "P04-P07,P48-P50",
+      "status": "PENDING"
+    },
+    {
+      "id": "T012",
+      "phase": "A",
+      "phase_name": "Quản trị, baseline và bộ nhớ dự án",
+      "title": "Cổng nghiệm thu baseline và governance",
+      "file": "tasks/T012_BASELINE_GOVERNANCE_GATE.md",
+      "depends_on": [
+        "T011"
+      ],
+      "covers": "P00-P03",
+      "status": "PENDING"
+    },
+    {
+      "id": "T013",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Rà soát Laravel bootstrap và service providers",
+      "file": "tasks/T013_AUDIT_LARAVEL_BOOTSTRAP.md",
+      "depends_on": [
+        "T012"
+      ],
+      "covers": "P04",
+      "status": "PENDING"
+    },
+    {
+      "id": "T014",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Rà soát Angular bootstrap, standalone và strict mode",
+      "file": "tasks/T014_AUDIT_ANGULAR_BOOTSTRAP.md",
+      "depends_on": [
+        "T013"
+      ],
+      "covers": "P05",
+      "status": "PENDING"
+    },
+    {
+      "id": "T015",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Ổn định build Angular và đồng bộ Laravel",
+      "file": "tasks/T015_VERIFY_MONOREPO_BUILD_SYNC.md",
+      "depends_on": [
+        "T014"
+      ],
+      "covers": "P07",
+      "status": "PENDING"
+    },
+    {
+      "id": "T016",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Cưỡng chế tiền tố hongvan_ cho mọi bảng",
+      "file": "tasks/T016_ENFORCE_DATABASE_PREFIX.md",
+      "depends_on": [
+        "T015"
+      ],
+      "covers": "P08",
+      "status": "PENDING"
+    },
+    {
+      "id": "T017",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Cưỡng chế comment cho mọi bảng và cột",
+      "file": "tasks/T017_ENFORCE_DATABASE_COMMENTS.md",
+      "depends_on": [
+        "T016"
+      ],
+      "covers": "P08",
+      "status": "PENDING"
+    },
+    {
+      "id": "T018",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Kiểm thử fresh, rollback và remigrate",
+      "file": "tasks/T018_VERIFY_MIGRATION_LIFECYCLE.md",
+      "depends_on": [
+        "T017"
+      ],
+      "covers": "P08",
+      "status": "PENDING"
+    },
+    {
+      "id": "T019",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Rà mapping model, relation và public_id",
+      "file": "tasks/T019_AUDIT_MODEL_TABLE_AND_PUBLIC_IDS.md",
+      "depends_on": [
+        "T018"
+      ],
+      "covers": "P08,P09",
+      "status": "PENDING"
+    },
+    {
+      "id": "T020",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Chuẩn hóa response envelope và pagination",
+      "file": "tasks/T020_STANDARDIZE_API_ENVELOPE.md",
+      "depends_on": [
+        "T019"
+      ],
+      "covers": "P09",
+      "status": "PENDING"
+    },
+    {
+      "id": "T021",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Làm cứng exception renderer API",
+      "file": "tasks/T021_HARDEN_API_EXCEPTION_RENDERING.md",
+      "depends_on": [
+        "T020"
+      ],
+      "covers": "P09,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T022",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Xác minh request ID và log context",
+      "file": "tasks/T022_VERIFY_REQUEST_ID_AND_LOG_CONTEXT.md",
+      "depends_on": [
+        "T021"
+      ],
+      "covers": "P09,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T023",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Chuẩn hóa locale API và timezone",
+      "file": "tasks/T023_STANDARDIZE_LOCALE_AND_TIMEZONE.md",
+      "depends_on": [
+        "T022"
+      ],
+      "covers": "P09,P14",
+      "status": "PENDING"
+    },
+    {
+      "id": "T024",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Làm cứng filter, sort, search và pagination allowlist",
+      "file": "tasks/T024_HARDEN_QUERY_ALLOWLIST.md",
+      "depends_on": [
+        "T023"
+      ],
+      "covers": "P09",
+      "status": "PENDING"
+    },
+    {
+      "id": "T025",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Rà toàn bộ rate limiter",
+      "file": "tasks/T025_REVIEW_RATE_LIMITERS.md",
+      "depends_on": [
+        "T024"
+      ],
+      "covers": "P09,P10,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T026",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Rà security headers, trusted host và proxy",
+      "file": "tasks/T026_REVIEW_SECURITY_HEADERS.md",
+      "depends_on": [
+        "T025"
+      ],
+      "covers": "P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T027",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Xác minh queue, cache và Redis contract",
+      "file": "tasks/T027_VERIFY_QUEUE_CACHE_REDIS.md",
+      "depends_on": [
+        "T026"
+      ],
+      "covers": "P04,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T028",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Làm cứng health và system ping",
+      "file": "tasks/T028_HARDEN_HEALTH_ENDPOINTS.md",
+      "depends_on": [
+        "T027"
+      ],
+      "covers": "P09",
+      "status": "PENDING"
+    },
+    {
+      "id": "T029",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Thiết lập cổng Pint, PHPStan, ESLint và TypeScript",
+      "file": "tasks/T029_FOUNDATION_STATIC_ANALYSIS_GATE.md",
+      "depends_on": [
+        "T028"
+      ],
+      "covers": "P04,P05,P48,P49",
+      "status": "PENDING"
+    },
+    {
+      "id": "T030",
+      "phase": "B",
+      "phase_name": "Nền tảng Laravel, Angular, Database và API",
+      "title": "Cổng tích hợp nền tảng",
+      "file": "tasks/T030_FOUNDATION_INTEGRATION_GATE.md",
+      "depends_on": [
+        "T029"
+      ],
+      "covers": "P04-P09",
+      "status": "PENDING"
+    },
+    {
+      "id": "T031",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Làm cứng Sanctum same-origin và CSRF",
+      "file": "tasks/T031_HARDEN_SANCTUM_SAME_ORIGIN.md",
+      "depends_on": [
+        "T030"
+      ],
+      "covers": "P10",
+      "status": "PENDING"
+    },
+    {
+      "id": "T032",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Ổn định login, logout và vòng đời session",
+      "file": "tasks/T032_STABILIZE_LOGIN_LOGOUT_SESSIONS.md",
+      "depends_on": [
+        "T031"
+      ],
+      "covers": "P10",
+      "status": "PENDING"
+    },
+    {
+      "id": "T033",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Làm cứng quên và đặt lại mật khẩu",
+      "file": "tasks/T033_HARDEN_FORGOT_RESET_PASSWORD.md",
+      "depends_on": [
+        "T032"
+      ],
+      "covers": "P10",
+      "status": "PENDING"
+    },
+    {
+      "id": "T034",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Hoàn thiện khóa tài khoản và thu hồi phiên",
+      "file": "tasks/T034_IMPLEMENT_ACCOUNT_LOCK_AND_REVOKE.md",
+      "depends_on": [
+        "T033"
+      ],
+      "covers": "P10,P11",
+      "status": "PENDING"
+    },
+    {
+      "id": "T035",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Cổng kiểm thử authentication",
+      "file": "tasks/T035_AUTHENTICATION_TEST_GATE.md",
+      "depends_on": [
+        "T034"
+      ],
+      "covers": "P10",
+      "status": "PENDING"
+    },
+    {
+      "id": "T036",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Đối chiếu registry permission với route và UI",
+      "file": "tasks/T036_RECONCILE_PERMISSION_REGISTRY.md",
+      "depends_on": [
+        "T035"
+      ],
+      "covers": "P11",
+      "status": "PENDING"
+    },
+    {
+      "id": "T037",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Ổn định quản lý role",
+      "file": "tasks/T037_STABILIZE_ROLE_MANAGEMENT.md",
+      "depends_on": [
+        "T036"
+      ],
+      "covers": "P11",
+      "status": "PENDING"
+    },
+    {
+      "id": "T038",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Ổn định quản lý user",
+      "file": "tasks/T038_STABILIZE_USER_MANAGEMENT.md",
+      "depends_on": [
+        "T037"
+      ],
+      "covers": "P11",
+      "status": "PENDING"
+    },
+    {
+      "id": "T039",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Rà Policy, Gate và permission middleware",
+      "file": "tasks/T039_AUDIT_POLICIES_AND_MIDDLEWARE.md",
+      "depends_on": [
+        "T038"
+      ],
+      "covers": "P11,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T040",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Làm cứng permission override và Super Admin",
+      "file": "tasks/T040_HARDEN_PERMISSION_OVERRIDES.md",
+      "depends_on": [
+        "T039"
+      ],
+      "covers": "P11",
+      "status": "PENDING"
+    },
+    {
+      "id": "T041",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Ổn định schema và API user preferences",
+      "file": "tasks/T041_STABILIZE_PREFERENCE_SCHEMA_API.md",
+      "depends_on": [
+        "T040"
+      ],
+      "covers": "P12",
+      "status": "PENDING"
+    },
+    {
+      "id": "T042",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Xác minh theme preferences theo user",
+      "file": "tasks/T042_VERIFY_ADMIN_THEME_PREFERENCES.md",
+      "depends_on": [
+        "T041"
+      ],
+      "covers": "P12",
+      "status": "PENDING"
+    },
+    {
+      "id": "T043",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Xác minh locale Admin theo user",
+      "file": "tasks/T043_VERIFY_LOCALE_PREFERENCES.md",
+      "depends_on": [
+        "T042"
+      ],
+      "covers": "P12,P14",
+      "status": "PENDING"
+    },
+    {
+      "id": "T044",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Ổn định menu yêu thích và điều hướng Annular",
+      "file": "tasks/T044_STABILIZE_FAVORITE_NAVIGATION.md",
+      "depends_on": [
+        "T043"
+      ],
+      "covers": "P12,P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T045",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Làm cứng registry cấu hình công ty",
+      "file": "tasks/T045_HARDEN_COMPANY_SETTING_REGISTRY.md",
+      "depends_on": [
+        "T044"
+      ],
+      "covers": "P13",
+      "status": "PENDING"
+    },
+    {
+      "id": "T046",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Làm cứng cấu hình bí mật",
+      "file": "tasks/T046_HARDEN_SECRET_SETTINGS.md",
+      "depends_on": [
+        "T045"
+      ],
+      "covers": "P13,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T047",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Ổn định chi nhánh và giờ làm việc",
+      "file": "tasks/T047_STABILIZE_BRANCHES_BUSINESS_HOURS.md",
+      "depends_on": [
+        "T046"
+      ],
+      "covers": "P13",
+      "status": "PENDING"
+    },
+    {
+      "id": "T048",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Ổn định social links và kênh liên hệ",
+      "file": "tasks/T048_STABILIZE_SOCIAL_CONTACT_CHANNELS.md",
+      "depends_on": [
+        "T047"
+      ],
+      "covers": "P13",
+      "status": "PENDING"
+    },
+    {
+      "id": "T049",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Hoàn thiện ngôn ngữ, translation và localized slugs",
+      "file": "tasks/T049_COMPLETE_LOCALIZATION_FOUNDATION.md",
+      "depends_on": [
+        "T048"
+      ],
+      "covers": "P14",
+      "status": "PENDING"
+    },
+    {
+      "id": "T050",
+      "phase": "C",
+      "phase_name": "Authentication, RBAC, Preferences, Settings, Localization và Audit",
+      "title": "Cổng tích hợp Identity, Settings, Localization và Audit",
+      "file": "tasks/T050_IDENTITY_SETTINGS_AUDIT_GATE.md",
+      "depends_on": [
+        "T049"
+      ],
+      "covers": "P10-P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T051",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Tái kiểm định giao diện Annular",
+      "file": "tasks/T051_RECERTIFY_ANNULAR_VISUAL_PARITY.md",
+      "depends_on": [
+        "T050"
+      ],
+      "covers": "P06",
+      "status": "PENDING"
+    },
+    {
+      "id": "T052",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Làm cứng layout và navigation responsive",
+      "file": "tasks/T052_HARDEN_RESPONSIVE_LAYOUT_NAV.md",
+      "depends_on": [
+        "T051"
+      ],
+      "covers": "P06,P12",
+      "status": "PENDING"
+    },
+    {
+      "id": "T053",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Ổn định header, breadcrumb, icon và favorites",
+      "file": "tasks/T053_STABILIZE_HEADER_BREADCRUMB_FAVORITES.md",
+      "depends_on": [
+        "T052"
+      ],
+      "covers": "P12,P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T054",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Cổng route, permission và i18n của Admin",
+      "file": "tasks/T054_ADMIN_ROUTE_PERMISSION_I18N_GATE.md",
+      "depends_on": [
+        "T053"
+      ],
+      "covers": "P06,P11,P12",
+      "status": "PENDING"
+    },
+    {
+      "id": "T055",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Rà schema và storage Media",
+      "file": "tasks/T055_AUDIT_MEDIA_SCHEMA_STORAGE.md",
+      "depends_on": [
+        "T054"
+      ],
+      "covers": "P16",
+      "status": "PENDING"
+    },
+    {
+      "id": "T056",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Làm cứng kiểm tra upload",
+      "file": "tasks/T056_HARDEN_MEDIA_UPLOAD_INSPECTION.md",
+      "depends_on": [
+        "T055"
+      ],
+      "covers": "P16,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T057",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Ổn định job tạo thumbnail WebP AVIF",
+      "file": "tasks/T057_STABILIZE_MEDIA_VARIANT_JOBS.md",
+      "depends_on": [
+        "T056"
+      ],
+      "covers": "P16",
+      "status": "PENDING"
+    },
+    {
+      "id": "T058",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Ổn định thư mục Media",
+      "file": "tasks/T058_STABILIZE_MEDIA_FOLDERS.md",
+      "depends_on": [
+        "T057"
+      ],
+      "covers": "P16,P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T059",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Ổn định metadata, visibility và lock Media",
+      "file": "tasks/T059_STABILIZE_MEDIA_METADATA_VISIBILITY_LOCK.md",
+      "depends_on": [
+        "T058"
+      ],
+      "covers": "P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T060",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Làm cứng Media usage registry",
+      "file": "tasks/T060_HARDEN_MEDIA_USAGE_TRACKING.md",
+      "depends_on": [
+        "T059"
+      ],
+      "covers": "P16",
+      "status": "PENDING"
+    },
+    {
+      "id": "T061",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Ổn định trash, restore và xóa vĩnh viễn",
+      "file": "tasks/T061_STABILIZE_MEDIA_TRASH_RESTORE_DELETE.md",
+      "depends_on": [
+        "T060"
+      ],
+      "covers": "P16,P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T062",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Làm cứng retry và cleanup Media",
+      "file": "tasks/T062_HARDEN_MEDIA_RETRY_CLEANUP.md",
+      "depends_on": [
+        "T061"
+      ],
+      "covers": "P16",
+      "status": "PENDING"
+    },
+    {
+      "id": "T063",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Làm cứng endpoint stream nội dung Media",
+      "file": "tasks/T063_HARDEN_MEDIA_CONTENT_STREAMING.md",
+      "depends_on": [
+        "T062"
+      ],
+      "covers": "P16",
+      "status": "PENDING"
+    },
+    {
+      "id": "T064",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Ổn định Media Picker và image editor",
+      "file": "tasks/T064_STABILIZE_MEDIA_PICKER_EDITOR.md",
+      "depends_on": [
+        "T063"
+      ],
+      "covers": "P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T065",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Tái kiểm định parity với StayHub Media",
+      "file": "tasks/T065_RECERTIFY_STAYHUB_MEDIA_PARITY.md",
+      "depends_on": [
+        "T064"
+      ],
+      "covers": "P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T066",
+      "phase": "D",
+      "phase_name": "Admin shell và Media Manager",
+      "title": "Cổng cuối Media và Admin shell",
+      "file": "tasks/T066_MEDIA_ADMIN_FINAL_GATE.md",
+      "depends_on": [
+        "T065"
+      ],
+      "covers": "P06,P16,P17",
+      "status": "PENDING"
+    },
+    {
+      "id": "T067",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Làm cứng Blade public shell",
+      "file": "tasks/T067_HARDEN_PUBLIC_BLADE_SHELL.md",
+      "depends_on": [
+        "T066"
+      ],
+      "covers": "P18",
+      "status": "PENDING"
+    },
+    {
+      "id": "T068",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Chuẩn hóa component và design token public",
+      "file": "tasks/T068_STANDARDIZE_PUBLIC_COMPONENTS_TOKENS.md",
+      "depends_on": [
+        "T067"
+      ],
+      "covers": "P18",
+      "status": "PENDING"
+    },
+    {
+      "id": "T069",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Kiểm kê lại FrontEndTemplate và giấy phép",
+      "file": "tasks/T069_REAUDIT_FRONTEND_TEMPLATE.md",
+      "depends_on": [
+        "T068"
+      ],
+      "covers": "P19",
+      "status": "PENDING"
+    },
+    {
+      "id": "T070",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Tái kiểm định header, home và footer public",
+      "file": "tasks/T070_RECERTIFY_PUBLIC_HEADER_HOME_FOOTER.md",
+      "depends_on": [
+        "T069"
+      ],
+      "covers": "P19",
+      "status": "PENDING"
+    },
+    {
+      "id": "T071",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Làm cứng legal, 404 và 500 pages",
+      "file": "tasks/T071_HARDEN_LEGAL_ERROR_PAGES.md",
+      "depends_on": [
+        "T070"
+      ],
+      "covers": "P18",
+      "status": "PENDING"
+    },
+    {
+      "id": "T072",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Làm cứng route locale public",
+      "file": "tasks/T072_HARDEN_PUBLIC_LOCALE_ROUTING.md",
+      "depends_on": [
+        "T071"
+      ],
+      "covers": "P14,P18",
+      "status": "PENDING"
+    },
+    {
+      "id": "T073",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Làm cứng Vite asset và cache headers",
+      "file": "tasks/T073_HARDEN_PUBLIC_ASSET_PIPELINE.md",
+      "depends_on": [
+        "T072"
+      ],
+      "covers": "P18,P19",
+      "status": "PENDING"
+    },
+    {
+      "id": "T074",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Cổng responsive và visual public foundation",
+      "file": "tasks/T074_PUBLIC_RESPONSIVE_VISUAL_GATE.md",
+      "depends_on": [
+        "T073"
+      ],
+      "covers": "P19,P46",
+      "status": "PENDING"
+    },
+    {
+      "id": "T075",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Rà bảng và version Theme",
+      "file": "tasks/T075_AUDIT_THEME_TABLES_VERSIONS.md",
+      "depends_on": [
+        "T074"
+      ],
+      "covers": "P20",
+      "status": "PENDING"
+    },
+    {
+      "id": "T076",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Làm cứng schema token Theme",
+      "file": "tasks/T076_HARDEN_THEME_TOKEN_SCHEMA.md",
+      "depends_on": [
+        "T075"
+      ],
+      "covers": "P20",
+      "status": "PENDING"
+    },
+    {
+      "id": "T077",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Làm cứng CSS compiler và runtime Theme",
+      "file": "tasks/T077_HARDEN_THEME_CSS_COMPILER.md",
+      "depends_on": [
+        "T076"
+      ],
+      "covers": "P20",
+      "status": "PENDING"
+    },
+    {
+      "id": "T078",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Ổn định draft, preview, publish và rollback Theme",
+      "file": "tasks/T078_STABILIZE_THEME_LIFECYCLE.md",
+      "depends_on": [
+        "T077"
+      ],
+      "covers": "P20",
+      "status": "PENDING"
+    },
+    {
+      "id": "T079",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Ổn định Angular Theme Studio",
+      "file": "tasks/T079_STABILIZE_THEME_STUDIO_ADMIN.md",
+      "depends_on": [
+        "T078"
+      ],
+      "covers": "P20",
+      "status": "PENDING"
+    },
+    {
+      "id": "T080",
+      "phase": "E",
+      "phase_name": "Public Blade foundation và Theme Studio",
+      "title": "Cổng cuối Public foundation và Theme",
+      "file": "tasks/T080_PUBLIC_THEME_FINAL_GATE.md",
+      "depends_on": [
+        "T079"
+      ],
+      "covers": "P18-P20",
+      "status": "PENDING"
+    },
+    {
+      "id": "T081",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Rà schema database Page Builder",
+      "file": "tasks/T081_AUDIT_PAGE_BUILDER_SCHEMA.md",
+      "depends_on": [
+        "T080"
+      ],
+      "covers": "P21",
+      "status": "PENDING"
+    },
+    {
+      "id": "T082",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng PageDocument schema và checksum",
+      "file": "tasks/T082_HARDEN_PAGE_DOCUMENT_SCHEMA.md",
+      "depends_on": [
+        "T081"
+      ],
+      "covers": "P21",
+      "status": "PENDING"
+    },
+    {
+      "id": "T083",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng BlockRegistry metadata",
+      "file": "tasks/T083_HARDEN_BLOCK_REGISTRY.md",
+      "depends_on": [
+        "T082"
+      ],
+      "covers": "P21",
+      "status": "PENDING"
+    },
+    {
+      "id": "T084",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng PageDocumentValidator",
+      "file": "tasks/T084_HARDEN_PAGE_VALIDATOR.md",
+      "depends_on": [
+        "T083"
+      ],
+      "covers": "P21",
+      "status": "PENDING"
+    },
+    {
+      "id": "T085",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng block/document migrator",
+      "file": "tasks/T085_HARDEN_BLOCK_MIGRATOR.md",
+      "depends_on": [
+        "T084"
+      ],
+      "covers": "P21",
+      "status": "PENDING"
+    },
+    {
+      "id": "T086",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng server PageDocumentRenderer",
+      "file": "tasks/T086_HARDEN_SERVER_RENDERER.md",
+      "depends_on": [
+        "T085"
+      ],
+      "covers": "P21,P22",
+      "status": "PENDING"
+    },
+    {
+      "id": "T087",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Chuẩn hóa cache key và dependency tags",
+      "file": "tasks/T087_STANDARDIZE_PAGE_CACHE_KEYS.md",
+      "depends_on": [
+        "T086"
+      ],
+      "covers": "P21,P24",
+      "status": "PENDING"
+    },
+    {
+      "id": "T088",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Tái kiểm định 7 layout blocks",
+      "file": "tasks/T088_RECERTIFY_LAYOUT_BLOCK_DEFINITIONS.md",
+      "depends_on": [
+        "T087"
+      ],
+      "covers": "P22",
+      "status": "PENDING"
+    },
+    {
+      "id": "T089",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng renderer và class resolver layout",
+      "file": "tasks/T089_HARDEN_LAYOUT_RENDERERS_CLASSES.md",
+      "depends_on": [
+        "T088"
+      ],
+      "covers": "P22",
+      "status": "PENDING"
+    },
+    {
+      "id": "T090",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Tái kiểm định content blocks",
+      "file": "tasks/T090_RECERTIFY_CONTENT_BLOCK_DEFINITIONS.md",
+      "depends_on": [
+        "T089"
+      ],
+      "covers": "P23",
+      "status": "PENDING"
+    },
+    {
+      "id": "T091",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng sanitizer content/media blocks",
+      "file": "tasks/T091_HARDEN_CONTENT_SANITIZER.md",
+      "depends_on": [
+        "T090"
+      ],
+      "covers": "P23,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T092",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng Media resolver cho Page Builder",
+      "file": "tasks/T092_HARDEN_PAGE_MEDIA_RESOLVER.md",
+      "depends_on": [
+        "T091"
+      ],
+      "covers": "P23",
+      "status": "PENDING"
+    },
+    {
+      "id": "T093",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng đồng bộ usage Page Builder",
+      "file": "tasks/T093_HARDEN_PAGE_MEDIA_USAGE_SYNC.md",
+      "depends_on": [
+        "T092"
+      ],
+      "covers": "P23",
+      "status": "PENDING"
+    },
+    {
+      "id": "T094",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Tái kiểm định DataSourceRegistry",
+      "file": "tasks/T094_RECERTIFY_DYNAMIC_DATA_SOURCES.md",
+      "depends_on": [
+        "T093"
+      ],
+      "covers": "P24",
+      "status": "PENDING"
+    },
+    {
+      "id": "T095",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng dynamic loader, memoization và cache",
+      "file": "tasks/T095_HARDEN_DYNAMIC_LOADER_CACHE.md",
+      "depends_on": [
+        "T094"
+      ],
+      "covers": "P24",
+      "status": "PENDING"
+    },
+    {
+      "id": "T096",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Tái kiểm định registry Form blocks",
+      "file": "tasks/T096_RECERTIFY_FORM_REGISTRY.md",
+      "depends_on": [
+        "T095"
+      ],
+      "covers": "P25",
+      "status": "PENDING"
+    },
+    {
+      "id": "T097",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng signed context Form blocks",
+      "file": "tasks/T097_HARDEN_SIGNED_FORM_CONTEXT.md",
+      "depends_on": [
+        "T096"
+      ],
+      "covers": "P25",
+      "status": "PENDING"
+    },
+    {
+      "id": "T098",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng Blade form và tích hợp Lead",
+      "file": "tasks/T098_HARDEN_FORM_RENDER_LEAD_INTEGRATION.md",
+      "depends_on": [
+        "T097"
+      ],
+      "covers": "P25,P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T099",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Ổn định models và data-access Page Builder Angular",
+      "file": "tasks/T099_STABILIZE_EDITOR_DATA_MODELS.md",
+      "depends_on": [
+        "T098"
+      ],
+      "covers": "P26",
+      "status": "PENDING"
+    },
+    {
+      "id": "T100",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng thao tác document immutable",
+      "file": "tasks/T100_HARDEN_DOCUMENT_MUTATIONS.md",
+      "depends_on": [
+        "T099"
+      ],
+      "covers": "P26",
+      "status": "PENDING"
+    },
+    {
+      "id": "T101",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Ổn định history, undo và redo",
+      "file": "tasks/T101_STABILIZE_HISTORY_UNDO_REDO.md",
+      "depends_on": [
+        "T100"
+      ],
+      "covers": "P26",
+      "status": "PENDING"
+    },
+    {
+      "id": "T102",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Ổn định editor shell, tree và palette",
+      "file": "tasks/T102_STABILIZE_EDITOR_SHELL_TREE_PALETTE.md",
+      "depends_on": [
+        "T101"
+      ],
+      "covers": "P26",
+      "status": "PENDING"
+    },
+    {
+      "id": "T103",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Ổn định inspector và responsive settings",
+      "file": "tasks/T103_STABILIZE_INSPECTOR_RESPONSIVE.md",
+      "depends_on": [
+        "T102"
+      ],
+      "covers": "P26",
+      "status": "PENDING"
+    },
+    {
+      "id": "T104",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng orchestration autosave cơ bản",
+      "file": "tasks/T104_HARDEN_AUTOSAVE_BASELINE.md",
+      "depends_on": [
+        "T103"
+      ],
+      "covers": "P26",
+      "status": "PENDING"
+    },
+    {
+      "id": "T105",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Làm cứng preview session và iframe protocol",
+      "file": "tasks/T105_HARDEN_PREVIEW_BACKEND_IFRAME.md",
+      "depends_on": [
+        "T104"
+      ],
+      "covers": "P27",
+      "status": "PENDING"
+    },
+    {
+      "id": "T106",
+      "phase": "F",
+      "phase_name": "Page Builder foundation, blocks, editor và preview",
+      "title": "Cổng Page Builder foundation P21-P27",
+      "file": "tasks/T106_PAGE_BUILDER_FOUNDATION_GATE.md",
+      "depends_on": [
+        "T105"
+      ],
+      "covers": "P21-P27",
+      "status": "PENDING"
+    },
+    {
+      "id": "T107",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Audit toàn bộ lifecycle versioning và publishing P28",
+      "file": "tasks/T107_AUDIT_P28_LIFECYCLE.md",
+      "depends_on": [
+        "T106"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T108",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Làm cứng optimistic concurrency autosave",
+      "file": "tasks/T108_HARDEN_AUTOSAVE_CONCURRENCY.md",
+      "depends_on": [
+        "T107"
+      ],
+      "covers": "P28,P29",
+      "status": "PENDING"
+    },
+    {
+      "id": "T109",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Ổn định manual save và immutable milestones",
+      "file": "tasks/T109_STABILIZE_MANUAL_MILESTONES.md",
+      "depends_on": [
+        "T108"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T110",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Hoàn thiện API và Resource lịch sử version",
+      "file": "tasks/T110_COMPLETE_VERSION_APIS.md",
+      "depends_on": [
+        "T109"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T111",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Triển khai diff summary theo block ID",
+      "file": "tasks/T111_IMPLEMENT_VERSION_DIFF_ENGINE.md",
+      "depends_on": [
+        "T110"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T112",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Làm cứng transaction Publish now",
+      "file": "tasks/T112_HARDEN_PUBLISH_TRANSACTION.md",
+      "depends_on": [
+        "T111"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T113",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Làm cứng validation trước publish",
+      "file": "tasks/T113_HARDEN_PREPUBLISH_VALIDATION.md",
+      "depends_on": [
+        "T112"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T114",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Ổn định dữ liệu lịch publish theo UTC",
+      "file": "tasks/T114_STABILIZE_SCHEDULE_DATA_UTC.md",
+      "depends_on": [
+        "T113"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T115",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Làm cứng scheduler chống race và chạy trùng",
+      "file": "tasks/T115_HARDEN_SCHEDULER_IDEMPOTENCY.md",
+      "depends_on": [
+        "T114"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T116",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Hoàn thiện cancel và reschedule",
+      "file": "tasks/T116_IMPLEMENT_CANCEL_RESCHEDULE.md",
+      "depends_on": [
+        "T115"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T117",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Hoàn thiện unpublish và archive page",
+      "file": "tasks/T117_IMPLEMENT_UNPUBLISH_ARCHIVE.md",
+      "depends_on": [
+        "T116"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T118",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Làm cứng rollback bằng revision mới",
+      "file": "tasks/T118_HARDEN_ROLLBACK.md",
+      "depends_on": [
+        "T117"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T119",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Chuẩn hóa cache, sitemap và audit sau commit",
+      "file": "tasks/T119_HARDEN_AFTER_COMMIT_EFFECTS.md",
+      "depends_on": [
+        "T118"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T120",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Thay native prompt/confirm bằng Material dialogs",
+      "file": "tasks/T120_REPLACE_NATIVE_P28_DIALOGS.md",
+      "depends_on": [
+        "T119"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T121",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Triển khai UI giải quyết conflict",
+      "file": "tasks/T121_IMPLEMENT_CONFLICT_RESOLUTION_UI.md",
+      "depends_on": [
+        "T120"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T122",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Ổn định history và diff UI",
+      "file": "tasks/T122_STABILIZE_VERSION_HISTORY_DIFF_UI.md",
+      "depends_on": [
+        "T121"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T123",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Ổn định UI schedule và timezone",
+      "file": "tasks/T123_STABILIZE_SCHEDULE_UI_TIMEZONE.md",
+      "depends_on": [
+        "T122"
+      ],
+      "covers": "P28",
+      "status": "PENDING"
+    },
+    {
+      "id": "T124",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Ổn định thư viện template P29",
+      "file": "tasks/T124_STABILIZE_TEMPLATE_LIBRARY.md",
+      "depends_on": [
+        "T123"
+      ],
+      "covers": "P29",
+      "status": "PENDING"
+    },
+    {
+      "id": "T125",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Hoàn thiện import, export và duplicate P29",
+      "file": "tasks/T125_COMPLETE_IMPORT_EXPORT_DUPLICATE.md",
+      "depends_on": [
+        "T124"
+      ],
+      "covers": "P29",
+      "status": "PENDING"
+    },
+    {
+      "id": "T126",
+      "phase": "G",
+      "phase_name": "Ổn định P28 và P29",
+      "title": "Làm cứng edit lock và cổng regression P28-P29",
+      "file": "tasks/T126_HARDEN_EDIT_LOCKS_AND_REGRESSION.md",
+      "depends_on": [
+        "T125"
+      ],
+      "covers": "P28,P29",
+      "status": "PENDING"
+    },
+    {
+      "id": "T127",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Thiết kế và triển khai schema Menu",
+      "file": "tasks/T127_DESIGN_MENU_SCHEMA_MODELS.md",
+      "depends_on": [
+        "T126"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T128",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Triển khai API, validation và Policy Menu",
+      "file": "tasks/T128_IMPLEMENT_MENU_API_POLICIES.md",
+      "depends_on": [
+        "T127"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T129",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Triển khai Angular quản lý Menu",
+      "file": "tasks/T129_IMPLEMENT_MENU_ADMIN_UI.md",
+      "depends_on": [
+        "T128"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T130",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Làm cứng nesting, link và localization Menu",
+      "file": "tasks/T130_HARDEN_MENU_NESTING_LOCALIZATION.md",
+      "depends_on": [
+        "T129"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T131",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Thiết kế schema versioned Global Regions",
+      "file": "tasks/T131_DESIGN_GLOBAL_REGION_SCHEMA.md",
+      "depends_on": [
+        "T130"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T132",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Triển khai API và lifecycle Global Regions",
+      "file": "tasks/T132_IMPLEMENT_GLOBAL_REGION_API.md",
+      "depends_on": [
+        "T131"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T133",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Triển khai Angular editor Global Regions",
+      "file": "tasks/T133_IMPLEMENT_GLOBAL_REGION_EDITOR.md",
+      "depends_on": [
+        "T132"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T134",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Render header/footer/global regions trên public",
+      "file": "tasks/T134_RENDER_HEADER_FOOTER_REGIONS.md",
+      "depends_on": [
+        "T133"
+      ],
+      "covers": "P30",
+      "status": "PENDING"
+    },
+    {
+      "id": "T135",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Thiết kế registry route public",
+      "file": "tasks/T135_DESIGN_PUBLIC_ROUTE_REGISTRY.md",
+      "depends_on": [
+        "T134"
+      ],
+      "covers": "P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T136",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Triển khai resolver localized slug",
+      "file": "tasks/T136_IMPLEMENT_LOCALIZED_SLUG_RESOLVER.md",
+      "depends_on": [
+        "T135"
+      ],
+      "covers": "P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T137",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Triển khai route public động cho Page Builder",
+      "file": "tasks/T137_IMPLEMENT_PAGE_BUILDER_PUBLIC_ROUTES.md",
+      "depends_on": [
+        "T136"
+      ],
+      "covers": "P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T138",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Làm cứng collision, canonical và redirect",
+      "file": "tasks/T138_HARDEN_ROUTE_COLLISIONS_CANONICAL.md",
+      "depends_on": [
+        "T137"
+      ],
+      "covers": "P31,P43",
+      "status": "PENDING"
+    },
+    {
+      "id": "T139",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Hoàn thiện các core page public",
+      "file": "tasks/T139_IMPLEMENT_CORE_PUBLIC_PAGES.md",
+      "depends_on": [
+        "T138"
+      ],
+      "covers": "P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T140",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Cô lập draft, preview và published public",
+      "file": "tasks/T140_ISOLATE_DRAFT_PREVIEW_PUBLISHED.md",
+      "depends_on": [
+        "T139"
+      ],
+      "covers": "P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T141",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Làm cứng cache invalidation Menu và Regions",
+      "file": "tasks/T141_HARDEN_MENU_REGION_CACHE.md",
+      "depends_on": [
+        "T140"
+      ],
+      "covers": "P30,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T142",
+      "phase": "H",
+      "phase_name": "Menus, Global Regions và Public Routing",
+      "title": "Cổng E2E Menu, Regions và Public Routing",
+      "file": "tasks/T142_PUBLIC_ROUTING_E2E_GATE.md",
+      "depends_on": [
+        "T141"
+      ],
+      "covers": "P30,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T143",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Rà schema và domain Product",
+      "file": "tasks/T143_AUDIT_PRODUCT_SCHEMA_DOMAIN.md",
+      "depends_on": [
+        "T142"
+      ],
+      "covers": "P32,P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T144",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Làm cứng pricing modes và resolver",
+      "file": "tasks/T144_HARDEN_PRODUCT_PRICING.md",
+      "depends_on": [
+        "T143"
+      ],
+      "covers": "P32",
+      "status": "PENDING"
+    },
+    {
+      "id": "T145",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Ổn định category, brand, tag và attribute",
+      "file": "tasks/T145_STABILIZE_PRODUCT_TAXONOMIES.md",
+      "depends_on": [
+        "T144"
+      ],
+      "covers": "P32,P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T146",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Ổn định Product manager và Admin API",
+      "file": "tasks/T146_STABILIZE_PRODUCT_MANAGER_API.md",
+      "depends_on": [
+        "T145"
+      ],
+      "covers": "P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T147",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Ổn định Angular danh sách Product",
+      "file": "tasks/T147_STABILIZE_PRODUCT_LIST_UI.md",
+      "depends_on": [
+        "T146"
+      ],
+      "covers": "P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T148",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Ổn định Angular editor Product",
+      "file": "tasks/T148_STABILIZE_PRODUCT_EDITOR_UI.md",
+      "depends_on": [
+        "T147"
+      ],
+      "covers": "P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T149",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Làm cứng media, specifications và related products",
+      "file": "tasks/T149_HARDEN_PRODUCT_MEDIA_SPEC_RELATED.md",
+      "depends_on": [
+        "T148"
+      ],
+      "covers": "P32,P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T150",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Làm cứng bulk, publish, archive, trash và restore",
+      "file": "tasks/T150_HARDEN_PRODUCT_BULK_LIFECYCLE.md",
+      "depends_on": [
+        "T149"
+      ],
+      "covers": "P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T151",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Triển khai query catalog public",
+      "file": "tasks/T151_IMPLEMENT_PUBLIC_PRODUCT_QUERY.md",
+      "depends_on": [
+        "T150"
+      ],
+      "covers": "P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T152",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Triển khai route category, brand và tag public",
+      "file": "tasks/T152_IMPLEMENT_PRODUCT_TAXONOMY_ROUTES.md",
+      "depends_on": [
+        "T151"
+      ],
+      "covers": "P33,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T153",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Triển khai detail, giá và CTA báo giá",
+      "file": "tasks/T153_IMPLEMENT_PRODUCT_DETAIL_PRICE_QUOTE.md",
+      "depends_on": [
+        "T152"
+      ],
+      "covers": "P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T154",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Triển khai SEO và structured data Product",
+      "file": "tasks/T154_IMPLEMENT_PRODUCT_SEO_SCHEMA.md",
+      "depends_on": [
+        "T153"
+      ],
+      "covers": "P33,P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T155",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Đăng ký Product blocks và data sources",
+      "file": "tasks/T155_REGISTER_PRODUCT_PAGE_BUILDER_BLOCKS.md",
+      "depends_on": [
+        "T154"
+      ],
+      "covers": "P24,P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T156",
+      "phase": "I",
+      "phase_name": "Product Catalog hoàn chỉnh",
+      "title": "Cổng test/E2E Product",
+      "file": "tasks/T156_PRODUCT_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T155"
+      ],
+      "covers": "P32,P33",
+      "status": "PENDING"
+    },
+    {
+      "id": "T157",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Rà schema và hierarchy Crop",
+      "file": "tasks/T157_AUDIT_CROP_SCHEMA_HIERARCHY.md",
+      "depends_on": [
+        "T156"
+      ],
+      "covers": "P34",
+      "status": "PENDING"
+    },
+    {
+      "id": "T158",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định manager và API Crop Solutions",
+      "file": "tasks/T158_STABILIZE_CROP_MANAGER_API.md",
+      "depends_on": [
+        "T157"
+      ],
+      "covers": "P34",
+      "status": "PENDING"
+    },
+    {
+      "id": "T159",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định Angular Crop Solutions",
+      "file": "tasks/T159_STABILIZE_CROP_ADMIN_UI.md",
+      "depends_on": [
+        "T158"
+      ],
+      "covers": "P34",
+      "status": "PENDING"
+    },
+    {
+      "id": "T160",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Triển khai public query và routes Crop",
+      "file": "tasks/T160_IMPLEMENT_PUBLIC_CROP_ROUTES.md",
+      "depends_on": [
+        "T159"
+      ],
+      "covers": "P34,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T161",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Hoàn thiện timeline giai đoạn cây trồng",
+      "file": "tasks/T161_IMPLEMENT_CROP_STAGE_TIMELINE.md",
+      "depends_on": [
+        "T160"
+      ],
+      "covers": "P34",
+      "status": "PENDING"
+    },
+    {
+      "id": "T162",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Đăng ký Crop blocks, SEO và internal links",
+      "file": "tasks/T162_REGISTER_CROP_BLOCKS_SEO_LINKS.md",
+      "depends_on": [
+        "T161"
+      ],
+      "covers": "P24,P34,P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T163",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Cổng test/E2E Crop Solutions",
+      "file": "tasks/T163_CROP_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T162"
+      ],
+      "covers": "P34",
+      "status": "PENDING"
+    },
+    {
+      "id": "T164",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Rà schema Service và boundary chuyên ngành",
+      "file": "tasks/T164_AUDIT_SERVICE_SCHEMA_BOUNDARY.md",
+      "depends_on": [
+        "T163"
+      ],
+      "covers": "P35",
+      "status": "PENDING"
+    },
+    {
+      "id": "T165",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định manager và API Service",
+      "file": "tasks/T165_STABILIZE_SERVICE_MANAGER_API.md",
+      "depends_on": [
+        "T164"
+      ],
+      "covers": "P35",
+      "status": "PENDING"
+    },
+    {
+      "id": "T166",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định Angular Services",
+      "file": "tasks/T166_STABILIZE_SERVICE_ADMIN_UI.md",
+      "depends_on": [
+        "T165"
+      ],
+      "covers": "P35",
+      "status": "PENDING"
+    },
+    {
+      "id": "T167",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Triển khai public list/detail và CTA Service",
+      "file": "tasks/T167_IMPLEMENT_PUBLIC_SERVICE_ROUTES.md",
+      "depends_on": [
+        "T166"
+      ],
+      "covers": "P35,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T168",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Đăng ký Service blocks và SEO",
+      "file": "tasks/T168_REGISTER_SERVICE_BLOCKS_SEO.md",
+      "depends_on": [
+        "T167"
+      ],
+      "covers": "P24,P35,P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T169",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Cổng test/E2E Services",
+      "file": "tasks/T169_SERVICE_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T168"
+      ],
+      "covers": "P35",
+      "status": "PENDING"
+    },
+    {
+      "id": "T170",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Rà schema và phạm vi Transportation",
+      "file": "tasks/T170_AUDIT_TRANSPORT_SCHEMA_BOUNDARY.md",
+      "depends_on": [
+        "T169"
+      ],
+      "covers": "P36",
+      "status": "PENDING"
+    },
+    {
+      "id": "T171",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định API fleet, routes và areas",
+      "file": "tasks/T171_STABILIZE_TRANSPORT_MANAGER_API.md",
+      "depends_on": [
+        "T170"
+      ],
+      "covers": "P36",
+      "status": "PENDING"
+    },
+    {
+      "id": "T172",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định Angular Transportation",
+      "file": "tasks/T172_STABILIZE_TRANSPORT_ADMIN_UI.md",
+      "depends_on": [
+        "T171"
+      ],
+      "covers": "P36",
+      "status": "PENDING"
+    },
+    {
+      "id": "T173",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Triển khai public capability pages Transportation",
+      "file": "tasks/T173_IMPLEMENT_PUBLIC_TRANSPORT_PAGES.md",
+      "depends_on": [
+        "T172"
+      ],
+      "covers": "P36,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T174",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Làm cứng request vận chuyển và Lead integration",
+      "file": "tasks/T174_HARDEN_TRANSPORT_REQUEST_LEADS.md",
+      "depends_on": [
+        "T173"
+      ],
+      "covers": "P25,P36,P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T175",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Đăng ký Transportation blocks và SEO",
+      "file": "tasks/T175_REGISTER_TRANSPORT_BLOCKS_SEO.md",
+      "depends_on": [
+        "T174"
+      ],
+      "covers": "P24,P36,P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T176",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Cổng test/E2E Transportation",
+      "file": "tasks/T176_TRANSPORT_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T175"
+      ],
+      "covers": "P36",
+      "status": "PENDING"
+    },
+    {
+      "id": "T177",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Rà schema Warehouse, facilities và services",
+      "file": "tasks/T177_AUDIT_WAREHOUSE_SCHEMA.md",
+      "depends_on": [
+        "T176"
+      ],
+      "covers": "P37",
+      "status": "PENDING"
+    },
+    {
+      "id": "T178",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định manager và API Warehouse",
+      "file": "tasks/T178_STABILIZE_WAREHOUSE_MANAGER_API.md",
+      "depends_on": [
+        "T177"
+      ],
+      "covers": "P37",
+      "status": "PENDING"
+    },
+    {
+      "id": "T179",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Ổn định Angular Warehouses",
+      "file": "tasks/T179_STABILIZE_WAREHOUSE_ADMIN_UI.md",
+      "depends_on": [
+        "T178"
+      ],
+      "covers": "P37",
+      "status": "PENDING"
+    },
+    {
+      "id": "T180",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Triển khai public listing và detail Warehouse",
+      "file": "tasks/T180_IMPLEMENT_PUBLIC_WAREHOUSE_ROUTES.md",
+      "depends_on": [
+        "T179"
+      ],
+      "covers": "P37,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T181",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Làm cứng bản đồ, giờ mở cửa và privacy",
+      "file": "tasks/T181_HARDEN_WAREHOUSE_MAP_HOURS_PRIVACY.md",
+      "depends_on": [
+        "T180"
+      ],
+      "covers": "P37",
+      "status": "PENDING"
+    },
+    {
+      "id": "T182",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Làm cứng request kho và Lead integration",
+      "file": "tasks/T182_HARDEN_WAREHOUSE_REQUEST_LEADS.md",
+      "depends_on": [
+        "T181"
+      ],
+      "covers": "P25,P37,P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T183",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Đăng ký Warehouse blocks, SEO và cache",
+      "file": "tasks/T183_REGISTER_WAREHOUSE_BLOCKS_SEO.md",
+      "depends_on": [
+        "T182"
+      ],
+      "covers": "P24,P37,P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T184",
+      "phase": "J",
+      "phase_name": "Crop Solutions, Services, Transportation và Warehouses",
+      "title": "Cổng test/E2E Warehouses",
+      "file": "tasks/T184_WAREHOUSE_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T183"
+      ],
+      "covers": "P37",
+      "status": "PENDING"
+    },
+    {
+      "id": "T185",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Rà schema Lead và dữ liệu nhạy cảm",
+      "file": "tasks/T185_AUDIT_LEAD_SCHEMA_ENCRYPTION.md",
+      "depends_on": [
+        "T184"
+      ],
+      "covers": "P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T186",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Làm cứng intake, idempotency và dedup",
+      "file": "tasks/T186_HARDEN_LEAD_INTAKE_DEDUP.md",
+      "depends_on": [
+        "T185"
+      ],
+      "covers": "P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T187",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Ổn định assignment, status và notes",
+      "file": "tasks/T187_STABILIZE_LEAD_WORKFLOW.md",
+      "depends_on": [
+        "T186"
+      ],
+      "covers": "P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T188",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Làm cứng notification và follow-up Leads",
+      "file": "tasks/T188_HARDEN_LEAD_NOTIFICATIONS.md",
+      "depends_on": [
+        "T187"
+      ],
+      "covers": "P38,P45",
+      "status": "PENDING"
+    },
+    {
+      "id": "T189",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Ổn định inbox, export và retention",
+      "file": "tasks/T189_STABILIZE_LEAD_ADMIN_EXPORT_RETENTION.md",
+      "depends_on": [
+        "T188"
+      ],
+      "covers": "P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T190",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Cổng test/E2E Lead workflows",
+      "file": "tasks/T190_LEAD_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T189"
+      ],
+      "covers": "P38",
+      "status": "PENDING"
+    },
+    {
+      "id": "T191",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Rà schema Posts, categories và tags",
+      "file": "tasks/T191_AUDIT_POST_SCHEMA_TAXONOMY.md",
+      "depends_on": [
+        "T190"
+      ],
+      "covers": "P39",
+      "status": "PENDING"
+    },
+    {
+      "id": "T192",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Làm cứng RichText sanitizer Posts",
+      "file": "tasks/T192_HARDEN_POST_RICH_TEXT.md",
+      "depends_on": [
+        "T191"
+      ],
+      "covers": "P39,P15",
+      "status": "PENDING"
+    },
+    {
+      "id": "T193",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Ổn định manager, schedule và slug history",
+      "file": "tasks/T193_STABILIZE_POST_MANAGER_SCHEDULE_SLUGS.md",
+      "depends_on": [
+        "T192"
+      ],
+      "covers": "P39",
+      "status": "PENDING"
+    },
+    {
+      "id": "T194",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Ổn định Angular CMS editor",
+      "file": "tasks/T194_STABILIZE_POST_ADMIN_EDITOR.md",
+      "depends_on": [
+        "T193"
+      ],
+      "covers": "P39",
+      "status": "PENDING"
+    },
+    {
+      "id": "T195",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Triển khai public post listing, category và tag",
+      "file": "tasks/T195_IMPLEMENT_PUBLIC_POST_LISTINGS.md",
+      "depends_on": [
+        "T194"
+      ],
+      "covers": "P39,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T196",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Triển khai detail, related, RSS, blocks và SEO Posts",
+      "file": "tasks/T196_IMPLEMENT_POST_DETAIL_RSS_BLOCKS_SEO.md",
+      "depends_on": [
+        "T195"
+      ],
+      "covers": "P39,P42,P43",
+      "status": "PENDING"
+    },
+    {
+      "id": "T197",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Cổng test/E2E News Content",
+      "file": "tasks/T197_POST_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T196"
+      ],
+      "covers": "P39",
+      "status": "PENDING"
+    },
+    {
+      "id": "T198",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Rà schema Showcase, Media và documents",
+      "file": "tasks/T198_AUDIT_SHOWCASE_SCHEMA_MEDIA_DOCS.md",
+      "depends_on": [
+        "T197"
+      ],
+      "covers": "P40",
+      "status": "PENDING"
+    },
+    {
+      "id": "T199",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Ổn định manager và API Showcase",
+      "file": "tasks/T199_STABILIZE_SHOWCASE_MANAGER_API.md",
+      "depends_on": [
+        "T198"
+      ],
+      "covers": "P40",
+      "status": "PENDING"
+    },
+    {
+      "id": "T200",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Ổn định Angular Showcase",
+      "file": "tasks/T200_STABILIZE_SHOWCASE_ADMIN_UI.md",
+      "depends_on": [
+        "T199"
+      ],
+      "covers": "P40",
+      "status": "PENDING"
+    },
+    {
+      "id": "T201",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Triển khai public galleries, projects, blocks và SEO",
+      "file": "tasks/T201_IMPLEMENT_PUBLIC_SHOWCASE_BLOCKS_SEO.md",
+      "depends_on": [
+        "T200"
+      ],
+      "covers": "P40,P31,P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T202",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Cổng test/E2E Showcase",
+      "file": "tasks/T202_SHOWCASE_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T201"
+      ],
+      "covers": "P40",
+      "status": "PENDING"
+    },
+    {
+      "id": "T203",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Làm cứng normalization và FULLTEXT index",
+      "file": "tasks/T203_HARDEN_SEARCH_NORMALIZATION_INDEX.md",
+      "depends_on": [
+        "T202"
+      ],
+      "covers": "P41",
+      "status": "PENDING"
+    },
+    {
+      "id": "T204",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Ổn định reindex và cập nhật search index",
+      "file": "tasks/T204_STABILIZE_SEARCH_INDEXER.md",
+      "depends_on": [
+        "T203"
+      ],
+      "covers": "P41",
+      "status": "PENDING"
+    },
+    {
+      "id": "T205",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Làm cứng API search và filters",
+      "file": "tasks/T205_HARDEN_PUBLIC_SEARCH_API.md",
+      "depends_on": [
+        "T204"
+      ],
+      "covers": "P41",
+      "status": "PENDING"
+    },
+    {
+      "id": "T206",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Triển khai Blade search UI",
+      "file": "tasks/T206_IMPLEMENT_BLADE_SEARCH_UI.md",
+      "depends_on": [
+        "T205"
+      ],
+      "covers": "P41,P31",
+      "status": "PENDING"
+    },
+    {
+      "id": "T207",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Làm cứng related content và search logs",
+      "file": "tasks/T207_HARDEN_RELATED_SEARCH_LOGS_PRIVACY.md",
+      "depends_on": [
+        "T206"
+      ],
+      "covers": "P41",
+      "status": "PENDING"
+    },
+    {
+      "id": "T208",
+      "phase": "K",
+      "phase_name": "Leads, News, Showcase và Search",
+      "title": "Cổng test/E2E Search",
+      "file": "tasks/T208_SEARCH_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T207"
+      ],
+      "covers": "P41",
+      "status": "PENDING"
+    },
+    {
+      "id": "T209",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng entity registry và meta resolver SEO",
+      "file": "tasks/T209_HARDEN_SEO_ENTITY_META_RESOLVER.md",
+      "depends_on": [
+        "T208"
+      ],
+      "covers": "P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T210",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Ổn định Angular SEO management",
+      "file": "tasks/T210_STABILIZE_SEO_ADMIN.md",
+      "depends_on": [
+        "T209"
+      ],
+      "covers": "P42",
+      "status": "PENDING"
+    },
+    {
+      "id": "T211",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng redirect manager",
+      "file": "tasks/T211_HARDEN_REDIRECT_MANAGER.md",
+      "depends_on": [
+        "T210"
+      ],
+      "covers": "P43",
+      "status": "PENDING"
+    },
+    {
+      "id": "T212",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng sitemap index, shards và cache",
+      "file": "tasks/T212_HARDEN_SITEMAP_GENERATOR.md",
+      "depends_on": [
+        "T211"
+      ],
+      "covers": "P43",
+      "status": "PENDING"
+    },
+    {
+      "id": "T213",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng robots, canonical và hreflang",
+      "file": "tasks/T213_HARDEN_ROBOTS_CANONICAL_HREFLANG.md",
+      "depends_on": [
+        "T212"
+      ],
+      "covers": "P42,P43",
+      "status": "PENDING"
+    },
+    {
+      "id": "T214",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng structured data và social cards",
+      "file": "tasks/T214_HARDEN_STRUCTURED_SOCIAL_DATA.md",
+      "depends_on": [
+        "T213"
+      ],
+      "covers": "P42,P43",
+      "status": "PENDING"
+    },
+    {
+      "id": "T215",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Cổng crawl và test SEO",
+      "file": "tasks/T215_SEO_CRAWL_FINAL_GATE.md",
+      "depends_on": [
+        "T214"
+      ],
+      "covers": "P42,P43",
+      "status": "PENDING"
+    },
+    {
+      "id": "T216",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng consent records và API",
+      "file": "tasks/T216_HARDEN_CONSENT_RECORDS_API.md",
+      "depends_on": [
+        "T215"
+      ],
+      "covers": "P44",
+      "status": "PENDING"
+    },
+    {
+      "id": "T217",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng providers, CSP, script renderer và banner",
+      "file": "tasks/T217_HARDEN_ANALYTICS_PROVIDER_CSP_UI.md",
+      "depends_on": [
+        "T216"
+      ],
+      "covers": "P44",
+      "status": "PENDING"
+    },
+    {
+      "id": "T218",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Cổng privacy và test Analytics",
+      "file": "tasks/T218_ANALYTICS_PRIVACY_FINAL_GATE.md",
+      "depends_on": [
+        "T217"
+      ],
+      "covers": "P44",
+      "status": "PENDING"
+    },
+    {
+      "id": "T219",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng aggregate và visibility Dashboard",
+      "file": "tasks/T219_HARDEN_DASHBOARD_AGGREGATES.md",
+      "depends_on": [
+        "T218"
+      ],
+      "covers": "P45",
+      "status": "PENDING"
+    },
+    {
+      "id": "T220",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng notification Dashboard",
+      "file": "tasks/T220_HARDEN_DASHBOARD_NOTIFICATIONS.md",
+      "depends_on": [
+        "T219"
+      ],
+      "covers": "P45",
+      "status": "PENDING"
+    },
+    {
+      "id": "T221",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Làm cứng reports queue và Dashboard UI",
+      "file": "tasks/T221_HARDEN_REPORTS_DASHBOARD_UI.md",
+      "depends_on": [
+        "T220"
+      ],
+      "covers": "P45",
+      "status": "PENDING"
+    },
+    {
+      "id": "T222",
+      "phase": "L",
+      "phase_name": "SEO, Analytics và Dashboard",
+      "title": "Cổng test/E2E Dashboard",
+      "file": "tasks/T222_DASHBOARD_FINAL_TEST_GATE.md",
+      "depends_on": [
+        "T221"
+      ],
+      "covers": "P45",
+      "status": "PENDING"
+    },
+    {
+      "id": "T223",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Hoàn thiện seeders an toàn và idempotent",
+      "file": "tasks/T223_BUILD_FINAL_SAFE_SEEDERS.md",
+      "depends_on": [
+        "T222"
+      ],
+      "covers": "P47",
+      "status": "PENDING"
+    },
+    {
+      "id": "T224",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Tái chứng nhận QA Backend toàn hệ thống",
+      "file": "tasks/T224_BACKEND_QA_RECERTIFICATION.md",
+      "depends_on": [
+        "T223"
+      ],
+      "covers": "P48",
+      "status": "PENDING"
+    },
+    {
+      "id": "T225",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Tái chứng nhận Angular, E2E và Visual QA",
+      "file": "tasks/T225_ADMIN_E2E_VISUAL_RECERTIFICATION.md",
+      "depends_on": [
+        "T224"
+      ],
+      "covers": "P49",
+      "status": "PENDING"
+    },
+    {
+      "id": "T226",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Cổng accessibility và performance",
+      "file": "tasks/T226_ACCESSIBILITY_PERFORMANCE_GATE.md",
+      "depends_on": [
+        "T225"
+      ],
+      "covers": "P46",
+      "status": "PENDING"
+    },
+    {
+      "id": "T227",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Quét dependency, license, secret và container",
+      "file": "tasks/T227_DEPENDENCY_LICENSE_SECURITY_SCANS.md",
+      "depends_on": [
+        "T226"
+      ],
+      "covers": "P50,P53",
+      "status": "PENDING"
+    },
+    {
+      "id": "T228",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Hoàn thiện CI và delivery pipeline",
+      "file": "tasks/T228_FINALIZE_CI_DELIVERY_PIPELINE.md",
+      "depends_on": [
+        "T227"
+      ],
+      "covers": "P50",
+      "status": "PENDING"
+    },
+    {
+      "id": "T229",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Hoàn thiện Docker và production deployment",
+      "file": "tasks/T229_IMPLEMENT_DOCKER_PRODUCTION_DEPLOYMENT.md",
+      "depends_on": [
+        "T228"
+      ],
+      "covers": "P51",
+      "status": "PENDING"
+    },
+    {
+      "id": "T230",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Hoàn thiện backup, restore, monitoring và incident runbooks",
+      "file": "tasks/T230_IMPLEMENT_BACKUP_RESTORE_MONITORING.md",
+      "depends_on": [
+        "T229"
+      ],
+      "covers": "P52",
+      "status": "PENDING"
+    },
+    {
+      "id": "T231",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Security review cuối toàn hệ thống",
+      "file": "tasks/T231_FINAL_SECURITY_REVIEW.md",
+      "depends_on": [
+        "T230"
+      ],
+      "covers": "P53",
+      "status": "PENDING"
+    },
+    {
+      "id": "T232",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "UAT, nội dung và dữ liệu sẵn sàng",
+      "file": "tasks/T232_UAT_CONTENT_DATA_READINESS.md",
+      "depends_on": [
+        "T231"
+      ],
+      "covers": "P54",
+      "status": "PENDING"
+    },
+    {
+      "id": "T233",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Production cutover có kiểm soát",
+      "file": "tasks/T233_PRODUCTION_CUTOVER.md",
+      "depends_on": [
+        "T232"
+      ],
+      "covers": "P55",
+      "status": "PENDING"
+    },
+    {
+      "id": "T234",
+      "phase": "M",
+      "phase_name": "Seeders, QA, CI, Deployment, Operations, Security, UAT và Handover",
+      "title": "Tài liệu và bàn giao cuối",
+      "file": "tasks/T234_DOCUMENTATION_HANDOVER.md",
+      "depends_on": [
+        "T233"
+      ],
+      "covers": "P56",
+      "status": "PENDING"
+    },
+    {
+      "id": "T235",
+      "phase": "N",
+      "phase_name": "Rà soát lặp, sinh prompt còn thiếu và Release Gate",
+      "title": "Rà soát lại toàn bộ source sau triển khai",
+      "file": "tasks/T235_FULL_SOURCE_REAUDIT.md",
+      "depends_on": [
+        "T234"
+      ],
+      "covers": "R90",
+      "status": "PENDING"
+    },
+    {
+      "id": "T236",
+      "phase": "N",
+      "phase_name": "Rà soát lặp, sinh prompt còn thiếu và Release Gate",
+      "title": "Audit chéo route, API, DB, permission và i18n",
+      "file": "tasks/T236_AUDIT_ROUTE_API_DB_PERMISSION_I18N.md",
+      "depends_on": [
+        "T235"
+      ],
+      "covers": "R90",
+      "status": "PENDING"
+    },
+    {
+      "id": "T237",
+      "phase": "N",
+      "phase_name": "Rà soát lặp, sinh prompt còn thiếu và Release Gate",
+      "title": "Audit UI, crawl, accessibility và performance",
+      "file": "tasks/T237_AUDIT_UI_CRAWL_A11Y_PERFORMANCE.md",
+      "depends_on": [
+        "T236"
+      ],
+      "covers": "R90",
+      "status": "PENDING"
+    },
+    {
+      "id": "T238",
+      "phase": "N",
+      "phase_name": "Rà soát lặp, sinh prompt còn thiếu và Release Gate",
+      "title": "Audit test, security, CI và operations",
+      "file": "tasks/T238_AUDIT_TEST_SECURITY_CI_OPERATIONS.md",
+      "depends_on": [
+        "T237"
+      ],
+      "covers": "R90",
+      "status": "PENDING"
+    },
+    {
+      "id": "T239",
+      "phase": "N",
+      "phase_name": "Rà soát lặp, sinh prompt còn thiếu và Release Gate",
+      "title": "Sinh prompt focused cho mọi gap và lặp audit",
+      "file": "tasks/T239_GENERATE_AND_LOOP_GAP_PROMPTS.md",
+      "depends_on": [
+        "T238"
+      ],
+      "covers": "R90",
+      "status": "PENDING"
+    },
+    {
+      "id": "T240",
+      "phase": "N",
+      "phase_name": "Rà soát lặp, sinh prompt còn thiếu và Release Gate",
+      "title": "Release Gate cuối GO hoặc NO-GO",
+      "file": "tasks/T240_FINAL_RELEASE_GO_NO_GO.md",
+      "depends_on": [
+        "T239"
+      ],
+      "covers": "R99",
+      "status": "PENDING"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Đọc prompts/hongvan-master-v2/00_RUN_NEXT.md và thực hiện đúng một task tiếp theo. Tuân thủ toàn bộ prompts/hongvan-master-v2/00_SHARED_RULES.md. Sau khi chạy test, commit, push và xác nhận local HEAD trùng origin/main thì dừng, không chạy task kế.

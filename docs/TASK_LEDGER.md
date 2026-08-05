@@ -1,5 +1,12 @@
 # TASK LEDGER
 
+## HongVan Master Pack V2
+
+- [x] T001 Đối chiếu HEAD hiện tại và trạng thái dự án; cài/validate pack đủ 240 task
+- [ ] T002 Kiểm kê cấu trúc repository và source boundaries
+
+## Prompt gốc P00-P56
+
 - [x] P00 Repository audit
 - [x] P01 External source inventory
 - [x] P02 Architecture records
