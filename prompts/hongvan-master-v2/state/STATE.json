@@ -12,7 +12,7 @@
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-05T14:34:00+07:00",
+  "updated_at": "2026-08-08T00:00:00+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -24,12 +24,12 @@
       "blocker": null
     },
     "T002": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "DONE",
+      "started_at": "2026-08-08T00:00:00+07:00",
+      "completed_at": "2026-08-08T00:00:00+07:00",
+      "base_head": "6b53a5530d0fdbe82d920bf635fc3e705fed7b91",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã lập inventory repository, bounded contexts, source boundaries, generated output và fingerprint evidence.",
       "blocker": null
     },
     "T003": {

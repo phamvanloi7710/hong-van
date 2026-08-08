@@ -3,7 +3,7 @@
 ## HongVan Master Pack V2
 
 - [x] T001 Đối chiếu HEAD hiện tại và trạng thái dự án; cài/validate pack đủ 240 task
-- [ ] T002 Kiểm kê cấu trúc repository và source boundaries
+- [x] T002 Kiểm kê cấu trúc repository và source boundaries
 
 ## Prompt gốc P00-P56
 
