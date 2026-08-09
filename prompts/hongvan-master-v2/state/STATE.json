@@ -4,15 +4,15 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "c9ce11c4e6a5c2c6bcaac9a61b40e6be5b153fcf",
-  "origin_main_head": "c9ce11c4e6a5c2c6bcaac9a61b40e6be5b153fcf",
+  "actual_head": "e2223e78a2ee5418815a48acf1f250d300631a20",
+  "origin_main_head": "e2223e78a2ee5418815a48acf1f250d300631a20",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-09T22:19:12+07:00",
+  "updated_at": "2026-08-09T22:39:00+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -123,12 +123,12 @@
       "blocker": null
     },
     "T013": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "DONE",
+      "started_at": "2026-08-09T22:33:17+07:00",
+      "completed_at": "2026-08-09T22:39:00+07:00",
+      "base_head": "e2223e78a2ee5418815a48acf1f250d300631a20",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã xác minh Laravel bootstrap/provider/routing/middleware/exception wiring; sửa schema architecture expectation bị stale cho bảng page template categories và tái chứng nhận Architecture/API/Pint/PHPStan/Admin lint.",
       "blocker": null
     },
     "T014": {

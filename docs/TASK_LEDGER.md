@@ -14,6 +14,7 @@
 - [x] T010 Xác minh runtime local bằng Docker theo owner override, không dùng WAMP
 - [x] T011 Chuẩn hóa danh mục lệnh test, lint, build, E2E và ma trận fast/full gate theo Docker
 - [x] T012 Nghiệm thu baseline/governance, khóa snapshot queue/state và mở dependency T013
+- [x] T013 Rà Laravel bootstrap, providers, routing, middleware và exception wiring
 
 ## Prompt gốc P00-P56
 

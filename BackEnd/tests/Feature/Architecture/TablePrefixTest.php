@@ -72,6 +72,7 @@ class TablePrefixTest extends TestCase
             'hongvan_page_locks',
             'hongvan_page_preview_sessions',
             'hongvan_page_publish_schedules',
+            'hongvan_page_template_categories',
             'hongvan_page_template_versions',
             'hongvan_page_templates',
             'hongvan_page_translations',
