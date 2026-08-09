@@ -4,15 +4,15 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "6c6b75c4365d8d057a6defe6b95d5664c447ecba",
-  "origin_main_head": "6c6b75c4365d8d057a6defe6b95d5664c447ecba",
+  "actual_head": "9d5c0fd12f93eb8fca784c0d47fefc293c5d49b7",
+  "origin_main_head": "9d5c0fd12f93eb8fca784c0d47fefc293c5d49b7",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-09T23:02:21+07:00",
+  "updated_at": "2026-08-09T23:10:08+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -159,12 +159,12 @@
       "blocker": null
     },
     "T017": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "VERIFIED",
+      "started_at": "2026-08-09T23:04:55+07:00",
+      "completed_at": "2026-08-09T23:10:08+07:00",
+      "base_head": "9d5c0fd12f93eb8fca784c0d47fefc293c5d49b7",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã xác minh DatabaseCommentTest truy vấn trực tiếp information_schema trên schema MySQL dựng mới và không phát hiện bảng/cột thiếu comment; TablePrefixTest, 28 migration production, Pint và pack validator đều đạt, không cần migration bổ sung.",
       "blocker": null
     },
     "T018": {
