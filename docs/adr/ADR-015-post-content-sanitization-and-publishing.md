@@ -1,5 +1,9 @@
 # ADR-015: Post content sanitization and scheduled publishing
 
+## Date
+
+2026-08-03
+
 ## Status
 
 Accepted for the Backend/Admin scope of P39. Public rendering remains deferred until the final frontend phase.

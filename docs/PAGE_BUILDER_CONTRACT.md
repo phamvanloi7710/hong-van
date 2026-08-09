@@ -2,7 +2,7 @@
 
 ## Trạng thái triển khai
 
-P21 đã triển khai foundation backend, P22 bổ sung 7 layout block và P23 bổ sung 15 content/media block. P24–P25 sẽ bổ sung business/form block, P26 triển khai editor Angular, P27 preview, P28 version/publish, P29 reusable/global blocks, P30 template và P31 public routing. Foundation không tự nhận Blade view/class, không `eval` và không lưu mã thực thi trong database.
+P21–P29 đã triển khai schema/registry, layout/content/media/business/form blocks, Angular editor, signed Blade preview, publishing/versioning và template/import/export/edit locks. P30 menu/global regions và P31 public routing vẫn chưa triển khai tại HEAD. Hệ thống không tự nhận Blade view/class, không `eval` và không lưu mã thực thi trong database.
 
 ## PageDocument schema v1
 
@@ -114,9 +114,9 @@ page-builder:published:{pagePublicId}:{locale}:{pageVersionPublicId}:{themeVersi
 
 Logical tags gồm `page-builder`, `page:{publicId}`, `page-version:{publicId}` và `theme-version:{publicId}`. P31 renderer phải dùng đúng key/tag này và invalidate khi page version, theme version hoặc data dependency thay đổi.
 
-## Preview và Angular canvas (deferred)
+## Preview và Angular canvas
 
-P27 sẽ dùng signed expiring URL, owner check, Redis TTL, `noindex`, CSP chặt và `postMessage` với origin allowlist. Angular canvas dùng iframe của cùng Blade renderer/CSS public; không dựng một renderer HTML khác ở client.
+P27 đã triển khai signed expiring URL, owner check, Redis TTL, `noindex`, CSP chặt và `postMessage` với origin allowlist. Angular canvas dùng iframe của cùng Blade renderer/CSS public; không dựng một renderer HTML khác ở client.
 
 ## Điều kiện an toàn đã kiểm chứng ở P21
 

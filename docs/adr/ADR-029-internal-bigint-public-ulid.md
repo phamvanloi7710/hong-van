@@ -1,4 +1,4 @@
-# ADR-009 — BIGINT nội bộ và ULID công khai
+# ADR-029 — BIGINT nội bộ và ULID công khai
 
 **Status:** Accepted
 

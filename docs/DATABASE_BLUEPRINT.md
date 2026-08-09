@@ -52,7 +52,7 @@ hongvan_contact_channels
 hongvan_audit_logs
 ```
 
-Quy ước định danh được chốt tại `ADR-009`: entity nghiệp vụ dùng unsigned `BIGINT` làm khóa nội bộ và `CHAR(26)` ULID unique làm `public_id` khi cần xuất hiện bên ngoài. Foreign key nội bộ tham chiếu `id`.
+Quy ước định danh được chốt tại `ADR-029`: entity nghiệp vụ dùng unsigned `BIGINT` làm khóa nội bộ và `CHAR(26)` ULID unique làm `public_id` khi cần xuất hiện bên ngoài. Foreign key nội bộ tham chiếu `id`.
 
 P13 đã hoàn thiện foundation settings bằng allowlist có kiểu dữ liệu cho 11 nhóm/28 khóa; secret dùng ciphertext hoặc tham chiếu `env:VARIABLE` và không xuất hiện trong payload Admin/public. P13 cũng triển khai `hongvan_branches`, `hongvan_business_hours`, `hongvan_social_links` và `hongvan_contact_channels`, có trạng thái, thứ tự, khóa ngoại, index và comment đầy đủ. P10 đã ánh xạ Sanctum vào `hongvan_personal_access_tokens`. P11 đã triển khai role, permission, hai pivot và user permission override; tất cả quan hệ dùng khóa nội bộ, còn API chỉ nhận/trả `public_id`.
 
@@ -134,6 +134,8 @@ hongvan_menu_items
 hongvan_global_regions
 hongvan_global_region_versions
 ```
+
+Bốn bảng menu/global region là schema dự kiến cho P30, chưa phải bằng chứng migration đã triển khai tại HEAD.
 
 `hongvan_page_versions.document_json` chứa PageDocument schema v1 đã validate bằng `BlockRegistry`; không chứa Blade view, PHP hoặc JavaScript tùy ý. Version đã publish không được update hoặc delete tại chỗ. Rollback sau này phải tạo version mới hoặc đổi con trỏ theo contract P28 mà không sửa lịch sử.
 
@@ -277,8 +279,9 @@ hongvan_redirects
 hongvan_sitemap_exclusions
 hongvan_search_logs
 hongvan_page_view_daily
-hongvan_consent_records
 ```
+
+Theo ADR-020, consent hiện lưu bằng cookie first-party được mã hóa và không tạo `hongvan_consent_records` khi chưa có yêu cầu pháp lý/nghiệp vụ cần lưu server-side.
 
 ## Quy tắc translation table
 

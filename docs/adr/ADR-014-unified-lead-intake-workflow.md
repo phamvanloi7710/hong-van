@@ -1,5 +1,9 @@
 # ADR-014 — Unified lead intake and immutable submissions
 
+## Date
+
+2026-08-03
+
 ## Status
 
 Accepted for the P38 Backend/Admin scope. Public Page Builder form-block wiring remains deferred until the public frontend template is supplied.

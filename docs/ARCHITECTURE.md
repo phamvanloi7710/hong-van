@@ -50,8 +50,9 @@
 ## Bounded contexts Laravel
 
 - Identity & Access.
-- Settings.
+- Settings & Localization.
 - Media.
+- Themes.
 - Page Builder.
 - Products.
 - Crop Solutions.
@@ -59,12 +60,21 @@
 - Transportation.
 - Warehouses.
 - Leads.
-- Content.
+- Posts & Content.
 - Showcase.
-- SEO.
-- Analytics.
+- Search.
+- SEO & Analytics.
+- Dashboard & Reports.
 - Audit.
+- Public Site.
 - Shared.
+
+## Luồng public và Admin
+
+- Public Blade dùng controller/domain service nội bộ; không gọi HTTP loopback về chính ứng dụng.
+- Public API có prefix `/api/public/v1` cho consent, search, media và intake khi client bên ngoài cần.
+- Admin Angular chạy dưới `/admin`, gọi `/api/admin/v1` bằng Sanctum cookie/session cùng origin và CSRF.
+- Preview Page Builder chạy dưới signed `/preview`, owner-scoped, hết hạn và dùng cùng Blade renderer/CSS public.
 
 ## Page Builder
 
