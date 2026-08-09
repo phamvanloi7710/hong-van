@@ -17,6 +17,8 @@
 
 Artisan tùy biến đã đối chiếu: `identity:bootstrap-super-admin`, `leads:anonymize-expired`, `media:cleanup`, `media:retry`, `pages:publish-scheduled`, `posts:publish-scheduled`, `search:reindex`. Không dùng tên lệnh ngoài danh sách `php artisan list` hiện tại.
 
+Image runtime production cài dependency với `--no-dev`, nên không chạy `php artisan test`, PHPUnit, Pint hoặc PHPStan trực tiếp trong container app đang phục vụ. Các lệnh QA backend phải chạy trong CI/QA image hoặc container mount source có dev dependencies; không cài dev package vào runtime image.
+
 ## Fast gate theo thay đổi
 
 | Thay đổi | Gate tối thiểu |
