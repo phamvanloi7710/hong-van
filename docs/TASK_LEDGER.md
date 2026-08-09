@@ -9,6 +9,7 @@
 - [x] T005 Đối chiếu prompt gốc, commit và task ledger
 - [x] T006 Rà kiến trúc tổng thể và ADR
 - [x] T007 Xác minh baseline PHP, Laravel, Angular, Node, MySQL và Redis bằng Docker runtime
+- [x] T008 Rà soát và đồng bộ hợp đồng biến môi trường với config/source
 
 ## Prompt gốc P00-P56
 
