@@ -4,8 +4,8 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "62418a8448ccf112dc8b24c493f2a3e73351b70f",
-  "origin_main_head": "62418a8448ccf112dc8b24c493f2a3e73351b70f",
+  "actual_head": "9602cdace683ffb29219b99df2fad362586e575f",
+  "origin_main_head": "9602cdace683ffb29219b99df2fad362586e575f",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
@@ -51,12 +51,12 @@
       "blocker": null
     },
     "T005": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "DONE",
+      "started_at": "2026-08-09T00:00:00+07:00",
+      "completed_at": "2026-08-09T00:00:00+07:00",
+      "base_head": "9602cdace683ffb29219b99df2fad362586e575f",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã đối chiếu P00-P56 theo HEAD thành 33 IMPLEMENTED, 8 PARTIAL, 7 MISSING, 8 STALE, 1 BLOCKED với commit/file/test evidence.",
       "blocker": null
     },
     "T006": {

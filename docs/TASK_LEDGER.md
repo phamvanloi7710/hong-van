@@ -6,6 +6,7 @@
 - [x] T002 Kiểm kê cấu trúc repository và source boundaries
 - [x] T003 Kiểm tra hệ thống AGENTS.md và phạm vi quy tắc
 - [x] T004 Đóng dấu và bảo vệ source tham chiếu chỉ đọc
+- [x] T005 Đối chiếu prompt gốc, commit và task ledger
 
 ## Prompt gốc P00-P56
 
