@@ -17,6 +17,7 @@
 - [x] T013 Rà Laravel bootstrap, providers, routing, middleware và exception wiring
 - [x] T014 Xác minh Angular standalone bootstrap, strict mode, providers và typed environment
 - [x] T015 Xác minh production build Admin/public và đồng bộ output có guard vào Laravel
+- [x] T016 Cưỡng chế tiền tố `hongvan_` cho mọi bảng, model và bảng framework
 
 ## Prompt gốc P00-P56
 
