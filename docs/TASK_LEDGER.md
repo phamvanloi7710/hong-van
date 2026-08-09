@@ -16,6 +16,7 @@
 - [x] T012 Nghiệm thu baseline/governance, khóa snapshot queue/state và mở dependency T013
 - [x] T013 Rà Laravel bootstrap, providers, routing, middleware và exception wiring
 - [x] T014 Xác minh Angular standalone bootstrap, strict mode, providers và typed environment
+- [x] T015 Xác minh production build Admin/public và đồng bộ output có guard vào Laravel
 
 ## Prompt gốc P00-P56
 
