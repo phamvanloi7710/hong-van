@@ -15,6 +15,7 @@
 - [x] T011 Chuẩn hóa danh mục lệnh test, lint, build, E2E và ma trận fast/full gate theo Docker
 - [x] T012 Nghiệm thu baseline/governance, khóa snapshot queue/state và mở dependency T013
 - [x] T013 Rà Laravel bootstrap, providers, routing, middleware và exception wiring
+- [x] T014 Xác minh Angular standalone bootstrap, strict mode, providers và typed environment
 
 ## Prompt gốc P00-P56
 
