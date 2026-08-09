@@ -4,6 +4,7 @@
 
 - [x] T001 Đối chiếu HEAD hiện tại và trạng thái dự án; cài/validate pack đủ 240 task
 - [x] T002 Kiểm kê cấu trúc repository và source boundaries
+- [x] T003 Kiểm tra hệ thống AGENTS.md và phạm vi quy tắc
 
 ## Prompt gốc P00-P56
 

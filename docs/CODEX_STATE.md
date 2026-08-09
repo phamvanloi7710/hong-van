@@ -6,11 +6,12 @@ company: Công Ty TNHH DV VT Hồng Vân
 current_prompt: P29
 last_completed_prompt: 29
 status: DONE
-master_pack_v2_current_task: T002
-master_pack_v2_last_completed_task: T002
+master_pack_v2_current_task: null
+master_pack_v2_last_completed_task: T003
 master_pack_v2_status: DONE
-master_pack_v2_next_task: T003
+master_pack_v2_next_task: T004
 master_pack_v2_baseline_head: 6b53a5530d0fdbe82d920bf635fc3e705fed7b91
+latest_agents_hierarchy: passed_t003_30_files_primary_boundaries_present_reference_nested_rules_context_only
 admin_template_gate: READY
 admin_template_integration: ANNULAR_FULL_VISUAL_REWORK_COMPLETE
 frontend_template_gate: READY_WORDPRESS_CLONE_REAUDITED_READ_ONLY

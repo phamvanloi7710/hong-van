@@ -48,6 +48,8 @@ SourceIntegrations/
 
 Không format, đổi package, xóa file, sửa asset hoặc commit thay đổi vào các thư mục này nếu prompt không cho phép rõ ràng.
 
+Các file `AGENTS.md` nằm bên trong source tham chiếu chỉ mô tả source gốc để phục vụ inventory/port. Chúng không được áp dụng cho source Hồng Vân và không được ghi đè quy tắc tại file root này.
+
 Khi clone giao diện:
 
 - Phải lập inventory trước.
