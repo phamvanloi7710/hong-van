@@ -11,6 +11,7 @@
 - [x] T007 Xác minh baseline PHP, Laravel, Angular, Node, MySQL và Redis bằng Docker runtime
 - [x] T008 Rà soát và đồng bộ hợp đồng biến môi trường với config/source
 - [x] T009 Rà Git hygiene, ignore policy và lịch sử secret
+- [x] T010 Xác minh runtime local bằng Docker theo owner override, không dùng WAMP
 
 ## Prompt gốc P00-P56
 
