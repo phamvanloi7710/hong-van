@@ -23,6 +23,8 @@ Mọi job dừng ngay khi prefix, migration, audit theo ngưỡng, test hoặc b
 
 ## Chạy local
 
+Danh mục lệnh đã đối chiếu và ma trận fast/full gate nằm tại `docs/hongvan-master-v2/TEST_MATRIX.md`. Runtime local chuẩn của dự án là Docker; các wrapper dưới đây là entrypoint CI/host và yêu cầu môi trường thực thi có đủ dependency tương ứng.
+
 Windows đầy đủ trên dependency hiện có:
 
 ```powershell

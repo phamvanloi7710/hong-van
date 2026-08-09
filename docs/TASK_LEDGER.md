@@ -12,6 +12,7 @@
 - [x] T008 Rà soát và đồng bộ hợp đồng biến môi trường với config/source
 - [x] T009 Rà Git hygiene, ignore policy và lịch sử secret
 - [x] T010 Xác minh runtime local bằng Docker theo owner override, không dùng WAMP
+- [x] T011 Chuẩn hóa danh mục lệnh test, lint, build, E2E và ma trận fast/full gate theo Docker
 
 ## Prompt gốc P00-P56
 
