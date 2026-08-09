@@ -4,15 +4,15 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "fabc114f1593ee414cd7c5ff5a4ff4c3796a9975",
-  "origin_main_head": "fabc114f1593ee414cd7c5ff5a4ff4c3796a9975",
+  "actual_head": "57596ab731a5f772b94d1a2e9657ae5ea46ebfdd",
+  "origin_main_head": "57596ab731a5f772b94d1a2e9657ae5ea46ebfdd",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-09T12:16:01+07:00",
+  "updated_at": "2026-08-09T21:46:46+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -87,12 +87,12 @@
       "blocker": null
     },
     "T009": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "VERIFIED",
+      "started_at": "2026-08-09T21:43:10+07:00",
+      "completed_at": "2026-08-09T21:46:46+07:00",
+      "base_head": "57596ab731a5f772b94d1a2e9657ae5ea46ebfdd",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã xác minh ignore policy, tracked/generated/reference boundaries và quét Gitleaks v8.28.0 trên 76 commit; không có secret leak hoặc file runtime/source tham chiếu ngoài allowlist.",
       "blocker": null
     },
     "T010": {
