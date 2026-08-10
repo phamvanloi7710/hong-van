@@ -29,6 +29,7 @@
 - [x] T025 Rà toàn bộ rate limiter
 - [x] T026 Rà security headers, trusted host và proxy
 - [x] T027 Xác minh queue, cache và Redis contract
+- [x] T028 Làm cứng health endpoint public và admin system ping
 
 ## Prompt gốc P00-P56
 

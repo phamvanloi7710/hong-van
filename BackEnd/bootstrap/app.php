@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\Seo\PublicRedirectController;
 use App\Http\Exceptions\ApiExceptionRenderer;
 use App\Http\Middleware\AssignRequestId;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -24,13 +26,16 @@ return Application::configure(basePath: dirname(__DIR__))
             __DIR__.'/../routes/admin.php',
         ],
         commands: __DIR__.'/../routes/console.php',
-        health: '/health',
+        then: static function (): void {
+            Route::get('/health', HealthController::class)->name('health');
+        },
     )
     ->withCommands([
         __DIR__.'/../app/Console/Commands',
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->preventRequestsDuringMaintenance(except: ['/health']);
         $middleware->convertEmptyStringsToNull(except: [
             static fn (Request $request): bool => $request->is('api/admin/v1/page-builder/*')
                 && $request->has('document'),

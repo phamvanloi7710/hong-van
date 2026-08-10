@@ -54,7 +54,7 @@ GET|PUT /api/admin/v1/page-builder/pages/{public_id}
 PUT /api/admin/v1/page-builder/pages/{public_id}/draft
 ```
 
-Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Admin ping dùng `auth` và Gate `system_health`, được P11 ánh xạ vào permission `system.health`. Identity API dùng Sanctum, permission middleware, Policy và Form Request; filter/sort chỉ nhận key trong allowlist phía server.
+Public ping chỉ trả trạng thái ứng dụng, không trả thông tin dependency hoặc cấu hình. Liveness `/health` luôn trả JSON status-only, kể cả khi client không gửi `Accept: application/json`. Admin ping dùng `auth` và Gate `system_health`, được P11 ánh xạ vào permission `system.health`. Identity API dùng Sanctum, permission middleware, Policy và Form Request; filter/sort chỉ nhận key trong allowlist phía server.
 
 Settings API dùng `settings.view`, `settings.update` và `settings.manage_settings`. Secret luôn trả `value: null` kèm `has_value`, không trả ciphertext, giá trị giải mã hoặc tên biến môi trường. Public Blade dùng `CompanySettingsViewModel` và cache nội bộ, không gọi HTTP loopback.
 
