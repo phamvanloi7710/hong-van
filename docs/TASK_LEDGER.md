@@ -31,6 +31,7 @@
 - [x] T027 Xác minh queue, cache và Redis contract
 - [x] T028 Làm cứng health endpoint public và admin system ping
 - [x] T029 Thiết lập cổng Pint, PHPStan, ESLint và TypeScript
+- [x] T030 Cổng tích hợp nền tảng
 
 ## Prompt gốc P00-P56
 

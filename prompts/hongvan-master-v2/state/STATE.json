@@ -4,15 +4,15 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "e099a10357ff0351f7173bfcb292e7d336ff7071",
-  "origin_main_head": "e099a10357ff0351f7173bfcb292e7d336ff7071",
+  "actual_head": "f5800c6a416f424f0597d2133c47e2ae67194dfe",
+  "origin_main_head": "f5800c6a416f424f0597d2133c47e2ae67194dfe",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-10T20:50:24+07:00",
+  "updated_at": "2026-08-10T21:04:28+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -276,12 +276,12 @@
       "blocker": null
     },
     "T030": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "VERIFIED",
+      "started_at": "2026-08-10T20:52:25+07:00",
+      "completed_at": "2026-08-10T21:04:28+07:00",
+      "base_head": "f5800c6a416f424f0597d2133c47e2ae67194dfe",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã xác minh foundation integration: API/foundation 9/62, health 3/15, Architecture 21/188, database comments 1/3, Pint 697, public Vite build/budget, Admin lint/unit/build-sync 30/63/123, smoke Docker, prefix guard và 28 migration đều đạt. Không mở Identity khi foundation xanh; debt dev-only npm audit được ghi T030-DEV-01.",
       "blocker": null
     },
     "T031": {
