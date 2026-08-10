@@ -65,6 +65,7 @@ final readonly class ApiExceptionRenderer
             404 => __('api.not_found'),
             409 => __('api.conflict'),
             419 => __('api.session_expired'),
+            422 => __('api.validation'),
             429 => __('api.rate_limited'),
             default => $status >= 500 ? __('api.server_error') : __('api.bad_request'),
         };

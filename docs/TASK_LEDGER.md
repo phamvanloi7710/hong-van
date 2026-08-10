@@ -22,6 +22,7 @@
 - [x] T018 Kiểm thử fresh, rollback toàn batch và remigrate trên database test cô lập
 - [x] T019 Rà mapping model, relation, cast, fillable và `public_id` không lộ khóa số qua API
 - [x] T020 Chuẩn hóa response envelope, pagination, request ID và bảo toàn binary/stream response
+- [x] T021 Làm cứng exception renderer API cho 401/403/404/409/419/422/429/500
 
 ## Prompt gốc P00-P56
 
