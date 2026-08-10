@@ -30,6 +30,7 @@
 - [x] T026 Rà security headers, trusted host và proxy
 - [x] T027 Xác minh queue, cache và Redis contract
 - [x] T028 Làm cứng health endpoint public và admin system ping
+- [x] T029 Thiết lập cổng Pint, PHPStan, ESLint và TypeScript
 
 ## Prompt gốc P00-P56
 
