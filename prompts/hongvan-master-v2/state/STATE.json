@@ -4,15 +4,15 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "21b7ec75fd1f31b5d60ad6a0ce5c71a9c26fd507",
-  "origin_main_head": "21b7ec75fd1f31b5d60ad6a0ce5c71a9c26fd507",
+  "actual_head": "a07ea7657c46275f91d815a4e4d5820a01b52894",
+  "origin_main_head": "a07ea7657c46275f91d815a4e4d5820a01b52894",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-10T07:03:43+07:00",
+  "updated_at": "2026-08-10T07:27:04+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -177,12 +177,12 @@
       "blocker": null
     },
     "T019": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "VERIFIED",
+      "started_at": "2026-08-10T07:17:46+07:00",
+      "completed_at": "2026-08-10T07:27:04+07:00",
+      "base_head": "a07ea7657c46275f91d815a4e4d5820a01b52894",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã audit động 107 model: mọi table mapping hợp lệ, 62 model có public_id đều dùng HasPublicId, 210 cast trỏ tới cột thật và 162 relation/pivot dùng bảng hongvan_; 32 API Resource không lộ numeric id, ProductDomain/Prefix/Comment tests cùng production migrate:status đều đạt.",
       "blocker": null
     },
     "T020": {

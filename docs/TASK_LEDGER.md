@@ -20,6 +20,7 @@
 - [x] T016 Cưỡng chế tiền tố `hongvan_` cho mọi bảng, model và bảng framework
 - [x] T017 Cưỡng chế comment cho mọi bảng và cột bằng kiểm tra schema MySQL thực
 - [x] T018 Kiểm thử fresh, rollback toàn batch và remigrate trên database test cô lập
+- [x] T019 Rà mapping model, relation, cast, fillable và `public_id` không lộ khóa số qua API
 
 ## Prompt gốc P00-P56
 
