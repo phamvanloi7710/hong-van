@@ -19,6 +19,7 @@
 - [x] T015 Xác minh production build Admin/public và đồng bộ output có guard vào Laravel
 - [x] T016 Cưỡng chế tiền tố `hongvan_` cho mọi bảng, model và bảng framework
 - [x] T017 Cưỡng chế comment cho mọi bảng và cột bằng kiểm tra schema MySQL thực
+- [x] T018 Kiểm thử fresh, rollback toàn batch và remigrate trên database test cô lập
 
 ## Prompt gốc P00-P56
 
