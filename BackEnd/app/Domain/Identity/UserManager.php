@@ -111,17 +111,21 @@ final readonly class UserManager
             throw new ConflictException('Hệ thống phải luôn còn ít nhất một Super Admin đang hoạt động.');
         }
 
-        $user->forceFill(['is_active' => false, 'locked_at' => now()])->save();
-        $this->sessionRevoker->revoke($user);
-        $this->auditLogger->record('identity.user.locked', $actor, 'user', $user->public_id);
+        DB::transaction(function () use ($actor, $user): void {
+            $user->forceFill(['is_active' => false, 'locked_at' => now()])->save();
+            $this->sessionRevoker->revoke($user);
+            $this->auditLogger->record('identity.user.locked', $actor, 'user', $user->public_id);
+        });
 
         return $this->load($user);
     }
 
     public function resetSessions(User $actor, User $user): void
     {
-        $this->sessionRevoker->revoke($user);
-        $this->auditLogger->record('identity.user.sessions_reset', $actor, 'user', $user->public_id);
+        DB::transaction(function () use ($actor, $user): void {
+            $this->sessionRevoker->revoke($user);
+            $this->auditLogger->record('identity.user.sessions_reset', $actor, 'user', $user->public_id);
+        });
     }
 
     /** @param list<string> $rolePublicIds */

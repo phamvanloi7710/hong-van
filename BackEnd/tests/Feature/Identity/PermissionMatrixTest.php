@@ -24,11 +24,19 @@ class PermissionMatrixTest extends TestCase
 
     public function test_direct_api_denies_user_without_permission(): void
     {
-        $this->actingAs(User::factory()->create());
+        $actor = User::factory()->create();
+        $target = User::factory()->create();
+        $this->actingAs($actor);
 
         $this->getJson('/api/admin/v1/identity/users')
             ->assertForbidden()
             ->assertJsonPath('success', false);
+        $this->postJson('/api/admin/v1/identity/users/'.$target->public_id.'/activate')
+            ->assertForbidden();
+        $this->postJson('/api/admin/v1/identity/users/'.$target->public_id.'/lock')
+            ->assertForbidden();
+        $this->postJson('/api/admin/v1/identity/users/'.$target->public_id.'/reset-sessions')
+            ->assertForbidden();
     }
 
     public function test_role_permission_and_user_overrides_follow_deny_then_allow_matrix(): void
@@ -123,12 +131,64 @@ class PermissionMatrixTest extends TestCase
             'last_activity' => now()->timestamp,
         ]);
         $this->actingAs($actor);
+        Log::spy();
 
-        $this->postJson('/api/admin/v1/identity/users/'.$target->public_id.'/lock')->assertOk();
+        $response = $this->postJson('/api/admin/v1/identity/users/'.$target->public_id.'/lock')
+            ->assertOk()
+            ->assertJsonPath('data.is_active', false);
 
         $this->assertDatabaseMissing('hongvan_sessions', ['id' => 'identity-session']);
         $this->assertDatabaseMissing('hongvan_personal_access_tokens', ['id' => $token->getKey()]);
         $this->assertDatabaseHas('hongvan_users', ['id' => $target->getKey(), 'is_active' => false]);
+        $this->assertNotNull($response->json('data.locked_at'));
+        Log::shouldHaveReceived('notice')->withArgs(
+            static fn (string $message, array $context): bool => $message === 'Admin identity event.'
+                && $context['event'] === 'identity.user.locked'
+                && $context['actor_public_id'] === $actor->public_id
+                && $context['subject_public_id'] === $target->public_id,
+        );
+    }
+
+    public function test_activate_and_reset_sessions_are_audited_and_reflect_current_state(): void
+    {
+        $actor = $this->superAdmin();
+        $target = User::factory()->locked()->create(['is_active' => false]);
+        $this->actingAs($actor);
+        Log::spy();
+
+        $this->postJson('/api/admin/v1/identity/users/'.$target->public_id.'/activate')
+            ->assertOk()
+            ->assertJsonPath('data.is_active', true)
+            ->assertJsonPath('data.locked_at', null);
+
+        Log::shouldHaveReceived('notice')->withArgs(
+            static fn (string $message, array $context): bool => $message === 'Admin identity event.'
+                && $context['event'] === 'identity.user.activated'
+                && $context['actor_public_id'] === $actor->public_id
+                && $context['subject_public_id'] === $target->public_id,
+        );
+
+        $token = $target->createToken('identity-reset-test')->accessToken;
+        DB::table('hongvan_sessions')->insert([
+            'id' => 'identity-reset-session',
+            'user_id' => $target->getKey(),
+            'ip_address' => '127.0.0.1',
+            'user_agent' => 'T034 test',
+            'payload' => 'payload',
+            'last_activity' => now()->timestamp,
+        ]);
+
+        $this->postJson('/api/admin/v1/identity/users/'.$target->public_id.'/reset-sessions')
+            ->assertOk();
+
+        $this->assertDatabaseMissing('hongvan_sessions', ['id' => 'identity-reset-session']);
+        $this->assertDatabaseMissing('hongvan_personal_access_tokens', ['id' => $token->getKey()]);
+        Log::shouldHaveReceived('notice')->withArgs(
+            static fn (string $message, array $context): bool => $message === 'Admin identity event.'
+                && $context['event'] === 'identity.user.sessions_reset'
+                && $context['actor_public_id'] === $actor->public_id
+                && $context['subject_public_id'] === $target->public_id,
+        );
     }
 
     public function test_super_admin_can_crud_custom_role_and_permission_with_filtering(): void
