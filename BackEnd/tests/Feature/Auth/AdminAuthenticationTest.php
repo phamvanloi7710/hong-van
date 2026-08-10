@@ -85,6 +85,9 @@ class AdminAuthenticationTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.public_id', $user->public_id);
 
+        $authenticatedSessionId = session()->getId();
+        $authenticatedCsrfToken = session()->token();
+
         Log::shouldHaveReceived('notice')->once()->withArgs(
             static fn (string $message, array $context): bool => $message === 'Admin authentication event.'
                 && $context['event'] === 'auth.login.succeeded'
@@ -98,6 +101,8 @@ class AdminAuthenticationTest extends TestCase
             ->assertJsonPath('success', true);
 
         $this->assertGuest();
+        $this->assertNotSame($authenticatedSessionId, session()->getId());
+        $this->assertNotSame($authenticatedCsrfToken, session()->token());
         $this->withHeaders($this->statefulHeaders)
             ->getJson('/api/admin/v1/auth/me')
             ->assertUnauthorized();
@@ -136,6 +141,11 @@ class AdminAuthenticationTest extends TestCase
         $password = 'Safe-password-123!';
         $user = User::factory()->create([...$state, 'password' => $password]);
 
+        $this->withSession(['stale_session' => true]);
+        $this->actingAs($user);
+        $previousSessionId = session()->getId();
+        $previousCsrfToken = session()->token();
+
         $this->withHeaders($this->statefulHeaders)
             ->postJson('/api/admin/v1/auth/login', [
                 'email' => $user->email,
@@ -145,6 +155,8 @@ class AdminAuthenticationTest extends TestCase
             ->assertJsonPath('errors.email.0', __('auth.credentials_invalid'));
 
         $this->assertGuest();
+        $this->assertNotSame($previousSessionId, session()->getId());
+        $this->assertNotSame($previousCsrfToken, session()->token());
     }
 
     /**

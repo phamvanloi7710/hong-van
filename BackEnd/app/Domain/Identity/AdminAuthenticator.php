@@ -24,6 +24,7 @@ final readonly class AdminAuthenticator
         };
 
         if ($reason !== null) {
+            $this->invalidateSession($request);
             $this->auditLogger->loginFailed($request, $email, $user, $reason);
 
             throw ValidationException::withMessages([
@@ -41,10 +42,16 @@ final readonly class AdminAuthenticator
     public function logout(Request $request): void
     {
         $user = $request->user();
+
+        $this->invalidateSession($request);
+        $this->auditLogger->logoutSucceeded($request, $user instanceof User ? $user : null);
+    }
+
+    private function invalidateSession(Request $request): void
+    {
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         Auth::forgetGuards();
-        $this->auditLogger->logoutSucceeded($request, $user instanceof User ? $user : null);
     }
 }
