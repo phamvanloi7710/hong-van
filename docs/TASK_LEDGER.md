@@ -27,6 +27,7 @@
 - [x] T023 Chuẩn hóa ưu tiên locale API và timezone UTC/Asia/Ho_Chi_Minh
 - [x] T024 Làm cứng allowlist filter, sort, search, pagination và bulk
 - [x] T025 Rà toàn bộ rate limiter
+- [x] T026 Rà security headers, trusted host và proxy
 
 ## Prompt gốc P00-P56
 

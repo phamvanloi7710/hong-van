@@ -23,7 +23,7 @@ final class SecurityHeaders
         $nonce = rtrim(strtr(base64_encode(random_bytes(18)), '+/', '-_'), '=');
         $request->attributes->set('csp_nonce', $nonce);
         $response = $next($request);
-        $isPreview = $request->is('preview/*') || $request->is('api/admin/v1/preview-sessions*');
+        $isPreview = $request->is('preview/*');
         $contentSecurityPolicy = $isPreview
             ? config('security.headers.preview_content_security_policy')
             : config('security.headers.content_security_policy');
