@@ -181,7 +181,8 @@ class ApiFoundationTest extends TestCase
             ->assertStatus(409)
             ->assertJsonPath('message', 'Dữ liệu xung đột với trạng thái hiện tại.');
 
-        RateLimiter::for('api', static fn (): Limit => Limit::perMinute(1)->by('api-foundation-test'));
+        $rateLimitKey = 'api-foundation-test-'.Str::ulid();
+        RateLimiter::for('api', static fn (): Limit => Limit::perMinute(1)->by($rateLimitKey));
 
         $this->getJson('/api/public/v1/system/ping')->assertOk();
         $this->getJson('/api/public/v1/system/ping')

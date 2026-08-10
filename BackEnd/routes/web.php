@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminSpaController;
-use App\Http\Controllers\PublicSite\PublicPageController;
 use App\Http\Controllers\PublicSite\PublicFormController;
+use App\Http\Controllers\PublicSite\PublicPageController;
 use App\Http\Controllers\Seo\RobotsController;
 use App\Http\Controllers\Seo\SitemapController;
 use Illuminate\Support\Facades\Route;

@@ -9,6 +9,7 @@ use Illuminate\Console\Command;
 final class PublishScheduledPages extends Command
 {
     protected $signature = 'pages:publish-scheduled';
+
     protected $description = 'Publish due Page Builder versions idempotently';
 
     public function handle(PagePublishingManager $manager): int
