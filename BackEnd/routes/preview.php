@@ -9,9 +9,9 @@ Route::prefix('preview')
     ->group(function (): void {
         Route::get('page-builder/{token}', PageBuilderPreviewController::class)
             ->where('token', '[A-Za-z0-9]{64}')
-            ->middleware(['signed:relative', 'auth'])
+            ->middleware(['signed:relative', 'auth', 'throttle:preview.views'])
             ->name('page-builder');
         Route::get('theme/{theme:public_id}/{version:public_id}', ThemePreviewController::class)
-            ->middleware('signed')
+            ->middleware(['signed', 'throttle:preview.views'])
             ->name('theme');
     });

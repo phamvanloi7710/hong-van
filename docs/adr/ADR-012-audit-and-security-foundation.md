@@ -14,7 +14,7 @@ Các thao tác xác thực, phân quyền và cấu hình cần một dấu vế
 - Audit log không có foreign key đến entity nguồn để lịch sử vẫn nguyên vẹn khi entity bị xóa. Model từ chối update/delete; API P15 chỉ cung cấp `GET` với permission `audit.view` và filter/sort allowlist.
 - CSP mặc định không cho inline script. Angular production tắt inline critical CSS để không sinh event handler `onload` trái với CSP nhưng vẫn giữ minify và output hashing.
 - Response luôn có `nosniff`, referrer policy và frame policy. Preview cùng origin có policy riêng; HSTS chỉ bật khi production chạy HTTPS.
-- Login, public form, upload và preview session dùng limiter có tên. Trusted hosts/proxies, retention audit và security log đều lấy từ environment.
+- API dùng key user/IP; login/reset dùng email đã hash + IP; form dùng IP chung; search dùng IP hash; upload và preview session/view dùng user hoặc IP. Limiter có store riêng `CACHE_LIMITER_STORE`, mặc định Redis shared để nhiều instance cùng áp dụng ngưỡng. Trusted hosts/proxies, retention audit và security log đều lấy từ environment.
 
 ## Hệ quả
 

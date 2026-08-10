@@ -145,6 +145,11 @@ class AppServiceProvider extends ServiceProvider
                 ->by(self::securityThrottleKey($request, 'preview'));
         });
 
+        RateLimiter::for('preview.views', static function (Request $request): Limit {
+            return Limit::perMinute(max(1, (int) config('security.rate_limits.preview_views_per_minute', 60)))
+                ->by(self::securityThrottleKey($request, 'preview-view'));
+        });
+
         ResetPassword::createUrlUsing(static function (User $user, string $token): string {
             return rtrim((string) config('app.url'), '/')
                 .'/admin/reset-password?token='.rawurlencode($token)

@@ -119,7 +119,7 @@ Page Builder API P21 yêu cầu Sanctum, `PagePolicy` và permission `pages.view
 - Client có thể gửi `X-Request-ID`, nhưng server chỉ giữ giá trị ULID hợp lệ; giá trị khác bị thay bằng ULID mới.
 - Response trả cùng ID trong header `X-Request-ID` và `meta.request_id`.
 - Middleware thêm `request_id` vào shared log context, không log body, token hoặc credential.
-- Rate limiter dùng store riêng `CACHE_LIMITER_STORE`; local mặc định `file`, còn production nhiều instance phải cấu hình shared store phù hợp như Redis.
+- Rate limiter dùng store riêng `CACHE_LIMITER_STORE`; default và `.env.example` dùng Redis shared. Môi trường production nhiều instance phải giữ Redis (không dùng `file`); test dùng `array` một cách tường minh.
 
 ## Locale
 

@@ -52,7 +52,7 @@
 
 ## Public forms
 
-- Rate limiter có tên cho login, public form, upload và preview session; endpoint tương lai phải gắn đúng limiter.
+- Rate limiter có tên theo bề mặt: API dùng user/IP, login/reset dùng email đã hash + IP, form dùng IP chung, search dùng IP hash, upload/preview dùng user hoặc IP. Store limiter production là Redis shared; endpoint mới phải gắn limiter đúng bề mặt.
 - Honeypot.
 - Optional Turnstile/reCAPTCHA qua setting.
 - Server validation.
