@@ -36,8 +36,11 @@ final readonly class SetApiLocale
     {
         $allowedLocales = $this->locales->supportedLocales();
         $defaultLocale = $this->locales->defaultLocale();
-        $user = $request->user();
-        $userLocale = $user?->getAttribute('locale');
+        $user = $request->user('sanctum') ?? $request->user();
+        $userLocale = $user?->preferences()
+            ->where('namespace', (string) config('admin_preferences.namespace', 'admin'))
+            ->where('key', 'locale')
+            ->first()?->value;
 
         $candidates = [
             is_string($userLocale) ? $userLocale : null,
