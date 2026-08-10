@@ -7,6 +7,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 final class CropSolutionQuery
 {
+    private const SORTS = ['code', 'sort_order', 'published_at', 'updated_at'];
+
     /**
      * @param  array<string, mixed>  $input
      * @return LengthAwarePaginator<int, CropSolution>
@@ -51,7 +53,11 @@ final class CropSolutionQuery
 
         $sort = is_string($input['sort'] ?? null) ? $input['sort'] : '-updated_at';
         $descending = str_starts_with($sort, '-');
-        $builder->orderBy(ltrim($sort, '-'), $descending ? 'desc' : 'asc')->orderByDesc('id');
+        $column = ltrim($sort, '-');
+        $builder->orderBy(
+            in_array($column, self::SORTS, true) ? $column : 'updated_at',
+            $descending ? 'desc' : 'asc',
+        )->orderByDesc('id');
 
         return $builder->paginate((int) ($input['per_page'] ?? 20));
     }

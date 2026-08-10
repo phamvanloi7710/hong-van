@@ -7,6 +7,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 final class ProductCatalogQuery
 {
+    private const SORTS = ['created_at', 'updated_at', 'sku', 'published_at'];
+
     /**
      * @param  array<string, mixed>  $input
      * @return LengthAwarePaginator<int, Product>
@@ -65,7 +67,10 @@ final class ProductCatalogQuery
         $sort = is_string($input['sort'] ?? null) ? $input['sort'] : '-updated_at';
         $descending = str_starts_with($sort, '-');
         $column = ltrim($sort, '-');
-        $builder->orderBy($column, $descending ? 'desc' : 'asc')->orderByDesc('id');
+        $builder->orderBy(
+            in_array($column, self::SORTS, true) ? $column : 'updated_at',
+            $descending ? 'desc' : 'asc',
+        )->orderByDesc('id');
 
         return $builder->paginate((int) ($input['per_page'] ?? 20));
     }

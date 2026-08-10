@@ -25,6 +25,7 @@
 - [x] T021 Làm cứng exception renderer API cho 401/403/404/409/419/422/429/500
 - [x] T022 Xác minh ULID request ID, header/meta và log context không chứa dữ liệu nhạy cảm
 - [x] T023 Chuẩn hóa ưu tiên locale API và timezone UTC/Asia/Ho_Chi_Minh
+- [x] T024 Làm cứng allowlist filter, sort, search, pagination và bulk
 
 ## Prompt gốc P00-P56
 
