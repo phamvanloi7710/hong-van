@@ -4,15 +4,15 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "ebf2ce288ae53ae8264f85e9e43a361dcae70b7b",
-  "origin_main_head": "ebf2ce288ae53ae8264f85e9e43a361dcae70b7b",
+  "actual_head": "1141e0b6353374ff7da0801d90d6063aa30a39c8",
+  "origin_main_head": "1141e0b6353374ff7da0801d90d6063aa30a39c8",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-10T19:39:02+07:00",
+  "updated_at": "2026-08-10T19:55:30+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -249,12 +249,12 @@
       "blocker": null
     },
     "T027": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "VERIFIED",
+      "started_at": "2026-08-10T19:46:36+07:00",
+      "completed_at": "2026-08-10T19:55:30+07:00",
+      "base_head": "1141e0b6353374ff7da0801d90d6063aa30a39c8",
       "result_head": null,
-      "summary": null,
+      "summary": "Đã xác minh Docker dùng Redis cho queue/cache/preview, DB 0/1 tách biệt, prefix hongvan_cache_, cache tags hoạt động và database/file fallback tồn tại; bốn tác vụ nặng đều ShouldQueue, không có explicit sync dispatch. Contract 3/23, Architecture 21/188, Pint 695 files và Admin lint đều đạt.",
       "blocker": null
     },
     "T028": {
