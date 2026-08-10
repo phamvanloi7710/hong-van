@@ -5,11 +5,13 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use Laravel\Sanctum\PersonalAccessToken;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -39,6 +41,18 @@ class AdminAuthenticationTest extends TestCase
         $this->assertTrue(config('session.encrypt'));
         $this->assertTrue(config('session.http_only'));
         $this->assertSame('lax', config('session.same_site'));
+
+        $sameOriginRequest = Request::create('/api/admin/v1/auth/login', 'POST', server: [
+            'HTTP_ORIGIN' => 'http://hongvan.local',
+            'HTTP_REFERER' => 'http://hongvan.local/admin/login',
+        ]);
+        $externalRequest = Request::create('/api/admin/v1/auth/login', 'POST', server: [
+            'HTTP_ORIGIN' => 'https://external.example',
+            'HTTP_REFERER' => 'https://external.example/login',
+        ]);
+
+        $this->assertTrue(EnsureFrontendRequestsAreStateful::fromFrontend($sameOriginRequest));
+        $this->assertFalse(EnsureFrontendRequestsAreStateful::fromFrontend($externalRequest));
     }
 
     public function test_admin_can_login_restore_session_read_profile_and_logout(): void

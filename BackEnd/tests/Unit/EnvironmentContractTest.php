@@ -74,6 +74,16 @@ class EnvironmentContractTest extends TestCase
         }
     }
 
+    public function test_session_encryption_is_enabled_in_the_example_and_by_default(): void
+    {
+        $variables = $this->variables($this->backendPath('.env.example'));
+        $sessionConfig = file_get_contents($this->backendPath('config/session.php'));
+
+        $this->assertSame('true', $variables['SESSION_ENCRYPT'] ?? null);
+        $this->assertIsString($sessionConfig);
+        $this->assertStringContainsString("'encrypt' => env('SESSION_ENCRYPT', true)", $sessionConfig);
+    }
+
     /** @return array<string, string> */
     private function variables(string $path): array
     {

@@ -32,6 +32,7 @@
 - [x] T028 Làm cứng health endpoint public và admin system ping
 - [x] T029 Thiết lập cổng Pint, PHPStan, ESLint và TypeScript
 - [x] T030 Cổng tích hợp nền tảng
+- [x] T031 Làm cứng Sanctum same-origin và CSRF
 
 ## Prompt gốc P00-P56
 
