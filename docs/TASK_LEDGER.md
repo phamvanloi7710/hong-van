@@ -34,6 +34,7 @@
 - [x] T030 Cổng tích hợp nền tảng
 - [x] T031 Làm cứng Sanctum same-origin và CSRF
 - [x] T032 Ổn định login, logout và vòng đời session
+- [x] T033 Làm cứng quên và đặt lại mật khẩu
 
 ## Prompt gốc P00-P56
 

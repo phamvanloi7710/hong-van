@@ -174,6 +174,8 @@ class AdminAuthenticationTest extends TestCase
     {
         Notification::fake();
         $user = User::factory()->create();
+        $inactiveUser = User::factory()->create(['is_active' => false]);
+        $lockedUser = User::factory()->create(['locked_at' => now()]);
 
         $existingResponse = $this->withHeaders($this->statefulHeaders)
             ->postJson('/api/admin/v1/auth/forgot-password', ['email' => $user->email])
@@ -184,6 +186,15 @@ class AdminAuthenticationTest extends TestCase
             ->assertOk();
 
         $this->assertSame($existingResponse->json('message'), $missingResponse->json('message'));
+
+        foreach ([$inactiveUser, $lockedUser] as $ineligibleUser) {
+            $response = $this->withHeaders($this->statefulHeaders)
+                ->postJson('/api/admin/v1/auth/forgot-password', ['email' => $ineligibleUser->email])
+                ->assertOk();
+
+            $this->assertSame($existingResponse->json('message'), $response->json('message'));
+            Notification::assertNotSentTo($ineligibleUser, ResetPasswordNotification::class);
+        }
 
         Notification::assertSentTo(
             $user,
@@ -230,6 +241,69 @@ class AdminAuthenticationTest extends TestCase
         $this->assertDatabaseMissing('hongvan_personal_access_tokens', [
             'id' => $personalToken->accessToken->getKey(),
         ]);
+    }
+
+    public function test_password_reset_token_cannot_be_reused_or_used_after_expiry(): void
+    {
+        $user = User::factory()->create();
+        $resetToken = Password::broker()->createToken($user);
+        $newPassword = 'New-safe-password-456!';
+
+        $this->withHeaders($this->statefulHeaders)
+            ->postJson('/api/admin/v1/auth/reset-password', [
+                'email' => $user->email,
+                'token' => $resetToken,
+                'password' => $newPassword,
+                'password_confirmation' => $newPassword,
+            ])
+            ->assertOk();
+
+        $this->withHeaders($this->statefulHeaders)
+            ->postJson('/api/admin/v1/auth/reset-password', [
+                'email' => $user->email,
+                'token' => $resetToken,
+                'password' => 'Another-safe-password-789!',
+                'password_confirmation' => 'Another-safe-password-789!',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonPath('errors.email.0', __('auth.password_reset_invalid'));
+
+        $expiredUser = User::factory()->create();
+        $expiredToken = Password::broker()->createToken($expiredUser);
+
+        $this->travel((int) config('auth.passwords.users.expire') + 1)->minutes();
+
+        $this->withHeaders($this->statefulHeaders)
+            ->postJson('/api/admin/v1/auth/reset-password', [
+                'email' => $expiredUser->email,
+                'token' => $expiredToken,
+                'password' => 'Expired-safe-password-789!',
+                'password_confirmation' => 'Expired-safe-password-789!',
+            ])
+            ->assertUnprocessable()
+            ->assertJsonPath('errors.email.0', __('auth.password_reset_invalid'));
+    }
+
+    public function test_password_reset_endpoint_is_rate_limited(): void
+    {
+        config()->set('api.auth_rate_limits.password_per_minute', 2);
+        $payload = [
+            'email' => 'reset-rate-limit@example.test',
+            'token' => 'invalid-reset-token',
+            'password' => 'New-safe-password-456!',
+            'password_confirmation' => 'New-safe-password-456!',
+        ];
+
+        $this->withHeaders($this->statefulHeaders)
+            ->postJson('/api/admin/v1/auth/reset-password', $payload)
+            ->assertUnprocessable();
+        $this->withHeaders($this->statefulHeaders)
+            ->postJson('/api/admin/v1/auth/reset-password', $payload)
+            ->assertUnprocessable();
+        $this->withHeaders($this->statefulHeaders)
+            ->postJson('/api/admin/v1/auth/reset-password', $payload)
+            ->assertTooManyRequests()
+            ->assertHeader('Retry-After');
     }
 
     public function test_login_endpoint_is_rate_limited(): void
