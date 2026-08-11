@@ -12,6 +12,7 @@ final class SearchIndexHealth
         $driver = DB::connection()->getDriverName();
         $database = DB::connection()->getDatabaseName();
         $collation = (string) DB::scalar('SELECT DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = ?', [$database]);
+        $accentInsensitive = $this->isAccentInsensitive($driver, $collation);
         $expected = [
             'hongvan_product_translations' => 'hv_p41_product_search_ft',
             'hongvan_crop_solution_translations' => 'hv_p41_crop_solution_search_ft',
@@ -40,11 +41,22 @@ final class SearchIndexHealth
             'driver' => $driver,
             'collation' => $collation,
             'healthy' => $driver === 'mysql'
-                && str_contains($collation, '_ai_ci')
+                && $accentInsensitive
                 && ! in_array(false, $indexes, true)
                 && ! in_array(false, array_map(static fn (array $plan): bool => $plan['access'] === 'fulltext', $plans), true),
             'indexes' => $indexes,
             'plans' => $plans,
         ];
+    }
+
+    private function isAccentInsensitive(string $driver, string $collation): bool
+    {
+        if ($driver !== 'mysql' || preg_match('/\Autf8mb4_[a-z0-9_]+\z/i', $collation) !== 1) {
+            return false;
+        }
+
+        return (bool) DB::scalar(
+            "SELECT _utf8mb4'a' COLLATE {$collation} = _utf8mb4'á' COLLATE {$collation}",
+        );
     }
 }

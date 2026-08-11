@@ -32,7 +32,11 @@ final class ReportTest extends TestCase
         $this->lead($viewer, '=2+3');
         $this->lead($other, 'Must not leak');
 
-        $payload = ['from' => now()->subDay()->toDateString(), 'to' => now()->toDateString(), 'timezone' => 'Asia/Ho_Chi_Minh'];
+        $payload = [
+            'from' => now('Asia/Ho_Chi_Minh')->subDay()->toDateString(),
+            'to' => now('Asia/Ho_Chi_Minh')->toDateString(),
+            'timezone' => 'Asia/Ho_Chi_Minh',
+        ];
         $response = $this->actingAs($viewer)->postJson('/api/admin/v1/dashboard/reports/leads', $payload)
             ->assertCreated()
             ->assertJsonPath('data.status', 'ready')
@@ -56,8 +60,9 @@ final class ReportTest extends TestCase
         $this->lead($viewer, 'Second');
 
         $this->actingAs($viewer)->postJson('/api/admin/v1/dashboard/reports/leads', [
-            'from' => now()->subDay()->toDateString(),
-            'to' => now()->toDateString(),
+            'from' => now('Asia/Ho_Chi_Minh')->subDay()->toDateString(),
+            'to' => now('Asia/Ho_Chi_Minh')->toDateString(),
+            'timezone' => 'Asia/Ho_Chi_Minh',
         ])->assertStatus(202)->assertJsonPath('data.status', 'queued')->assertJsonPath('data.row_count', 2);
 
         Queue::assertPushed(GenerateLeadReportExport::class);

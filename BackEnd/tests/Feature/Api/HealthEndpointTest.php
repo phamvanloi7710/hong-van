@@ -25,7 +25,7 @@ final class HealthEndpointTest extends TestCase
 
         $requestId = (string) Str::ulid();
         $this->withHeader('X-Request-ID', $requestId)
-            ->getJson('/api/v1/system/ping')
+            ->getJson('/api/public/v1/system/ping')
             ->assertOk()
             ->assertExactJson([
                 'success' => true,

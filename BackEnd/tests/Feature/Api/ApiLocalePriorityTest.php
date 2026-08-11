@@ -34,7 +34,7 @@ class ApiLocalePriorityTest extends TestCase
                 'X-Locale' => 'en',
                 'Accept-Language' => 'vi-VN,vi;q=0.9',
             ])
-            ->getJson('/api/v1/system/ping')
+            ->getJson('/api/public/v1/system/ping')
             ->assertOk()
             ->assertHeader('Content-Language', 'zh');
     }
