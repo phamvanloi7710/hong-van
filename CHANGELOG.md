@@ -12,6 +12,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Faster GitHub backend quality startup.
 - Focused public contact and quotation smoke coverage.
 
+## [0.1.1] - 2026-08-12
+
+### Fixed
+
+- Removed duplicate Markdown document blocks introduced by a Web IDE replacement during the `v0.1.0` release workflow.
+- Restored one canonical README, Codex state, OSS readiness assessment, and application draft without changing application code.
+
 ## [0.1.0] - 2026-08-12
 
 ### Added
@@ -36,5 +43,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - This is an early `0.x` release intended for evaluation, contribution, and controlled deployments.
 - Checkout, online payment, and e-commerce order processing are intentionally out of scope.
 
-[Unreleased]: https://github.com/phamvanloi7710/hong-van/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/phamvanloi7710/hong-van/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/phamvanloi7710/hong-van/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/phamvanloi7710/hong-van/releases/tag/v0.1.0
