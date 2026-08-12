@@ -1,0 +1,94 @@
+name: Documentation issue
+description: Report missing, unclear, incorrect, or outdated project documentation.
+title: "[Docs]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Documentation improvements are welcome.
+
+        Please identify the affected document as precisely as possible.
+
+        Do not include credentials, tokens, production data, or private information in this issue.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checklist
+      options:
+        - label: I searched existing issues for the same documentation problem.
+          required: true
+        - label: This report contains no sensitive information.
+          required: true
+
+  - type: dropdown
+    id: documentation-area
+    attributes:
+      label: Documentation area
+      options:
+        - README
+        - CONTRIBUTING
+        - SECURITY
+        - Docker / local setup
+        - Deployment
+        - Backend
+        - Admin / Angular
+        - API
+        - Database
+        - Page Builder
+        - Security
+        - CI / testing
+        - Historical prompt documentation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Document or location
+      description: Provide the file path, section, page, or heading if known.
+      placeholder: README.md → Quick Start with Docker
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Problem type
+      options:
+        - Missing documentation
+        - Incorrect documentation
+        - Outdated documentation
+        - Unclear documentation
+        - Broken example or command
+        - Typo or formatting
+        - Translation / localization
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong?
+      description: Describe the documentation problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-change
+    attributes:
+      label: Suggested improvement
+      description: Explain what should be added, removed, clarified, or corrected.
+
+  - type: textarea
+    id: audience
+    attributes:
+      label: Intended audience
+      description: Who is likely to be affected by this documentation problem?
+      placeholder: New contributor, maintainer, administrator, developer, deployer, etc.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Include any examples or screenshots that help explain the problem.

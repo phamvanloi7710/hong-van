@@ -1,0 +1,110 @@
+name: Feature request
+description: Propose an improvement or new capability for Hong Van.
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing an improvement.
+
+        Please focus on the problem to solve before describing implementation details.
+
+        Hong Van currently focuses on company content, fertilizer products, transportation, warehousing, quotation requests, CMS functionality, SEO, and administration.
+
+        Cart, checkout, payment, and e-commerce order processing are outside the current product scope unless maintainers explicitly decide otherwise.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checklist
+      options:
+        - label: I searched existing issues and did not find an equivalent request.
+          required: true
+        - label: I have described the user or project problem this feature would solve.
+          required: true
+        - label: This issue does not contain sensitive or confidential information.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Project area
+      options:
+        - Public website
+        - Admin application
+        - Laravel API
+        - Authentication / permissions
+        - Page Builder
+        - Media management
+        - Products / pricing
+        - SEO
+        - Transportation
+        - Warehouses
+        - Dashboard / reports
+        - Localization
+        - Docker / developer experience
+        - CI / quality tooling
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem or limitation are you trying to solve?
+      placeholder: Describe the problem from the user's or maintainer's perspective.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior you would like to see.
+      placeholder: Explain the desired result without requiring a particular implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any workarounds or alternative approaches you considered.
+
+  - type: textarea
+    id: users
+    attributes:
+      label: Who benefits from this?
+      description: Identify the users, administrators, developers, or maintainers who would benefit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility or migration considerations
+      description: |
+        Mention database migrations, API compatibility, configuration changes,
+        deployment impact, or other upgrade concerns if relevant.
+
+  - type: textarea
+    id: security
+    attributes:
+      label: Security considerations
+      description: Describe any authentication, authorization, privacy, upload, content-rendering, or other security implications.
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add diagrams, screenshots, references, or other useful context.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to help implement or test this feature.
+          required: false
