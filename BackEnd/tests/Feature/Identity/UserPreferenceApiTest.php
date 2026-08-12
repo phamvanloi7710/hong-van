@@ -109,9 +109,16 @@ class UserPreferenceApiTest extends TestCase
             'key' => 'theme',
             'value' => ['skin' => 'removed-skin', 'menu_density' => 'invalid'],
         ]);
+        UserPreference::query()->create([
+            'user_id' => $user->getKey(),
+            'namespace' => 'admin',
+            'key' => 'locale',
+            'value' => 'fr',
+        ]);
 
         $this->getJson('/api/admin/v1/preferences')
             ->assertOk()
+            ->assertJsonPath('data.locale', 'vi')
             ->assertJsonPath('data.theme.skin', 'indigo-light')
             ->assertJsonPath('data.theme.menu_density', 'default');
     }

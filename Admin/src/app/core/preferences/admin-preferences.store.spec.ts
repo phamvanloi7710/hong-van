@@ -1,8 +1,9 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { ApiEnvelope } from '../auth/auth.models';
+import { sessionCredentialsInterceptor } from '../auth/auth.interceptor';
 import { AdminPreferencesDto } from './admin-preferences.model';
 import { AdminPreferencesStore } from './admin-preferences.store';
 import { LocalAdminPreferencesCache } from './local-admin-preferences.cache';
@@ -40,7 +41,10 @@ describe('AdminPreferencesStore', () => {
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(withInterceptors([sessionCredentialsInterceptor])),
+        provideHttpClientTesting(),
+      ],
     });
     store = TestBed.inject(AdminPreferencesStore);
     cache = TestBed.inject(LocalAdminPreferencesCache);
@@ -56,6 +60,25 @@ describe('AdminPreferencesStore', () => {
     expect(store.theme().skin).toBe('teal-light');
     expect(store.locale()).toBe('en');
     expect(store.favoriteMenuIds()).toEqual(['dashboard']);
+  });
+
+  it('changes locale immediately, persists it, and sends the new X-Locale header', () => {
+    store.initialize('01JUSER').subscribe();
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(preferences));
+
+    store.updateLocale('zh');
+
+    expect(store.locale()).toBe('zh');
+    expect(document.documentElement.lang).toBe('zh');
+    expect(cache.load('01JUSER')?.locale).toBe('zh');
+
+    const request = httpTesting.expectOne('/api/admin/v1/preferences');
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual({ locale: 'zh' });
+    expect(request.request.headers.get('X-Locale')).toBe('zh');
+    request.flush(envelope({ ...preferences, locale: 'zh' }));
+
+    expect(store.locale()).toBe('zh');
   });
 
   it('applies the active user cache immediately and then reconciles the server theme', () => {
