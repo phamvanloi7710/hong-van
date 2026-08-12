@@ -42,14 +42,16 @@ final readonly class UserManager
     public function update(User $actor, User $user, array $data): User
     {
         if ($actor->is($user) && (array_key_exists('role_ids', $data) || array_key_exists('permission_overrides', $data))) {
-            throw new ConflictException('Bạn không thể tự thay đổi quyền hoặc vai trò của chính mình.');
-        }
-
-        if (array_key_exists('role_ids', $data) && $this->wouldRemoveLastSuperAdmin($user, $data['role_ids'])) {
-            throw new ConflictException('Hệ thống phải luôn còn ít nhất một Super Admin đang hoạt động.');
+            throw new ConflictException(__('api.identity_self_authorization_update_forbidden'));
         }
 
         return DB::transaction(function () use ($actor, $user, $data): User {
+            $superAdminRole = array_key_exists('role_ids', $data) ? $this->lockSuperAdminRole() : null;
+            $user = $this->lockUser($user);
+            if ($superAdminRole !== null && $this->wouldRemoveLastSuperAdmin($user, $data['role_ids'], $superAdminRole)) {
+                throw new ConflictException(__('api.identity_active_super_admin_required'));
+            }
+
             $fields = Arr::only($data, ['name', 'email', 'password']);
             if (isset($fields['email'])) {
                 $fields['email'] = Str::lower((string) $fields['email']);
@@ -80,13 +82,16 @@ final readonly class UserManager
     public function delete(User $actor, User $user): void
     {
         if ($actor->is($user)) {
-            throw new ConflictException('Bạn không thể tự xóa tài khoản của chính mình.');
-        }
-        if ($this->isCountedSuperAdmin($user) && $this->permissions->superAdminCount() <= 1) {
-            throw new ConflictException('Hệ thống phải luôn còn ít nhất một Super Admin đang hoạt động.');
+            throw new ConflictException(__('api.identity_self_delete_forbidden'));
         }
 
         DB::transaction(function () use ($actor, $user): void {
+            $superAdminRole = $this->lockSuperAdminRole();
+            $user = $this->lockUser($user);
+            if ($this->isCountedSuperAdmin($user, $superAdminRole) && $this->permissions->superAdminCount() <= 1) {
+                throw new ConflictException(__('api.identity_active_super_admin_required'));
+            }
+
             $publicId = $user->public_id;
             $this->sessionRevoker->revoke($user);
             $user->delete();
@@ -96,8 +101,13 @@ final readonly class UserManager
 
     public function activate(User $actor, User $user): User
     {
-        $user->forceFill(['is_active' => true, 'locked_at' => null])->save();
-        $this->auditLogger->record('identity.user.activated', $actor, 'user', $user->public_id);
+        $user = DB::transaction(function () use ($actor, $user): User {
+            $user = $this->lockUser($user);
+            $user->forceFill(['is_active' => true, 'locked_at' => null])->save();
+            $this->auditLogger->record('identity.user.activated', $actor, 'user', $user->public_id);
+
+            return $user;
+        });
 
         return $this->load($user);
     }
@@ -105,13 +115,16 @@ final readonly class UserManager
     public function lock(User $actor, User $user): User
     {
         if ($actor->is($user)) {
-            throw new ConflictException('Bạn không thể tự khóa tài khoản của chính mình.');
-        }
-        if ($this->isCountedSuperAdmin($user) && $this->permissions->superAdminCount() <= 1) {
-            throw new ConflictException('Hệ thống phải luôn còn ít nhất một Super Admin đang hoạt động.');
+            throw new ConflictException(__('api.identity_self_lock_forbidden'));
         }
 
         DB::transaction(function () use ($actor, $user): void {
+            $superAdminRole = $this->lockSuperAdminRole();
+            $user = $this->lockUser($user);
+            if ($this->isCountedSuperAdmin($user, $superAdminRole) && $this->permissions->superAdminCount() <= 1) {
+                throw new ConflictException(__('api.identity_active_super_admin_required'));
+            }
+
             $user->forceFill(['is_active' => false, 'locked_at' => now()])->save();
             $this->sessionRevoker->revoke($user);
             $this->auditLogger->record('identity.user.locked', $actor, 'user', $user->public_id);
@@ -123,6 +136,7 @@ final readonly class UserManager
     public function resetSessions(User $actor, User $user): void
     {
         DB::transaction(function () use ($actor, $user): void {
+            $user = $this->lockUser($user);
             $this->sessionRevoker->revoke($user);
             $this->auditLogger->record('identity.user.sessions_reset', $actor, 'user', $user->public_id);
         });
@@ -158,16 +172,13 @@ final readonly class UserManager
     }
 
     /** @param list<string> $rolePublicIds */
-    private function wouldRemoveLastSuperAdmin(User $user, array $rolePublicIds): bool
+    private function wouldRemoveLastSuperAdmin(User $user, array $rolePublicIds, Role $superAdminRole): bool
     {
-        if (! $this->isCountedSuperAdmin($user) || $this->permissions->superAdminCount() > 1) {
+        if (! $this->isCountedSuperAdmin($user, $superAdminRole) || $this->permissions->superAdminCount() > 1) {
             return false;
         }
 
-        return ! Role::query()
-            ->whereIn('public_id', $rolePublicIds)
-            ->where('slug', PermissionRegistry::SUPER_ADMIN_ROLE)
-            ->exists();
+        return ! in_array($superAdminRole->public_id, $rolePublicIds, true);
     }
 
     private function load(User $user): User
@@ -175,10 +186,23 @@ final readonly class UserManager
         return $user->fresh(['roles.permissions', 'permissionOverrides']) ?? $user;
     }
 
-    private function isCountedSuperAdmin(User $user): bool
+    private function isCountedSuperAdmin(User $user, Role $superAdminRole): bool
     {
         return $user->is_active
             && $user->locked_at === null
-            && $this->permissions->isSuperAdmin($user);
+            && $user->roles()->where('hongvan_roles.id', $superAdminRole->getKey())->exists();
+    }
+
+    private function lockSuperAdminRole(): Role
+    {
+        return Role::query()
+            ->where('slug', PermissionRegistry::SUPER_ADMIN_ROLE)
+            ->lockForUpdate()
+            ->firstOrFail();
+    }
+
+    private function lockUser(User $user): User
+    {
+        return User::query()->lockForUpdate()->findOrFail($user->getKey());
     }
 }

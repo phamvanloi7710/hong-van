@@ -36,6 +36,12 @@
 - [x] T032 Ổn định login, logout và vòng đời session
 - [x] T033 Làm cứng quên và đặt lại mật khẩu
 - [x] T034 Hoàn thiện khóa tài khoản và thu hồi phiên
+- [x] T035 Cổng kiểm thử authentication
+- [x] T036 Đối chiếu registry permission với route và UI
+- [x] T037 Ổn định quản lý role
+- [x] T038 Ổn định quản lý user
+- [x] T039 Rà Policy, Gate và permission middleware
+- [x] T040 Làm cứng permission override và Super Admin
 
 ## Prompt gốc P00-P56
 

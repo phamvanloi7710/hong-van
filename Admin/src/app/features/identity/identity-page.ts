@@ -19,6 +19,10 @@ import { I18nService } from '../../core/i18n/i18n.service';
 import { TranslationPipe } from '../../core/i18n/translation.pipe';
 import { IdentityDataService } from './identity-data.service';
 import {
+  IdentityConfirmationDialog,
+  IdentityConfirmationDialogData,
+} from './identity-confirmation-dialog';
+import {
   IdentityPermission,
   IdentityRole,
   IdentityUser,
@@ -174,9 +178,26 @@ export class IdentityPage {
   }
 
   deleteUser(user: IdentityUser): void {
-    if (confirm(this.i18n.t('identity.confirmDeleteUser', { name: user.name }))) {
-      this.run(this.data.deleteUser(user.public_id), this.i18n.t('identity.deletedUser'));
-    }
+    const data: IdentityConfirmationDialogData = {
+      title: this.i18n.t('common.delete'),
+      message: this.i18n.t('identity.confirmDeleteUser', { name: user.name }),
+      cancelLabel: this.i18n.t('common.cancel'),
+      confirmLabel: this.i18n.t('common.delete'),
+    };
+    this.dialog
+      .open<IdentityConfirmationDialog, IdentityConfirmationDialogData, boolean>(
+        IdentityConfirmationDialog,
+        { data, width: '420px' },
+      )
+      .afterClosed()
+      .pipe(
+        filter((confirmed): confirmed is true => confirmed === true),
+        switchMap(() => this.data.deleteUser(user.public_id)),
+      )
+      .subscribe({
+        next: () => this.complete(this.i18n.t('identity.deletedUser')),
+        error: (error: unknown) => this.fail(error),
+      });
   }
 
   deleteRole(role: IdentityRole): void {

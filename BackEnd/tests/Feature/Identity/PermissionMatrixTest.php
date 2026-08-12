@@ -3,12 +3,15 @@
 namespace Tests\Feature\Identity;
 
 use App\Domain\Identity\PermissionRegistry;
+use App\Domain\Identity\PermissionService;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\LanguageSeeder;
 use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -19,7 +22,7 @@ class PermissionMatrixTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed(PermissionSeeder::class);
+        $this->seed([LanguageSeeder::class, PermissionSeeder::class]);
     }
 
     public function test_direct_api_denies_user_without_permission(): void
@@ -57,6 +60,25 @@ class PermissionMatrixTest extends TestCase
         $this->getJson('/api/admin/v1/identity/users')->assertOk();
     }
 
+    public function test_explicit_allow_grants_without_a_role_and_deny_overrides_every_role_grant(): void
+    {
+        $permission = Permission::query()->where('key', 'users.view')->firstOrFail();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->getJson('/api/admin/v1/identity/users')->assertForbidden();
+
+        $user->permissionOverrides()->attach($permission, ['is_allowed' => true]);
+        $this->getJson('/api/admin/v1/identity/users')->assertOk();
+
+        $role = Role::query()->create(['name' => 'Viewer', 'slug' => 'override_viewer', 'is_system' => false]);
+        $role->permissions()->attach($permission, ['created_at' => now()]);
+        $user->roles()->attach($role, ['created_at' => now()]);
+        $user->permissionOverrides()->updateExistingPivot($permission->getKey(), ['is_allowed' => false]);
+
+        $this->getJson('/api/admin/v1/identity/users')->assertForbidden();
+    }
+
     public function test_super_admin_bypass_is_explicit_and_audited_once_per_permission_request(): void
     {
         $user = $this->superAdmin();
@@ -71,6 +93,38 @@ class PermissionMatrixTest extends TestCase
                 && $context['actor_public_id'] === $user->public_id
                 && $context['details']['permission'] === 'users.view',
         );
+    }
+
+    public function test_super_admin_bypass_remains_deny_by_default_for_invalid_accounts_and_permissions(): void
+    {
+        $permissions = app(PermissionService::class);
+        $active = $this->superAdmin();
+
+        $this->assertTrue(Gate::forUser($active)->allows('viewAny', User::class));
+        $this->assertFalse($permissions->allows($active, 'unknown.view'));
+
+        $inactive = $this->superAdmin();
+        $inactive->forceFill(['is_active' => false])->save();
+        $this->assertFalse(Gate::forUser($inactive)->allows('viewAny', User::class));
+
+        $locked = $this->superAdmin();
+        $locked->forceFill(['locked_at' => now('UTC')])->save();
+        $this->assertFalse(Gate::forUser($locked)->allows('viewAny', User::class));
+
+        Permission::query()->where('key', 'users.view')->delete();
+        $this->assertFalse(Gate::forUser($active)->allows('viewAny', User::class));
+    }
+
+    public function test_super_admin_bypass_has_precedence_over_an_explicit_deny_override(): void
+    {
+        $user = $this->superAdmin();
+        $permission = Permission::query()->where('key', 'users.view')->firstOrFail();
+        $user->permissionOverrides()->attach($permission, ['is_allowed' => false]);
+
+        $this->actingAs($user);
+
+        $this->getJson('/api/admin/v1/identity/users')->assertOk();
+        $this->assertContains('users.view', app(PermissionService::class)->effectivePermissionKeys($user));
     }
 
     public function test_inactive_and_locked_users_are_denied_even_when_their_role_grants_permission(): void
@@ -89,16 +143,75 @@ class PermissionMatrixTest extends TestCase
     public function test_permission_seed_is_idempotent_and_all_tables_are_prefixed(): void
     {
         $permissionCount = Permission::query()->count();
+        Permission::query()->create([
+            'key' => 'legacy.view',
+            'module' => 'legacy',
+            'action' => 'view',
+            'name' => 'Legacy',
+            'is_system' => true,
+        ]);
+        Permission::query()->create([
+            'key' => 'reports.view',
+            'module' => 'reports',
+            'action' => 'view',
+            'name' => 'Custom report',
+            'is_system' => false,
+        ]);
 
         $this->seed(PermissionSeeder::class);
 
-        $this->assertSame($permissionCount, Permission::query()->count());
+        $this->assertSame($permissionCount + 1, Permission::query()->count());
+        $this->assertDatabaseMissing('hongvan_permissions', ['key' => 'legacy.view']);
+        $this->assertDatabaseHas('hongvan_permissions', ['key' => 'reports.view', 'is_system' => false]);
         $this->assertSame(1, Role::query()->where('slug', PermissionRegistry::SUPER_ADMIN_ROLE)->count());
         $this->assertSame($permissionCount, DB::table('hongvan_permission_role')->count());
+        $this->assertSame(
+            $permissionCount,
+            DB::table('hongvan_translation_keys')->where('namespace', 'permissions')->count(),
+        );
+        $this->assertSame(
+            $permissionCount * 3,
+            DB::table('hongvan_translation_values')
+                ->join('hongvan_translation_keys', 'hongvan_translation_keys.id', '=', 'hongvan_translation_values.translation_key_id')
+                ->where('hongvan_translation_keys.namespace', 'permissions')
+                ->count(),
+        );
+
+        $seededLabels = DB::table('hongvan_translation_values')
+            ->join('hongvan_translation_keys', 'hongvan_translation_keys.id', '=', 'hongvan_translation_values.translation_key_id')
+            ->join('hongvan_languages', 'hongvan_languages.id', '=', 'hongvan_translation_values.language_id')
+            ->where('hongvan_translation_keys.namespace', 'permissions')
+            ->get(['hongvan_translation_keys.key', 'hongvan_languages.locale', 'hongvan_translation_values.value'])
+            ->groupBy('key');
+        foreach (PermissionRegistry::definitions() as $definition) {
+            $this->assertEquals(
+                $definition['labels'],
+                $seededLabels->get($definition['key'])->pluck('value', 'locale')->all(),
+                $definition['key'],
+            );
+        }
 
         foreach (['roles', 'permissions', 'role_user', 'permission_role', 'user_permission_overrides'] as $table) {
             $this->assertTrue(DB::getSchemaBuilder()->hasTable('hongvan_'.$table));
         }
+    }
+
+    public function test_system_permission_api_returns_localized_labels(): void
+    {
+        $this->actingAs($this->superAdmin());
+
+        $this->withHeader('X-Locale', 'en')
+            ->getJson('/api/admin/v1/identity/permissions?filter[module]=users')
+            ->assertOk()
+            ->assertJsonFragment([
+                'key' => 'users.view',
+                'name' => 'View users',
+                'labels' => [
+                    'vi' => 'Xem người dùng',
+                    'en' => 'View users',
+                    'zh' => '用户查看',
+                ],
+            ]);
     }
 
     public function test_last_super_admin_cannot_remove_own_role_lock_or_delete_self(): void

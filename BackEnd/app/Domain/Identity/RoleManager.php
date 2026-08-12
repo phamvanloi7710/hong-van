@@ -31,11 +31,12 @@ final readonly class RoleManager
     /** @param array<string, mixed> $data */
     public function update(User $actor, Role $role, array $data): Role
     {
-        if ($role->is_system) {
-            throw new ConflictException('Vai trò hệ thống không thể chỉnh sửa.');
-        }
-
         return DB::transaction(function () use ($actor, $role, $data): Role {
+            $role = Role::query()->lockForUpdate()->findOrFail($role->getKey());
+            if ($role->is_system) {
+                throw new ConflictException(__('api.identity_system_role_update_forbidden'));
+            }
+
             $role->fill(Arr::only($data, ['name', 'slug', 'description']))->save();
             if (array_key_exists('permission_ids', $data)) {
                 $affectedUsers = $role->users()->get();
@@ -52,17 +53,20 @@ final readonly class RoleManager
 
     public function delete(User $actor, Role $role): void
     {
-        if ($role->is_system) {
-            throw new ConflictException('Vai trò hệ thống không thể xóa.');
-        }
-        if ($role->users()->exists()) {
-            throw new ConflictException('Không thể xóa vai trò đang được gán cho người dùng.');
-        }
+        DB::transaction(function () use ($actor, $role): void {
+            $role = Role::query()->lockForUpdate()->findOrFail($role->getKey());
+            if ($role->is_system) {
+                throw new ConflictException(__('api.identity_system_role_delete_forbidden'));
+            }
+            if ($role->users()->exists()) {
+                throw new ConflictException(__('api.identity_assigned_role_delete_forbidden'));
+            }
 
-        $publicId = $role->public_id;
-        $slug = $role->slug;
-        $role->delete();
-        $this->auditLogger->record('identity.role.deleted', $actor, 'role', $publicId, ['slug' => $slug]);
+            $publicId = $role->public_id;
+            $slug = $role->slug;
+            $role->delete();
+            $this->auditLogger->record('identity.role.deleted', $actor, 'role', $publicId, ['slug' => $slug]);
+        });
     }
 
     /** @param list<string> $permissionPublicIds */

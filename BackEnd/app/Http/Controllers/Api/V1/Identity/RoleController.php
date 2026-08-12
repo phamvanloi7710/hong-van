@@ -55,7 +55,7 @@ final class RoleController extends Controller
         Gate::authorize('delete', $role);
         $manager->delete($this->actor($request), $role);
 
-        return $response->success(message: 'Đã xóa vai trò.');
+        return $response->success(message: __('api.identity_role_deleted'));
     }
 
     private function actor(Request $request): User

@@ -71,7 +71,7 @@ final class UserController extends Controller
         Gate::authorize('delete', $user);
         $manager->delete($this->actor($request), $user);
 
-        return $response->success(message: 'Đã xóa người dùng.');
+        return $response->success(message: __('api.identity_user_deleted'));
     }
 
     public function activate(Request $request, User $user, UserManager $manager, ApiResponse $response): JsonResponse
@@ -95,7 +95,7 @@ final class UserController extends Controller
         Gate::authorize('manageSessions', $user);
         $manager->resetSessions($this->actor($request), $user);
 
-        return $response->success(message: 'Đã thu hồi toàn bộ phiên đăng nhập.');
+        return $response->success(message: __('api.identity_user_sessions_reset'));
     }
 
     private function actor(Request $request): User
