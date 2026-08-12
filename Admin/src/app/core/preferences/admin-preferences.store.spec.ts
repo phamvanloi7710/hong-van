@@ -5,6 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { ApiEnvelope } from '../auth/auth.models';
 import { AdminPreferencesDto } from './admin-preferences.model';
 import { AdminPreferencesStore } from './admin-preferences.store';
+import { LocalAdminPreferencesCache } from './local-admin-preferences.cache';
 
 const preferences: AdminPreferencesDto = {
   theme: {
@@ -34,6 +35,7 @@ function envelope(data: AdminPreferencesDto): ApiEnvelope<AdminPreferencesDto> {
 describe('AdminPreferencesStore', () => {
   let store: AdminPreferencesStore;
   let httpTesting: HttpTestingController;
+  let cache: LocalAdminPreferencesCache;
 
   beforeEach(() => {
     localStorage.clear();
@@ -41,6 +43,7 @@ describe('AdminPreferencesStore', () => {
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
     store = TestBed.inject(AdminPreferencesStore);
+    cache = TestBed.inject(LocalAdminPreferencesCache);
     httpTesting = TestBed.inject(HttpTestingController);
   });
 
@@ -53,6 +56,64 @@ describe('AdminPreferencesStore', () => {
     expect(store.theme().skin).toBe('teal-light');
     expect(store.locale()).toBe('en');
     expect(store.favoriteMenuIds()).toEqual(['dashboard']);
+  });
+
+  it('applies the active user cache immediately and then reconciles the server theme', () => {
+    cache.save('01JUSER', {
+      ...preferences,
+      theme: {
+        fixed_header: false,
+        fixed_sidenav: false,
+        fixed_footer: true,
+        sidenav_opened: false,
+        sidenav_pinned: false,
+        menu_orientation: 'horizontal',
+        menu_density: 'mini',
+        skin: 'blue-dark',
+        rtl: true,
+      },
+    });
+
+    store.initialize('01JUSER').subscribe();
+    const request = httpTesting.expectOne('/api/admin/v1/preferences');
+
+    expect(store.theme()).toEqual({
+      fixedHeader: false,
+      fixedSidenav: false,
+      fixedFooter: true,
+      sidenavOpened: false,
+      sidenavPinned: false,
+      menuOrientation: 'horizontal',
+      menuDensity: 'mini',
+      skin: 'blue-dark',
+      rtl: true,
+    });
+
+    request.flush(envelope(preferences));
+
+    expect(store.theme().skin).toBe('teal-light');
+    expect(store.theme().menuOrientation).toBe('vertical');
+    expect(cache.load('01JUSER')).toEqual(preferences);
+  });
+
+  it('uses defaults instead of another user theme when the active user has no cache', () => {
+    store.initialize('01JUSER_A').subscribe();
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(
+      envelope({
+        ...preferences,
+        theme: { ...preferences.theme, menu_orientation: 'horizontal', skin: 'green-dark' },
+      }),
+    );
+    expect(store.theme().skin).toBe('green-dark');
+
+    store.initialize('01JUSER_B').subscribe();
+    const request = httpTesting.expectOne('/api/admin/v1/preferences');
+
+    expect(store.theme().skin).toBe('indigo-light');
+    expect(store.theme().menuOrientation).toBe('vertical');
+
+    request.flush(envelope(preferences));
+    expect(store.theme().skin).toBe('teal-light');
   });
 
   it('stores ordered favorite menu ids selected from the template picker', () => {
@@ -147,5 +208,24 @@ describe('AdminPreferencesStore', () => {
 
     expect(store.locale()).toBe('vi');
     expect(store.favoriteMenuIds()).toEqual([]);
+  });
+
+  it('drops queued theme writes that belong to a previous user', () => {
+    store.initialize('01JUSER_A').subscribe();
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(preferences));
+
+    store.updateTheme({ ...store.theme(), skin: 'blue-dark' });
+    store.updateTheme({ ...store.theme(), skin: 'green-dark' });
+    const activeWrite = httpTesting.expectOne('/api/admin/v1/preferences');
+
+    store.clear();
+    store.initialize('01JUSER_B').subscribe();
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(preferences));
+
+    activeWrite.flush(envelope({ ...preferences, theme: { ...preferences.theme, skin: 'blue-dark' } }));
+
+    httpTesting.expectNone('/api/admin/v1/preferences');
+    expect(store.theme().skin).toBe('teal-light');
+    expect(store.saving()).toBe(false);
   });
 });

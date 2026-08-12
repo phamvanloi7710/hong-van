@@ -63,13 +63,30 @@ class UserPreferenceApiTest extends TestCase
             ->getJson('/api/admin/v1/preferences')
             ->assertOk()
             ->assertJsonPath('data.locale', 'vi')
+            ->assertJsonPath('data.theme.fixed_header', true)
+            ->assertJsonPath('data.theme.fixed_sidenav', true)
+            ->assertJsonPath('data.theme.fixed_footer', false)
+            ->assertJsonPath('data.theme.sidenav_opened', true)
+            ->assertJsonPath('data.theme.sidenav_pinned', true)
+            ->assertJsonPath('data.theme.menu_orientation', 'vertical')
+            ->assertJsonPath('data.theme.menu_density', 'default')
             ->assertJsonPath('data.theme.skin', 'indigo-light')
+            ->assertJsonPath('data.theme.rtl', false)
             ->assertJsonPath('data.favorite_menu_ids', []);
 
         $this->actingAs($userA)
             ->getJson('/api/admin/v1/preferences')
             ->assertOk()
             ->assertJsonPath('data.locale', 'zh')
+            ->assertJsonPath('data.theme.fixed_header', true)
+            ->assertJsonPath('data.theme.fixed_sidenav', false)
+            ->assertJsonPath('data.theme.fixed_footer', true)
+            ->assertJsonPath('data.theme.sidenav_opened', false)
+            ->assertJsonPath('data.theme.sidenav_pinned', false)
+            ->assertJsonPath('data.theme.menu_orientation', 'horizontal')
+            ->assertJsonPath('data.theme.menu_density', 'compact')
+            ->assertJsonPath('data.theme.skin', 'green-dark')
+            ->assertJsonPath('data.theme.rtl', false)
             ->assertJsonPath('data.favorite_menu_ids.1', 'identity');
 
         $this->assertSame(3, UserPreference::query()->where('user_id', $userA->getKey())->count());

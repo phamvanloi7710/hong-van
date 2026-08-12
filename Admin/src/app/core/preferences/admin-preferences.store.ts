@@ -16,11 +16,13 @@ type AdminPreferenceWrite =
   | {
       readonly kind: 'update';
       readonly sequence: number;
+      readonly userPublicId: string;
       readonly update: AdminPreferencesUpdateDto;
     }
   | {
       readonly kind: 'reset';
       readonly sequence: number;
+      readonly userPublicId: string;
     };
 
 @Injectable({ providedIn: 'root' })
@@ -45,23 +47,32 @@ export class AdminPreferencesStore {
   constructor() {
     this.saveQueue
       .pipe(
-        concatMap((write) =>
-          (write.kind === 'update' ? this.api.update(write.update) : this.api.reset()).pipe(
+        concatMap((write) => {
+          if (write.userPublicId !== this.activeUserPublicId) {
+            this.completePendingSave();
+
+            return EMPTY;
+          }
+
+          return (write.kind === 'update' ? this.api.update(write.update) : this.api.reset()).pipe(
             tap((preferences) => {
-              if (write.sequence === this.latestWriteSequence) {
+              if (
+                write.userPublicId === this.activeUserPublicId &&
+                write.sequence === this.latestWriteSequence
+              ) {
                 this.applyDto(preferences);
               }
             }),
             catchError(() => {
-              this.error.set(this.i18n.t('preferences.saveError'));
+              if (write.userPublicId === this.activeUserPublicId) {
+                this.error.set(this.i18n.t('preferences.saveError'));
+              }
+
               return EMPTY;
             }),
-            finalize(() => {
-              this.pendingSaves -= 1;
-              this.saving.set(this.pendingSaves > 0);
-            }),
-          ),
-        ),
+            finalize(() => this.completePendingSave()),
+          );
+        }),
       )
       .subscribe();
   }
@@ -73,15 +84,28 @@ export class AdminPreferencesStore {
     const cached = this.cache.load(userPublicId);
     if (cached !== null) {
       this.applyDto(cached);
+    } else {
+      this.apply(DEFAULT_ADMIN_PREFERENCES, false);
     }
 
     this.loading.set(true);
 
     return this.api.get().pipe(
-      tap((preferences) => this.applyDto(preferences)),
-      finalize(() => this.loading.set(false)),
+      tap((preferences) => {
+        if (this.activeUserPublicId === userPublicId) {
+          this.applyDto(preferences);
+        }
+      }),
+      finalize(() => {
+        if (this.activeUserPublicId === userPublicId) {
+          this.loading.set(false);
+        }
+      }),
       catchError(() => {
-        this.error.set(this.i18n.t('preferences.loadError'));
+        if (this.activeUserPublicId === userPublicId) {
+          this.error.set(this.i18n.t('preferences.loadError'));
+        }
+
         return of(null);
       }),
     );
@@ -118,10 +142,19 @@ export class AdminPreferencesStore {
   }
 
   reset(): void {
+    const userPublicId = this.activeUserPublicId;
+    if (userPublicId === null) {
+      return;
+    }
+
     this.error.set(null);
     this.pendingSaves += 1;
     this.saving.set(true);
-    this.saveQueue.next({ kind: 'reset', sequence: ++this.latestWriteSequence });
+    this.saveQueue.next({
+      kind: 'reset',
+      sequence: ++this.latestWriteSequence,
+      userPublicId,
+    });
   }
 
   clear(): void {
@@ -135,11 +168,21 @@ export class AdminPreferencesStore {
   }
 
   private persist(update: AdminPreferencesUpdateDto): void {
+    const userPublicId = this.activeUserPublicId;
+    if (userPublicId === null) {
+      return;
+    }
+
     this.saveCache();
     this.error.set(null);
     this.pendingSaves += 1;
     this.saving.set(true);
-    this.saveQueue.next({ kind: 'update', sequence: ++this.latestWriteSequence, update });
+    this.saveQueue.next({
+      kind: 'update',
+      sequence: ++this.latestWriteSequence,
+      userPublicId,
+      update,
+    });
   }
 
   private applyDto(preferences: AdminPreferencesDto): void {
@@ -180,6 +223,11 @@ export class AdminPreferencesStore {
       locale: preferences.locale,
       favorite_menu_ids: preferences.favoriteMenuIds,
     });
+  }
+
+  private completePendingSave(): void {
+    this.pendingSaves = Math.max(0, this.pendingSaves - 1);
+    this.saving.set(this.pendingSaves > 0);
   }
 }
 
