@@ -88,4 +88,64 @@ describe('AdminPreferencesStore', () => {
 
     expect(store.favoriteMenuIds()).toEqual([]);
   });
+
+  it('serializes reset with pending writes and keeps the latest local change', () => {
+    store.initialize('01JUSER').subscribe();
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(preferences));
+
+    store.updateFavoriteMenuIds(['dashboard', 'page-builder']);
+    store.reset();
+    store.updateLocale('zh');
+
+    expect(store.favoriteMenuIds()).toEqual(['dashboard', 'page-builder']);
+    expect(store.locale()).toBe('zh');
+
+    const favoriteRequest = httpTesting.expectOne('/api/admin/v1/preferences');
+    expect(favoriteRequest.request.method).toBe('PUT');
+    favoriteRequest.flush(
+      envelope({ ...preferences, favorite_menu_ids: ['dashboard', 'page-builder'] }),
+    );
+
+    const resetRequest = httpTesting.expectOne('/api/admin/v1/preferences');
+    expect(resetRequest.request.method).toBe('DELETE');
+    resetRequest.flush(
+      envelope({
+        ...preferences,
+        theme: { ...preferences.theme, skin: 'indigo-light' },
+        locale: 'vi',
+        favorite_menu_ids: [],
+      }),
+    );
+    expect(store.locale()).toBe('zh');
+
+    const localeRequest = httpTesting.expectOne('/api/admin/v1/preferences');
+    expect(localeRequest.request.method).toBe('PUT');
+    expect(localeRequest.request.body).toEqual({ locale: 'zh' });
+    localeRequest.flush(
+      envelope({
+        ...preferences,
+        theme: { ...preferences.theme, skin: 'indigo-light' },
+        locale: 'zh',
+        favorite_menu_ids: [],
+      }),
+    );
+
+    expect(store.locale()).toBe('zh');
+    expect(store.favoriteMenuIds()).toEqual([]);
+    expect(store.theme().skin).toBe('indigo-light');
+  });
+
+  it('does not apply a completed write after the active user is cleared', () => {
+    store.initialize('01JUSER').subscribe();
+    httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(preferences));
+
+    store.updateLocale('zh');
+    const request = httpTesting.expectOne('/api/admin/v1/preferences');
+
+    store.clear();
+    request.flush(envelope({ ...preferences, locale: 'zh' }));
+
+    expect(store.locale()).toBe('vi');
+    expect(store.favoriteMenuIds()).toEqual([]);
+  });
 });

@@ -33,11 +33,17 @@ final readonly class UserPreferenceService
     {
         $namespace = (string) config('admin_preferences.namespace', 'admin');
         $keys = array_values(array_intersect(
-            ['theme', 'locale', 'favorite_menu_ids'],
+            $this->allowed('keys'),
             array_keys($preferences),
         ));
 
-        DB::transaction(function () use ($keys, $namespace, $preferences, $user): void {
+        if ($keys === []) {
+            return $this->get($user);
+        }
+
+        return DB::transaction(function () use ($keys, $namespace, $preferences, $user): array {
+            $this->lockUser($user);
+
             foreach ($keys as $key) {
                 UserPreference::query()->updateOrCreate(
                     [
@@ -48,27 +54,29 @@ final readonly class UserPreferenceService
                     ['value' => $preferences[$key]],
                 );
             }
-        });
 
-        if ($keys !== []) {
             $this->auditLogger->record('identity.user_preferences.updated', $user, 'user', $user->public_id, [
                 'keys' => implode(',', $keys),
             ]);
-        }
 
-        return $this->get($user);
+            return $this->get($user);
+        });
     }
 
     /** @return array<string, mixed> */
     public function reset(User $user): array
     {
-        $user->preferences()
-            ->where('namespace', (string) config('admin_preferences.namespace', 'admin'))
-            ->delete();
+        return DB::transaction(function () use ($user): array {
+            $this->lockUser($user);
 
-        $this->auditLogger->record('identity.user_preferences.reset', $user, 'user', $user->public_id);
+            $user->preferences()
+                ->where('namespace', (string) config('admin_preferences.namespace', 'admin'))
+                ->delete();
 
-        return $this->defaults();
+            $this->auditLogger->record('identity.user_preferences.reset', $user, 'user', $user->public_id);
+
+            return $this->normalize([]);
+        });
     }
 
     /**
@@ -152,5 +160,13 @@ final readonly class UserPreferenceService
         return is_string($value) && in_array($value, $this->allowed($allowlist), true)
             ? $value
             : $fallback;
+    }
+
+    private function lockUser(User $user): void
+    {
+        User::query()
+            ->whereKey($user->getKey())
+            ->lockForUpdate()
+            ->firstOrFail();
     }
 }

@@ -119,6 +119,30 @@ class UserPreferenceApiTest extends TestCase
             ->assertJsonPath('data.favorite_menu_ids', []);
     }
 
+    public function test_all_current_navigable_menu_ids_are_allowlisted_and_ordered(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $favoriteMenuIds = [
+            'products',
+            'page-builder',
+            'theme-studio',
+            'localization',
+            'audit',
+        ];
+
+        $this->putJson('/api/admin/v1/preferences', [
+            'favorite_menu_ids' => $favoriteMenuIds,
+        ])
+            ->assertOk()
+            ->assertJsonPath('data.favorite_menu_ids', $favoriteMenuIds);
+
+        $this->getJson('/api/admin/v1/preferences')
+            ->assertOk()
+            ->assertJsonPath('data.favorite_menu_ids', $favoriteMenuIds);
+    }
+
     public function test_user_can_reset_only_their_own_preferences(): void
     {
         $userA = User::factory()->create();
@@ -133,12 +157,29 @@ class UserPreferenceApiTest extends TestCase
             ]);
         }
 
+        UserPreference::query()->create([
+            'user_id' => $userA->getKey(),
+            'namespace' => 'public',
+            'key' => 'locale',
+            'value' => 'zh',
+        ]);
+
         $this->actingAs($userA)
             ->deleteJson('/api/admin/v1/preferences')
             ->assertOk()
-            ->assertJsonPath('data.locale', 'vi');
+            ->assertJsonPath('data.locale', 'vi')
+            ->assertJsonPath('data.theme.skin', 'indigo-light')
+            ->assertJsonPath('data.favorite_menu_ids', []);
 
-        $this->assertDatabaseMissing('hongvan_user_preferences', ['user_id' => $userA->getKey()]);
+        $this->assertDatabaseMissing('hongvan_user_preferences', [
+            'user_id' => $userA->getKey(),
+            'namespace' => 'admin',
+        ]);
+        $this->assertDatabaseHas('hongvan_user_preferences', [
+            'user_id' => $userA->getKey(),
+            'namespace' => 'public',
+            'key' => 'locale',
+        ]);
         $this->assertDatabaseHas('hongvan_user_preferences', ['user_id' => $userB->getKey(), 'key' => 'locale']);
     }
 }

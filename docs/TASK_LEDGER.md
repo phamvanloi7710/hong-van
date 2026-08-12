@@ -42,6 +42,7 @@
 - [x] T038 Ổn định quản lý user
 - [x] T039 Rà Policy, Gate và permission middleware
 - [x] T040 Làm cứng permission override và Super Admin
+- [x] T041 Ổn định schema và API user preferences
 
 ## Prompt gốc P00-P56
 

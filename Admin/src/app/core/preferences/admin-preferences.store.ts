@@ -12,15 +12,27 @@ import {
 } from './admin-preferences.model';
 import { LocalAdminPreferencesCache } from './local-admin-preferences.cache';
 
+type AdminPreferenceWrite =
+  | {
+      readonly kind: 'update';
+      readonly sequence: number;
+      readonly update: AdminPreferencesUpdateDto;
+    }
+  | {
+      readonly kind: 'reset';
+      readonly sequence: number;
+    };
+
 @Injectable({ providedIn: 'root' })
 export class AdminPreferencesStore {
   private readonly api = inject(AdminPreferenceApi);
   private readonly cache = inject(LocalAdminPreferencesCache);
   private readonly i18n = inject(I18nService);
   private readonly state = signal<AdminPreferences>(DEFAULT_ADMIN_PREFERENCES);
-  private readonly saveQueue = new Subject<AdminPreferencesUpdateDto>();
+  private readonly saveQueue = new Subject<AdminPreferenceWrite>();
   private activeUserPublicId: string | null = null;
   private pendingSaves = 0;
+  private latestWriteSequence = 0;
 
   readonly preferences = this.state.asReadonly();
   readonly theme = computed(() => this.state().theme);
@@ -33,8 +45,13 @@ export class AdminPreferencesStore {
   constructor() {
     this.saveQueue
       .pipe(
-        concatMap((update) =>
-          this.api.update(update).pipe(
+        concatMap((write) =>
+          (write.kind === 'update' ? this.api.update(write.update) : this.api.reset()).pipe(
+            tap((preferences) => {
+              if (write.sequence === this.latestWriteSequence) {
+                this.applyDto(preferences);
+              }
+            }),
             catchError(() => {
               this.error.set(this.i18n.t('preferences.saveError'));
               return EMPTY;
@@ -101,17 +118,10 @@ export class AdminPreferencesStore {
   }
 
   reset(): void {
+    this.error.set(null);
+    this.pendingSaves += 1;
     this.saving.set(true);
-    this.api
-      .reset()
-      .pipe(
-        finalize(() => this.saving.set(false)),
-        catchError(() => {
-          this.error.set(this.i18n.t('preferences.saveError'));
-          return of(null);
-        }),
-      )
-      .subscribe((preferences) => this.applyServerPreferences(preferences));
+    this.saveQueue.next({ kind: 'reset', sequence: ++this.latestWriteSequence });
   }
 
   clear(): void {
@@ -120,6 +130,7 @@ export class AdminPreferencesStore {
     }
 
     this.activeUserPublicId = null;
+    this.latestWriteSequence += 1;
     this.apply(DEFAULT_ADMIN_PREFERENCES, false);
   }
 
@@ -128,7 +139,7 @@ export class AdminPreferencesStore {
     this.error.set(null);
     this.pendingSaves += 1;
     this.saving.set(true);
-    this.saveQueue.next(update);
+    this.saveQueue.next({ kind: 'update', sequence: ++this.latestWriteSequence, update });
   }
 
   private applyDto(preferences: AdminPreferencesDto): void {

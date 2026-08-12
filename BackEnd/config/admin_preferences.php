@@ -24,6 +24,7 @@ return [
     ],
 
     'allowed' => [
+        'keys' => ['theme', 'locale', 'favorite_menu_ids'],
         'locales' => ['vi', 'en', 'zh'],
         'skins' => [
             'indigo-light',
@@ -37,7 +38,25 @@ return [
         ],
         'menu_orientations' => ['vertical', 'horizontal'],
         'menu_densities' => ['default', 'compact', 'mini'],
-        'favorite_menu_ids' => ['dashboard', 'identity'],
+        'favorite_menu_ids' => [
+            'dashboard',
+            'products',
+            'crop-solutions',
+            'services',
+            'transportation',
+            'warehouses',
+            'leads',
+            'content-pages',
+            'media',
+            'showcase',
+            'page-builder',
+            'theme-studio',
+            'seo',
+            'identity',
+            'settings',
+            'localization',
+            'audit',
+        ],
         'max_favorite_menus' => 12,
     ],
 ];
