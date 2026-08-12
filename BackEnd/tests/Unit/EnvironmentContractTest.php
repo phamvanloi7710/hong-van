@@ -37,18 +37,35 @@ class EnvironmentContractTest extends TestCase
         }
     }
 
-    public function test_root_example_only_documents_the_consumed_cross_workspace_override(): void
+    public function test_root_example_documents_docker_compose_and_cross_workspace_contract(): void
     {
-        $variables = $this->variables(dirname($this->backendPath()).DIRECTORY_SEPARATOR.'.env.example');
-
-        $this->assertSame(
-            ['PLAYWRIGHT_BASE_URL' => 'http://hongvan.local/admin/'],
-            $variables,
+        $variables = $this->variables(
+            dirname($this->backendPath()).DIRECTORY_SEPARATOR.'.env.example'
         );
 
-        $playwrightConfig = file_get_contents(dirname($this->backendPath()).DIRECTORY_SEPARATOR.'Admin'.DIRECTORY_SEPARATOR.'playwright.config.ts');
+        $this->assertSame([
+            'COMPOSE_PROJECT_NAME' => 'hongvan',
+            'DOCKER_DOMAIN' => 'hongvan.local',
+            'DOCKER_PMA_DOMAIN' => 'hongvan-pma.local',
+            'MYSQL_ROOT_PASSWORD' => '',
+            'DB_DATABASE' => 'hongvan_platform',
+            'DB_USERNAME' => 'hongvan',
+            'DB_PASSWORD' => '',
+            'REDIS_PASSWORD' => '',
+            'PLAYWRIGHT_BASE_URL' => 'http://hongvan.local/admin/',
+        ], $variables);
+
+        $playwrightConfig = file_get_contents(
+            dirname($this->backendPath())
+            .DIRECTORY_SEPARATOR.'Admin'
+            .DIRECTORY_SEPARATOR.'playwright.config.ts'
+        );
+
         $this->assertIsString($playwrightConfig);
-        $this->assertStringContainsString("process.env['PLAYWRIGHT_BASE_URL']", $playwrightConfig);
+        $this->assertStringContainsString(
+            "process.env['PLAYWRIGHT_BASE_URL']",
+            $playwrightConfig
+        );
     }
 
     public function test_secret_placeholders_are_empty(): void
