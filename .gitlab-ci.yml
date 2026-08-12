@@ -6,9 +6,18 @@ stages:
 
 workflow:
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_BRANCH'
+    # Always allow manually started pipelines.
     - if: '$CI_PIPELINE_SOURCE == "web"'
+
+    # Prefer merge request pipelines when an MR exists.
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+    # Prevent a duplicate branch pipeline when the branch already has an open MR.
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+
+    # Run a branch pipeline while no MR exists, including main.
+    - if: '$CI_COMMIT_BRANCH'
 
 default:
   interruptible: true
@@ -42,6 +51,10 @@ secret_and_source_policy:
     entrypoint: ['']
   variables:
     GIT_DEPTH: '0'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
   script:
     - gitleaks git --gitleaks-ignore-path .gitleaksignore --redact --no-banner .
     - |
@@ -55,18 +68,54 @@ secret_and_source_policy:
 backend_qa:
   extends: .php_backend
   stage: quality
+
+  rules:
+    # Manual pipeline means "run it regardless of changed paths".
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+    # MR pipeline: GitLab compares the source branch with the MR target.
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - '.env.example'
+          - 'BackEnd/**/*'
+          - 'scripts/check-table-prefix.php'
+
+    # On the default branch, use the actual commit changes.
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - '.env.example'
+          - 'BackEnd/**/*'
+          - 'scripts/check-table-prefix.php'
+
+    # Before an MR exists, compare a feature branch against main.
+    - if: '$CI_COMMIT_BRANCH'
+      changes:
+        compare_to: "refs/heads/$CI_DEFAULT_BRANCH"
+        paths:
+          - '.gitlab-ci.yml'
+          - '.env.example'
+          - 'BackEnd/**/*'
+          - 'scripts/check-table-prefix.php'
+
   services:
     - name: 'mysql:8.4'
       alias: mysql
       variables:
         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         MYSQL_DATABASE: hongvan_ci
+
     - name: 'redis:7.4-alpine'
       alias: redis
+
   variables:
     APP_ENV: testing
     APP_KEY: 'base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
     APP_URL: 'http://127.0.0.1:8000'
+
     DB_CONNECTION: mysql
     DB_HOST: mysql
     DB_PORT: '3306'
@@ -76,14 +125,20 @@ backend_qa:
     DB_CHARSET: utf8mb4
     DB_COLLATION: utf8mb4_0900_ai_ci
     DB_ENGINE: InnoDB
+
     CACHE_STORE: redis
     REDIS_HOST: redis
     REDIS_PORT: '6379'
+
     QUEUE_CONNECTION: sync
+
     SESSION_DRIVER: array
     SESSION_ENCRYPT: 'true'
+
     MAIL_MAILER: array
+
     COMPOSER_CACHE_DIR: '$CI_PROJECT_DIR/.composer-cache'
+
   cache:
     key:
       files:
@@ -92,6 +147,7 @@ backend_qa:
     paths:
       - .composer-cache/files/
     policy: pull-push
+
   script:
     - cd BackEnd
     - composer validate --strict --no-check-publish
@@ -106,6 +162,29 @@ backend_qa:
 admin_qa:
   stage: quality
   image: 'node:24.15.0-bookworm'
+
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+
+    - if: '$CI_COMMIT_BRANCH'
+      changes:
+        compare_to: "refs/heads/$CI_DEFAULT_BRANCH"
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+
   cache:
     key:
       files:
@@ -114,6 +193,7 @@ admin_qa:
     paths:
       - .npm/
     policy: pull-push
+
   script:
     - cd Admin
     - npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline
@@ -126,11 +206,35 @@ admin_qa:
 admin_e2e:
   stage: e2e
   image: 'node:24.15.0-bookworm'
-  needs:
-    - admin_qa
+
   rules:
-    - if: '$RUN_E2E == "true"'
+    # An explicitly requested manual E2E run always wins.
+    - if: '$RUN_E2E == "true" && $CI_PIPELINE_SOURCE == "web"'
+
+    - if: '$RUN_E2E == "true" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+          - 'scripts/serve-spa.mjs'
+
+    - if: '$RUN_E2E == "true" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+          - 'scripts/serve-spa.mjs'
+
+    - if: '$RUN_E2E == "true" && $CI_COMMIT_BRANCH'
+      changes:
+        compare_to: "refs/heads/$CI_DEFAULT_BRANCH"
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+          - 'scripts/serve-spa.mjs'
+
     - when: never
+
   cache:
     key:
       files:
@@ -139,6 +243,7 @@ admin_e2e:
     paths:
       - .npm/
     policy: pull
+
   script:
     - cd Admin
     - npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline
@@ -151,10 +256,12 @@ admin_e2e:
         if node -e "fetch('http://127.0.0.1:8000/admin/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"; then
           break
         fi
+
         if [ "$attempt" -eq 30 ]; then
           cat /tmp/hongvan-admin-server.log
           exit 1
         fi
+
         sleep 1
       done
     - cd Admin
@@ -163,10 +270,47 @@ admin_e2e:
 web_asset_artifact:
   stage: artifact
   image: 'node:24.15.0-bookworm'
-  needs:
-    - secret_and_source_policy
-    - backend_qa
-    - admin_qa
+
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+          - 'BackEnd/package.json'
+          - 'BackEnd/package-lock.json'
+          - 'BackEnd/resources/**/*'
+          - 'BackEnd/public/**/*'
+          - 'BackEnd/vite.config.*'
+          - 'scripts/create-build-artifact.sh'
+
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+          - 'BackEnd/package.json'
+          - 'BackEnd/package-lock.json'
+          - 'BackEnd/resources/**/*'
+          - 'BackEnd/public/**/*'
+          - 'BackEnd/vite.config.*'
+          - 'scripts/create-build-artifact.sh'
+
+    - if: '$CI_COMMIT_BRANCH'
+      changes:
+        compare_to: "refs/heads/$CI_DEFAULT_BRANCH"
+        paths:
+          - '.gitlab-ci.yml'
+          - 'Admin/**/*'
+          - 'BackEnd/package.json'
+          - 'BackEnd/package-lock.json'
+          - 'BackEnd/resources/**/*'
+          - 'BackEnd/public/**/*'
+          - 'BackEnd/vite.config.*'
+          - 'scripts/create-build-artifact.sh'
+
   cache:
     key:
       files:
@@ -176,12 +320,14 @@ web_asset_artifact:
     paths:
       - .npm/
     policy: pull-push
+
   script:
     - cd BackEnd && npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline && cd ..
     - cd Admin && npm ci --cache "$NPM_CONFIG_CACHE" --prefer-offline && cd ..
     - bash scripts/create-build-artifact.sh --skip-install
     - cd .tmp/artifacts/hongvan-web-assets
     - sha256sum --check SHA256SUMS.txt
+
   artifacts:
     name: 'hongvan-web-assets-$CI_COMMIT_SHA'
     when: on_success
