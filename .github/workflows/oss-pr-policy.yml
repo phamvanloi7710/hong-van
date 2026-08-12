@@ -1,0 +1,46 @@
+name: OSS PR Policy
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oss-pr-policy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-policy:
+    name: Repository policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Enforce reference-source policy
+        shell: bash
+        run: |
+          unexpected="$(git ls-files Template FrontEndTemplate SourceIntegrations \
+            | grep -Ev '(^|/)(AGENTS\.md|README_PLACE_[A-Z_]+\.md)$' || true)"
+
+          if [ -n "${unexpected}" ]; then
+            printf 'Reference source files must not be committed:\n%s\n' "${unexpected}" >&2
+            exit 1
+          fi
+
+      - name: Scan Git history for secrets
+        shell: bash
+        run: |
+          docker run --rm \
+            --volume "${GITHUB_WORKSPACE}:/repo" \
+            --workdir /repo \
+            zricethezav/gitleaks:v8.28.0 \
+            git --gitleaks-ignore-path .gitleaksignore --redact --no-banner .
