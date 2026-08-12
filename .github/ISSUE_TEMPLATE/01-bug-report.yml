@@ -1,0 +1,125 @@
+name: Bug report
+description: Report a reproducible problem with Hong Van.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a problem.
+
+        Before submitting, please make sure the issue can be reproduced on the latest `main` branch when possible.
+
+        **Security vulnerabilities must not be reported here.**
+        Use GitHub Private Vulnerability Reporting instead.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight checklist
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: I tested or verified this against the latest relevant project code where possible.
+          required: true
+        - label: This report does not contain passwords, tokens, credentials, personal data, or other sensitive information.
+          required: true
+        - label: This is not a security vulnerability requiring private disclosure.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Which part of the project is affected?
+      options:
+        - Public website
+        - Admin application
+        - Laravel API
+        - Authentication / permissions
+        - Page Builder
+        - Media management
+        - Products / pricing
+        - SEO
+        - Transportation
+        - Warehouses
+        - Database / migrations
+        - Docker / local environment
+        - Queue / scheduler / Redis
+        - CI / build pipeline
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current behavior
+      description: Describe what is happening.
+      placeholder: Explain the problem clearly and concisely.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen instead?
+      placeholder: Describe the expected result.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest reliable reproduction you can.
+      placeholder: |
+        1. Start the project with ...
+        2. Open ...
+        3. Perform ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: input
+    id: commit-version
+    attributes:
+      label: Version or commit
+      description: Tag, release, branch, or commit SHA if known.
+      placeholder: main / v0.x.x / commit SHA
+
+  - type: input
+    id: operating-system
+    attributes:
+      label: Operating system
+      placeholder: Windows 11, Ubuntu 26.04, macOS, etc.
+
+  - type: input
+    id: docker-version
+    attributes:
+      label: Docker version
+      description: Include this when the problem involves the Docker environment.
+      placeholder: Docker Desktop / Docker Engine version
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: Include this for public or admin user-interface problems.
+      placeholder: Chrome, Firefox, Edge, Safari, etc.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: |
+        Paste only the minimum logs required to understand the problem.
+        Remove secrets, credentials, tokens, cookies, private data, and production data first.
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or additional context
+      description: Add screenshots, recordings, or other useful context when appropriate.
