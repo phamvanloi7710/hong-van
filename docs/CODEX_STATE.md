@@ -2,7 +2,7 @@
 
 ```yaml
 project: HongVan Website Platform
-company: Công Ty TNHH DV VT Hồng Vân
+company: CÃ´ng Ty TNHH DV VT Há»“ng VÃ¢n
 current_prompt: P29
 last_completed_prompt: 29
 status: DONE
@@ -313,6 +313,11 @@ open_blockers:
 next_prompt: 30_MENUS_AND_GLOBAL_REGIONS
 standard_next_prompt: 51_DOCKER_AND_PRODUCTION_DEPLOYMENT
 next_prompt_gate: READY_P29_DONE_STOPPED_BEFORE_P30
+latest_oss_readiness: prepared_readme_roadmap_changelog_six_public_issues_and_codex_for_oss_application_evidence
+latest_github_actions: passed_policy_backend_admin_manual_runs_and_real_pr_validation_pending
+latest_public_release: v0_1_0_prepared_not_yet_published
+latest_codex_for_oss_application: prepared_not_yet_submitted
 ```
 
-Codex phải cập nhật file này sau mỗi prompt nhưng giữ ngắn gọn.
+Codex pháº£i cáº­p nháº­t file nÃ y sau má»—i prompt nhÆ°ng giá»¯ ngáº¯n gá»n.
+
