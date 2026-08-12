@@ -1,0 +1,97 @@
+name: OSS PR Backend
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - .github/workflows/oss-pr-backend.yml
+      - BackEnd/**
+      - scripts/check-table-prefix.php
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oss-pr-backend-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-quality:
+    name: Backend quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container: php:8.5-cli-bookworm
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: hongvan_ci
+        options: >-
+          --health-cmd="mysqladmin ping --host=127.0.0.1 --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+      redis:
+        image: redis:7.4-alpine
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      APP_URL: http://127.0.0.1:8000
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: hongvan_ci
+      DB_USERNAME: root
+      DB_PASSWORD: ""
+      DB_CHARSET: utf8mb4
+      DB_COLLATION: utf8mb4_0900_ai_ci
+      DB_ENGINE: InnoDB
+      CACHE_STORE: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: array
+      SESSION_ENCRYPT: true
+      MAIL_MAILER: array
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install PHP extensions and Composer
+        shell: bash
+        run: |
+          apt-get update -qq
+          apt-get install -y --no-install-recommends curl git unzip libavif-dev libfreetype6-dev libicu-dev libjpeg62-turbo-dev libpng-dev libwebp-dev libzip-dev
+          docker-php-ext-configure gd --with-avif --with-freetype --with-jpeg --with-webp
+          docker-php-ext-install -j"$(nproc)" bcmath gd intl pdo_mysql zip
+          pecl install redis
+          docker-php-ext-enable redis
+          curl --silent --show-error --fail --location https://getcomposer.org/installer --output /tmp/composer-setup.php
+          curl --silent --show-error --fail https://composer.github.io/installer.sig --output /tmp/composer.sig
+          test "$(php -r "echo hash_file('sha384', '/tmp/composer-setup.php');")" = "$(cat /tmp/composer.sig)"
+          php /tmp/composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
+          rm -f /tmp/composer-setup.php /tmp/composer.sig
+
+      - name: Run backend quality suite
+        working-directory: BackEnd
+        shell: bash
+        run: |
+          composer validate --strict --no-check-publish
+          composer audit --locked
+          composer install --no-interaction --prefer-dist --no-progress
+          php artisan migrate --force
+          php ../scripts/check-table-prefix.php
+          php vendor/bin/pint --test
+          php vendor/bin/phpstan analyse --memory-limit=1G
+          php artisan test

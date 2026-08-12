@@ -1,0 +1,40 @@
+name: OSS PR Admin
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - .github/workflows/oss-pr-admin.yml
+      - Admin/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oss-pr-admin-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  admin-quality:
+    name: Admin quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container: node:24.15.0-bookworm
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Run admin quality suite
+        working-directory: Admin
+        shell: bash
+        run: |
+          npm ci --cache /tmp/npm-cache --prefer-offline
+          npm audit --omit=dev --audit-level=high
+          npm audit --audit-level=critical
+          npm run lint
+          npm test -- --watch=false
+          npm run build:laravel
