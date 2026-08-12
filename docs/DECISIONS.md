@@ -6,6 +6,7 @@ Delivery order decision: public frontend/template work was postponed until the o
 
 | ADR | Decision | Status | Date |
 |---|---|---|---|
+| [ADR-030](adr/ADR-030-dedicated-local-runtime-shared-proxy.md) | Local runtime riêng, chỉ dùng chung reverse proxy cổng 80 | Accepted | 2026-08-12 |
 | [ADR-029](adr/ADR-029-internal-bigint-public-ulid.md) | BIGINT nội bộ và ULID công khai | Accepted | 2026-08-02 |
 | [ADR-028](adr/ADR-028-versioned-page-template-import-and-edit-locks.md) | Versioned template, safe import/export and expiring Page Builder edit lock | Accepted | 2026-08-04 |
 | [ADR-027](adr/ADR-027-secure-cache-backed-page-builder-preview.md) | Preview Page Builder dùng cache TTL, URL ký owner-scoped và giao thức iframe được xác thực chặt | Accepted | 2026-08-03 |

@@ -1,0 +1,205 @@
+name: hongvan
+
+x-app-service: &app-service
+  image: hongvan-app:local
+  env_file:
+    - path: ./BackEnd/.env
+      required: true
+  environment:
+    APP_ENV: local
+    APP_DEBUG: "true"
+    APP_URL: http://${DOCKER_DOMAIN:-hongvan.local}
+    TRUSTED_HOSTS: ${DOCKER_DOMAIN:-hongvan.local},localhost,127.0.0.1
+    TRUSTED_PROXIES: 172.16.0.0/12
+    DB_CONNECTION: mysql
+    DB_HOST: mysql
+    DB_PORT: 3306
+    DB_DATABASE: ${DB_DATABASE:?Run scripts/setup-docker-env.ps1 first}
+    DB_USERNAME: ${DB_USERNAME:?Run scripts/setup-docker-env.ps1 first}
+    DB_PASSWORD: ${DB_PASSWORD:?Run scripts/setup-docker-env.ps1 first}
+    REDIS_HOST: redis
+    REDIS_PORT: 6379
+    REDIS_PASSWORD: ${REDIS_PASSWORD:?Run scripts/setup-docker-env.ps1 first}
+    REDIS_DB: 0
+    REDIS_CACHE_DB: 1
+    CACHE_STORE: redis
+    CACHE_LIMITER_STORE: redis
+    CACHE_PREFIX: hongvan_cache_
+    QUEUE_CONNECTION: redis
+  networks:
+    - hongvan-internal
+  volumes:
+    - hongvan-storage:/var/www/html/storage/app/public
+  depends_on:
+    mysql:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  init: true
+  restart: unless-stopped
+  stop_grace_period: 30s
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: hongvan-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Run scripts/setup-docker-env.ps1 first}
+      MYSQL_DATABASE: ${DB_DATABASE:?Run scripts/setup-docker-env.ps1 first}
+      MYSQL_USER: ${DB_USERNAME:?Run scripts/setup-docker-env.ps1 first}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Run scripts/setup-docker-env.ps1 first}
+      TZ: UTC
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+00:00
+    volumes:
+      - hongvan-mysql-data:/var/lib/mysql
+    networks:
+      - hongvan-internal
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping --host=127.0.0.1 --user=root --password=\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: hongvan-redis
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Run scripts/setup-docker-env.ps1 first}
+    command:
+      - sh
+      - -c
+      - exec redis-server --appendonly yes --requirepass "$${REDIS_PASSWORD}"
+    volumes:
+      - hongvan-redis-data:/data
+    networks:
+      - hongvan-internal
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=\"$$REDIS_PASSWORD\" redis-cli ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:5.2-apache
+    container_name: hongvan-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ABSOLUTE_URI: http://${DOCKER_PMA_DOMAIN:-hongvan-pma.local}/
+      VIRTUAL_HOST: ${DOCKER_PMA_DOMAIN:-hongvan-pma.local}
+      VIRTUAL_PORT: 80
+    networks:
+      - hongvan-internal
+      - local-infra
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "php -r '$$socket = @fsockopen(\"127.0.0.1\", 80); exit($$socket ? 0 : 1);'"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+  app:
+    <<: *app-service
+    container_name: hongvan-app
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: app
+    networks:
+      hongvan-internal:
+        aliases:
+          - hongvan-php
+    healthcheck:
+      test: ["CMD-SHELL", "php -r '$$socket = @fsockopen(\"127.0.0.1\", 9000); exit($$socket ? 0 : 1);'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  queue:
+    <<: *app-service
+    container_name: hongvan-queue
+    command:
+      - php
+      - artisan
+      - queue:work
+      - redis
+      - --queue=default,media
+      - --sleep=3
+      - --tries=3
+      - --timeout=120
+      - --max-time=3600
+      - --no-interaction
+    healthcheck:
+      test: ["CMD-SHELL", "php artisan queue:monitor default,media --max=1000 >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  scheduler:
+    <<: *app-service
+    container_name: hongvan-scheduler
+    command: ["php", "artisan", "schedule:work", "--no-interaction"]
+    healthcheck:
+      test: ["CMD-SHELL", "php artisan schedule:list >/dev/null 2>&1"]
+      interval: 60s
+      timeout: 15s
+      retries: 5
+      start_period: 30s
+
+  nginx:
+    image: hongvan-nginx:local
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: nginx
+    container_name: hongvan-nginx
+    environment:
+      VIRTUAL_HOST: ${DOCKER_DOMAIN:-hongvan.local}
+      VIRTUAL_PORT: 8080
+    expose:
+      - "8080"
+    networks:
+      hongvan-internal: {}
+      local-infra:
+        aliases:
+          - hongvan-nginx
+    volumes:
+      - hongvan-storage:/var/www/html/storage/app/public:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider --header=\"Host: $$VIRTUAL_HOST\" http://127.0.0.1:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+networks:
+  hongvan-internal:
+    name: hongvan-internal
+  local-infra:
+    external: true
+    name: local-infra
+
+volumes:
+  hongvan-mysql-data:
+    name: hongvan-mysql-data
+  hongvan-redis-data:
+    name: hongvan-redis-data
+  hongvan-storage:
+    name: hongvan-storage
