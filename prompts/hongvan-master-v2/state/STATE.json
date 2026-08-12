@@ -12,7 +12,7 @@
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-12T20:15:40+07:00",
+  "updated_at": "2026-08-12T20:46:58+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -375,12 +375,12 @@
       "blocker": null
     },
     "T041": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "DONE",
+      "started_at": "2026-08-12T20:21:00+07:00",
+      "completed_at": "2026-08-12T20:46:58+07:00",
+      "base_head": "5ad130754b819acd6fb52fc1187eae1ff35a782e",
       "result_head": null,
-      "summary": null,
+      "summary": "On dinh preference contract voi allowlist namespace/key/value typed va day du 17 menu ID; backend khoa ghi theo user de PUT/DELETE tuan tu, Admin dua reset vao cung concat queue, chi ap response moi nhat va bo response sau logout; reset chi xoa namespace admin va tra default da normalize. Backend 6/41, Admin preference 5/5, lint, Pint, build-sync 123 va Docker smoke bundle/API 200/401 pass.",
       "blocker": null
     },
     "T042": {
