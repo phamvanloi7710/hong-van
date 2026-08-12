@@ -1,73 +1,442 @@
-# HỒNG VÂN — FULL CODEX PROMPT KIT V2
+# Hong Van
 
-Bộ tài liệu dùng để xây dựng tuần tự website cho:
+Open-source company website and content management platform for **CÔNG TY TNHH DV VT HỒNG VÂN**, built with Laravel, Angular, Docker, MySQL, and Redis.
 
-> **CÔNG TY TNHH DV VT HỒNG VÂN**
+The project focuses on public company content, fertilizer product presentation, transportation services, warehousing, lead collection, quotation requests, multilingual content, SEO, and internal content administration.
 
-## Phạm vi
+> The platform is not designed as an e-commerce system. Products may display pricing when available or direct visitors to request a quotation.
 
-- Catalog giới thiệu sản phẩm phân bón, có thể hiển thị giá hoặc liên hệ báo giá.
-- Giới thiệu dịch vụ vận chuyển và hệ thống kho bãi.
-- Tiếp nhận liên hệ, yêu cầu báo giá, yêu cầu vận chuyển và yêu cầu thuê kho.
-- Laravel Blade SSR cho website public để ưu tiên SEO.
-- Angular cho trang quản trị, sử dụng template tham chiếu tại `Template/`.
-- Page Builder kéo thả toàn bộ page public; preview dùng chính Blade renderer/CSS public.
-- Media Manager có domain nền và được clone theo source StayHub khi source được cung cấp.
-- Theme admin lưu riêng theo từng user.
-- Mọi bảng do project tạo phải có tiền tố `hongvan_`.
+## Features
 
-## Quy ước thư mục V2
+### Public website
+
+* Server-side rendered public website using Laravel Blade.
+* Fertilizer product catalog.
+* Product pricing or contact-for-quotation behavior.
+* Transportation service presentation and request forms.
+* Warehouse and storage service presentation and request forms.
+* Contact and quotation request workflows.
+* Multilingual content.
+* SEO-oriented server rendering.
+* Sitemap, metadata, and structured content foundations.
+* Public-facing page composition through the Page Builder.
+
+### Administration
+
+* Angular-based administration application.
+* Authentication and permission-aware administration.
+* Product and content management.
+* Media management foundation.
+* Page Builder with controlled blocks and bindings.
+* Preview workflow using the public rendering system.
+* Per-user interface preferences.
+* Theme and favorite-menu preferences.
+* Localization management.
+* Lead and request management.
+* Dashboard and reporting foundations.
+* Audit and security controls.
+
+## Tech Stack
+
+| Layer             | Technology                          |
+| ----------------- | ----------------------------------- |
+| Backend           | PHP 8.5, Laravel 13                 |
+| Authentication    | Laravel Sanctum                     |
+| Public frontend   | Laravel Blade SSR                   |
+| Admin frontend    | Angular 22.1, Angular Material      |
+| Language          | TypeScript 6                        |
+| Database          | MySQL 8.4 LTS                       |
+| Cache / Queue     | Redis                               |
+| Web server        | Nginx                               |
+| PHP runtime       | PHP-FPM                             |
+| Containers        | Docker Compose                      |
+| CI/CD             | GitLab CI                           |
+| Backend quality   | PHPUnit, PHPStan, Laravel Pint      |
+| Admin quality     | Angular tests, ESLint, Playwright   |
+| Security scanning | Composer Audit, npm Audit, Gitleaks |
+
+## Architecture
 
 ```text
-Template/                          Template Angular Admin, read-only
-FrontEndTemplate/                  Template website public, read-only
-SourceIntegrations/StayHubMedia/   Source tham chiếu Media Manager, read-only
-Admin/                             Source Angular Admin chính thức
-BackEnd/                           Laravel API + Blade public
+                         +--------------------+
+                         |      Browser       |
+                         +----------+---------+
+                                    |
+                                    v
+                         +--------------------+
+                         |       Nginx        |
+                         +----------+---------+
+                                    |
+                    +---------------+---------------+
+                    |                               |
+                    v                               v
+          +-------------------+           +-------------------+
+          | Laravel Blade SSR |           |   Angular Admin   |
+          +---------+---------+           +---------+---------+
+                    |                               |
+                    +---------------+---------------+
+                                    |
+                                    v
+                         +--------------------+
+                         |    Laravel API     |
+                         +---------+----------+
+                                   |
+                    +--------------+--------------+
+                    |                             |
+                    v                             v
+             +-------------+               +-------------+
+             | MySQL 8.4   |               |    Redis    |
+             +-------------+               +-------------+
 ```
 
-Template website public phải đặt tại `FrontEndTemplate/`.
+The public website prioritizes server-side rendering and SEO, while the Angular application provides the administration interface.
 
-## Baseline công nghệ
-
-- Laravel 13.x.
-- PHP 8.5.x.
-- Angular 22.1.x.
-- Node.js 24.x tương thích Angular 22.
-- MySQL 8.4 LTS.
-- Redis cho cache, queue, rate limit và preview session.
-- Nginx + PHP-FPM cho production.
-
-Patch version phải được P04/P05 kiểm tra lại bằng nguồn chính thức trước khi bootstrap. Không tự nâng major ngoài baseline nếu chưa có ADR và kiểm thử.
-
-## Bắt đầu
-
-1. Đọc `START_HERE.md`.
-2. Đọc `docs/IMPLEMENTATION_GUIDE_FROM_SCRATCH.md`.
-3. Đặt template Admin vào `Template/`.
-4. Đặt template public vào `FrontEndTemplate/`.
-5. Mở đúng root project bằng Codex.
-6. Chạy từng prompt từ P00 đến P56, mỗi prompt là một checkpoint độc lập.
-
-## Tài liệu chính
+## Repository Structure
 
 ```text
-START_HERE.md                                      Hướng dẫn bắt đầu nhanh
-HUONG_DAN_TRIEN_KHAI_TU_DAU.md                    Hướng dẫn từ local đến production
-DANH_SACH_PROMPT_CHI_TIET.md                      Danh sách tuần tự P00–P56 kèm nghiệm thu
-docs/IMPLEMENTATION_GUIDE_FROM_SCRATCH.md         Bản sao hướng dẫn trong thư mục docs
-prompts/PROMPT_INDEX.md                           Bảng tra cứu nhanh 57 prompt
-prompts/DANH_SACH_PROMPT_CHI_TIET_00_56.md        Danh sách chi tiết trong thư mục prompts
-prompts/FULL_PROMPT_SEQUENCE.md                   Toàn bộ nội dung 57 prompt
-prompts/RUN_PROMPT_TEMPLATE.md                    Mẫu giao từng prompt cho Codex
+hong-van/
+├── Admin/                    Angular administration application
+├── BackEnd/                  Laravel API and public Blade application
+├── docker/                   PHP and Nginx container configuration
+├── docs/                     Project and implementation documentation
+├── prompts/                  Historical implementation prompt workflow
+├── scripts/                  Development, CI, and Docker utilities
+├── Template/                 Admin reference source location
+├── FrontEndTemplate/         Public frontend reference source location
+├── SourceIntegrations/       External integration reference locations
+├── compose.yaml              Local Docker Compose stack
+├── .gitlab-ci.yml            CI pipeline
+├── LICENSE                   MIT License
+└── README.md
 ```
 
-## Quy tắc bất biến
+### Reference source policy
 
-- Không chạy tất cả prompt trong một lượt.
-- Không sửa source tham chiếu.
-- Không tự thêm cart, checkout, payment hoặc order workflow.
-- Không hiển thị `0đ`; giá trống chuyển thành liên hệ báo giá.
-- Không lưu hoặc thực thi Blade/PHP/JavaScript tùy ý từ database.
-- Không dùng connection-level table prefix; tên bảng phải ghi rõ `hongvan_`.
-- Không commit secret, `.env`, upload thật hoặc dữ liệu production.
+`Template/`, `FrontEndTemplate/`, and `SourceIntegrations/` are reserved for reference sources.
+
+Proprietary or external source packages must not be committed to the public repository. CI enforces this policy and only permits the repository-owned placeholder documentation in these locations.
+
+## Database Convention
+
+Project-owned database tables must use the prefix:
+
+```text
+hongvan_
+```
+
+The project does not rely on a connection-level table prefix. Table names are explicitly defined by the application.
+
+## Requirements
+
+For the current Docker-based local environment:
+
+* Git
+* Docker Desktop or Docker Engine
+* Docker Compose
+* PowerShell for the provided environment bootstrap script
+* A Docker network named `local-infra`
+* A shared reverse proxy connected to `local-infra` for local HTTP routing
+
+PHP, Node.js, MySQL, Redis, Nginx, and application dependencies are provided through containers or Docker build stages for the standard local workflow.
+
+## Quick Start with Docker
+
+### 1. Prepare environment files
+
+From the repository root:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-docker-env.ps1
+```
+
+The script creates ignored environment files and generates local secrets when they do not already exist.
+
+Never commit generated `.env` files or real credentials.
+
+### 2. Check the shared Docker network
+
+```powershell
+docker network inspect local-infra
+```
+
+If the network does not exist:
+
+```powershell
+docker network create local-infra
+```
+
+### 3. Validate the Compose configuration
+
+```powershell
+docker compose config --quiet
+```
+
+### 4. Build the application images
+
+```powershell
+docker compose build
+```
+
+### 5. Start MySQL and Redis
+
+```powershell
+docker compose up -d mysql redis
+```
+
+### 6. Run migrations and seed the initial data
+
+```powershell
+docker compose run --rm app php artisan migrate --force --seed
+```
+
+### 7. Start the complete stack
+
+```powershell
+docker compose up -d
+```
+
+### 8. Check container status
+
+```powershell
+docker compose ps
+```
+
+## Local Domains
+
+The current local environment expects:
+
+```text
+127.0.0.1 hongvan.local
+127.0.0.1 hongvan-pma.local
+```
+
+Add these entries to your local hosts file.
+
+When the shared reverse proxy is configured and attached to `local-infra`, the expected local endpoints are:
+
+```text
+Public website:
+http://hongvan.local/
+
+Administration:
+http://hongvan.local/admin/
+
+phpMyAdmin:
+http://hongvan-pma.local/
+```
+
+The Compose stack intentionally does not publish a dedicated HTTP port for each application. Local HTTP routing is expected to be handled by the shared reverse proxy.
+
+## Docker Services
+
+The local stack contains the following project-specific services:
+
+```text
+mysql
+redis
+phpmyadmin
+app
+queue
+scheduler
+nginx
+```
+
+Persistent application data is stored in named Docker volumes for:
+
+```text
+hongvan-mysql-data
+hongvan-redis-data
+hongvan-storage
+```
+
+Running:
+
+```powershell
+docker compose down
+```
+
+stops the stack while preserving these named volumes.
+
+Do not use:
+
+```powershell
+docker compose down -v
+```
+
+unless you intentionally want to delete the project database, Redis data, and persisted storage.
+
+## Useful Docker Commands
+
+Check running services:
+
+```powershell
+docker compose ps
+```
+
+View application logs:
+
+```powershell
+docker compose logs -f app
+```
+
+View Nginx logs:
+
+```powershell
+docker compose logs -f nginx
+```
+
+Check migration status:
+
+```powershell
+docker compose exec app php artisan migrate:status
+```
+
+Clear Laravel caches:
+
+```powershell
+docker compose exec app php artisan optimize:clear
+```
+
+Check Redis:
+
+```powershell
+docker compose exec redis sh -c 'REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ping'
+```
+
+Stop the environment:
+
+```powershell
+docker compose down
+```
+
+## Development Notes
+
+The current application image is built from repository source instead of bind-mounting the complete working tree into the running container.
+
+After source changes that affect the built application, rebuild the relevant images before validating the running stack.
+
+For example:
+
+```powershell
+docker compose build app nginx
+docker compose up -d --force-recreate app queue scheduler nginx
+```
+
+The production-style `app` image is installed without Composer development dependencies. PHPUnit and other development-only tools are therefore not expected to be available in the normal running `app` container.
+
+The authoritative full quality suite currently runs in GitLab CI.
+
+## Testing and Quality
+
+Every merge request is expected to pass the project CI pipeline.
+
+### Security checks
+
+CI validates:
+
+* Git history with Gitleaks.
+* Reference-source commit policy.
+* Composer security advisories.
+* npm production dependency advisories.
+* Critical npm dependency advisories.
+
+### Backend checks
+
+CI runs:
+
+```text
+composer validate
+composer audit
+composer install
+Laravel migrations
+table-prefix validation
+Laravel Pint
+PHPStan
+PHPUnit
+```
+
+### Admin checks
+
+CI runs:
+
+```text
+npm ci
+npm audit
+lint
+unit tests
+production build
+Laravel asset synchronization
+```
+
+Playwright end-to-end tests are available as an optional CI stage.
+
+## Project Invariants
+
+The following rules are intentionally enforced throughout the project:
+
+* Project-owned database tables use the `hongvan_` prefix.
+* Secrets and generated `.env` files must never be committed.
+* Proprietary reference source must not be committed.
+* Database content must not execute arbitrary Blade, PHP, or JavaScript.
+* Missing product prices must not be rendered as `0`.
+* Products without an appropriate public price should use the quotation/contact flow.
+* Cart, checkout, payment, and order workflows are outside the current product scope.
+* Public rendering should remain SEO-friendly and server-side where appropriate.
+* Administrative functionality must remain permission-aware.
+
+## Repository Workflow
+
+GitLab is the development source of truth.
+
+GitHub is maintained as the public mirror of the project.
+
+Code changes should follow the GitLab branch and Merge Request workflow, pass the required CI pipeline, and then be mirrored to GitHub after merge.
+
+A dedicated contributor guide will be added in `CONTRIBUTING.md`.
+
+## Security
+
+Security is treated as part of the development lifecycle through dependency auditing, secret scanning, permission checks, static analysis, and automated tests.
+
+A dedicated vulnerability reporting policy will be published in `SECURITY.md`.
+
+Until that policy is available, never include secrets, credentials, private production data, or sensitive vulnerability details in public repository content.
+
+## Roadmap
+
+Near-term open-source project work includes:
+
+* Publish contributor guidelines.
+* Publish the security reporting policy.
+* Add issue templates.
+* Add Merge Request and Pull Request templates.
+* Improve contributor-oriented development documentation.
+* Formalize project versioning and changelog conventions.
+* Prepare the first public tagged release.
+* Continue development and stabilization of the CMS, Page Builder, media, SEO, logistics, and public website modules.
+
+## Documentation
+
+Additional project documentation is available in:
+
+```text
+START_HERE.md
+HUONG_DAN_TRIEN_KHAI_TU_DAU.md
+DANH_SACH_PROMPT_CHI_TIET.md
+docs/
+prompts/
+```
+
+The prompt documents describe the historical implementation sequence and remain useful as architectural and project-history references.
+
+## License
+
+This project is licensed under the MIT License.
+
+See:
+
+```text
+LICENSE
+```
+
+for the full license text.
