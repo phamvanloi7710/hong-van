@@ -83,6 +83,8 @@ describe('AuthService', () => {
     const request = httpTesting.expectOne('/api/admin/v1/auth/me');
     expect(request.request.withCredentials).toBe(true);
     request.flush(envelope(adminUser));
+    expect(resolvedUser).toBeUndefined();
+
     httpTesting.expectOne('/api/admin/v1/preferences').flush(envelope(adminPreferences));
 
     expect(resolvedUser).toEqual(adminUser);

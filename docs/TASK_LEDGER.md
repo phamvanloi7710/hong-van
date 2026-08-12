@@ -43,6 +43,7 @@
 - [x] T039 Rà Policy, Gate và permission middleware
 - [x] T040 Làm cứng permission override và Super Admin
 - [x] T041 Ổn định schema và API user preferences
+- [x] T042 Xác minh theme preferences theo từng user
 
 ## Prompt gốc P00-P56
 
