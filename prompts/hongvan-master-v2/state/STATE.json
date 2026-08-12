@@ -4,7 +4,7 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "60da0388b288d49373e3a1f7a1646e3666c3f099",
+  "actual_head": "e119169d269472d861fc3e59a252fd544153fb24",
   "origin_main_head": "60da0388b288d49373e3a1f7a1646e3666c3f099",
   "current_task": null,
   "audit_round": 0,
@@ -12,7 +12,7 @@
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-12T21:20:52+07:00",
+  "updated_at": "2026-08-12T21:42:05+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -393,12 +393,12 @@
       "blocker": null
     },
     "T043": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "VERIFIED",
+      "started_at": "2026-08-12T21:29:02+07:00",
+      "completed_at": "2026-08-12T21:42:05+07:00",
+      "base_head": "e119169d269472d861fc3e59a252fd544153fb24",
       "result_head": null,
-      "summary": null,
+      "summary": "Verified that locale changes apply immediately to Admin state and document language, persist to the per-user cache/server and send the new X-Locale header. Audited 22 Admin catalogs with matching, non-empty vi/en/zh entries and deterministic Vietnamese fallback; added regressions for core catalog parity, unsupported guest/stored locales and locale request behavior. Backend 6/59, Admin 2 files/13 tests, lint, Pint, build-sync 123 and Docker Content-Language/runtime 200/401 pass.",
       "blocker": null
     },
     "T044": {
