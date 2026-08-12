@@ -1,6 +1,10 @@
 # Hong Van
 
-Open-source company website and content management platform for **CÔNG TY TNHH DV VT HỒNG VÂN**, built with Laravel, Angular, Docker, MySQL, and Redis.
+Open-source company website and content management platform for **CÃ”NG TY TNHH DV VT Há»’NG VÃ‚N**, built with Laravel, Angular, Docker, MySQL, and Redis.
+
+[![OSS PR Policy](https://github.com/phamvanloi7710/hong-van/actions/workflows/oss-pr-policy.yml/badge.svg)](https://github.com/phamvanloi7710/hong-van/actions/workflows/oss-pr-policy.yml)
+[![Latest release](https://img.shields.io/github/v/release/phamvanloi7710/hong-van?include_prereleases)](https://github.com/phamvanloi7710/hong-van/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 The project focuses on public company content, fertilizer product presentation, transportation services, warehousing, lead collection, quotation requests, multilingual content, SEO, and internal content administration.
 
@@ -50,7 +54,7 @@ The project focuses on public company content, fertilizer product presentation, 
 | Web server        | Nginx                               |
 | PHP runtime       | PHP-FPM                             |
 | Containers        | Docker Compose                      |
-| CI/CD             | GitLab CI                           |
+| CI/CD             | GitLab CI, GitHub Actions           |
 | Backend quality   | PHPUnit, PHPStan, Laravel Pint      |
 | Admin quality     | Angular tests, ESLint, Playwright   |
 | Security scanning | Composer Audit, npm Audit, Gitleaks |
@@ -95,19 +99,20 @@ The public website prioritizes server-side rendering and SEO, while the Angular 
 
 ```text
 hong-van/
-├── Admin/                    Angular administration application
-├── BackEnd/                  Laravel API and public Blade application
-├── docker/                   PHP and Nginx container configuration
-├── docs/                     Project and implementation documentation
-├── prompts/                  Historical implementation prompt workflow
-├── scripts/                  Development, CI, and Docker utilities
-├── Template/                 Admin reference source location
-├── FrontEndTemplate/         Public frontend reference source location
-├── SourceIntegrations/       External integration reference locations
-├── compose.yaml              Local Docker Compose stack
-├── .gitlab-ci.yml            CI pipeline
-├── LICENSE                   MIT License
-└── README.md
+â”œâ”€â”€ Admin/                    Angular administration application
+â”œâ”€â”€ BackEnd/                  Laravel API and public Blade application
+â”œâ”€â”€ docker/                   PHP and Nginx container configuration
+â”œâ”€â”€ docs/                     Project and implementation documentation
+â”œâ”€â”€ prompts/                  Historical implementation prompt workflow
+â”œâ”€â”€ scripts/                  Development, CI, and Docker utilities
+â”œâ”€â”€ Template/                 Admin reference source location
+â”œâ”€â”€ FrontEndTemplate/         Public frontend reference source location
+â”œâ”€â”€ SourceIntegrations/       External integration reference locations
+â”œâ”€â”€ compose.yaml              Local Docker Compose stack
+â”œâ”€â”€ .gitlab-ci.yml            CI pipeline
+â”œâ”€â”€ .github/workflows/        Public pull-request checks
+â”œâ”€â”€ LICENSE                   MIT License
+â””â”€â”€ README.md
 ```
 
 ### Reference source policy
@@ -326,6 +331,8 @@ The production-style `app` image is installed without Composer development depen
 
 The authoritative full quality suite currently runs in GitLab CI.
 
+Public GitHub pull requests also run read-only, secret-safe policy checks. Backend and Admin quality workflows run only when the corresponding paths change.
+
 ## Testing and Quality
 
 Every merge request is expected to pass the project CI pipeline.
@@ -392,28 +399,23 @@ GitHub is maintained as the public mirror of the project.
 
 Code changes should follow the GitLab branch and Merge Request workflow, pass the required CI pipeline, and then be mirrored to GitHub after merge.
 
-A dedicated contributor guide will be added in `CONTRIBUTING.md`.
+Public contributors can start from [CONTRIBUTING.md](CONTRIBUTING.md), open a GitHub Issue, and submit a GitHub Pull Request. Maintainers reconcile accepted contributions through the authoritative GitLab workflow.
 
 ## Security
 
 Security is treated as part of the development lifecycle through dependency auditing, secret scanning, permission checks, static analysis, and automated tests.
 
-A dedicated vulnerability reporting policy will be published in `SECURITY.md`.
-
-Until that policy is available, never include secrets, credentials, private production data, or sensitive vulnerability details in public repository content.
+Use the private reporting process in [SECURITY.md](SECURITY.md). Never include secrets, credentials, private production data, or sensitive vulnerability details in a public Issue.
 
 ## Roadmap
 
-Near-term open-source project work includes:
+The public roadmap, release themes, and contribution-ready work are maintained in [ROADMAP.md](ROADMAP.md) and GitHub Issues.
 
-* Publish contributor guidelines.
-* Publish the security reporting policy.
-* Add issue templates.
-* Add Merge Request and Pull Request templates.
-* Improve contributor-oriented development documentation.
-* Formalize project versioning and changelog conventions.
-* Prepare the first public tagged release.
-* Continue development and stabilization of the CMS, Page Builder, media, SEO, logistics, and public website modules.
+## Versioning and releases
+
+Public releases follow [Semantic Versioning](https://semver.org/). The project is currently in the `0.x` series, so breaking changes may still occur between minor releases and will be documented.
+
+Release notes are maintained in [CHANGELOG.md](CHANGELOG.md). `CHANGELOG_V2.md` remains the historical changelog for the original implementation prompt pack.
 
 ## Documentation
 
@@ -440,3 +442,4 @@ LICENSE
 ```
 
 for the full license text.
+
