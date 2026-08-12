@@ -12,7 +12,7 @@
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-12T19:47:05+07:00",
+  "updated_at": "2026-08-12T20:15:40+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -366,12 +366,12 @@
       "blocker": null
     },
     "T040": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "DONE",
+      "started_at": "2026-08-12T20:03:00+07:00",
+      "completed_at": "2026-08-12T20:15:40+07:00",
+      "base_head": "ba24d0ddf9febf09f56700b46a3073e71df089b5",
       "result_head": null,
-      "summary": null,
+      "summary": "Quy dinh ro precedence: user thuong deny override > role grant, allow override cap quyen khong can role; Super Admin active/unlocked bypass override nhung van deny-by-default cho account/permission invalid. SuperAdminSeeder khong tao credential trong production; production bootstrap van can --force. Permission 38/1712, Identity 35/1701, Admin identity 3/3, lint, Pint 700, build-sync 123 va Docker smoke 200/401 pass.",
       "blocker": null
     },
     "T041": {

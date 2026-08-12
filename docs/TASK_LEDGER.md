@@ -41,6 +41,7 @@
 - [x] T037 Ổn định quản lý role
 - [x] T038 Ổn định quản lý user
 - [x] T039 Rà Policy, Gate và permission middleware
+- [x] T040 Làm cứng permission override và Super Admin
 
 ## Prompt gốc P00-P56
 

@@ -14,6 +14,10 @@ final class SuperAdminSeeder extends Seeder
 {
     public function run(): void
     {
+        if (app()->environment('production')) {
+            return;
+        }
+
         $email = Str::lower(trim((string) config('identity.super_admin.email')));
         $name = trim((string) config('identity.super_admin.name', 'Super Admin'));
         $password = (string) config('identity.super_admin.password');

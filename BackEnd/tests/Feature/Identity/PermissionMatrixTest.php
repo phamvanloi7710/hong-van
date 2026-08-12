@@ -60,6 +60,25 @@ class PermissionMatrixTest extends TestCase
         $this->getJson('/api/admin/v1/identity/users')->assertOk();
     }
 
+    public function test_explicit_allow_grants_without_a_role_and_deny_overrides_every_role_grant(): void
+    {
+        $permission = Permission::query()->where('key', 'users.view')->firstOrFail();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $this->getJson('/api/admin/v1/identity/users')->assertForbidden();
+
+        $user->permissionOverrides()->attach($permission, ['is_allowed' => true]);
+        $this->getJson('/api/admin/v1/identity/users')->assertOk();
+
+        $role = Role::query()->create(['name' => 'Viewer', 'slug' => 'override_viewer', 'is_system' => false]);
+        $role->permissions()->attach($permission, ['created_at' => now()]);
+        $user->roles()->attach($role, ['created_at' => now()]);
+        $user->permissionOverrides()->updateExistingPivot($permission->getKey(), ['is_allowed' => false]);
+
+        $this->getJson('/api/admin/v1/identity/users')->assertForbidden();
+    }
+
     public function test_super_admin_bypass_is_explicit_and_audited_once_per_permission_request(): void
     {
         $user = $this->superAdmin();
@@ -94,6 +113,18 @@ class PermissionMatrixTest extends TestCase
 
         Permission::query()->where('key', 'users.view')->delete();
         $this->assertFalse(Gate::forUser($active)->allows('viewAny', User::class));
+    }
+
+    public function test_super_admin_bypass_has_precedence_over_an_explicit_deny_override(): void
+    {
+        $user = $this->superAdmin();
+        $permission = Permission::query()->where('key', 'users.view')->firstOrFail();
+        $user->permissionOverrides()->attach($permission, ['is_allowed' => false]);
+
+        $this->actingAs($user);
+
+        $this->getJson('/api/admin/v1/identity/users')->assertOk();
+        $this->assertContains('users.view', app(PermissionService::class)->effectivePermissionKeys($user));
     }
 
     public function test_inactive_and_locked_users_are_denied_even_when_their_role_grants_permission(): void
