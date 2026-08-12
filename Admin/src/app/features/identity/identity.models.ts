@@ -4,6 +4,7 @@ export interface IdentityPermission {
   readonly module: string;
   readonly action: string;
   readonly name: string;
+  readonly labels: Readonly<Record<'vi' | 'en' | 'zh', string>>;
   readonly description: string | null;
   readonly is_system: boolean;
   readonly roles_count?: number;

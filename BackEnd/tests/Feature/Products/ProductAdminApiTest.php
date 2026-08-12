@@ -5,6 +5,7 @@ namespace Tests\Feature\Products;
 use App\Domain\Identity\PermissionRegistry;
 use App\Models\Media;
 use App\Models\Permission;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
@@ -36,6 +37,29 @@ final class ProductAdminApiTest extends TestCase
         $this->getJson('/api/admin/v1/products')->assertOk();
         $this->getJson('/api/admin/v1/products?filter[unsafe]=value')->assertUnprocessable();
         $this->postJson('/api/admin/v1/products', [])->assertForbidden();
+    }
+
+    public function test_bulk_status_cannot_exceed_the_actor_resource_permissions(): void
+    {
+        $viewer = User::factory()->create();
+        $viewer->permissionOverrides()->attach(
+            Permission::query()->where('key', 'products.view')->firstOrFail(),
+            ['is_allowed' => true],
+        );
+        $product = Product::factory()->draft()->create();
+        $this->actingAs($viewer);
+
+        foreach (['publish', 'archive'] as $action) {
+            $this->postJson('/api/admin/v1/products/bulk', [
+                'action' => $action,
+                'product_ids' => [$product->public_id],
+            ])->assertForbidden();
+        }
+
+        $this->assertDatabaseHas('hongvan_products', [
+            'id' => $product->getKey(),
+            'status' => 'draft',
+        ]);
     }
 
     public function test_admin_can_manage_taxonomy_product_media_price_and_bulk_status(): void
