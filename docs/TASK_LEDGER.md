@@ -45,6 +45,7 @@
 - [x] T041 Ổn định schema và API user preferences
 - [x] T042 Xác minh theme preferences theo từng user
 - [x] T043 Xác minh locale Admin theo từng user
+- [x] T044 Ổn định menu yêu thích và điều hướng Annular
 
 ## Prompt gốc P00-P56
 
