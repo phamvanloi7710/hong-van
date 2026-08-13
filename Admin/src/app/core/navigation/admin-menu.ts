@@ -7,6 +7,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
     icon: 'dashboard',
     iconColor: '#3f51b5',
     route: '/dashboard',
+    permission: 'dashboard.view',
   },
   {
     id: 'catalog',
@@ -20,6 +21,7 @@ export const ADMIN_MENU_ITEMS: readonly AdminMenuItem[] = [
         icon: 'eco',
         iconColor: '#43a047',
         route: '/products',
+        permission: 'products.view',
       },
       {
         id: 'crop-solutions',

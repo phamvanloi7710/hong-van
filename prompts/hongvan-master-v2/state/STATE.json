@@ -4,15 +4,15 @@
   "project": "HongVan Website Platform",
   "repository": "phamvanloi7710/hong-van",
   "branch": "main",
-  "actual_head": "e119169d269472d861fc3e59a252fd544153fb24",
-  "origin_main_head": "60da0388b288d49373e3a1f7a1646e3666c3f099",
+  "actual_head": "86e7ab2dd496eeffae49e43d4c918ee91c7a456f",
+  "origin_main_head": "86e7ab2dd496eeffae49e43d4c918ee91c7a456f",
   "current_task": null,
   "audit_round": 0,
   "audit_recheck_required": false,
   "last_zero_gap_audit_at": null,
   "generated_queue_status": "EMPTY",
   "started_at": null,
-  "updated_at": "2026-08-12T21:42:05+07:00",
+  "updated_at": "2026-08-13T09:50:40+07:00",
   "tasks": {
     "T001": {
       "status": "DONE",
@@ -402,12 +402,12 @@
       "blocker": null
     },
     "T044": {
-      "status": "PENDING",
-      "started_at": null,
-      "completed_at": null,
-      "base_head": null,
+      "status": "DONE",
+      "started_at": "2026-08-13T09:42:09+07:00",
+      "completed_at": "2026-08-13T09:50:40+07:00",
+      "base_head": "86e7ab2dd496eeffae49e43d4c918ee91c7a456f",
       "result_head": null,
-      "summary": null,
+      "summary": "Added missing dashboard.view and products.view permissions to the Admin menu registry so all 17 favorite shortcuts react to current authorization. Verified Annular multi-select behavior, stored order, heart-before-shortcuts layout and immediate removal of unauthorized shortcuts with new Header/registry regressions. Backend Preference 6/59, Admin 3 files/13 tests, lint, build-sync 123 and Docker runtime 200/401 pass.",
       "blocker": null
     },
     "T045": {

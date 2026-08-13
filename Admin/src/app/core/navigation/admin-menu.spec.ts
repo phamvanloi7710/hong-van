@@ -9,12 +9,15 @@ describe('ADMIN_MENU_ITEMS', () => {
     const leafItems = ADMIN_MENU_ITEMS.flatMap((item) => item.children ?? [item]);
 
     expect(leafItems.every((item) => item.route !== undefined)).toBe(true);
+    expect(leafItems.every((item) => item.permission !== undefined)).toBe(true);
     expect(NAVIGABLE_ADMIN_MENU_ITEMS).toHaveLength(17);
     expect(new Set(NAVIGABLE_ADMIN_MENU_ITEMS.map((item) => item.route)).size).toBe(17);
   });
 
   it('resolves feature routes for the page header and favorite menu', () => {
     expect(findAdminMenuItemByRoute('/products')?.id).toBe('products');
+    expect(findAdminMenuItemByRoute('/products')?.permission).toBe('products.view');
+    expect(findAdminMenuItemByRoute('/dashboard')?.permission).toBe('dashboard.view');
     expect(findAdminMenuItemByRoute('/showcase')?.id).toBe('showcase');
     expect(findAdminMenuItemByRoute('/page-builder?mode=draft')?.id).toBe('page-builder');
     expect(findAdminMenuItemByRoute('/page-builder')?.permission).toBe('pages.view');
